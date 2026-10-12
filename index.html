@@ -3537,10 +3537,17 @@ function QuizMenu(){
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=b.dataset.mode;QuizMenu()});
  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;FX.pageTurn(()=>startQuiz(key))})}
 function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,wrong:[],res:[],tut:!!o.tut,done:o.done}}
- else{QZ={key,label:labelOf(key),list:shuffle(poolOf(key)).slice(0,10),i:0,gain:0,wrong:[],res:[]}}quizQ()}
+ else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,wrong:[],res:[]};toast(pick.msg)}quizQ()}
+/* ドリルの出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
+function drillPick(key){const pool=poolOf(key);const st=q=>S.qs[q.id]||0;
+ const fresh=shuffle(pool.filter(q=>st(q)===0)),wrong=shuffle(pool.filter(q=>st(q)===2)),done=shuffle(pool.filter(q=>st(q)===1));
+ const list=fresh.concat(wrong,done).slice(0,10);
+ const mode=fresh.length?'fresh':wrong.length?'wrong':'random';
+ const msg=mode==='fresh'?`まだ解いていない問題から出すよ（残り${fresh.length}問）`:mode==='wrong'?`一周したね。間違えた問題を復習しよう（残り${wrong.length}問）`:'全部正解済み！　ランダムに出すよ';
+ return {list,mode,msg}}
 function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${QZ.key}章<br>${esc(CHT[QZ.key])}`:esc(QZ.label);
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
-  <div class="scr-title">${top}</div>
+  <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}</small>`:''}</div>
   <div class="dr-tabs"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
   <div class="gc-top">${QZ.tut?'':'<button class="gc-back" id="qQuit">やめる</button>'}<div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
   <div class="dr-gain">この回の獲得　栞 ${QZ.gain}</div>
