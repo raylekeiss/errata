@@ -2714,6 +2714,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 <script id="errata-main">
 const DATA=JSON.parse(document.getElementById('errata-data').textContent);
 /* 画像：「名前: dataURL」を1行に1枚。カードの肖像は人物名がキー */
+/* GAS版（学校アカウント保存）から読み込まれたときは、画像をGitHub Pagesから読む */
+const CLOUD=!!(window.google&&google.script&&google.script.run);
+const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/7daf45dd0576.webp",
 "背景_ホーム": "img/f8e8df074d29.webp",
@@ -3036,6 +3039,7 @@ const IMG={
      FX.spotlight(要素)    キャラを強調する        【演出：強調】
      FX.pageTurn(次の処理) ページを捲って切り替え  【演出：頁めくり】
    ===================================================================== */
+if(IMG_BASE)for(const k in IMG)if(!/^(data:|https?:)/.test(IMG[k]))IMG[k]=IMG_BASE+IMG[k];
 const FX={
  busy:false,
  reduce(){try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}},
@@ -3062,7 +3066,7 @@ function FxLab(){closeDrawer();
  document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{const k=b.dataset.fx;
   if(k==='pageTurn')FX.pageTurn(()=>{});else if(k==='shake'||k==='shakeBig')FX.shake($('#fxlab'),k==='shakeBig'?'big':'');else if(k==='glow')FX.glow('#fig');else if(k==='spotlight')FX.spotlight('#fig');else FX.flash()});
  $('#fxBack').onclick=()=>FX.pageTurn(Home)}
-try{document.documentElement.classList.toggle('embedded',window.self!==window.top)}catch(e){document.documentElement.classList.add('embedded')}
+try{document.documentElement.classList.toggle('embedded',!CLOUD&&window.self!==window.top)}catch(e){document.documentElement.classList.add('embedded')}
 
 const ATTR_CLASS=a=>'k-'+a;
 const CARDS=DATA.cards.filter(c=>!c.x), CARD=Object.fromEntries(DATA.cards.map(c=>[c.n,c]));
@@ -3082,6 +3086,7 @@ const TUTORIAL_K={id:'TUT',ch:1,boss:false,t:'バビロン第1王朝の時代、
   wd:['ネブカドネザル2世','ラメス2世','モーセ'],ok:'第6代の王ハンムラビが',ng:['アッカド人のサルゴン1世が','ヒッタイトの王が'],
   cm:'ハンムラビはバビロン第1王朝の第6代の王。法典の石碑は、のちにイランの古都スサで見つかったんだ。'};
 const SAVE_KEY='errata_all_v1';
+const CL={mem:null,ready:false,busy:false,dirty:false,last:0,fail:0,pendingLocal:null};
 /* iPadなどタッチ端末のSafariは、全画面中にタップが素早く続くと「タイプ入力」とみなして詐欺警告を出すため、タッチ端末では全画面ボタンを出さない */
 const TOUCH=(navigator.maxTouchPoints||0)>0;
 const $=s=>document.querySelector(s);
@@ -3091,13 +3096,13 @@ const app=$('#app');
 
 /* ---------- state ---------- */
 function freshState(){return{name:'',prologue:false,cleared:Array(NCH).fill(false),tutorial:false,
-  shiori:0,oshi:'シミ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false}}
+  shiori:0,oshi:'シミ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
 /* 記録の章数をそろえる */
 function normState(N){N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;return N}
 let S=freshState();
-function save(){window.__played=true;try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
-function load(){try{const t=localStorage.getItem(SAVE_KEY);if(t){S=normState(Object.assign(freshState(),JSON.parse(t)));return true}}catch(e){}return false}
-function hasSave(){try{return !!localStorage.getItem(SAVE_KEY)}catch(e){return false}}
+function save(){window.__played=true;S.t=Date.now();CL.dirty=true;if(CLOUD)CL.mem=JSON.stringify(S);try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{let t=null;try{t=localStorage.getItem(SAVE_KEY)}catch(e){}t=t||CL.mem;if(t){S=normState(Object.assign(freshState(),JSON.parse(t)));return true}}catch(e){}return false}
+function hasSave(){let t=null;try{t=localStorage.getItem(SAVE_KEY)}catch(e){}return !!(t||CL.mem)}
 const lv=n=>S.cards[n]||0; // 0=未所持, 1..5 = 凸0..4
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
 function unlockedMax(){return Math.max(1,S.cleared.filter(Boolean).length)} // クリアした章までの頁（未クリアなら第1章）
@@ -3128,9 +3133,10 @@ function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div
  <h1 class="logo">エラータ<svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 70 C30 40, 60 90, 92 30"/></svg></h1>
  <p class="subtitle">世界史探究</p>
  <div class="titlebtns">
+  ${CLOUD&&!CL.ready?'<p id="clWait" style="opacity:.85;line-height:1.8">学校アカウントの記録を確認しています…</p>':''}<div id="tbtns" style="display:${CLOUD&&!CL.ready?'none':'contents'}">
   ${hasSave()?'<button class="btn main" id="cont">つづきから</button>':''}
   <button class="btn ${hasSave()?'':'main'}" id="newg">はじめから</button>
-  <button class="btn" id="spell">復活の呪文を入力</button>
+  <button class="btn" id="spell">復活の呪文を入力</button></div>
   ${TOUCH?'':'<button class="fs-link" id="fsT">全画面で遊ぶ</button>'}
  </div></div>`);
  {const fb=$('#fsT');if(fb)fb.onclick=toggleFS}
@@ -3278,7 +3284,7 @@ function openDrawer(){closeDrawer();
   <div class="grp">文字の表示の速さ<div class="seg">${['slow','normal','fast','instant'].map(sp).join('')}</div></div>
   <button class="item" id="dwSpell">復活の呪文<small>いまの記録を呪文にして書き写す</small></button>
   <button class="item" id="dwFx">演出の見本<small>揺れ・光る・強調・頁めくりを試せます</small></button>
-  <a class="item" href="credits.html" style="text-decoration:none">画像の出典<small>肖像の作者とライセンスの一覧</small></a>
+  <a class="item" href="${IMG_BASE}credits.html" ${CLOUD?'target="_blank" rel="noopener"':''} style="text-decoration:none">画像の出典<small>肖像の作者とライセンスの一覧</small></a>
   <button class="item" id="dwTitle">タイトルに戻る<small>記録は自動で保存されています</small></button>`;
  document.body.append(bg,d);
  bg.onclick=closeDrawer;$('#dwClose').onclick=closeDrawer;
@@ -3303,7 +3309,7 @@ function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.pro
   <div class="vn-box" id="tb" aria-live="polite"><span class="vn-name" id="np" hidden></span><p class="vn-text" id="say"></p><span class="vn-next" id="nxt"></span></div>
  </div>`);
  $('#story').addEventListener('click',e=>{if(e.target.closest('.vn-tools,.vn-choices'))return;advance()});
- $('#quitS').onclick=()=>{stopType();S.prog={ch:PL.ch,i:Math.max(0,PL.i-1)};save();PL=null;FX.pageTurn(ch===0&&!S.prologue?Title:Home)};
+ $('#quitS').onclick=()=>{stopType();S.prog={ch:PL.ch,i:Math.max(0,PL.i-1)};saveNow();PL=null;FX.pageTurn(ch===0&&!S.prologue?Title:Home)};
  {const fb=$('#fsS');if(fb)fb.onclick=toggleFS}
  const sk=$('#skipP');if(sk)sk.onclick=skipPrologue;
  setItem(PL.item);step()}
@@ -3311,7 +3317,7 @@ document.addEventListener('keydown',e=>{if(!PL||!$('#story')||$('#modal')||$('.v
 function skipPrologue(){stopType();if(!S.name){askName(()=>skipPrologue());return}
  if(!S.tutorial){S.tutorial=true;giveCard(pickTutorial());}
  finishPrologue()}
-function finishPrologue(){S.prologue=true;S.prog=null;PL=null;S.tour=true;if(S.shiori<5)S.shiori=5;autoParty();save();toast('序章を読み終えました');Home()}
+function finishPrologue(){S.prologue=true;S.prog=null;PL=null;S.tour=true;if(S.shiori<5)S.shiori=5;autoParty();saveNow();toast('序章を読み終えました');Home()}
 function sp(t){return t.replace(/○○/g,S.name||'カコ')}
 function step(){const ev=PL.ev;PL.pages=null;
  if(PL.i>=ev.length){ if(PL.ch===0){finishPrologue()}else{if(S.mid)delete S.mid[PL.ch];S.prog=null;PL=null;save();Home()} return}
@@ -3392,14 +3398,14 @@ function runAct(e){
  if(e.a==='quizopen'){return step()}
  if(e.a==='quiz'||e.a==='tquiz'){const list=e.v.map(id=>Q.find(q=>q.id===id)).filter(Boolean);
    startQuiz({list,label:e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',tut:e.a==='tquiz',done:()=>{if(e.a==='tquiz'&&S.shiori<5){S.shiori=5;save()}resumeStory()}});return}
- if(e.a==='break'){S.mid=S.mid||{};S.mid[PL.ch]=PL.i;S.prog=null;const ch=PL.ch;PL=null;save();
+ if(e.a==='break'){S.mid=S.mid||{};S.mid[PL.ch]=PL.i;S.prog=null;const ch=PL.ch;PL=null;saveNow();
    modal(`<h3>${CHNAME[ch]}　前編おわり</h3><p style="line-height:1.8;text-align:center">ここまでの記録は保存されました。<br>続きは、ストーリーから${CHNAME[ch]}を選ぶと後編から読めます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>ホームへ</button></div>`,()=>Home());return}
  if(e.a==='battle'){Battle(K[e.v],{done:()=>resumeStory()});return}
  if(e.a==='reward'){const first=!S.cleared[e.v-1];S.cleared[e.v-1]=true;let msg='';
    if(first){const r=giveCard(e.c);msg=`${esc(e.c)}の頁を手に入れた。${r}`}else msg='（この章はクリア済みのため、報酬はありません）';
    if(e.v<STORY.length-1&&first)msg+=`<br>${CHNAME[e.v+1]}が読めるようになった。`;
    if(e.v===STORY.length-1&&first)msg+=`<br>ここから先の章は、準備中です。`;
-   autoParty();save();
+   autoParty();saveNow();
    modal(`<h3>${CHNAME[e.v]} クリア</h3>${first?`<div style="width:160px;margin:0 auto 10px">${cardHTML(e.c,{forceOwn:true})}</div>`:''}<p style="text-align:center;line-height:1.8">${msg}</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,()=>step());return}
  step()}
 function resumeStory(){const ch=PL.ch,i=PL.i;playChapterAt(ch,i)}
@@ -3549,9 +3555,9 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';tabs[QZ.i].textContent=ok?'✦':'✕';
   $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':'おしい……',ok?`栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,`<span class="who">シミ</span>${esc(q.x)}`,QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'));
   $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.done){const d=QZ.done,g=QZ.gain;QZ=null;
-    modal(`<h3>栞を${g}枚手に入れた</h3><p style="text-align:center;line-height:1.8">おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
+    saveNow();modal(`<h3>栞を${g}枚手に入れた</h3><p style="text-align:center;line-height:1.8">おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
    else FX.pageTurn(quizEnd)}})}
-function quizEnd(){const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
+function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;saveNow()}const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="gc-top"><div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
   <div class="dr-res parch"><h3>栞を${QZ.gain}枚手に入れた</h3><p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
@@ -3588,7 +3594,7 @@ function pull(n,tut){const cost=n===10?50:5;if(S.shiori<cost){toast('栞が足�
  S.shiori-=cost;const res=[];for(let i=0;i<n;i++)res.push(tut?pickTutorial():draw1());if(tut)S.tutorial=true;
  if(n===10&&!res.some(x=>CARD[x].r>=2))res[9]=draw1(2);
  const tags=res.map(x=>{const before=lv(x);const r=giveCard(x);return before===0?'NEW':before<5?(lv(x)-1)+'凸':'史料片'});
- S.pity+=n;autoParty();save();
+ S.pity+=n;autoParty();saveNow();
  const gc=$('#gc');if(!gc||FX.reduce()){GachaResult(res,tags,n,tut);return}
  const rare=res.some(x=>CARD[x].r===3);const b=document.createElement('div');b.className='gc-burst';
  b.innerHTML='<span class="core"></span>'+Array.from({length:14},(_,i)=>{const a=(i/14)*Math.PI*2+Math.random()*.4;const d=40+Math.random()*30;
@@ -3671,7 +3677,7 @@ function CodeScreen(){const code=encode();
 function SpellInput(){modal(`<h3>復活の呪文を入力</h3><textarea id="sp" rows="4" placeholder="4文字ずつ区切られていても、そのまま入力できます"></textarea>
  <div class="row"><button class="btn" id="spok">この呪文で再開する</button><button class="btn light" data-close>やめる</button></div>`);
  $('#spok').onclick=()=>{const N=decode($('#sp').value);if(!N){toast('呪文が正しくありません。打ち間違いがないか確かめてください');return}
-  S=N;autoParty();closeModal(true);askName(()=>{save();toast('記録を復活させました');Home()})}}
+  S=N;autoParty();closeModal(true);askName(()=>{saveNow();toast('記録を復活させました');Home()})}}
 
 
 /* ---------- 記録を守る ---------- */
@@ -3684,8 +3690,28 @@ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().
 /* この開き方で記録が残せるか確かめる */
 function storageOK(){try{const k='errata_test';localStorage.setItem(k,'1');const ok=localStorage.getItem(k)==='1';localStorage.removeItem(k);return ok}catch(e){return false}}
 
+/* ---------- 学校アカウントへの保存（GAS版のみ） ---------- */
+function saveNow(){save();cloudPush(true)}
+function cloudPush(force){if(!CLOUD||!CL.ready||CL.busy)return;if(!CL.dirty&&!force)return;
+ CL.busy=true;CL.dirty=false;const body=JSON.stringify(S);
+ google.script.run.withSuccessHandler(()=>{CL.busy=false;CL.last=Date.now();CL.fail=0})
+  .withFailureHandler(()=>{CL.busy=false;CL.dirty=true;if(++CL.fail===2)toast('学校アカウントへの保存に失敗しました。通信を確かめてください')}).putSave(body)}
+function cloudInit(){if(!CLOUD)return;let done=false;
+ const ready=()=>{if(done)return;done=true;CL.ready=true;if($('#title'))Title()};
+ setTimeout(()=>{if(!done){toast('学校アカウントの記録を読めませんでした。この端末の記録で続けます');ready()}},12000);
+ google.script.run.withSuccessHandler(r=>{if(done)return;
+   let local=null;try{local=JSON.parse(localStorage.getItem(SAVE_KEY)||'null')}catch(e){}
+   let cloud=null;try{cloud=r&&r.data?JSON.parse(r.data):null}catch(e){}
+   if(cloud&&(!local||(cloud.t||0)>(local.t||0))){CL.mem=JSON.stringify(cloud);try{localStorage.setItem(SAVE_KEY,CL.mem)}catch(e){}}
+   else if(local&&(!cloud||(local.t||0)>(cloud.t||0)))CL.dirty=true,CL.pendingLocal=local;
+   ready();if(CL.pendingLocal){google.script.run.putSave(JSON.stringify(CL.pendingLocal));CL.pendingLocal=null;CL.dirty=false}})
+  .withFailureHandler(()=>{toast('学校アカウントの記録を読めませんでした。この端末の記録で続けます');ready()}).getSave()}
+setInterval(()=>cloudPush(false),60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&window.__played)cloudPush(true)});
+
 Title();
-if(!storageOK())modal(`<h3>この開き方では記録が残りません</h3><p style="line-height:1.8">プライベートブラウズで開いているなど、記録を保存できない状態です。ふつうのタブで開き直すか、遊んだあとにメニューの「復活の呪文」を書き写しておいてください。</p><div class="row"><button class="btn" data-close>わかった</button></div>`);
+cloudInit();
+if(!CLOUD&&!storageOK())modal(`<h3>この開き方では記録が残りません</h3><p style="line-height:1.8">プライベートブラウズで開いているなど、記録を保存できない状態です。ふつうのタブで開き直すか、遊んだあとにメニューの「復活の呪文」を書き写しておいてください。</p><div class="row"><button class="btn" data-close>わかった</button></div>`);
 </script>
 </body>
 </html>

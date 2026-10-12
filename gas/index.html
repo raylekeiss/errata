@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+html,body{height:100%;margin:0;background:#070c1f}
+#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+  color:#e9e1cc;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;letter-spacing:.2em;text-align:center;padding:24px}
+#boot b{font-size:40px;font-weight:600;color:#f4efe2}
+</style>
+</head>
+<body>
+<div id="boot"><b>エラータ</b><span id="bootMsg">読み込んでいます…</span></div>
+<script>
+/* ゲーム本体はGitHub Pagesに置いてあるものを読み込みます。ゲームを直すときはGitHub側だけ更新すればOKです。 */
+window.ERRATA_BASE = 'https://raylekeiss.github.io/errata/';
+fetch(window.ERRATA_BASE + 'index.html?v=' + Date.now(), { cache: 'no-store' })
+  .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+  .then(function (text) {
+    var doc = new DOMParser().parseFromString(text, 'text/html');
+    doc.querySelectorAll('style').forEach(function (st) { document.head.appendChild(document.importNode(st, true)); });
+    var data = document.createElement('script');
+    data.type = 'application/json'; data.id = 'errata-data';
+    data.textContent = doc.getElementById('errata-data').textContent;
+    document.body.appendChild(data);
+    var app = document.createElement('div'); app.id = 'app';
+    document.body.appendChild(app);
+    document.getElementById('boot').remove();
+    var main = document.createElement('script');
+    main.textContent = doc.getElementById('errata-main').textContent;
+    document.body.appendChild(main);
+  })
+  .catch(function () {
+    document.getElementById('bootMsg').textContent = 'ゲームを読み込めませんでした。通信を確かめて、もう一度開いてください。';
+  });
+</script>
+</body>
+</html>

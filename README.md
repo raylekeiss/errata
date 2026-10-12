@@ -6,3 +6,7 @@
 - `img/` … 画像
 - `credits.html` / `credits.json` … 肖像の出典一覧
 - `tools/get_credits.py` … 出典情報を集め直すスクリプト
+
+## 学校アカウント保存版（GAS）
+
+`gas/` の2ファイルをスプレッドシートのApps Scriptに置くと、学校アカウントごとに記録をスプレッドシートへ保存する版になる。ゲーム本体はこのリポジトリの `index.html` を読み込むので、ゲームの更新はGitHub側だけでよい。
