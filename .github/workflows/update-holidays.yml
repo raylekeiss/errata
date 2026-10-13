@@ -1,0 +1,37 @@
+# 内閣府の祝日CSVを取りに行き、data/holidays.json を更新する
+# 実行タイミング：毎年2月15日・8月15日（日本時間 9:17ごろ）＋ 手動実行
+# （翌年の祝日は例年2月上旬に公表されるため、2月の実行で翌年分が入る）
+name: 祝日データの更新
+
+on:
+  schedule:
+    - cron: '17 0 15 2,8 *'   # UTC表記。日本時間では同日 9:17
+  workflow_dispatch:           # Actions画面の「Run workflow」で手動実行
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 祝日CSVを取得してJSONに変換
+        run: node tools/update-holidays.mjs
+
+      - name: 変更があれば保存
+        run: |
+          if git diff --quiet -- data/holidays.json && git ls-files --error-unmatch data/holidays.json >/dev/null 2>&1; then
+            echo "変更なし"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/holidays.json
+          git commit -m "祝日データを更新"
+          git push
