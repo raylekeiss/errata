@@ -785,6 +785,55 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 @keyframes scin{from{opacity:0}to{opacity:1}}
 @keyframes scban{from{opacity:0;letter-spacing:.5em;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.bosscut .bc-band,.bosscut .bc-in,.scenecut,.scenecut .sc-ban{animation:none}}
+
+/* --- cast: 2〜3人の立ち絵を並べる --- */
+.vn-cast{position:absolute;left:0;right:0;bottom:0;height:96%;z-index:1;pointer-events:none;transition:opacity .25s}
+.vn-cast.off{opacity:0}
+.vn-cast .cm{position:absolute;bottom:0;height:100%;transform:translateX(-50%);transition:left .45s cubic-bezier(.3,.8,.3,1),opacity .3s}
+.vn-cast .cm img{height:100%;width:auto;display:block;filter:brightness(.5) saturate(.75) drop-shadow(0 0 24px rgba(5,10,30,.6));transition:filter .3s}
+.vn-cast .cm.talk{z-index:3}
+.vn-cast .cm.talk img{filter:brightness(1) drop-shadow(0 0 24px rgba(5,10,30,.6))}
+.vn-cast .cm.solo img{filter:brightness(1) drop-shadow(0 0 24px rgba(5,10,30,.6))}
+.vn-cast .cm.in{animation:cmin .35s ease-out both}
+.vn-cast .cm.out{opacity:0}
+.vn-cast .cm .hop{height:100%}
+.vn-cast .cm.hopping .hop{animation:cmhop .32s ease-out}
+.vn-cast .cm .ph-char{position:absolute;bottom:calc(150*var(--u));left:50%;transform:translateX(-50%)}
+.vn-cast .cm.sil img,.vn-fig img.sil{filter:brightness(0) invert(.18) drop-shadow(0 0 18px rgba(0,0,0,.5))!important}
+@keyframes cmin{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+@keyframes cmhop{0%{translate:0 0}40%{translate:0 calc(-16*var(--u))}100%{translate:0 0}}
+@media (orientation:portrait){.vn-cast{height:86%;bottom:-6%}}
+@keyframes bg-glow{0%{filter:blur(3px) brightness(.62) saturate(.9)}35%{filter:blur(2px) brightness(1.05) saturate(1.1)}100%{filter:blur(3px) brightness(.62) saturate(.9)}}
+.vn-bg.bg-glow{animation:bg-glow 1.4s ease-out}
+/* --- 本の世界に入る：文字が足もとから立ちのぼる --- */
+.bookcut{position:absolute;inset:0;z-index:40;overflow:hidden;pointer-events:auto}
+.bookcut .bk-dark{position:absolute;inset:0;background:#05070f;opacity:0;animation:bkdark 1.5s .55s ease-in forwards}
+.bookcut .gl{position:absolute;bottom:-12%;color:#f3ead6;font-family:var(--serif),"Noto Sans",sans-serif;line-height:1;white-space:nowrap;
+ text-shadow:0 0 12px rgba(255,214,140,.75),0 0 2px rgba(255,240,200,.9);animation:bkrise var(--d) var(--w) cubic-bezier(.25,.6,.4,1) both;will-change:transform,opacity}
+.bookcut .bk-ban{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
+.bookcut .sc-ban{display:flex;flex-direction:column;align-items:center;gap:calc(10*var(--u));padding:calc(18*var(--u)) calc(70*var(--u));
+ border-top:1px solid #c9a24a;border-bottom:1px solid #c9a24a;background:linear-gradient(90deg,transparent,rgba(201,162,74,.12),transparent);animation:scban .9s ease-out both;white-space:nowrap}
+.bookcut .sc-a{font-family:var(--sans);font-size:max(12px,calc(17*var(--u)));letter-spacing:.5em;color:#c9a24a}
+.bookcut .sc-b{font-family:var(--serif);font-size:max(20px,calc(36*var(--u)));letter-spacing:.16em;color:#f3ead6}
+.bookcut.out{opacity:0;transition:opacity .32s ease-in}
+@keyframes bkdark{to{opacity:1}}
+@keyframes bkrise{0%{opacity:0;transform:translateY(0) scale(.7)}12%{opacity:1}70%{opacity:.95}100%{opacity:0;transform:translateY(calc(-1 * var(--h))) scale(1.15)}}
+/* --- 背景が崩れてバトルへ --- */
+.crumble{position:absolute;inset:0;z-index:45;background:#05070f;overflow:hidden;pointer-events:auto}
+.crumble .tl{position:absolute;background-repeat:no-repeat;filter:blur(3px) brightness(.62) saturate(.9);animation:tlfall var(--d) var(--w) cubic-bezier(.55,0,.85,.4) forwards;will-change:transform,opacity}
+@keyframes tlfall{0%{transform:none;opacity:1}15%{transform:translate(calc(var(--x)*.1),4px) rotate(calc(var(--r)*.1))}100%{transform:translate(var(--x),calc(var(--y))) rotate(var(--r));opacity:0}}
+/* --- おさらいドリルのカットイン --- */
+.quizcut{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(5,9,26,.6);animation:fadein .2s ease-out}
+.quizcut .qc-band{position:absolute;left:-10%;right:-10%;top:50%;height:calc(200*var(--u));min-height:128px;transform:translateY(-50%) skewY(-4deg);
+ background:linear-gradient(180deg,#f3ead6,#e2d5b8);box-shadow:0 0 0 3px #b8923f,0 0 0 7px rgba(32,48,90,.9),0 0 50px rgba(255,214,140,.35);animation:bcband .45s cubic-bezier(.2,.9,.3,1) both}
+.quizcut .qc-in{position:relative;display:flex;align-items:center;gap:calc(26*var(--u));transform:skewY(-4deg);animation:bcin .5s .12s cubic-bezier(.2,.9,.3,1.2) both}
+.quizcut .qc-face{width:calc(150*var(--u));height:calc(150*var(--u));min-width:96px;min-height:96px;border-radius:50%;background:#20305a center/cover no-repeat;box-shadow:0 0 0 3px #b8923f}
+.quizcut .qc-tx{display:flex;flex-direction:column;gap:calc(6*var(--u))}
+.quizcut .qc-eye{font-family:var(--sans);font-weight:800;letter-spacing:.45em;font-size:max(12px,calc(17*var(--u)));color:#8a2a25}
+.quizcut .qc-t{font-family:var(--serif);font-size:max(26px,calc(52*var(--u)));letter-spacing:.12em;color:#20305a;font-weight:700}
+.quizcut .qc-s{font-family:var(--sans);font-size:max(12px,calc(16*var(--u)));letter-spacing:.12em;color:#4a3f30}
+.quizcut.out{opacity:0;transition:opacity .28s}
+@media (prefers-reduced-motion:reduce){.bookcut .gl,.bookcut .bk-dark,.crumble .tl,.quizcut .qc-band,.quizcut .qc-in,.vn-cast .cm.in,.vn-cast .cm.hopping .hop{animation:none}}
 </style>
 </head>
 <body>
@@ -1156,7 +1205,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   "P1-07": {"id":"P1-07","ch":2,"boss":false,"t":"（　　）は、バラモンの権威を否定し、徹底した不殺生を説いてジャイナ教を開いた","slot":"（　　）は、","who":"ヴァルダマーナ","ok":"クシャトリヤ出身のヴァルダマーナは、","wd":["ガウタマ＝シッダールタ","ナーガールジュナ","カニシカ王"],"ng":["バラモン出身のヴァルダマーナは、","シュードラ出身のヴァルダマーナは、"],"cm":"ジャイナ教は不殺生をとても厳しく守るから、農業より商業に向いていてね。ヴァイシャ、つまり商人たちに広まったんだ。"},
   "P1-08": {"id":"P1-08","ch":2,"boss":false,"t":"（　　）は、マガダ国にマウリヤ朝を建て、パータリプトラを都とした","slot":"（　　）は、","who":"チャンドラグプタ","ok":"チャンドラグプタは、","wd":["チャンドラグプタ2世","アショーカ王","ハルシャ王"],"ng":["チャンドラグプタ1世は、","チャンドラグプタ2世は、"],"cm":"マウリヤ朝のチャンドラグプタと、グプタ朝のチャンドラグプタ1世は別の人だよ。都はどちらもパータリプトラだから、混同しやすいんだ。"},
   "P1-09": {"id":"P1-09","ch":2,"boss":false,"t":"カリンガ征服を悔いた（　　）は、仏教に帰依し、ダルマにもとづく政治を行った","slot":"（　　）","who":"アショーカ王","ok":"マウリヤ朝のアショーカ王","wd":["カニシカ王","チャンドラグプタ","ハルシャ王"],"ng":["クシャーナ朝のアショーカ王","グプタ朝のアショーカ王"],"cm":"アショーカ王は碑文の中で、自分のことを「神々に愛された者」と名乗っていたんだ。"},
-  "P1-10": {"id":"P1-10","ch":2,"boss":true,"t":"唐の僧（　　）は、ナーランダー僧院で学び、帰国後に『大唐西域記』を著した","slot":"（　　）は、","who":"玄奘","ok":"陸路でインドに渡った玄奘は、","wd":["義浄","法顕","ハルシャ王"],"ng":["海路でインドに渡った玄奘は、","東晋から渡った玄奘は、"],"cm":"玄奘は陸路でインドへ行って、帰りも陸路だったんだ。海路でインドに渡ったのは、義浄のほうだよ。"},
+  "P1-10": {"id":"P1-10","ch":2,"boss":true,"t":"唐の僧（　　）は、ナーランダー僧院で学び、帰国後に『大唐西域記』を著した","slot":"（　　）は、","who":"玄奘","ok":"陸路でインドに渡った玄奘は、","wd":["義浄","法顕","ハルシャ王"],"ng":["海路でインドに渡った玄奘は、","東晋から渡った玄奘は、"],"cm":"玄奘は陸路でインドへ行って、帰りも陸路だったんだ。海路でインドに渡ったのは、義浄のほうだよ。この陸路の旅が、ずっとあとの明の時代に、小説『西遊記』になったんだよ。"},
   "P1-11": {"id":"P1-11","ch":3,"boss":false,"t":"殷墟から出土した甲骨文字は、コンラッド博士の日記だった","slot":"コンラッド博士の日記だった","who":"武王","ok":"王が行った占いの記録だった","wd":["斉の桓公","始皇帝","孔子"],"ng":["周の法律の条文だった","商人の取引の記録だった"],"cm":"甲骨文字は、殷の王が亀の甲羅や獣の骨を焼いて行った占いの記録なんだ。"},
   "P1-12": {"id":"P1-12","ch":3,"boss":false,"t":"ある人は、人の本性は善であるとする性善説を説き、徳による王道政治を主張した","slot":"ある人は、","who":"孟子","ok":"儒家の孟子は、","wd":["荀子","孔子","韓非"],"ng":["法家の孟子は、","道家の孟子は、"],"cm":"性善説の孟子と、性悪説の荀子。どちらも儒家だから、セットで覚えておこう。"},
   "P1-13": {"id":"P1-13","ch":3,"boss":false,"t":"ある人は、法による厳しい統治を説き、その著書は秦王に愛読された","slot":"ある人は、","who":"韓非","ok":"荀子に学んだ韓非は、","wd":["荀子","墨子","張儀"],"ng":["孟子に学んだ韓非は、","老子に学んだ韓非は、"],"cm":"韓非は荀子に学んで、法家の思想を大成したんだ。秦の李斯とは同じ先生に学んだ仲だよ。"},
@@ -1204,7 +1253,6 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"id":"ORI-Q02-021","ch":1,"q":"ハンムラビ法典の「復讐法」の原則を表す言葉は？","a":"目には目を、歯には歯を","d":["汝の隣人を愛せ","法の前の平等","悪法もまた法なり"],"x":"やられた以上にやり返すな、という上限の決まりでもあったんだ。ただし身分が違えば、罰も違ったよ。","v":"ORI"},
   {"id":"ORI-Q02-022","ch":1,"q":"「目には目を、歯には歯を」に代表される、ハンムラビ法典の原則は？","a":"復讐法","d":["身分法","万民法","自然法"],"x":"復讐していいのは、受けた害と同じ分まで。際限のない仕返しを止めるための決まりだったんだ。","v":"ORI"},
   {"id":"ORI-Q02-023","ch":1,"q":"ハンムラビ法典に定められた、酒場の女主人がビールの値段をごまかしたときの罰は？","a":"溺死刑","d":["火あぶり刑","罰金のみ","追放刑"],"x":"ビールはパンと同じくらい大切な食べ物だったんだ。だから値段のごまかしには厳しかったんだよ。","v":"ORI"},
-  {"id":"ORI-Q02-024","ch":1,"q":"ハンムラビ法典で、女性の聖職者がビールを飲むために酒場に入ったときの罰は？","a":"火あぶり刑","d":["溺死刑","鞭打ち刑","罰金刑"],"x":"聖職者の女性には、それだけ厳しい身の慎みが求められていたんだね。","v":"ORI"},
   {"id":"ORI-Q02-025","ch":1,"q":"鉄製の武器を用いてバビロン第1王朝を滅ぼした、インド＝ヨーロッパ語族の民族は？","a":"ヒッタイト人","d":["アッシリア人","ヒクソス","カッシート人"],"x":"製鉄の技術は国の秘密として守られていたんだ。ヒッタイトが滅びたあとで、鉄は一気にオリエントに広まったよ。","v":"ORI"},
   {"id":"ORI-Q02-026","ch":1,"q":"ヒッタイト人がオリエントで初めて本格的に用いた金属は？","a":"鉄","d":["青銅","銅","金"],"x":"鉄の武器は青銅より硬くて、材料もあちこちで手に入る。戦いのあり方を変えた金属だね。","v":"ORI"},
   {"id":"ORI-Q02-027","ch":1,"q":"ヒッタイトが去ったあと、北メソポタミアにフルリ人が建てた国は？","a":"ミタンニ王国","d":["カッシート王国","リディア","クシュ王国"],"x":"ミタンニの王女はエジプトのファラオに嫁いでいるんだ。外交の手紙もたくさん残っているよ。","v":"ORI"},
@@ -2298,10 +2346,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "棚の一冊が、ふっと白く光る。", "fx": "flash"},
     {"t": "l", "s": "主人公", "x": "本が光ってる。"},
     {"t": "l", "s": "シミ", "x": "誤植があると、本が光って教えてくれるんだ。これだけ本があると、一冊ずつ確かめるわけにいかないからね。"},
-    {"t": "d", "x": "シミが本を開き、頁のすき間から黒いもちもちとした、黒光りする虫のようななにかをつまみ出した。"},
+    {"t": "d", "x": "紙魚が本を開き、ページのすき間から黒いもちもちとした、黒光りする虫のようななにかをつまみ出した。"},
     {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたして暴れている。"},
     {"t": "l", "s": "シミ", "x": "いただきます。"},
-    {"t": "d", "x": "【道具：なし】シミはそれを、ためらいなく口に入れる。行の文字が「ラスコー洞窟（フランス）」に戻る。"},
+    {"t": "d", "x": "【道具：なし】紙魚はそれを、ためらいなく口に入れる。行の文字が「ラスコー洞窟（フランス）」に戻る。"},
     {"t": "choice", "o": ["今の、何ですか？", "食べました……よね？"], "to": [38, 40]},
     {"t": "l", "s": "シミ", "x": "誤植。歴史の書き間違いだよ。妖怪みたいなものかな。"},
     {"t": "jump", "to": 42},
@@ -2318,7 +2366,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "主人公", "x": "慣れるくらい食べてるんですね。"},
     {"t": "l", "s": "シミ", "x": "長くいるからね。"},
     {"t": "l", "s": "シミ", "x": "年号の数字とか、地名の一字くらいなら、俺が食べれば済む。でも、人がかかわる大きな書き換えは、そうはいかない。"},
-    {"t": "d", "x": "シミがエプロンのポケットから、細長い栞を数枚と、人物が描かれた一枚の紙を取り出す。シミは人物の姿と名前が書かれた紙の方をこちらに差し出した。"},
+    {"t": "d", "x": "紙魚がエプロンのポケットから、細長い栞を数枚と、人物が描かれた一枚の紙を取り出す。紙魚は人物の姿と名前が書かれた紙の方をこちらに差し出した。"},
     {"t": "l", "s": "シミ", "x": "ちょっと見てみて。これが頁（ページ）。歴史上の人物について書かれた、文字通り本の一ページだよ。誤植を見つけたら、その出来事にいちばん詳しい人の頁を開いて、証言してもらうんだ。"},
     {"t": "l", "s": "シミ", "x": "頁（ページ）は、書庫のあちこちの本に挟まってる。この栞を集めておくと、自分が必要とすることになる誰かの頁のところまで導いてくれる。誰の頁が出てくるかは、めくってみるまでわからないけどね。"},
     {"t": "l", "s": "シミ", "x": "栞は、勉強した分だけ手に入る。知っていることを増やせば増やすほど、栞はたまるんだ。"},
@@ -2328,8 +2376,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "act", "a": "tgacha"},
     {"t": "l", "s": "シミ", "x": "うん、いい頁が出たね。大事にしてあげて。"},
     {"t": "d", "x": "さらに奥、メソポタミアの棚で、別の本がまぶしく光る。", "fx": "flash"},
-    {"t": "d", "x": "シミが開くと、頁の余白にまで黒い虫がびっしりと並び、大きく盛り上がっていく。小型の誤植モンスターになる。", "fx": "shake"},
-    {"t": "d", "x": "頁には「世界最古の法典の一つをつくったのは、コンラッド博士である」。"},
+    {"t": "d", "x": "紙魚が開くと、ページの余白にまで黒い虫がびっしりと並び、大きく盛り上がっていく。小型の誤植モンスターになる。", "fx": "shake"},
+    {"t": "d", "x": "ページには「世界最古の法典の一つをつくったのは、コンラッド博士である」。"},
     {"t": "l", "s": "主人公", "x": "コンラッド博士？"},
     {"t": "l", "s": "シミ", "x": "……うーーん、コンラッド……この人の名前は、初めて見たね。"},
     {"t": "l", "s": "シミ", "x": "ほら、さっきの頁がちょうど役に立ちそうだ。めくったときに出てくる頁が、どんな人だったかは図鑑で確認しておくといいかもしれないね。"},
@@ -2351,8 +2399,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "中で誤植が増えすぎてるんだ。外からつまみ出すだけじゃ、追いつかないね。"},
     {"t": "l", "s": "シミ", "x": "こういうときは、本の中に入って直接直すんだよ。"},
     {"t": "l", "s": "主人公", "x": "本の中に……入る？"},
-    {"t": "l", "s": "シミ", "x": "頁に手を置いてごらん。大丈夫、司書なら誰でもできるから。"},
-    {"t": "d", "x": "○○が頁に手を置くと、文字が足もとから立ちのぼり、書架が遠ざかっていく。", "fx": "flash"},
+    {"t": "l", "s": "シミ", "x": "ページに手を置いてごらん。大丈夫、司書なら誰でもできるから。"},
+    {"t": "d", "x": "○○がページに手を置くと、文字が足もとから立ちのぼり、書架が遠ざかっていく。", "fx": "flash"},
     {"t": "bg", "v": "背景_シュメール"},
     {"t": "d", "x": "気がつくと、照りつける日差しの下に立っている。日干しれんがの家並みの向こうに、階段状の巨大な神殿がそびえている。"},
     {"t": "l", "s": "シミ", "x": "ようこそ、メソポタミアへ。二つの川のあいだ、っていう意味の土地だよ。ここはシュメール人の都市国家、ウルだね。"},
@@ -2368,7 +2416,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "世界初、っていう言葉が好きなんだろうね。"},
     {"t": "l", "s": "主人公", "x": "これって、このコンラッド博士って人が犯人なんでしょうか。"},
     {"t": "l", "s": "シミ", "x": "うーん、決めつけはよくないけど、まあ、まず間違いないだろうね。"},
-    {"t": "d", "x": "シミが道ばたの黒い虫をまとめてつまみ上げると、景色が頁をめくるように流れ、時代が先へ進んでいく。", "fx": "shake"},
+    {"t": "d", "x": "紙魚が道ばたの黒い虫をまとめてつまみ上げると、景色がページをめくるように流れ、時代が先へ進んでいく。", "fx": "shake"},
     {"t": "bg", "v": "背景_バビロン"},
     {"t": "d", "x": "高い城壁に囲まれた都。広場の真ん中に、人の背丈を超える黒い石碑が立っている。その石碑が、ひときわ強く光っている。", "fx": "flash"},
     {"t": "d", "x": "石碑の一番下に、新しい条文が刻まれている。「第283条　コンラッド博士の学説を否定した者は、溺死刑に処す」"},
@@ -2376,7 +2424,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "よっぽど、否定されたのが悔しかったんだね。"},
     {"t": "l", "s": "主人公", "x": "ハンムラビ法典に、勝手に書き足されてますよ！！"},
     {"t": "l", "s": "シミ", "x": "本物は全282条だからね。この一条はおまけだ。いただきます。"},
-    {"t": "d", "x": "シミが石碑の端から黒い虫をつまみ出し、口に入れる。283条目の文字が消える。"},
+    {"t": "d", "x": "紙魚が石碑の端から黒い虫をつまみ出し、口に入れる。283条目の文字が消える。"},
     {"t": "l", "s": "シミ", "x": "ちなみに、本物の法典には、ビールの値段をごまかした酒場の女主人を溺死刑にする条文があるんだよ。"},
     {"t": "l", "s": "主人公", "x": "溺死刑の基準がわからない……。"},
     {"t": "l", "s": "シミ", "x": "当時の「酒」は腐りにくく、長持ちする貴重なカロリー源だったからね。今とは価値が全く違うんだ。"},
@@ -2413,16 +2461,16 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "jump", "to": 68},
     {"t": "l", "s": "コンラッド", "x": "ふむ、諸説ある。答えは、まだ誰も知らん。だから面白いのだ。"},
     {"t": "jump", "to": 68},
-    {"t": "d", "x": "○○が振り返ると、シミがいない。工房の外、王宮へ続く大通りを、一人で歩いていく背中が見える。"},
-    {"t": "l", "s": "主人公", "x": "シミさん？"},
+    {"t": "d", "x": "○○が振り返ると、紙魚がいない。工房の外、王宮へ続く大通りを、一人で歩いていく背中が見える。"},
+    {"t": "l", "s": "主人公", "x": "シミ先輩？"},
     {"t": "d", "x": "返事はない。追いかけようか迷っていると、コンラッドがぱたんとノートを閉じた。"},
     {"t": "l", "s": "コンラッド", "x": "さて、講義は終わりだ。私には、まだ書き足すべき世界初があるのでね。失礼するよ！！"},
-    {"t": "d", "x": "コンラッドがノートの頁を一枚破って宙に投げる。頁の余白が白くほどけるように広がり、コンラッドはその白の中へ、溶けるように姿を消す。", "fx": "flash"},
-    {"t": "d", "x": "しばらくして、シミが戻ってくる。いつもの顔をしている。"},
+    {"t": "d", "x": "コンラッドがノートのページを一枚破って宙に投げる。ページの余白が白くほどけるように広がり、コンラッドはその白の中へ、溶けるように姿を消す。", "fx": "flash"},
+    {"t": "d", "x": "しばらくして、紙魚が戻ってくる。いつもの顔をしている。"},
     {"t": "l", "s": "シミ", "x": "ごめんね。誤植の匂いがしたから、向こうを見てきたんだ。"},
-    {"t": "l", "s": "主人公", "x": "いえ、でも、博士は白い頁の中に消えちゃって……。次の時代に行ってしまったみたいです。"},
+    {"t": "l", "s": "主人公", "x": "いえ、でも、博士は白いページの中に消えちゃって……。次の時代に行ってしまったみたいです。"},
     {"t": "l", "s": "シミ", "x": "わかった。追いかけようか。"},
-    {"t": "d", "x": "シミが宙に残った白い頁に手を置くと、景色が夜に変わる。"},
+    {"t": "d", "x": "紙魚が宙に残った白いページに手を置くと、景色が夜に変わる。"},
     {"t": "bg", "v": "背景_王家の谷"},
     {"t": "d", "x": "月明かりに照らされた、岩山の谷。斜面のあちこちに、王たちの墓の入口がぽっかりと口をあけている。"},
     {"t": "l", "s": "シミ", "x": "ここは王家の谷だね。新王国のファラオたちのお墓が集まる場所だよ。"},
@@ -2445,7 +2493,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "bg", "v": "背景_書庫_書架"},
     {"t": "d", "x": "書庫の通路。今度は、地中海の棚で本が光っている。", "fx": "flash"},
     {"t": "l", "s": "シミ", "x": "博士、今度は海のほうへ行ったみたいだね。"},
-    {"t": "d", "x": "二人は、光る頁に手を置く。"},
+    {"t": "d", "x": "二人は、光るページに手を置く。"},
     {"t": "bg", "v": "背景_フェニキア"},
     {"t": "d", "x": "潮のにおい。港町の岸壁に、杉材を積んだ船がずらりと並んでいる。"},
     {"t": "l", "s": "シミ", "x": "ティルス。フェニキア人の港町だよ。ここの商人たちは、地中海じゅうを船で行き来してたんだ。"},
@@ -2460,9 +2508,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "詳しいねえ。さすが研究者だ。"},
     {"t": "d", "x": "書き換えられた表が、店先からはがれて宙に浮かび、誤植になる。", "fx": "shake"},
     {"t": "act", "a": "battle", "v": "P1-04"},
-    {"t": "l", "s": "フェニキア人", "x": "（この文字は、俺たちが商売の帳簿をつけるために使ってたものさ。ギリシアの連中は、母音を書き足して使ってるらしいな。）"},
+    {"t": "l", "s": "シミ", "x": "フェニキア文字は、もともとフェニキアの商人たちが商売の帳簿をつけるために使っていた文字なんだ。子音しかなかったから、ギリシア人が母音を書き足して使うようになったんだよ。"},
     {"t": "act", "a": "quiz", "v": ["ORI-Q04-001", "ORI-Q04-004", "ORI-Q04-006", "ORI-Q04-008", "ORI-Q04-015"]},
-    {"t": "d", "x": "コンラッドの足あとを追って港を走りぬけると、景色が頁をめくるように流れていく。"},
+    {"t": "d", "x": "コンラッドの足あとを追って港を走りぬけると、景色がページをめくるように流れていく。"},
     {"t": "bg", "v": "背景_ニネヴェ"},
     {"t": "d", "x": "アッシリアの都ニネヴェ。王宮の一室に、粘土板の目録がずらりと並ぶ巨大な書庫がある。その一角が、まぶしく光っている。", "fx": "flash"},
     {"t": "d", "x": "目録の粘土板の間に、場違いな革装の本が何冊も差し込まれている。背表紙には「コンラッド著」。"},
@@ -2500,10 +2548,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "行き先はわかるよ。博士が書き込むたびに、本が光るから。"},
     {"t": "act", "a": "quiz", "v": ["ORI-Q06-002", "ORI-Q06-003", "ORI-Q06-005", "ORI-Q06-007"]},
     {"t": "bg", "v": "背景_書庫_書架"},
-    {"t": "d", "x": "書庫に戻った○○は、シミを探す。シミは、アマルナの書架の前に一人で立っている。光っている本は一冊もない。"},
-    {"t": "l", "s": "主人公", "x": "シミさん。ここ、誤植ないですよ。"},
+    {"t": "d", "x": "書庫に戻った○○は、紙魚を探す。紙魚は、アマルナの書架の前に一人で立っている。光っている本は一冊もない。"},
+    {"t": "l", "s": "主人公", "x": "シミ先輩。ここ、誤植ないですよ。"},
     {"t": "l", "s": "シミ", "x": "うん。誤植がなくても、たまに本の様子を見に来るんだよ。何度でも読み返したくなったりする本って、あるだろ。"},
-    {"t": "d", "x": "シミは振り返り、いつもの顔で笑う。"},
+    {"t": "d", "x": "紙魚は振り返り、いつもの顔で笑う。"},
     {"t": "l", "s": "シミ", "x": "さ、お茶にしようか。新人さん、今日はよくがんばったね。"},
     {"t": "act", "a": "reward", "v": 1, "c": "アメンホテプ4世"}
   ]},
@@ -2555,7 +2603,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "都の城門の前で、見覚えのある片眼鏡の男が、青い顔をして本をめくっている。"},
     {"t": "l", "s": "主人公", "x": "博士！　やっぱり、名前を消してたのは……"},
     {"t": "l", "s": "コンラッド", "x": "私ではない！"},
-    {"t": "d", "x": "コンラッドは本をこちらに突きつける。頁には「（　　）博士、マウリヤ朝の建国に助言」。"},
+    {"t": "d", "x": "コンラッドは本をこちらに突きつける。ページには「（　　）博士、マウリヤ朝の建国に助言」。"},
     {"t": "l", "s": "コンラッド", "x": "見たまえ。私が書いた私の名前まで、消されている！"},
     {"t": "l", "s": "コンラッド", "x": "これだと、どこの「博士」だか分からなくなってしまうだろう！！”コンラッド博士”じゃなければ困るのだ！"},
     {"t": "l", "s": "コンラッド", "x": "だいたい、君らも分かってると思うが、私は自分の名前を歴史に残したいだけだ。誰かの業績を意味もなく消すわけがないだろう。"},
@@ -2606,10 +2654,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "act", "a": "battle", "v": "P1-10"},
     {"t": "l", "s": "玄奘", "x": "（旅のすべてを記録に残しておいたのです。私がどこを歩いたか、どう学んだか、のちの誰かがたどれるように。）"},
     {"t": "l", "s": "シミ", "x": "玄奘は、国の許しを得ずに唐を出たんだ。でも帰ってきたときは大歓迎されて、持ち帰ったお経の翻訳に、残りの一生をかけたんだよ。"},
-    {"t": "d", "x": "誤植が崩れ、白いページが一枚ずつ、もとの本へと戻っていく。最後の一枚が、○○の足もとに落ちる。"},
+    {"t": "d", "x": "誤植が崩れ、白い頁が一枚ずつ、もとの本へと戻っていく。最後の一枚が、○○の足もとに落ちる。"},
     {"t": "d", "x": "○○はそれを拾い上げた。なんてことない人物の頁だ。"},
-    {"t": "d", "x": "ページの隅には、細い字で走り書きが書かれていた。"},
-    {"t": "d", "x": "「名前を残すことは、そんなに大事なの？」【演出：強調】"},
+    {"t": "d", "x": "頁の隅には、細い字で走り書きが書かれていた。"},
+    {"t": "l", "s": "？？？", "x": "名前を残すことは、そんなに大事なの？【演出：強調】", "img": "ヌル", "sil": 1},
     {"t": "l", "s": "主人公", "x": "……誰が書いたんだろう。"},
     {"t": "act", "a": "quiz", "v": ["IND-Q04-004", "IND-Q04-007", "IND-Q04-011", "IND-Q04-015", "IND-Q04-021"]},
     {"t": "bg", "v": "背景_書庫_書架"},
@@ -2632,7 +2680,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "主人公", "x": "占いの内容を自分の日記にしちゃったんですか。"},
     {"t": "l", "s": "コンラッド", "x": "まあ、さすがに無理があるのは自覚している。若気の至りだ。どうぞ遠慮なく消したまえ。"},
     {"t": "l", "s": "シミ", "x": "これくらいなら、中に入るまでもないね。ここで直そう。"},
-    {"t": "d", "x": "挿絵の骨がかたかたと震え、誤植になって頁から飛び出す。【演出：揺れ】"},
+    {"t": "d", "x": "挿絵の骨がかたかたと震え、誤植になってページから飛び出す。【演出：揺れ】"},
     {"t": "act", "a": "battle", "v": "P1-11"},
     {"t": "l", "s": "武王", "x": "（殷の王たちは、何をするにも骨を焼いて占っておった。その記録を日記とは、無礼な。）"},
     {"t": "l", "s": "シミ", "x": "甲骨文字が見つかったきっかけは、漢方薬だった、って話が伝わってるんだ。『竜骨』っていう薬の材料として売られていた骨に、文字が刻まれてるのに気づいた学者がいたんだって。"},
@@ -2641,12 +2689,14 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "そのとき、隣の棚の本が、いっせいにぼんやりと光りはじめる。【演出：光る】"},
     {"t": "l", "s": "シミ", "x": "……こっちは、にじむ光だ。"},
     {"t": "l", "s": "コンラッド", "x": "例の名前泥棒か。行くぞ。"},
-    {"t": "d", "x": "三人は、光る頁に手を置く。"},
+    {"t": "d", "x": "三人は、光るページに手を置く。"},
     {"t": "bg", "v": "背景_戦国の都"},
     {"t": "d", "x": "人と荷車でにぎわう大通り。城門の近くに立つ大きな学舎から、論争する声があちこちから響いてくる。"},
     {"t": "l", "s": "シミ", "x": "斉の都、臨淄。戦国時代、ここには各地から学者が集められて、毎日のように議論してたんだ。"},
     {"t": "d", "x": "学舎の壁に掛けられた木簡が、にじむように光っている。どの札も、同じ書き出しで始まっている。【演出：光る】"},
-    {"t": "d", "x": "「ある人が仁を説いた」「ある人が性善説を説いた」「ある人が無為自然を説いた」"},
+    {"t": "d", "x": "「ある人が仁を説いた」"},
+    {"t": "d", "x": "「ある人が性善説を説いた」"},
+    {"t": "d", "x": "「ある人が無為自然を説いた」"},
     {"t": "l", "s": "コンラッド", "x": "全員『ある人』か。これでは誰が誰だか、さっぱりわからん。"},
     {"t": "l", "s": "主人公", "x": "テストに出たら、全員『ある人』って書けばいいんですかね。"},
     {"t": "l", "s": "コンラッド", "x": "ふん、よかったな。なら歴史のテストは全員１００点だ。"},
@@ -2674,19 +2724,19 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "？？？", "x": "この壁をつくったのは誰？"},
     {"t": "d", "x": "頭上から声がして、あわてて視線を上げる。城壁の上に、一人の女性が立っていた。灰色の外套。顔立ちははっきり見えるのに、なぜか覚えにくい。"},
     {"t": "d", "x": "女性は手で耳をぎゅっと押さえている。まるで、往来の中に一人取り残されたかのように。"},
-    {"t": "l", "s": "？？？", "x": "この壁をつくったのは誰？"},
+    {"t": "l", "s": "？？？", "x": "この壁をつくったのは誰？", "img": "ヌル"},
     {"t": "l", "s": "主人公", "x": "えっと……始皇帝……ですよね？"},
     {"t": "l", "s": "コンラッド", "x": "正確に言うのであれば、始皇帝は”戦国時代の諸侯が建築していた城壁”を修築して繋げたに過ぎんがな。"},
     {"t": "l", "s": "シミ", "x": "うん。さらに付け足すと、今よく見る「万里の長城」の姿は、ほとんどが明代に修築、あるいは延長されたものなんだ。明の時代の長城だけでも、6000キロ以上あるんだよ。"},
     {"t": "l", "s": "主人公", "x": "細かい人たちだなあ……。始皇帝でいいじゃないですか……ですよね？"},
-    {"t": "l", "s": "？？？", "x": "教科書にはそう書いてある。でも、実際に石を運んだ人たちの名前は？"},
+    {"t": "l", "s": "？？？", "x": "教科書にはそう書いてある。でも、実際に石を運んだ人たちの名前は？", "img": "ヌル"},
     {"t": "l", "s": "主人公", "x": "……こっちも別ジャンルで細かい人そうだなあ。"},
-    {"t": "l", "s": "？？？", "x": "その人たちは、いなかったことになっているの？"},
+    {"t": "l", "s": "？？？", "x": "その人たちは、いなかったことになっているの？", "img": "ヌル"},
     {"t": "d", "x": "コンラッドは少し考え、眼鏡を押し上げる。"},
     {"t": "l", "s": "コンラッド", "x": "始皇帝期の長城建設で動員された兵士らの名簿は、見つかっていない。記録の上では値がない。……つまり、null(ヌル)だな。"},
-    {"t": "l", "s": "？？？", "x": "なら、私のこともヌルと呼べばいい。"},
+    {"t": "l", "s": "？？？", "x": "なら、私のこともヌルと呼べばいい。", "img": "ヌル"},
     {"t": "l", "s": "コンラッド", "x": "君が、名前を消して回っている犯人か。良いからさっさと名を名乗りたまえ。"},
-    {"t": "l", "s": "？？？", "x": "ない。"},
+    {"t": "l", "s": "？？？", "x": "ない。", "img": "ヌル"},
     {"t": "l", "s": "ヌル", "x": "私は、名前を残せなかったすべての命の代弁者だから。【演出：強調】"},
     {"t": "d", "x": "ヌルはコンラッドを、少しのあいだじっと見つめる。"},
     {"t": "l", "s": "ヌル", "x": "……あなたは、ずいぶん元気そうね。"},
@@ -2719,16 +2769,16 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "○○にはなにも聞こえない。地下には、自分たちの足音しか響いていない。"},
     {"t": "l", "s": "ヌル", "x": "為政者の圧政で死んだ人たちも、なんとか集まって戦おうとした人たちも、一生懸命国のために働いた人たちも。"},
     {"t": "l", "s": "ヌル", "x": "どの人生も素晴らしいものであるはずなのに。誰かの名前を残して、誰かの名前は残さないなんて、そんな選択をする権利は私たちには無いはずなのに。"},
-    {"t": "d", "x": "○○が何か言おうとする前に、ヌルは列の向こうの暗がりへ、余白に溶けるように消えてしまった。誤植が動く様子もない。あたりには静寂だけが残された。"},
+    {"t": "d", "x": "○○が何か言おうとする前に、ヌルは列の向こうの暗がりへ、闇に溶けるように消えてしまった。誤植が動く様子もない。あたりには静寂だけが残された。"},
     {"t": "d", "x": "紙魚は何も言わず、ヌルの消えた暗がりをじっと見つめていた。"},
     {"t": "act", "a": "quiz", "v": ["CHN-Q03-006", "CHN-Q03-007", "CHN-Q03-011", "CHN-Q03-012"]},
     {"t": "bg", "v": "背景_書庫_書架"},
     {"t": "d", "x": "書庫に戻ると、紙魚はいつもより長く、中国の棚を見上げている。"},
-    {"t": "l", "s": "主人公", "x": "紙魚さん？"},
+    {"t": "l", "s": "主人公", "x": "シミ先輩？"},
     {"t": "l", "s": "シミ", "x": "ん、ごめん。……ヌル、か。博士、うまいこと言うね。"},
     {"t": "l", "s": "コンラッド", "x": "名前の無いものを系統や体系で並べ替えて名前を付けるのは学者の専売特許だよ。"},
     {"t": "l", "s": "コンラッド", "x": "……本人が気に入ったかどうかは、知らんがな。"},
-    {"t": "l", "s": "コンラッド", "x": "ところで、紙魚くん。考古学の棚の図書目録を見せてくれんか。私がエヴァンズより前に書いたクノッソス論文が、どの棚のどの本に収まっているか確かめたいのだ。"},
+    {"t": "l", "s": "コンラッド", "x": "ところで、シミくん。考古学の棚の図書目録を見せてくれんか。私がエヴァンズより前に書いたクノッソス論文が、どの棚のどの本に収まっているか確かめたいのだ。"},
     {"t": "l", "s": "シミ", "x": "いいよ。"},
     {"t": "d", "x": "紙魚はカウンターの奥から分厚い目録を出してきて、ぱらぱらとめくる。指が止まり、また動き、もう一度最初から戻る。"},
     {"t": "l", "s": "シミ", "x": "……ないね。"},
@@ -2771,7 +2821,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "宮廷の奥から、また別のにじむ光がもれている。【演出：光る】"},
     {"t": "l", "s": "シミ", "x": "今度は、もっと西のほうだね。"},
     {"t": "act", "a": "quiz", "v": ["CHN-Q04-002", "CHN-Q04-005", "CHN-Q04-009", "CHN-Q04-014", "CHN-Q04-012"]},
-    {"t": "d", "x": "景色が頁をめくるように流れ、乾いた風が吹きこんでくる。"},
+    {"t": "d", "x": "景色がページをめくるように流れ、乾いた風が吹きこんでくる。"},
     {"t": "bg", "v": "背景_西域"},
     {"t": "d", "x": "砂漠の中に、ぽつんと緑が広がるオアシスの町。日干しれんがの城壁の外に、ラクダの隊商がつながったまま歩いていく。"},
     {"t": "l", "s": "シミ", "x": "ここは、西域のオアシス都市だよ。敦煌のさらに西、亀茲（クチャ）のような町だね。前漢の武帝が河西回廊に敦煌などの四郡を置いて、西への影響力を強めて以降、様々な使者や商人が、ここを通って西へと向かったんだ。"},
@@ -2800,7 +2850,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "○○はコンラッドに自分の名前を書かないように念押しして、紙魚を探しに行った。ひとりで棚の奥へ歩いていく。すると話し声が聞こえた。書架のすき間からのぞくと、紙魚とヌルが向かい合っている。"},
     {"t": "l", "s": "シミ", "x": "ねえ、落丁を生み出すのを、やめるわけにはいかないのかな。"},
     {"t": "d", "x": "ヌルは何も言わずに首を振る。紙魚も諦めたように肩をすくめた。ヌルは手を前に差し出す。"},
-    {"t": "d", "x": "ヌルの手には、古い頁が一枚握られていた。そのページは、人物の名前と顔の部分が削り取られたように判読できなくなっている。"},
+    {"t": "d", "x": "ヌルの手には、古い頁が一枚握られていた。その頁は、人物の名前と顔の部分が削り取られたように判読できなくなっている。"},
     {"t": "l", "s": "ヌル", "x": "古代のどこかで見つけた頁なの。"},
     {"t": "l", "s": "ヌル", "x": "ふつう、名前を削られた頁からは、声がする。返して、とか、さみしい、助けて、とか。"},
     {"t": "l", "s": "ヌル", "x": "でも、この頁はとても静か。名前が削り取られてるのに、声がまったくしない。……どうして？　あなたは、ここに勤めて長いんでしょう。わかる？"},
@@ -2829,17 +2879,17 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "ヌル", "x": "三国志に出てくる兵士たちには、名前がある？"},
     {"t": "l", "s": "コンラッド", "x": "正史の方か？……なら、一兵卒のものはないな。"},
     {"t": "d", "x": "コンラッドは言い返さない。ヌルは少しだけ首をかしげ、棚の向こうへ消える。"},
-    {"t": "d", "x": "その棚の一冊が、にじむように光りだす。開いた頁には、海の向こうの島国の記事。【演出：光る】"},
+    {"t": "d", "x": "その棚の一冊が、にじむように光りだす。開いたページには、海の向こうの島国の記事。【演出：光る】"},
     {"t": "d", "x": "「（　　）は、魏に使いを送り「親魏倭王」の称号を与えられた」"},
     {"t": "l", "s": "シミ", "x": "日本の話だね。中国の歴史書には、ときどき日本のことも書いてあるんだ。"},
-    {"t": "d", "x": "空欄が頁からはがれ、誤植になる。【演出：揺れ】"},
+    {"t": "d", "x": "空欄がページからはがれ、誤植になる。【演出：揺れ】"},
     {"t": "act", "a": "battle", "v": "P1-20"},
     {"t": "l", "s": "卑弥呼", "x": "（魏の皇帝には、男女の奴隷と布を贈りました。お返しに金印と、銅鏡を百枚いただきましたよ。）"},
     {"t": "l", "s": "シミ", "x": "「漢委奴国王」と書かれた金印をもらったとされる奴国は、後漢の時代の話だよ。卑弥呼の治めていたとされる邪馬台国は、後漢のあと、三国時代の魏に金印をもらったんだ。ごっちゃにしやすいところだから気を付けてね。"},
     {"t": "act", "a": "quiz", "v": ["CHN-Q06-003", "CHN-Q06-006", "CHN-Q06-009", "CHN-Q06-012", "CHN-Q06-019"]},
     {"t": "d", "x": "南朝の棚。一冊の本が、やさしく、けれど弱々しく光っている。背表紙には「桃花源記」。"},
     {"t": "l", "s": "シミ", "x": "戦乱を知らずに暮らしてた村の話だよ。これは実在の村ではなく、東晋時代の詩人、「陶淵明」が描いた理想郷なんだ。漁師が一度だけ迷いこんで、二度とたどり着けなかった、という、理想の村が描かれている。"},
-    {"t": "d", "x": "三人は、頁に手を置いた。"},
+    {"t": "d", "x": "三人は、ページに手を置いた。"},
     {"t": "bg", "v": "背景_桃源郷"},
     {"t": "d", "x": "一面に、咲きほこる桃の林が広がった。林には花と一緒に桃の実がなっている。あたりには花の甘い匂いがして、遠くには霞がかかっている。花びらの舞う小道の先に、のどかな村の家並みが見える。みな美しい天女のような衣を着ている。どこからか中国の弦楽器である、二胡の音がした。幻想的な風景だ。"},
     {"t": "l", "s": "主人公", "x": "うわあ、夢の中みたいな、素敵な景色ですね。"},
@@ -2864,12 +2914,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "主人公", "x": "博士？"},
     {"t": "l", "s": "コンラッド", "x": "……なんでもない。少し、めまいがしただけだ。"},
     {"t": "l", "s": "シミ", "x": "ヘンなもの食べるから……"},
-    {"t": "d", "x": "村の真ん中に進んでいくと、桃の花びらと白い頁が混ざりあった、巨大な誤植がうずくまっている。【演出：大きく揺れ】"},
+    {"t": "d", "x": "村の真ん中に進んでいくと、桃の花びらと白いページが混ざりあった、巨大な誤植がうずくまっている。【演出：大きく揺れ】"},
     {"t": "act", "a": "battle", "v": "P1-21"},
     {"t": "l", "s": "陶淵明", "x": "（役人勤めは性に合わなかった。わずかな給料のために上役へ頭を下げるくらいなら、田舎で畑を耕して、酒を飲んでいるほうがいい。）"},
     {"t": "d", "x": "誤植が崩れ、桃の林に静けさが戻る。○○が振り返ると、コンラッドの姿がない。"},
     {"t": "d", "x": "桃の木の枝に、書き置きが一枚ひっかかっている。"},
-    {"t": "d", "x": "「アレクサンドリアへ行く。この書庫の目録に私の名前がないのなら、世界最初の目録に載せるまでだ。　コンラッド」【演出：強調】"},
+    {"t": "d", "x": "「アレクサンドリアへ行く。この書庫の目録に私の名前がないのなら、世界最初の目録に載せるまでだ。　コンラッド」【演出：強調】", "img": "コンラッド", "sil": 1},
     {"t": "l", "s": "主人公", "x": "博士……。"},
     {"t": "l", "s": "シミ", "x": "行き先をちゃんと書いていくところが、博士らしいね。"},
     {"t": "act", "a": "quiz", "v": ["CHN-Q07-003", "CHN-Q07-005", "CHN-Q07-010", "CHN-Q07-013", "CHN-Q07-016"]},
@@ -2884,7 +2934,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "博士とヌル、両方の光だね。"},
     {"t": "l", "s": "主人公", "x": "二人とも、同じ本にいるんでしょうか？"},
     {"t": "l", "s": "シミ", "x": "行ってみればわかるよ。"},
-    {"t": "d", "x": "二人は頁に手を置く。"},
+    {"t": "d", "x": "二人はページに手を置く。"},
     {"t": "bg", "v": "背景_オリンピア"},
     {"t": "d", "x": "オリーブの木々に囲まれた聖域。神殿の柱の向こうに、細長い競技場が広がっている。"},
     {"t": "l", "s": "シミ", "x": "オリンピアだよ。ギリシア人は4年に一度ここに集まって、ゼウスに捧げる競技会を開いたんだ。"},
@@ -2902,7 +2952,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "ソロン", "x": "（オリンピアで勝ったアテネ市民には、500ドラクマの褒美を出すことにした。ずいぶん気前がいいと言われたものだ。）"},
     {"t": "l", "s": "シミ", "x": "ギリシア人はポリスごとにばらばらだったけど、オリンピアの祭典や神々への信仰で、同じ「ヘレネス」だっていう意識を持っていたんだ。"},
     {"t": "act", "a": "quiz", "v": ["GRM-Q01-001", "GRM-Q01-003", "GRM-Q01-007", "GRM-Q01-009", "GRM-Q01-015"]},
-    {"t": "d", "x": "景色が頁をめくるように流れ、にぎやかな人の声が近づいてくる。"},
+    {"t": "d", "x": "景色がページをめくるように流れ、にぎやかな人の声が近づいてくる。"},
     {"t": "bg", "v": "背景_アテネ"},
     {"t": "d", "x": "柱廊に囲まれた広場。見上げると、丘の上にパルテノン神殿が白く輝いている。"},
     {"t": "l", "s": "シミ", "x": "アテネのアゴラ。政治の話も商売も、みんなここでしたんだよ。"},
@@ -2997,7 +3047,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "俺が覚えていられるのは、あの本の中に記述としてある歴史だけだ。ヌルが博士を吸収してしまっていたから、出した論文も、学説も余白の中に溶け込んで、なかったことにされてしまっていたんだ。"},
     {"t": "l", "s": "コンラッド", "x": "なに！？なら彼女の影響下から抜け出しさえすれば、私は歴史の中に戻れるということか！いなかったことにはならないのか。"},
     {"t": "l", "s": "シミ", "x": "多分ね。"},
-    {"t": "d", "x": "ヌルの手が止まる。けれど、舞い上がった白い頁は止まらない。頁は閲覧室の真ん中で渦を巻き、巨大な誤植になる。【演出：大きく揺れ】"},
+    {"t": "d", "x": "ヌルの手が止まる。けれど、舞い上がった白いページは止まらない。ページは閲覧室の真ん中で渦を巻き、巨大な誤植になる。【演出：大きく揺れ】"},
     {"t": "l", "s": "シミ", "x": "止められなくなってるね。新人さん、博士、いくよ。"},
     {"t": "l", "s": "コンラッド", "x": "言われずとも。「われ思う故に我あり」。私はここに存在している。このまま消されてたまるか。"},
     {"t": "act", "a": "battle", "v": "P1-27"},
@@ -3017,10 +3067,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "俺たちには、この空白はただの白にしか見えない。でも、ヌルが読んだら、ここには何が書いてある？"},
     {"t": "l", "s": "ヌル", "x": "……そんなこと、したことない。"},
     {"t": "l", "s": "シミ", "x": "やってみないと、分からないよ。少なくとも、この竜巻でお互い立ち往生はごめんだろ！？"},
-    {"t": "d", "x": "〇〇は、足もとに落ちていた白い頁を一枚拾い上げてヌルの手に握らせる。ヌルはしばらく黙って見つめてから、ぎゅっと目を閉じた。【演出：強調】"},
+    {"t": "d", "x": "〇〇は、足もとに落ちていた白いページを一枚拾い上げてヌルの手に握らせる。ヌルはしばらく黙って見つめてから、ぎゅっと目を閉じた。【演出：強調】"},
     {"t": "l", "s": "ヌル", "x": "……”羨ましい”、って声がする。いつもの声。"},
     {"t": "l", "s": "ヌル", "x": "でも、その奥に……ちがう声もある。"},
-    {"t": "d", "x": "白い頁に、うっすらと文字が浮かびはじめる。古代の言語のはずなのに、○○にも、それが読めた。【演出：光る】"},
+    {"t": "d", "x": "白いページに、うっすらと文字が浮かびはじめる。古代の言語のはずなのに、○○にも、それが読めた。【演出：光る】"},
     {"t": "bg", "v": "背景_ナイル", "cut": 1},
     {"t": "l", "s": "？？？", "x": "はっはっは、今日の現場は第三の班が一番で引き上げだ。おれたち『クフ王の友』の班がな。"},
     {"t": "l", "s": "？？？", "x": "おっ、ほら、パンの配給が来たぞ。今日の分のビールもだ。"},
@@ -3028,7 +3078,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "bg", "v": "背景_ムセイオン", "cut": 1},
     {"t": "d", "x": "紙魚の声が遠くから聞こえる。"},
     {"t": "l", "s": "シミ", "x": "ギザのピラミッドを造った人たちだね。働き手たちは班に分かれていて、自分たちの班に『クフ王の友』みたいな名前をつけてたんだ。石に落書きも残ってるよ。パンやビールが配られていたことも、記録からわかってる。"},
-    {"t": "d", "x": "ヌルは、もう一枚、頁を拾う。〇〇はヌルの手をそっと包み込む。"},
+    {"t": "d", "x": "ヌルは、もう一枚、ページを拾う。〇〇はヌルの手をそっと包み込む。"},
     {"t": "bg", "v": "背景_王家の谷", "cut": 1},
     {"t": "l", "s": "？？？", "x": "書記どの、今日は休みます。村のビールを仕込んでいたので。"},
     {"t": "l", "s": "？？？", "x": "すみません、サソリに刺されました、今日はお休みさせてください。"},
@@ -3051,13 +3101,13 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "ギリシアのアテネで民主政が確立したのも、無名の無産市民たちがペルシア戦争に従軍し、船をこぎ、戦い、死に、勝ったからだ。歴史を消し去るということは、その裏に隠された名もなき人々の営みさえ、無かったことにしてしまうということなんだよ。"},
     {"t": "d", "x": "ヌルは、ピナケスの巻物を、そっと棚に戻す。"},
     {"t": "l", "s": "ヌル", "x": "……分かった。もう、もう消さない。"},
-    {"t": "d", "x": "けれど、閲覧室の天井近くで、行き場をなくした白い頁がもう一度集まり、大きな形をとる。【演出：大きく揺れ】"},
+    {"t": "d", "x": "けれど、閲覧室の天井近くで、行き場をなくした白いページがもう一度集まり、大きな形をとる。【演出：大きく揺れ】"},
     {"t": "l", "s": "コンラッド", "x": "しぶといな。もうひと押しだ。"},
     {"t": "act", "a": "battle", "v": "P1-28"},
     {"t": "l", "s": "アレクサンドロス大王", "x": "（師のアリストテレスが注釈をつけてくれた『イリアス』は、遠征のあいだ、ずっと枕もとに置いていた。）"},
-    {"t": "d", "x": "嵐がやみ、白い頁がもとの巻物に戻っていく。閲覧室の光が、静かに消える。"},
+    {"t": "d", "x": "嵐がやみ、白いページがもとの巻物に戻っていく。閲覧室の光が、静かに消える。"},
     {"t": "d", "x": "コンラッドの輪郭も、もとに戻っている。コンラッドは自分の手を何度か握ったり開いたりして、ふんと鼻を鳴らした。"},
-    {"t": "d", "x": "机の上には、コンラッドのノートと、声の書かれた白い頁の束。ヌルは、それを大切そうに胸に抱える。"},
+    {"t": "d", "x": "机の上には、コンラッドのノートと、声の書かれた白いページの束。ヌルは、それを大切そうに胸に抱える。"},
     {"t": "l", "s": "ヌル", "x": "今まで、本当に、ごめんなさい。"},
     {"t": "l", "s": "ヌル", "x": "もし、許されるのであれば、私はこの声たちを、本にしたい。"},
     {"t": "l", "s": "主人公", "x": "本に？"},
@@ -3184,6 +3234,7 @@ const IMG={
 "セルバンテス": "img/fa96cfab93f5.webp",
 "誤植": "img/374881b265a4.webp",
 "道具_誤植の本": "img/4fcfbab94c64.webp",
+"道具_誤植ミニサイズ": "img/f1e8a70f96f8.webp",
 "アイスキュロス": "img/5f55940787ab.webp",
 "アウラングゼーブ": "img/74dbd075448f.webp",
 "アクバル": "img/fe15eca61deb.webp",
@@ -3452,7 +3503,7 @@ const FX={
   setTimeout(()=>{try{cb&&cb()}finally{d.classList.add('out')}},430);setTimeout(()=>{d.remove();FX.busy=false},930)},
  run(name){({shake:()=>FX.shake(),shakeBig:()=>FX.shake(null,'big'),glow:()=>FX.glow(),flash:()=>FX.flash(),spotlight:()=>FX.spotlight(),pageTurn:()=>FX.pageTurn()})[name]?.()}
 };
-const FX_LIST=[['揺れ','shake','FX.shake()'],['大きく揺れ','shakeBig',"FX.shake(null,'big')"],['光る','glow','FX.glow(要素)'],['閃光','flash','FX.flash()'],['強調','spotlight','FX.spotlight(要素)'],['頁めくり','pageTurn','FX.pageTurn(次の処理)']];
+const FX_LIST=[['揺れ','shake','FX.shake()'],['大きく揺れ','shakeBig',"FX.shake(null,'big')"],['光る','glow','FX.glow(要素)'],['閃光','flash','FX.flash()'],['強調','spotlight','FX.spotlight(要素)'],['ページめくり','pageTurn','FX.pageTurn(次の処理)']];
 function FxLab(){closeDrawer();
  show(`<div class="fxlab" id="fxlab"><div class="vn-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="vn-fig" id="fig">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="シミ">`:'<div class="ph-char">シミ</div>'}</div>
@@ -3684,7 +3735,7 @@ function openDrawer(){closeDrawer();
   ${TOUCH?'':`<button class="item" id="dwFS">${isFS()?'全画面表示をやめる':'全画面で表示する'}<small>ブラウザで直接開いているときに使えます</small></button>`}
   <div class="grp">文字の表示の速さ<div class="seg">${['slow','normal','fast','instant'].map(sp).join('')}</div></div>
   <button class="item" id="dwSpell">復活の呪文<small>いまの記録を呪文にして書き写す</small></button>
-  <button class="item" id="dwFx">演出の見本<small>揺れ・光る・強調・頁めくりを試せます</small></button>
+  <button class="item" id="dwFx">演出の見本<small>揺れ・光る・強調・ページめくりを試せます</small></button>
   <a class="item" href="${IMG_BASE}credits.html" ${CLOUD?'target="_blank" rel="noopener"':''} style="text-decoration:none">画像の出典<small>肖像の作者とライセンスの一覧</small></a>
   <button class="item" id="dwTitle">タイトルに戻る<small>記録は自動で保存されています</small></button>`;
  document.body.append(bg,d);
@@ -3699,12 +3750,12 @@ function closeDrawer(){const a=$('#drawer'),b=$('#drawerBg');if(a)a.remove();if(
 /* ---------- story player ---------- */
 let PL=null;
 const _pre=new Set();function preload(u){if(!u||_pre.has(u)||u.startsWith('data:'))return;_pre.add(u);const i=new Image();i.decoding='async';i.src=u}
-function preloadCh(ch){const st=STORY[ch];if(!st)return;preload(bgOf(ch,null));st.ev.forEach(e=>{if(e.t==='bg')preload(IMG[e.v]);if(e.t==='l'&&IMG[e.s])preload(IMG[e.s]);if(e.t==='act'&&e.a==='battle'&&K[e.v])preload(IMG[K[e.v].who])})}
-function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.prog.i:((S.mid&&S.mid[ch])||0);PL={ch,i:resume,ev:STORY[ch].ev,pages:null,pg:0,typing:null,full:''};
+function preloadCh(ch){const st=STORY[ch];if(!st)return;preload(bgOf(ch,null));st.ev.forEach(e=>{if(e.t==='bg')preload(IMG[e.v]);if(e.t==='l'&&IMG[e.s])preload(IMG[e.s]);if(e.img)preload(IMG[e.img]);if(e.t==='act'&&e.a==='battle'&&K[e.v])preload(IMG[K[e.v].who])})}
+function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.prog.i:((S.mid&&S.mid[ch])||0);PL={ch,i:resume,ev:STORY[ch].ev,pages:null,pg:0,typing:null,full:'',cast:[],ln:0,solo:false};
  let bgk=null,itk=null;for(let k=0;k<resume&&k<PL.ev.length;k++){const e=PL.ev[k];if(e.t==='bg')bgk=e.v;if(e.x){const t=tagsOf(e.x);if(t.item!==undefined)itk=t.item}}PL.bg=bgk;PL.item=itk;const bgu=bgOf(ch,bgk);
  show(`<div class="vn" id="story">
   <div class="vn-bg" id="vnbg" ${bgu?`style="background-image:url(${bgu})"`:''}></div>
-  <div class="vn-fig" id="fig"></div><div class="vn-shade"></div><div class="vn-item" id="item" hidden></div>
+  <div class="vn-cast" id="cast"></div><div class="vn-fig" id="fig"></div><div class="vn-shade"></div><div class="vn-item" id="item" hidden></div>
   <div class="vn-chap">${CHNAME[ch]}<br>${esc(STORY[ch].title)}</div>
   <div class="vn-tools">${ch===0?'<button id="skipP">序章をとばす</button>':''}${TOUCH?'':'<button id="fsS">全画面</button>'}<button id="quitS">中断する</button></div>
   <div class="vn-box" id="tb" aria-live="polite"><span class="vn-name" id="np" hidden></span><p class="vn-text" id="say"></p><span class="vn-next" id="nxt"></span></div>
@@ -3724,7 +3775,8 @@ function step(){const ev=PL.ev;PL.pages=null;
  if(PL.i>=ev.length){ if(PL.ch===0){finishPrologue()}else{if(S.mid)delete S.mid[PL.ch];S.prog=null;PL=null;save();Home()} return}
  const e=ev[PL.i++];S.prog={ch:PL.ch,i:PL.i-1};save();
  if(e.t==='jump'){PL.i=e.to;return step()}
- if(e.t==='bg'){const prev=PL.bg;PL.bg=e.v;const b=$('#vnbg');const u=bgOf(PL.ch,e.v);if(b&&u&&prev!==e.v&&(e.cut||(e.v in BGL))){stopType();sceneCut(e.cut?null:BGL[e.v],()=>{b.style.backgroundImage=`url(${u})`},()=>{if(PL)step()});return}if(b&&u)b.style.backgroundImage=`url(${u})`;return step()}
+ if(e.t==='bg'){const prev=PL.bg;PL.bg=e.v;const b=$('#vnbg');const u=bgOf(PL.ch,e.v);if(b&&u&&prev!==e.v&&(e.cut||(e.v in BGL))){stopType();const swap=()=>{b.style.backgroundImage=`url(${u})`;castClear()},next=()=>{if(PL)step()};
+   if(!e.cut&&isLibBg(prev)&&!isLibBg(e.v))bookCut(BGL[e.v],swap,next);else sceneCut(e.cut?null:BGL[e.v],swap,next);return}if(b&&u)b.style.backgroundImage=`url(${u})`;return step()}
  if(e.t==='choice'){showChoice(e);return}
  if(e.t==='act'){runAct(e);return}
  renderLine(e)}
@@ -3741,7 +3793,7 @@ function sceneCut(lb,swap,done){const st=$('#story');if(!st||FX.reduce()){swap()
  o.innerHTML=lb?`<div class="sc-ban"><span class="sc-a">${esc(lb[0])}</span><span class="sc-b">${esc(lb[1])}</span></div>`:'';
  st.appendChild(o);let t1,t2,fin=false;const end=()=>{if(fin)return;fin=true;clearTimeout(t1);clearTimeout(t2);o.classList.add('out');setTimeout(()=>{o.remove();done()},320)};
  t1=setTimeout(swap,380);t2=setTimeout(end,lb?1700:800);o.onclick=e=>{e.stopPropagation();swap();end()}}
-function advance(){if(!PL||$('.vn-choices')||$('#modal')||$('#scenecut'))return;
+function advance(){if(!PL||$('.vn-choices')||$('#modal')||$('#scenecut')||$('.crumble')||$('.quizcut'))return;
  if(PL.typing){finishType();return}
  if(PL.pages&&PL.pg<PL.pages.length-1){PL.pg++;typePage();return}
  step()}
@@ -3769,41 +3821,119 @@ function setFig(html,cls){const f=$('#fig');if(f.dataset.html===html)return;f.da
 /* ト書き・台詞の中の【道具：名前】【道具：なし】【演出：揺れ】などを読む */
 const FX_NAME={'揺れ':'shake','大きく揺れ':'shakeBig','光る':'glow','閃光':'flash','強調':'spotlight'};
 const MEMO_SVG='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 220"><g transform="rotate(-4 150 110)"><rect x="40" y="30" width="220" height="160" fill="#f3ead6" stroke="#b8923f" stroke-width="3"/><text x="150" y="80" font-size="26" text-anchor="middle" fill="#3a2a1a" font-family="serif" font-weight="700">辞　令</text><text x="150" y="118" font-size="13" text-anchor="middle" fill="#3a2a1a" font-family="serif">本日付で史書庫司書に任ずる</text><text x="225" y="160" font-size="14" text-anchor="end" fill="#3a2a1a" font-family="serif">館長</text><path d="M232 20c22 18 30 50 22 86-14-22-24-54-22-86z" fill="#fafafa" stroke="#222" stroke-width="2"/><path d="M243 30c4 26 4 50 11 76" stroke="#111" stroke-width="2" fill="none"/><path d="M240 60c6 4 10 10 13 18" stroke="#111" stroke-width="4" fill="none"/></g></svg>');
-function ITEM_FB(n){if(n==='誤植ミニサイズ')return IMG['誤植']||null;if(n==='館長のメモ')return MEMO_SVG;return null}
+function ITEM_FB(n){if(n==='誤植ミニサイズ')return IMG['道具_誤植ミニサイズ']||IMG['誤植']||null;if(n==='館長のメモ')return MEMO_SVG;return null}
 function tagsOf(t){const r={fx:[],text:String(t)};r.text=r.text.replace(/【道具：([^】]*)】/g,(m,n)=>{n=n.trim();r.item=(n==='なし'||!n)?null:n;return ''}).replace(/【演出：([^】]*)】/g,(m,n)=>{if(FX_NAME[n.trim()])r.fx.push(FX_NAME[n.trim()]);return ''}).trim();return r}
 function setItem(n){const el=$('#item');if(!el)return;const src=n&&(IMG['道具_'+n]||ITEM_FB(n));if(PL)PL.item=n||null;
  if(!src){el.hidden=true;el.innerHTML='';el.dataset.n='';return}if(el.dataset.n===n)return;el.dataset.n=n;el.innerHTML=`<img src="${src}" alt="${esc(n)}">`;el.hidden=false}
-function renderLine(e){const np=$('#np'),say=$('#say');
- say.className='vn-text';const tg=tagsOf(sp(e.x));let txt=tg.text;if(tg.item!==undefined)setItem(tg.item);tg.fx.forEach(f=>setTimeout(()=>FX.run(f),30));
- if(e.t==='d'){np.hidden=true;say.classList.add('desc')}
+function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;
+ say.className='vn-text';const tg=tagsOf(sp(e.x));let txt=tg.text;if(tg.item!==undefined)setItem(tg.item);
+ let tgt=null; /* 光る・強調の対象 */
+ if(e.t==='d'){np.hidden=true;say.classList.add('desc');
+  if(e.img&&IMG[e.img]){soloFig(`<img src="${IMG[e.img]}" alt=""${e.sil?' class="sil"':''}>`);tgt='#fig'}
+  else{castExits(txt);if(!PL.solo){const m=castMentioned(txt);if(m)tgt=m;castRender(null)}}}
  else{
   const name=e.s.replace('（召喚）','');const summon=e.s.includes('（召喚）')||CARD[name];
   np.hidden=false;np.textContent=name==='主人公'?(S.name||'カコ'):name;
-  np.className='vn-name'+(name==='シミ'?' shimi':name==='ゴーストライター'?' gw':name==='主人公'?' mc':name==='コンラッド'?' konrad':name==='ヌル'?' nul':CARD[name]?' fig':' other');
-  if(name==='イエス'){say.classList.add('light');txt=txt.replace(/^（|）$/g,'');setFig(`<div class="card">${lightArt()}</div>`,'card-fig');
-    FX.flash()}
+  np.className='vn-name'+(name==='シミ'?' shimi':name==='ゴーストライター'?' gw':name==='主人公'?' mc':name==='コンラッド'?' konrad':(name==='ヌル'||e.img==='ヌル')?' nul':CARD[name]?' fig':' other');
+  const key=e.img||name;
+  if(name==='イエス'){say.classList.add('light');txt=txt.replace(/^（|）$/g,'');soloFig(`<div class="card">${lightArt()}</div>`,'card-fig');FX.flash()}
   else if(summon&&CARD[name]&&/^（.*）$/.test(txt)){say.classList.add('light');txt=txt.replace(/^（|）$/g,'');
-    const was=$('#fig').dataset.who;setFig(cardHTML(name,{forceOwn:true}),'card-fig');$('#fig').dataset.who=name;if(was!==name){FX.flash();setTimeout(()=>FX.glow('#fig'),60)}}
-  else if(name!=='主人公'){
-   if(summon&&CARD[name]){const was=$('#fig').dataset.who;setFig(cardHTML(name,{forceOwn:true}),'card-fig');$('#fig').dataset.who=name;if(was!==name)setTimeout(()=>{FX.glow('#fig');FX.spotlight('#fig')},60)}
-   else if(IMG[name])setFig(`<img src="${IMG[name]}" alt="${esc(name)}">`);
-   else if(['シミ','ゴーストライター','コンラッド','ヌル'].includes(name))setFig(`<div class="ph-char">${esc(name)}</div>`)}
+    const was=$('#fig').dataset.who;soloFig(cardHTML(name,{forceOwn:true}),'card-fig');$('#fig').dataset.who=name;if(was!==name){FX.flash();setTimeout(()=>FX.glow('#fig'),60)}tgt='#fig'}
+  else if(summon&&CARD[name]&&name!=='主人公'){const was=$('#fig').dataset.who;soloFig(cardHTML(name,{forceOwn:true}),'card-fig');$('#fig').dataset.who=name;if(was!==name)setTimeout(()=>{FX.glow('#fig');FX.spotlight('#fig')},60);tgt='#fig'}
+  else if(name!=='主人公'&&(IMG[key]||['シミ','ゴーストライター','コンラッド','ヌル'].includes(key))){
+    if(e.sil&&IMG[key]){soloFig(`<img src="${IMG[key]}" alt="" class="sil">`);tgt='#fig'}
+    else{castSpeak(key);tgt=`#cast .cm[data-k="${key}"]`}}
+  else if(!PL.solo)castRender(null);
  }
- if(e.fx)setTimeout(()=>FX.run(e.fx),30);
+ const fx=tg.fx.slice();if(e.fx)fx.push(e.fx);
+ fx.forEach(f=>setTimeout(()=>{
+  if(f==='glow'){if(e.t==='d'&&!e.img)FX._replay($('#vnbg'),'bg-glow',1450);else if(tgt)FX.glow(tgt)}
+  else if(f==='spotlight'){if(tgt)FX.spotlight(tgt)}
+  else FX.run(f)},30));
  PL.pages=paginate(txt,pageSize());PL.pg=0;typePage()}
+/* ---------- 立ち絵の並び（話している人を明るく、ほかは少し暗く） ---------- */
+const CAST_WIN=7; /* この行数のあいだ話さなかった人は下がる */
+function castMax(){const s=$('#story');if(!s)return 2;return s.clientWidth/s.clientHeight>=1.2?3:2}
+function soloFig(html,cls){setFig(html,cls);PL.solo=true;const c=$('#cast');if(c)c.classList.add('off')}
+function endSolo(){if(!PL.solo)return;PL.solo=false;setFig('');const f=$('#fig');if(f)f.dataset.who='';const c=$('#cast');if(c)c.classList.remove('off')}
+function castClear(){if(!PL)return;PL.cast=[];endSolo();const c=$('#cast');if(c)c.innerHTML=''}
+function castSpeak(key){endSolo();const L=PL.cast;let m=L.find(x=>x.k===key);
+ if(!m){m={k:key,first:PL.ln};L.push(m)}m.last=PL.ln;
+ for(let i=L.length-1;i>=0;i--)if(L[i]!==m&&PL.ln-L[i].last>CAST_WIN)L.splice(i,1);
+ while(L.length>castMax()){let o=null;L.forEach(x=>{if(x!==m&&(!o||x.last<o.last))o=x});L.splice(L.indexOf(o),1)}
+ castRender(key)}
+const CAST_ALIAS={'紙魚':'シミ'};
+function castExits(t){if(!PL.cast.length)return;
+ const sents=t.split('。');PL.cast=PL.cast.filter(m=>!sents.some(s=>(s.includes(m.k)||Object.keys(CAST_ALIAS).some(a=>CAST_ALIAS[a]===m.k&&s.includes(a)))&&/消え|姿を消|引っ込|立ち去|去ってい|姿はもうない/.test(s)))}
+function castMentioned(t){const m=PL.cast.find(x=>t.includes(x.k)||Object.keys(CAST_ALIAS).some(a=>CAST_ALIAS[a]===x.k&&t.includes(a)));return m?`#cast .cm[data-k="${m.k}"]`:null}
+function castRender(talker){const box=$('#cast');if(!box)return;const L=PL.cast;
+ const pos={1:[50],2:[31,69],3:[20,50,80]}[L.length]||[];
+ const order=L.slice().sort((a,b)=>a.first-b.first);
+ [...box.children].forEach(el=>{if(!L.some(x=>x.k===el.dataset.k)){el.classList.add('out');setTimeout(()=>el.remove(),320)}});
+ order.forEach((m,i)=>{let el=[...box.children].find(x=>x.dataset.k===m.k&&!x.classList.contains('out'));
+  if(!el){el=document.createElement('div');el.className='cm in';el.dataset.k=m.k;
+   el.innerHTML=`<div class="hop">${IMG[m.k]?`<img src="${IMG[m.k]}" alt="${esc(m.k)}">`:`<div class="ph-char">${esc(m.k)}</div>`}</div>`;
+   el.style.left=pos[i]+'%';box.appendChild(el);setTimeout(()=>el.classList.remove('in'),400)}
+  el.style.left=pos[i]+'%';
+  const was=el.classList.contains('talk');el.classList.toggle('talk',m.k===talker);el.classList.toggle('solo',L.length===1&&!talker);
+  if(m.k===talker&&!was&&L.length>1)FX._replay(el,'hopping',340)})}
+function isLibBg(k){return !k||/^背景_書庫/.test(k)}
+/* ---------- 本の世界へ：あらゆる文字が足もとから立ちのぼる ---------- */
+const GLYPH_SRC=['史書頁歴名王帝民国記文字年代誤植時空海山河都城神言葉読書','一二三四五六七八九十百千万','0123456789','あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん',
+ 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン','ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz','ΑΒΓΔΕΖΗΘΛΜΞΠΣΦΨΩαβγδλμπσω',
+ 'АБВГДЖЗИЛПФЦЧШЩЭЮЯбвгджзлфы','가나다라마바사아자차카타파하역사이름책','ᜀᜁᜂᜃᜄᜅᜆᜇᜈᜉᜊᜋᜌᜎᜏᜐᜑ','ابتثجحخدذرزسشصضطظعغفقكلمنهوي','אבגדהוזחטיכלמנסעפצקרשת','अआइईउकखगघचछजझटठडढतथदधनपफबभमयरलवशसह','กขคงจฉชซญดตถทนบปผพฟมยรลวสหอฮ','ሀለሐመሠረሰቀበተኀነአከወዐዘየደገጠጰጸፀፈፐ'];
+let GLYPHS=null;
+function glyphPool(){if(GLYPHS)return GLYPHS;GLYPHS=[];
+ try{const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d');x.font='24px sans-serif';x.textBaseline='top';
+  const sig=ch=>{x.clearRect(0,0,32,32);x.fillText(ch,2,2);const d=x.getImageData(0,0,32,32).data;let s=0;for(let i=3;i<d.length;i+=4)s=(s*31+d[i])>>>0;return s};
+  const tofu=[sig('\u{10FFFD}'),sig('￿')];
+  GLYPH_SRC.forEach(set=>{const a=[...set];const t=a[0];const g=sig(t);if(g&&!tofu.includes(g))GLYPHS.push(...a)})}catch(e){}
+ if(!GLYPHS.length)GLYPHS=[...GLYPH_SRC.slice(0,6).join('')];return GLYPHS}
+function bookCut(lb,swap,done){const st=$('#story');if(!st||FX.reduce()){swap();done();return}
+ const o=document.createElement('div');o.className='bookcut';o.id='scenecut';const G=glyphPool();const H=st.clientHeight;
+ let html='<div class="bk-dark"></div>';const N=Math.round(Math.min(190,Math.max(90,st.clientWidth/7)));
+ for(let i=0;i<N;i++){const g=G[Math.floor(Math.random()*G.length)];const sz=(14+Math.random()*Math.random()*58).toFixed(0);
+  html+=`<span class="gl" style="left:${(Math.random()*100).toFixed(1)}%;font-size:calc(${sz}*var(--u));--d:${(1.1+Math.random()*0.9).toFixed(2)}s;--w:${(Math.random()*1.1).toFixed(2)}s;--h:${Math.round(H*(0.6+Math.random()*0.6))}px">${esc(g)}</span>`}
+ o.innerHTML=html;st.appendChild(o);let fin=false,shown=false;
+ const ban=()=>{if(shown)return;shown=true;swap();o.querySelectorAll('.gl').forEach(x=>x.remove());const k=o.querySelector('.bk-dark');k.style.animation='none';k.style.opacity=1;
+  if(lb){const b=document.createElement('div');b.className='bk-ban';b.innerHTML=`<div class="sc-ban"><span class="sc-a">${esc(lb[0])}</span><span class="sc-b">${esc(lb[1])}</span></div>`;o.appendChild(b)}};
+ const end=()=>{if(fin)return;fin=true;clearTimeout(t1);clearTimeout(t2);ban();o.classList.add('out');setTimeout(()=>{o.remove();done()},320)};
+ const t1=setTimeout(ban,2150),t2=setTimeout(end,lb?3500:2500);
+ o.onclick=ev=>{ev.stopPropagation();if(!shown){ban();return}end()}}
+/* ---------- 背景がぼろぼろと崩れてバトルへ ---------- */
+const BG_SIZE={};
+function crumbleCut(done){const st=$('#story'),bg=$('#vnbg');if(!st||!bg||FX.reduce()){done();return}
+ stopType();const url=(bg.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/)||[])[1];if(!url){done();return}
+ const go=(iw,ih)=>{const r=bg.getBoundingClientRect(),sr=st.getBoundingClientRect();const W=r.width,H=r.height;
+  const sc=Math.max(W/iw,H/ih),dw=iw*sc,dh=ih*sc,ox=(W-dw)/2,oy=(H-dh)/2;
+  const cols=W>H?9:6,rows=W>H?6:9,tw=W/cols,th=H/rows;const o=document.createElement('div');o.className='crumble';
+  let html='';for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+   const w=(Math.random()*0.5+(rows-y)/rows*0.35+Math.abs(x-cols/2)/cols*0.2).toFixed(2);
+   html+=`<div class="tl" style="left:${(r.left-sr.left)+x*tw}px;top:${(r.top-sr.top)+y*th}px;width:${tw+1}px;height:${th+1}px;background-image:url(${url});background-size:${dw}px ${dh}px;background-position:${ox-x*tw}px ${oy-y*th}px;--w:${w}s;--d:${(0.7+Math.random()*0.5).toFixed(2)}s;--x:${((Math.random()-.5)*tw*1.4).toFixed(0)}px;--y:${(H*0.9+Math.random()*H*0.4).toFixed(0)}px;--r:${((Math.random()-.5)*80).toFixed(0)}deg"></div>`}
+  o.innerHTML=html;st.appendChild(o);let fin=false;const end=()=>{if(fin)return;fin=true;clearTimeout(t);done()};
+  const t=setTimeout(end,1750);o.onclick=ev=>{ev.stopPropagation();end()}};
+ if(BG_SIZE[url]){go(...BG_SIZE[url]);return}
+ const im=new Image();im.onload=()=>{BG_SIZE[url]=[im.naturalWidth,im.naturalHeight];go(im.naturalWidth,im.naturalHeight)};im.onerror=()=>done();im.src=url}
+/* ---------- おさらいドリルのカットイン ---------- */
+function quizCut(title,tut,done){const st=$('#story');if(!st){done();return}
+ const o=document.createElement('div');o.className='quizcut';
+ o.innerHTML=`<div class="qc-band"></div><div class="qc-in"><div class="qc-face" style="${IMG['シミ_顔']?`background-image:url(${IMG['シミ_顔']})`:''}"></div><div class="qc-tx"><span class="qc-eye">${tut?'TUTORIAL':'REVIEW DRILL'}</span><b class="qc-t">${esc(title)}</b><span class="qc-s">${tut?'まずは問題に答えてみよう':'ここまでの内容を、おさらいしよう'}</span></div></div>`;
+ stopType();let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done()},FX.reduce()?0:280)};
+ o.onclick=ev=>{ev.stopPropagation();end()};st.appendChild(o);setTimeout(end,FX.reduce()?900:1900)}
 function showChoice(e){stopType();const d=document.createElement('div');d.className='vn-choices';
  e.o.forEach((o,k)=>{const b=document.createElement('button');b.textContent=o;b.onclick=ev=>{ev.stopPropagation();d.remove();PL.i=e.to[k];step()};d.appendChild(b)});
  $('#story').appendChild(d)}
 function runAct(e){
  if(e.a==='name'){if(S.name)return step();askName(()=>step());return}
  if(e.a==='tgacha'){if(S.tutorial)return step();if(S.shiori<5){S.shiori=5;save()}FX.pageTurn(()=>Gacha({tut:true,done:()=>resumeStory()}));return}
- if(e.a==='tbattle'){Battle(TUTORIAL_K,{tutorial:true,done:()=>resumeStory()});return}
+ if(e.a==='tbattle'){crumbleCut(()=>Battle(TUTORIAL_K,{tutorial:true,done:()=>resumeStory()}));return}
  if(e.a==='quizopen'){return step()}
  if(e.a==='quiz'||e.a==='tquiz'){const list=e.v.map(id=>Q.find(q=>q.id===id)).filter(Boolean);
-   startQuiz({list,label:e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',tut:e.a==='tquiz',done:()=>{if(e.a==='tquiz'&&S.shiori<5){S.shiori=5;save()}resumeStory()}});return}
+   if(!list.length)return step();
+   quizCut(e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',e.a==='tquiz',()=>startQuiz({list,label:e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',tut:e.a==='tquiz',done:()=>{if(e.a==='tquiz'&&S.shiori<5){S.shiori=5;save()}resumeStory()}}));return}
  if(e.a==='break'){S.mid=S.mid||{};S.mid[PL.ch]=PL.i;S.prog=null;const ch=PL.ch;PL=null;saveNow();
    modal(`<h3>${CHNAME[ch]}　前編おわり</h3><p style="line-height:1.8;text-align:center">ここまでの記録は保存されました。<br>続きは、ストーリーから${CHNAME[ch]}を選ぶと後編から読めます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>ホームへ</button></div>`,()=>Home());return}
- if(e.a==='battle'){Battle(K[e.v],{done:()=>resumeStory()});return}
+ if(e.a==='battle'){crumbleCut(()=>Battle(K[e.v],{done:()=>resumeStory()}));return}
  if(e.a==='reward'){const first=!S.cleared[e.v-1];S.cleared[e.v-1]=true;let msg='';
    if(first){const r=giveCard(e.c);msg=`${esc(e.c)}の頁を手に入れた。${r}`}else msg='（この章はクリア済みのため、報酬はありません）';
    if(e.v<STORY.length-1&&first)msg+=`<br>${CHNAME[e.v+1]}が読めるようになった。`;
@@ -3862,7 +3992,7 @@ function updHud(){const k=B.k;$('#hpn').textContent=`${k.boss?'巨大な誤植':
  document.querySelectorAll('.bt-gauge span').forEach((s,i)=>s.classList.toggle('on',i<B.gauge))}
 function msText(k,state){let t=esc(k.t);const s=esc(k.slot);
  t=t.replace(s,state==='fixed'?`<span class="fixwrap"><span class="struck">${s}</span><span class="fixed">${esc(k.ok)}</span></span>`:`<span class="slot">${s}</span>`);
- return `<p class="lead">${state==='fixed'?'誤植を正した。':'史書に誤植がある。下線の部分がおかしい。'}</p><p class="text">${t}</p>`}
+ return `<p class="lead">${state==='fixed'?'誤植を正した。':'本に誤植がある。下線の部分がおかしい。'}</p><p class="text">${t}</p>`}
 function slips(list,id,ownMark){return `<div class="grid2" id="${id}">${list.map(o=>{const own=ownMark&&lv(o);return `<button class="slip ${own?'owned':''}" data-v="${esc(o)}">${own?'<span class="own">頁を持っている</span>':''}${esc(o)}</button>`}).join('')}</div>`}
 function askKai(){const k=B.k;B.turn++;B.phase='who';$('#bms').innerHTML=msText(k);
  $('#bq').innerHTML=`<p class="prompt">この誤植を正せる人物は？</p>${slips(shuffle([k.who,...k.wd]),'o1',true)}`;
@@ -3898,8 +4028,8 @@ function followUp(){B.turn++;const base=Q.filter(q=>q.ch===B.ch&&!q.q.includes(B
  document.querySelectorAll('#o3 .slip').forEach(b=>b.onclick=()=>{lockSlips('#o3',q.a);const tm=teamMult(B.ch,CARD[B.k.who].a);const ok=b.dataset.v===q.a;let d=0;
   if(ok){d=Math.round(20*tm.m);hit(d,false)}else{b.classList.add('wrong');B.gauge++;updHud();FX.shake('#battle')}
   setTimeout(()=>{$('#bq').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':'不正解……',ok?`${d}ダメージ`:'改変ゲージ＋1',`${ok?'':`正しくは<b>${esc(q.a)}</b>。`}${esc(q.x)}`);$('#nx').onclick=afterTurn},650)})}
-function win(){const cb=B.opt.done;FX.shake('#enemy','big');inkSplash(true);setTimeout(()=>modal(`<h3>誤植を修正した</h3><p style="line-height:1.8">史書の記述が元に戻った。</p><div class="row"><button class="btn" data-close>ストーリーにもどる</button></div>`,cb),700)}
-function lose(){const k=B.k,o=B.opt;modal(`<h3>改変ゲージがいっぱいになった</h3><p style="line-height:1.8">誤植が書き換えを広げてしまった。もう一度、最初から挑戦しよう。<br>（ペナルティはありません）</p><div class="row"><button class="btn" data-close>もう一度挑戦する</button></div>`,()=>Battle(k,o))}
+function win(){const cb=B.opt.done;FX.shake('#enemy','big');inkSplash(true);setTimeout(()=>modal(`<h3>誤植を修正した</h3><p style="line-height:1.8;text-align:center">本の記述が元に戻った。</p><div class="row" style="justify-content:center"><button class="btn" data-close>ストーリーにもどる</button></div>`,cb),700)}
+function lose(){const k=B.k,o=B.opt;modal(`<h3>改変ゲージがいっぱいになった</h3><p style="line-height:1.8">誤植が書き換えを広げてしまった。もう一度、最初から挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>もう一度挑戦する</button></div>`,()=>Battle(k,o))}
 
 /* ---------- drill ---------- */
 const CHT=DATA.chapters;
