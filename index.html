@@ -834,6 +834,78 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .quizcut .qc-s{font-family:var(--sans);font-size:max(12px,calc(16*var(--u)));letter-spacing:.12em;color:#4a3f30}
 .quizcut.out{opacity:0;transition:opacity .28s}
 @media (prefers-reduced-motion:reduce){.bookcut .gl,.bookcut .bk-dark,.crumble .tl,.quizcut .qc-band,.quizcut .qc-in,.vn-cast .cm.in,.vn-cast .cm.hopping .hop{animation:none}}
+
+/* --- 時代別の栞 --- */
+.coins{display:flex;gap:calc(8*var(--u));align-items:stretch}
+.coin{position:relative;display:flex;flex-direction:column;justify-content:center;min-width:calc(96*var(--u));padding:calc(5*var(--u)) calc(12*var(--u)) calc(5*var(--u)) calc(40*var(--u));
+ background:linear-gradient(180deg,#141c38,#0b1128);color:#f1e3bf;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(201,162,74,.75),0 6px 16px rgba(0,0,0,.45)}
+.coin .rb{position:absolute;left:calc(9*var(--u));top:-2px;width:calc(24*var(--u));min-width:18px}
+.coin span{font-family:var(--sans);font-size:max(10px,calc(12*var(--u)));letter-spacing:.05em;opacity:.9;white-space:nowrap}
+.coin b{font-family:var(--serif);font-size:max(15px,calc(24*var(--u)));font-weight:600;line-height:1.1;text-align:right;font-variant-numeric:tabular-nums}
+.rb{display:block;height:auto}
+.h-coins{position:absolute;right:calc(clamp(16px,3vw,40px) + 60px);top:calc(env(safe-area-inset-top,0px) + clamp(12px,2.4vh,28px));z-index:3}
+.dr .coin,.gc .coin{min-width:calc(88*var(--u))}
+@media (orientation:portrait){.h-coins{right:clamp(16px,3vw,40px);top:calc(env(safe-area-inset-top,0px) + 74px)}}
+.shiori3{font-family:var(--sans);font-size:13px;color:var(--paper);white-space:nowrap}.shiori3 b{font-family:var(--serif);font-size:17px;color:#fff;margin:0 .4em 0 .2em}
+/* --- 頁をめくる（時代別） --- */
+.gc2 .gc-ret{position:absolute;z-index:4;left:clamp(16px,3vw,40px);top:calc(env(safe-area-inset-top,0px) + 18*var(--u));min-width:calc(110*var(--u))}
+.gc2 .gc-head{position:absolute;z-index:3;left:44%;top:calc(env(safe-area-inset-top,0px) + 14*var(--u));transform:translateX(-50%);text-align:center}
+.gc2 .gc-title{position:relative;left:auto;top:auto;transform:none;min-width:calc(380*var(--u));font-size:max(18px,calc(34*var(--u)));padding:calc(8*var(--u)) calc(64*var(--u))}
+.gc2 .gc-sub{margin:calc(8*var(--u)) 0 0;font-size:max(11px,calc(15*var(--u)));letter-spacing:.14em;color:#e9e1cc;text-shadow:0 2px 6px rgba(0,0,0,.8);white-space:nowrap}
+.gc2 .gc-shimi{left:calc(-40*var(--u));bottom:calc(-90*var(--u));height:calc(640*var(--u));aspect-ratio:810/1500}
+.gc2 .gc-say{left:calc(40*var(--u));top:calc(118*var(--u));max-width:calc(250*var(--u));font-size:max(13px,calc(17*var(--u)))}
+.gc2 .gc-say::before{left:calc(120*var(--u));top:auto;bottom:-12px;border:none;border-left:9px solid transparent;border-right:9px solid transparent;border-top:12px solid #ebe0c8}
+.gc-panel{position:absolute;z-index:3;left:27%;right:3.5%;top:19%;bottom:13%;display:flex;flex-direction:column;gap:calc(12*var(--u));padding:calc(14*var(--u));
+ background:linear-gradient(180deg,rgba(14,20,46,.88),rgba(7,12,31,.92));box-shadow:inset 0 0 0 1px rgba(201,162,74,.75),inset 0 0 0 5px rgba(7,12,31,.9),inset 0 0 0 6px rgba(201,162,74,.35),0 14px 40px rgba(0,0,0,.6)}
+.gc-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(12*var(--u));flex:none}
+.gc-tab{position:relative;display:flex;align-items:center;justify-content:center;gap:calc(10*var(--u));min-height:max(44px,calc(66*var(--u)));padding:0 calc(10*var(--u)) 0 calc(56*var(--u));
+ font-family:var(--serif);font-weight:600;font-size:max(14px,calc(24*var(--u)));letter-spacing:.14em;color:#f1e3bf;
+ background:linear-gradient(180deg,#18224a,#0e1533);box-shadow:inset 0 0 0 1px rgba(201,162,74,.55);clip-path:polygon(0 0,100% 0,100% 100%,0 100%);overflow:visible}
+.gc-tab .rb{position:absolute;left:calc(14*var(--u));top:0;width:calc(36*var(--u));min-width:24px}
+.gc-tab.on{color:#2a2320;background:linear-gradient(180deg,#f6eedc,#e5d5b2);box-shadow:inset 0 0 0 1px #b8923f,inset 0 0 0 4px #f3e9d2,inset 0 0 0 5px rgba(184,146,63,.6),0 0 18px rgba(255,214,140,.35)}
+.gc-tab.on::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border-left:9px solid transparent;border-right:9px solid transparent;border-top:9px solid #e5d5b2}
+.gc-tab:disabled{filter:grayscale(.8) brightness(.6)}
+.gc-banner{position:relative;flex:1;min-height:0;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(201,162,74,.6)}
+.gb-art{position:absolute;inset:0;background:#141c38 center/cover no-repeat}
+.gb-fade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,12,31,.92) 0,rgba(7,12,31,.7) 34%,rgba(7,12,31,0) 62%)}
+.gb-tx{position:absolute;left:calc(46*var(--u));top:50%;transform:translateY(-50%);max-width:46%;display:flex;flex-direction:column;align-items:flex-start;color:#f1e3bf}
+.gb-emb{width:calc(48*var(--u));min-width:34px;color:var(--ec);filter:drop-shadow(0 0 10px rgba(255,214,140,.35));margin-left:calc(58*var(--u))}
+.gb-tx h3{margin:calc(2*var(--u)) 0 0;font-family:var(--serif);font-weight:600;font-size:max(24px,calc(46*var(--u)));letter-spacing:.14em;color:#fbf3df;text-shadow:0 3px 10px rgba(0,0,0,.7)}
+.gb-en{font-family:var(--serif);font-size:max(10px,calc(15*var(--u)));letter-spacing:.4em;color:var(--ec);margin:0 0 calc(8*var(--u)) calc(56*var(--u))}
+.gb-tx p{margin:0 0 calc(10*var(--u));font-size:max(12px,calc(16*var(--u)));line-height:1.8;letter-spacing:.06em;white-space:pre-line;text-shadow:0 2px 6px rgba(0,0,0,.8)}
+.gb-more{font-family:var(--sans);font-size:max(12px,calc(15*var(--u)));color:#f1e3bf;padding:calc(4*var(--u)) calc(24*var(--u));min-height:36px;border-radius:999px;background:rgba(7,12,31,.6);box-shadow:inset 0 0 0 1px rgba(201,162,74,.8)}
+.gb-arrow{position:absolute;z-index:2;top:50%;transform:translateY(-50%);width:44px;height:64px;font-size:40px;line-height:1;color:#f1e3bf;background:none;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+.gb-arrow.l{left:0}.gb-arrow.r{right:0}
+.gc2 .gc-pity{position:static;flex:none;text-align:center;font-family:var(--sans);font-size:max(11px,calc(14*var(--u)));color:#e9e1cc;letter-spacing:.06em}
+.gc2 .gc-pity b{font-family:var(--serif);font-size:1.3em;color:#ffd98a;margin:0 .2em}
+.gc-pull{display:flex;justify-content:center;gap:calc(22*var(--u));flex:none}
+.gp{position:relative;flex:0 1 calc(360*var(--u));min-height:max(56px,calc(104*var(--u)));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(4*var(--u));
+ font-family:var(--serif);clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%)}
+.gp b{font-size:max(17px,calc(30*var(--u)));font-weight:600;letter-spacing:.14em}
+.gp span{display:flex;align-items:center;gap:calc(8*var(--u));font-family:var(--sans);font-size:max(12px,calc(16*var(--u)))}
+.gp .rb{width:calc(20*var(--u));min-width:14px}
+.gp.one{color:#2a2320;background:linear-gradient(180deg,#f6eedc,#e2d3b0);box-shadow:inset 0 0 0 1px #b8923f,inset 0 0 0 5px #f3e9d2,inset 0 0 0 6px rgba(184,146,63,.6)}
+.gp.ten{color:#f4e6c4;background:radial-gradient(ellipse at 50% 40%,#a12c2e 0,#7a1c1f 60%,#561114 100%);box-shadow:inset 0 0 0 1px #c9a24a,inset 0 0 0 5px #6a1619,inset 0 0 0 6px rgba(201,162,74,.6)}
+.gp::before,.gp::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);font-size:max(14px,calc(24*var(--u)));opacity:.55}
+.gp::before{left:calc(36*var(--u))}.gp::after{right:calc(36*var(--u))}
+.gp:active{transform:translateY(2px)}.gp.off{filter:grayscale(.75) brightness(.7)}
+.gc-links{position:absolute;z-index:3;left:27%;right:3.5%;bottom:calc(env(safe-area-inset-bottom,0px) + 2.6%);display:flex;justify-content:center;gap:calc(14*var(--u))}
+.gc-links button{flex:0 1 calc(210*var(--u));min-height:44px;font-family:var(--serif);font-size:max(12px,calc(16*var(--u)));letter-spacing:.1em;color:#f1e3bf;background:rgba(7,12,31,.82);border-radius:4px;box-shadow:inset 0 0 0 1px rgba(201,162,74,.75)}
+.gh-list{max-height:55vh;overflow:auto;margin:6px 0 0;padding:0;list-style:none}
+.gh-list li{display:flex;gap:10px;align-items:baseline;padding:6px 2px;border-bottom:1px solid rgba(120,88,40,.25);font-size:14px}
+.gh-list .t{font-family:var(--sans);font-size:12px;color:#6d5f4a;min-width:84px}.gh-list .e{font-size:12px;padding:0 6px;color:#fff;background:var(--ec);border-radius:2px}
+.gh-list .r{color:#b8923f;min-width:3.2em}
+@media (orientation:portrait){
+ .gc2 .gc-head{left:50%}
+ .gc2 .gc-top{left:50%;right:auto;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 130*var(--u))}
+ .gc2 .gc-shimi{display:none}
+ .gc2 .gc-say{left:4%;right:4%;max-width:none;top:calc(env(safe-area-inset-top,0px) + 215*var(--u))}
+ .gc2 .gc-say::before{display:none}
+ .gc-panel{left:4%;right:4%;top:calc(env(safe-area-inset-top,0px) + 330*var(--u));bottom:calc(env(safe-area-inset-bottom,0px) + 150*var(--u))}
+ .gc-links{left:4%;right:4%;flex-wrap:wrap;bottom:calc(env(safe-area-inset-bottom,0px) + 20*var(--u))}
+ .gc-links button{flex:1 1 40%}
+ .gb-tx{max-width:70%}
+}
 </style>
 </head>
 <body>
@@ -3542,13 +3614,37 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 const app=$('#app');
 
 /* ---------- state ---------- */
+/* ---------- 時代（古代・中世・近世）と時代別の栞 ---------- */
+const ERAS=[
+ {k:'古代',en:'ANCIENT',c:'#c9a24a',part:'第1部',chs:[1,2,3,4,5],bg:'背景_ガチャ_古代',fb:'背景_ナイル',d:'神々と文明の始まりの時代。\n遥かな記憶が、今ここに蘇る。'},
+ {k:'中世',en:'MEDIEVAL',c:'#4a78c0',part:'第2部',chs:[6,7,8,9,10],bg:'背景_ガチャ_中世',fb:'背景_ガチャ',d:'帝国と信仰が交わる時代。\n祈りと剣の記憶をたどる。'},
+ {k:'近世',en:'EARLY MODERN',c:'#c2373d',part:'第3部',chs:[11,12,13,14,15],bg:'背景_ガチャ_近世',fb:'背景_ガチャ',d:'海を越えて、世界がつながる時代。\n革命の足音が聞こえてくる。'}];
+function eraOfCh(ch){return ch<=5?0:ch<=10?1:2}
+function eraOfCard(n){return eraOfCh((CARD[n]||{}).st||1)}
+const QBYID=Object.fromEntries(DATA.Q.map(q=>[q.id,q]));
+function emblem(e){const s='<svg viewBox="0 0 40 40" class="emb" aria-hidden="true">';
+ if(e===0)return s+'<g fill="currentColor"><circle cx="20" cy="20" r="6.5"/>'+Array.from({length:12},(_,i)=>`<path d="M19.2 2.5h1.6l-.5 9h-.6z" transform="rotate(${i*30} 20 20)"/>`).join('')+'</g></svg>';
+ if(e===1)return s+'<g fill="currentColor"><path d="M20 3c4 5 4.6 10.5 1.6 17.5h-3.2C15.4 13.5 16 8 20 3z"/><path d="M18.4 20.5C13 21 8.5 18.5 8.6 13.6c2.4 3.4 5.4 4.6 8.4 4.4z"/><path d="M21.6 20.5C27 21 31.5 18.5 31.4 13.6c-2.4 3.4-5.4 4.6-8.4 4.4z"/><rect x="12.5" y="21.5" width="15" height="3" rx="1"/><path d="M17.6 25.5h4.8L20 37z"/><path d="M15.5 25.5c-3 .6-5 3-4.6 6 1.4-2 3-3 5.4-3.2z"/><path d="M24.5 25.5c3 .6 5 3 4.6 6-1.4-2-3-3-5.4-3.2z"/></g></svg>';
+ return s+'<g fill="currentColor">'+Array.from({length:8},(_,i)=>`<ellipse cx="20" cy="10.5" rx="4.2" ry="7.5" transform="rotate(${i*45} 20 20)" opacity=".9"/>`).join('')+'<circle cx="20" cy="20" r="5.5" fill="#f3ead6"/><circle cx="20" cy="20" r="3" /></g></svg>'}
+function ribbon(e){const c=ERAS[e].c;return `<svg class="rb" viewBox="0 0 30 44" aria-hidden="true"><path d="M3 0h24v42l-12-9-12 9z" fill="${c}"/><path d="M3 0h24v42l-12-9-12 9z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/><g transform="translate(5 6) scale(.5)" color="#fbf3df">${emblem(e).replace('<svg viewBox="0 0 40 40" class="emb" aria-hidden="true">','').replace('</svg>','')}</g></svg>`}
+function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
+function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
+function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
+function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
 function freshState(){return{name:'',prologue:false,cleared:Array(NCH).fill(false),tutorial:false,
-  shiori:0,oshi:'シミ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
+  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'シミ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
 /* 記録の章数をそろえる */
-function normState(N){N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;return N}
+function normState(N){N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
+ /* 栞を時代別に（古い記録は、正解した問題の時代の割合で分ける） */
+ if(!Array.isArray(N.sh)||N.sh.length!==3){const tot=N.shiori||0;const w=[0,0,0];const qs=N.qs||{};
+  for(const id in qs)if(qs[id]===1&&QBYID[id])w[eraOfCh(QBYID[id].ch)]++;const W=w[0]+w[1]+w[2];
+  if(!W)N.sh=[tot,0,0];else{N.sh=w.map(x=>Math.floor(tot*x/W));N.sh[w.indexOf(Math.max(...w))]+=tot-N.sh[0]-N.sh[1]-N.sh[2]}}
+ if(!Array.isArray(N.pt)||N.pt.length!==3)N.pt=[N.pity||0,0,0];
+ if(!Array.isArray(N.hist))N.hist=[];
+ N.shiori=N.sh[0]+N.sh[1]+N.sh[2];return N}
 let S=freshState();
-function save(){window.__played=true;S.t=Date.now();CL.dirty=true;if(CLOUD)CL.mem=JSON.stringify(S);try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
-function load(){try{let t=null;try{t=localStorage.getItem(SAVE_KEY)}catch(e){}t=t||CL.mem;if(t){S=normState(Object.assign(freshState(),JSON.parse(t)));return true}}catch(e){}return false}
+function save(){window.__played=true;S.t=Date.now();if(S.sh)S.shiori=S.sh[0]+S.sh[1]+S.sh[2];CL.dirty=true;if(CLOUD)CL.mem=JSON.stringify(S);try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{let t=null;try{t=localStorage.getItem(SAVE_KEY)}catch(e){}t=t||CL.mem;if(t){const o=JSON.parse(t);const N=Object.assign(freshState(),o);if(!Array.isArray(o.sh))delete N.sh;if(!Array.isArray(o.pt))delete N.pt;S=normState(N);return true}}catch(e){}return false}
 function hasSave(){let t=null;try{t=localStorage.getItem(SAVE_KEY)}catch(e){}return !!(t||CL.mem)}
 const lv=n=>S.cards[n]||0; // 0=未所持, 1..5 = 凸0..4
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
@@ -3571,7 +3667,7 @@ function blobSVG(boss){if(IMG[boss?'誤植_ボス':'誤植']||IMG['誤植'])retu
 
 /* ---------- router ---------- */
 function show(html){app.innerHTML=html;const t=app.querySelector('.gc-top');if(t&&!TOUCH&&!t.querySelector('.fs-mini')){const b=document.createElement('button');b.className='gc-back fs-mini';b.setAttribute('aria-label','全画面');b.title='全画面';b.innerHTML='<svg viewBox=\x220 0 24 24\x22 width=\x2220\x22 height=\x2220\x22 aria-hidden=\x22true\x22><path d=\x22M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\x22 fill=\x22none\x22 stroke=\x22currentColor\x22 stroke-width=\x222.2\x22 stroke-linecap=\x22round\x22 stroke-linejoin=\x22round\x22/></svg>';b.onclick=e=>{e.stopPropagation();toggleFS()};t.prepend(b)}}
-function shioriBadge(){return `<span class="shiori">栞 <b>${S.shiori}</b></span>`}
+function shioriBadge(){return `<span class="shiori3">${ERAS.map((E,i)=>`${E.k}<b>${S.sh[i]}</b>`).join('')}</span>`}
 function topbar(title,backTo='home'){return `<div class="bar"><button class="back" data-go="${backTo}">戻る</button><h2>${esc(title)}</h2>${shioriBadge()}</div>`}
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,code:CodeScreen,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
 
@@ -3611,7 +3707,7 @@ function homeBubble(){const o=oshiName();
  if(o!=='シミ'){const c=CARD[o];return `<span class="who">${esc(o)}　「${esc(c.sk)}」</span>${esc(c.f)}`}
  const nx=nextChapter();const ctx=[];
  if(nx!==null&&S.prologue)ctx.push(`次は${CHNAME[nx]}「${STORY[nx].title}」だね。準備ができたら行こうか。`);
- if(S.shiori>=50)ctx.push(`栞が${S.shiori}枚あるね。10頁めくれるよ。`);
+ {const e=S.sh.findIndex(x=>x>=50);if(e>=0)ctx.push(`${ERAS[e].k}の栞が${S.sh[e]}枚あるね。${ERAS[e].k}の頁を10回めくれるよ。`)}
  const all=ctx.concat(SHIMI_IDLE);
  homeLine=homeLine<0&&ctx.length?0:homeLine<0?ctx.length+Math.floor(Math.random()*SHIMI_IDLE.length):(homeLine+1)%all.length;
  return `<span class="who">シミ</span>${esc(all[homeLine])}`}
@@ -3625,7 +3721,7 @@ function Home(){const nx=nextChapter();const o=oshiName();
   <header class="h-logo"><div class="lg-wrap"><svg viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="150" cy="62" rx="146" ry="36" fill="none" stroke="#c4302b" stroke-width="1.4" transform="rotate(-7 150 62)" stroke-dasharray="330 16 5 16"/><path d="M266 16l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="#e0423a"/><path d="M34 94l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#f2e8cf"/></svg><span class="lg">エラータ</span></div>
    <p class="lg-sub">― 世界史探究 ―</p></header>
   <button class="burger" id="burger" aria-label="メニュー"><span></span></button>
-  <div class="h-shiori" aria-label="栞の数"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#b5302a"/><path d="M11 7h8v16l-4-3-4 3z" fill="#f3ead6"/></svg><span>栞</span><b>${S.shiori}</b></div>
+  <div class="h-coins">${coinsHTML()}</div>
   <div class="oshi ${(o==='シミ'||CHARA[o])?'':'cardmode'}" id="oshi" role="button" aria-label="ひとこと">${oshiHTML}</div>
   <button class="oshi-chg" id="oshiChg">推しを変える</button>
   <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}${FLO.replace('class="flo"','class="ink"')}</div>
@@ -3642,7 +3738,7 @@ function Home(){const nx=nextChapter();const o=oshiName();
  if(S.tour){S.tour=false;save();setTimeout(()=>{if($('#oshi')&&!$('#modal'))homeTour()},450)}}
 const TOUR=[['[data-go="story"]','ストーリー','光っている本を追いかけて、章ごとに誤植を直していくよ。続きの章は、前の章を修復すると読めるようになるんだ。'],
  ['[data-go="quiz"]','ドリル','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「試験範囲で選ぶ」に切りかえると、範囲の問題だけを解けるよ。'],
- ['[data-go="gacha"]','頁をめくる','栞5枚で1頁、50枚で10頁めくれる。誰が出るかは、めくってみるまでわからないよ。'],
+ ['[data-go="gacha"]','頁をめくる','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
  ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
  ['[data-go="zukan"]','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
  ['[data-go="code"]','復活の呪文','記録はこの端末に保存されるけど、ときどき呪文を書き写しておくと安心だよ。ほかの端末でも続きから遊べるからね。'],
@@ -3706,7 +3802,7 @@ function StoryMenu(){const nx=nextChapter();if(nx!==null&&PART===0&&partOf(nx)>0
    <div class="sm-page sm-right"><h3>目次</h3><div class="toc">${rows.join('')}</div></div>
   </div>
   <div class="scr-title">ストーリー</div>
-  <div class="gc-top"><button class="gc-back" data-go="home">戻る</button><div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div></div>`);
+  <div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div></div>`);
  document.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{PART=+b.dataset.part;StoryMenu()});
  document.querySelectorAll('.toc-row').forEach(b=>b.onclick=()=>{const ch=+b.dataset.ch;
   if(b.dataset.ex!=='1'){FX.shake(b);toast('この章は、まだ誤植に食われていて読めないみたい（準備中）');return}
@@ -3769,7 +3865,7 @@ document.addEventListener('keydown',e=>{if(!PL||!$('#story')||$('#modal')||$('.v
 function skipPrologue(){stopType();if(!S.name){askName(()=>skipPrologue());return}
  if(!S.tutorial){S.tutorial=true;giveCard(pickTutorial());}
  finishPrologue()}
-function finishPrologue(){S.prologue=true;S.prog=null;PL=null;S.tour=true;if(S.shiori<5)S.shiori=5;autoParty();saveNow();toast('序章を読み終えました');Home()}
+function finishPrologue(){S.prologue=true;S.prog=null;PL=null;S.tour=true;if(S.sh[0]<5)S.sh[0]=5;autoParty();saveNow();toast('序章を読み終えました');Home()}
 function sp(t){return t.replace(/○○/g,S.name||'カコ')}
 function step(){const ev=PL.ev;PL.pages=null;
  if(PL.i>=ev.length){ if(PL.ch===0){finishPrologue()}else{if(S.mid)delete S.mid[PL.ch];S.prog=null;PL=null;save();Home()} return}
@@ -3925,12 +4021,12 @@ function showChoice(e){stopType();const d=document.createElement('div');d.classN
  $('#story').appendChild(d)}
 function runAct(e){
  if(e.a==='name'){if(S.name)return step();askName(()=>step());return}
- if(e.a==='tgacha'){if(S.tutorial)return step();if(S.shiori<5){S.shiori=5;save()}FX.pageTurn(()=>Gacha({tut:true,done:()=>resumeStory()}));return}
+ if(e.a==='tgacha'){if(S.tutorial)return step();if(S.sh[0]<5){S.sh[0]=5;save()}FX.pageTurn(()=>Gacha({tut:true,done:()=>resumeStory()}));return}
  if(e.a==='tbattle'){crumbleCut(()=>Battle(TUTORIAL_K,{tutorial:true,done:()=>resumeStory()}));return}
  if(e.a==='quizopen'){return step()}
  if(e.a==='quiz'||e.a==='tquiz'){const list=e.v.map(id=>Q.find(q=>q.id===id)).filter(Boolean);
    if(!list.length)return step();
-   quizCut(e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',e.a==='tquiz',()=>startQuiz({list,label:e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',tut:e.a==='tquiz',done:()=>{if(e.a==='tquiz'&&S.shiori<5){S.shiori=5;save()}resumeStory()}}));return}
+   quizCut(e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',e.a==='tquiz',()=>startQuiz({list,label:e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',tut:e.a==='tquiz',done:()=>{if(e.a==='tquiz'&&S.sh[0]<5){S.sh[0]=5;save()}resumeStory()}}));return}
  if(e.a==='break'){S.mid=S.mid||{};S.mid[PL.ch]=PL.i;S.prog=null;const ch=PL.ch;PL=null;saveNow();
    modal(`<h3>${CHNAME[ch]}　前編おわり</h3><p style="line-height:1.8;text-align:center">ここまでの記録は保存されました。<br>続きは、ストーリーから${CHNAME[ch]}を選ぶと後編から読めます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>ホームへ</button></div>`,()=>Home());return}
  if(e.a==='battle'){crumbleCut(()=>Battle(K[e.v],{done:()=>resumeStory()}));return}
@@ -3984,7 +4080,7 @@ function renderBattle(){const k=B.k;const p=partyNames(B.ch);
   <div class="scr-title">${B.opt.tutorial?'チュートリアル':'改変バトル'}${k.boss?'<br>ボス':''}</div>
   <div class="bt-hud"><div class="bt-hp"><i id="hpb" style="width:${100*B.hp/B.max}%"></i></div><div class="bt-hpn" id="hpn">${k.boss?'巨大な誤植':'誤植'}　${B.hp}／${B.max}</div>
    <div class="bt-gauge" aria-label="改変ゲージ">${[0,1,2].map(i=>`<span class="${i<B.gauge?'on':''}"></span>`).join('')}</div></div>
-  <div class="gc-top"><div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
+  <div class="gc-top">${coinsHTML([eraOfCh(B.ch||1)])}</div>
   ${IMG['誤植']?'':BOOK_SVG}<div class="bt-enemy ${k.boss?'boss':''} ${IMG['誤植']?'img':''}" id="enemy"><div class="blob">${blobSVG(k.boss)}</div></div>
   <div class="bt-ms parch" id="bms"></div><div class="bt-q" id="bq"></div>
   <div class="bt-party">${p.own.map(n=>cardHTML(n)).join('')}<span class="sep"></span><div class="helper">${cardHTML(p.helper,{forceOwn:true,noLv:true})}</div></div></div>`)}
@@ -4058,7 +4154,7 @@ function QuizMenu(){
  const keys=DRMODE==='ch'?Object.keys(CHT).map(Number):VOLS.map(v=>v.code);
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
   <div class="gc-title">ドリル</div>
-  <div class="gc-top"><button class="gc-back" data-go="home">戻る</button><div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
+  <div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div>
   <div class="dr-mode"><button data-mode="ch" class="${DRMODE==='ch'?'on':''}">章で選ぶ</button><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button></div>
   <div class="gc-shimi">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="">`:''}</div>
   <div class="gc-say"><span class="who">シミ</span>${esc(DRMODE==='ch'?DR_LINES[Math.floor(Math.random()*DR_LINES.length)]:'テストの範囲ごとに、まとめて解けるよ。範囲の問題から10問ずつ出るからね。')}</div>
@@ -4069,8 +4165,8 @@ function QuizMenu(){
     <span class="lbl">${vtitle(name)}</span><span class="beads">${[0,1,2,3,4].map(i=>`<i class="${i<on?'on':''}"></i>`).join('')}</span><span class="cnt">${st.done}／${st.n}</span></button>`}).join('')}</div></div>`);
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=b.dataset.mode;QuizMenu()});
  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;FX.pageTurn(()=>startQuiz(key))})}
-function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,wrong:[],res:[],tut:!!o.tut,done:o.done}}
- else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,wrong:[],res:[]};toast(pick.msg)}quizQ()}
+function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done}}
+ else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[]};toast(pick.msg)}quizQ()}
 /* ドリルの出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
 function drillPick(key){const pool=poolOf(key);const st=q=>S.qs[q.id]||0;
  const fresh=shuffle(pool.filter(q=>st(q)===0)),wrong=shuffle(pool.filter(q=>st(q)===2)),done=shuffle(pool.filter(q=>st(q)===1));
@@ -4082,83 +4178,117 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}</small>`:''}</div>
   <div class="dr-tabs"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
-  <div class="gc-top">${QZ.tut?'':'<button class="gc-back" id="qQuit">やめる</button>'}<div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
-  <div class="dr-gain">この回の獲得　栞 ${QZ.gain}</div>
+  <div class="gc-top">${QZ.tut?'':'<button class="gc-back" id="qQuit">やめる</button>'}${coinsHTML(qEras())}</div>
+  <div class="dr-gain">この回の獲得　${gainText(QZ.gainE)}</div>
   <div class="dr-paper parch"><p>${esc(q.q)}</p></div>
   <div class="dr-opts" id="qo">${shuffle([q.a,...q.d]).map(o=>`<button class="slip" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
   <div class="dr-note" id="qr"></div></div>`);
  const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes('ここでやめますか？（ここまでの栞はもらえます）','やめる',back)};
  document.querySelectorAll('#qo .slip').forEach(b=>b.onclick=()=>{document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=S.qs[q.id]||0;const ok=b.dataset.v===q.a;let g=0;
-  if(ok){g=st===0?3:st===2?5:1;S.qs[q.id]=1;S.shiori=Math.min(16383,S.shiori+g);QZ.gain+=g}else{b.classList.add('wrong');S.qs[q.id]=2;QZ.wrong.push(q)}
-  QZ.res[QZ.i]=ok;save();$('.gc-coin b').textContent=S.shiori;$('.dr-gain').textContent='この回の獲得　栞 '+QZ.gain;
+  const qe=eraOfCh(q.ch);if(ok){g=st===0?3:st===2?5:1;S.qs[q.id]=1;S.sh[qe]=Math.min(16383,S.sh[qe]+g);QZ.gain+=g;QZ.gainE[qe]+=g}else{b.classList.add('wrong');S.qs[q.id]=2;QZ.wrong.push(q)}
+  QZ.res[QZ.i]=ok;save();refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';tabs[QZ.i].textContent=ok?'✦':'✕';
-  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':'おしい……',ok?`栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,`<span class="who">シミ</span>${esc(q.x)}`,QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'));
-  $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.done){const d=QZ.done,g=QZ.gain;QZ=null;
-    saveNow();modal(`<h3>栞を${g}枚手に入れた</h3><p style="text-align:center;line-height:1.8">おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
+  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':'おしい……',ok?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,`<span class="who">シミ</span>${esc(q.x)}`,QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'));
+  $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
+    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
    else FX.pageTurn(quizEnd)}})}
 function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;saveNow()}const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
-  <div class="gc-top"><div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
-  <div class="dr-res parch"><h3>栞を${QZ.gain}枚手に入れた</h3><p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
+  <div class="gc-top">${coinsHTML(qEras())}</div>
+  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3><p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
   ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}<p class="sub">次に正解すると、栞が5枚もらえます。</p></div>`:'<p>全問正解！</p>'}
   <div class="rowb"><button class="btn red" id="again">もう一度解く</button><button class="btn light" id="toShelf">ほかの棚を選ぶ</button><button class="btn light" data-go="home">ホームへ</button></div></div></div>`);
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
 
 let QZ=null;
-function gachaPool(){return CARDS.filter(c=>!isSP(c.n))}
-function draw1(minR){const pool=gachaPool();let r=Math.random()*100;let rar=r<5?3:r<40?2:1;if(minR&&rar<minR)rar=minR;
+const GC_LINES=['どの時代の頁をめくろうか。新しい出会いがあるかもしれないね。','★3の頁は、出てくるときの光り方がちょっと違うんだよ。','同じ時代で50回めくったら、その時代の好きな頁を1枚選べるよ。','同じ頁が重なると、記述がくわしくなるんだ。凸っていうらしいね。','栞が足りなかったら、その時代のドリルで集めておいで。'];
+const BM='<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#b5302a"/><path d="M11 7h8v16l-4-3-4 3z" fill="#f3ead6"/></svg>';
+let GOPT={},GERA=0;
+function Gacha(opt={}){GOPT=opt;const tut=!!opt.tut;if(tut)GERA=0;const e=GERA,E=ERAS[e];const left=50-S.pt[e];
+ const line=tut?'古代の栞を5枚使って、「1回めくる」を押してごらん。':GC_LINES[Math.floor(Math.random()*GC_LINES.length)];
+ const art=IMG[E.bg]||IMG[E.fb]||'';
+ show(`<div class="gc gc2" id="gc">
+  <div class="gc-bg" ${IMG['背景_ガチャ']?`style="background-image:url(${IMG['背景_ガチャ']})"`:''}></div><div class="gc-shade"></div>
+  ${tut?'':'<button class="gc-back gc-ret" data-go="home">‹ 戻る</button>'}
+  <div class="gc-head"><div class="gc-title">頁をめくる</div><p class="gc-sub">時の頁をめくり、まだ見ぬ出会いをあなたの元へ。</p></div>
+  <div class="gc-top">${coinsHTML()}</div>
+  <div class="gc-shimi">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="">`:''}</div>
+  <div class="gc-say"><span class="who">シミ</span>${esc(line)}</div>
+  <div class="gc-panel">
+   <div class="gc-tabs" role="tablist">${ERAS.map((X,i)=>`<button class="gc-tab ${i===e?'on':''}" data-era="${i}" role="tab" aria-selected="${i===e}" ${tut&&i?'disabled':''}>${ribbon(i)}<span>${X.k}の頁</span></button>`).join('')}</div>
+   <div class="gc-banner" style="--ec:${E.c}">
+    <div class="gb-art" ${art?`style="background-image:url(${art})"`:''}></div><div class="gb-fade"></div>
+    ${tut?'':'<button class="gb-arrow l" data-step="-1" aria-label="前の時代">‹</button><button class="gb-arrow r" data-step="1" aria-label="次の時代">›</button>'}
+    <div class="gb-tx"><div class="gb-emb">${emblem(e)}</div><h3>${E.k}の頁</h3><span class="gb-en">${E.en}</span><p>${esc(E.d)}</p>${tut?'':'<button class="gb-more" id="gMore">詳細 ›</button>'}</div>
+   </div>
+   ${tut?'':`<div class="gc-pity">${E.k}の天井まで　あと<b>${left}</b>回　｜　史料片<b>${S.shiryo}</b></div>`}
+   <div class="gc-pull">
+    <button class="gp one ${S.sh[e]<5?'off':''}" id="g1"><b>1回めくる</b><span>${ribbon(e)}${E.k}の栞　5</span></button>
+    <button class="gp ten ${tut||S.sh[e]<50?'off':''}" id="g10"><b>10回めくる</b><span>${ribbon(e)}${E.k}の栞　50</span></button>
+   </div>
+  </div>
+  ${tut?'':`<nav class="gc-links"><button id="gRate">提供割合 ›</button><button id="gList">収録キャラ一覧 ›</button><button id="gHist">ガチャ履歴 ›</button><button id="gEx">史料片の交換 ›</button></nav>`}
+ </div>`);
+ const go=i=>{if(tut||i===GERA)return;GERA=(i+3)%3;Gacha(opt)};
+ document.querySelectorAll('.gc-tab').forEach(t=>t.onclick=()=>go(+t.dataset.era));
+ document.querySelectorAll('.gb-arrow').forEach(t=>t.onclick=()=>go(GERA+(+t.dataset.step)));
+ $('#g1').onclick=()=>pull(1,tut);$('#g10').onclick=()=>tut?toast('まずは1回めくってみよう'):pull(10);if(tut)FX.glow('#g1');
+ if(!tut){$('#gMore').onclick=()=>gachaMore(e);$('#gRate').onclick=gachaRate;$('#gList').onclick=()=>gachaList(e);$('#gHist').onclick=gachaHist;$('#gEx').onclick=()=>shiryoEx(e)}}
+function gachaMore(e){const E=ERAS[e];
+ modal(`<h3>${E.k}の頁</h3><p style="line-height:1.9;margin:0">${E.part}の人物の頁が出てきます。<br>${E.chs.map(c=>`第${c}章　${esc(CHT[c])}`).join('<br>')}</p>
+  <p style="line-height:1.8">${E.k}の栞は、${E.part}の章のドリルや、ストーリーのおさらいで正解するともらえます。<br>いま　${E.k}の栞 <b>${S.sh[e]}</b>枚　／　天井まであと <b>${50-S.pt[e]}</b>回</p>
+  <div class="row"><button class="btn light" data-close>閉じる</button></div>`)}
+function gachaRate(){modal(`<h3>提供割合</h3><p style="line-height:1.9;margin:0">★3：5%　★2：35%　★1：60%<br>10回めくると、★2以上が1枚以上出ます。<br>時代ごとに、50回めくるたびに、その時代の好きな頁を1枚選べます。<br>4凸を超えて重なった頁は「史料片」になり、史料片10個で好きな頁と交換できます。</p>
+  <div class="row"><button class="btn light" data-close>閉じる</button></div>`)}
+function gachaList(e){const pool=gachaPool(e);const own=pool.filter(c=>lv(c.n)).length;
+ modal(`<h3>${ERAS[e].k}の頁　収録一覧</h3><p class="muted" style="margin:0">${pool.length}人（持っている頁 ${own}人）</p>
+  ${[3,2,1].map(r=>`<h3 style="font-size:16px;margin:12px 0 0">${'★'.repeat(r)}</h3><div class="chips">${pool.filter(c=>c.r===r).map(c=>`<span class="${ATTR_CLASS(c.a)}" style="${lv(c.n)?'':'opacity:.55'}">${esc(c.n)}</span>`).join('')}</div>`).join('')}
+  <div class="row"><button class="btn light" data-close>閉じる</button></div>`)}
+function gachaHist(){const L=S.hist||[];const fmt=t=>{const d=new Date(t);return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`};
+ modal(`<h3>ガチャ履歴</h3><p class="muted" style="margin:0">新しい順に、最大100件まで残ります。</p>
+  ${L.length?`<ul class="gh-list">${L.map(([e,n,t])=>`<li><span class="t">${fmt(t)}</span><span class="e" style="--ec:${ERAS[e].c}">${ERAS[e].k}</span><span class="r">${'★'.repeat((CARD[n]||{}).r||1)}</span><span>${esc(n)}</span></li>`).join('')}</ul>`:'<p>まだ頁をめくっていません。</p>'}
+  <div class="row"><button class="btn light" data-close>閉じる</button></div>`)}
+function shiryoEx(e){if(S.shiryo<10){toast(`史料片が足りません（いま${S.shiryo}個、交換には10個）`);return}
+ chooseCard(`史料片10個と交換する${ERAS[e].k}の頁を選んでください`,n=>{S.shiryo-=10;const r=giveCard(n);autoParty();save();toast(n+'の頁を手に入れた'+r);Gacha(GOPT)},{pool:gachaPool(e),confirm:true,cancel:true})}
+function gachaPool(e){return CARDS.filter(c=>!isSP(c.n)&&(e===undefined||eraOfCard(c.n)===e))}
+function draw1(e,minR){const pool=gachaPool(e);let r=Math.random()*100;let rar=r<5?3:r<40?2:1;if(minR&&rar<minR)rar=minR;
  let c=pool.filter(x=>x.r===rar);for(const alt of [2,3,1]){if(c.length)break;if(alt<(minR||0))continue;c=pool.filter(x=>x.r===alt)}
  return c[Math.floor(Math.random()*c.length)].n}
-const GC_LINES=['どの頁が出るかな。','★3の頁は、出てくるときの光り方がちょっと違うんだよ。','めくった回数が50回になったら、好きな頁を1枚選べるよ。','同じ頁が重なると、記述がくわしくなるんだ。凸っていうらしいね。','栞が足りなかったら、ドリルで集めておいで。'];
-const BM='<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#b5302a"/><path d="M11 7h8v16l-4-3-4 3z" fill="#f3ead6"/></svg>';
-let GOPT={};function Gacha(opt={}){GOPT=opt;const tut=!!opt.tut;const left=50-S.pity;const line=GC_LINES[Math.floor(Math.random()*GC_LINES.length)];
- show(`<div class="gc" id="gc">
-  <div class="gc-bg" ${IMG['背景_ガチャ']?`style="background-image:url(${IMG['背景_ガチャ']})"`:''}></div><div class="gc-shade"></div>
-  <div class="gc-title">頁をめくる</div>
-  <div class="gc-top">${tut?'':'<button class="gc-back" data-go="home">戻る</button>'}<div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
-  <div class="gc-shimi">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="">`:''}</div>
-  <div class="gc-say"><span class="who">シミ</span>${esc(tut?'栞を5枚使って、「1頁めくる」を押してごらん。':line)}</div>
-  <button class="gc-info" id="gInfo" ${tut?'hidden':''}>出現率・天井<small>天井まであと${left}回　史料片 ${S.shiryo}</small></button>
-  <div class="gc-btns">
-   <button class="gc-book one ${S.shiori<5?'off':''}" id="g1"><span class="star">✦</span>1頁めくる<span class="cost">${BM.replace('<svg','<svg width="18" height="18"')}栞 5</span></button>
-   <button class="gc-book ten ${tut||S.shiori<50?'off':''}" id="g10"><span class="star">✦</span>10頁めくる<span class="cost">${BM.replace('<svg','<svg width="18" height="18"')}栞 50</span><span class="ribbon"></span></button>
-  </div></div>`);
- $('#g1').onclick=()=>pull(1,tut);$('#g10').onclick=()=>tut?toast('まずは1頁めくってみよう'):pull(10);if(tut)FX.glow('#g1');$('#gInfo').onclick=gachaInfo}
-function gachaInfo(){const pool=gachaPool();
- modal(`<h3>出現率と天井</h3><p style="line-height:1.8;margin:0 0 8px">★3：5%　★2：35%　★1：60%<br>10頁めくると、★2以上が1枚以上出ます。<br>めくった回数が50回に達するたびに、好きな頁を1枚選べます（あと${50-S.pity}回）。<br>4凸を超えて重なった頁は「史料片」になり、10個で好きな頁と交換できます。</p>
-  <h3 style="font-size:17px;margin-top:14px">いま出てくる頁</h3><div class="chips">${pool.map(c=>`<span class="${ATTR_CLASS(c.a)}">${'★'.repeat(c.r)} ${esc(c.n)}</span>`).join('')}</div>
-  <div class="row"><button class="btn" id="gx" ${S.shiryo<10?'disabled':''}>史料片10個で交換（所持 ${S.shiryo}）</button><button class="btn light" data-close>閉じる</button></div>`);
- $('#gx').onclick=()=>{closeModal(true);chooseCard('史料片10個と交換する頁を選んでください',n=>{S.shiryo-=10;const r=giveCard(n);autoParty();save();toast(n+'の頁を手に入れた'+r);Gacha()})}}
-function pull(n,tut){const cost=n===10?50:5;if(S.shiori<cost){toast('栞が足りません。ドリルで集めてこよう');return}
- S.shiori-=cost;const res=[];for(let i=0;i<n;i++)res.push(tut?pickTutorial():draw1());if(tut)S.tutorial=true;
- if(n===10&&!res.some(x=>CARD[x].r>=2))res[9]=draw1(2);
+function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(`${ERAS[e].k}の栞が足りません。${ERAS[e].part}のドリルで集めてこよう`);return}
+ S.sh[e]-=cost;const res=[];for(let i=0;i<n;i++)res.push(tut?pickTutorial():draw1(e));if(tut)S.tutorial=true;
+ if(n===10&&!res.some(x=>CARD[x].r>=2))res[9]=draw1(e,2);
  const tags=res.map(x=>{const before=lv(x);const r=giveCard(x);return before===0?'NEW':before<5?(lv(x)-1)+'凸':'史料片'});
- S.pity+=n;autoParty();saveNow();
- const gc=$('#gc');if(!gc||FX.reduce()){GachaResult(res,tags,n,tut);return}
+ S.pt[e]+=n;const now=Date.now();S.hist=res.map(x=>[e,x,now]).reverse().concat(S.hist||[]).slice(0,100);autoParty();saveNow();
+ const gc=$('#gc');if(!gc||FX.reduce()){GachaResult(res,tags,n,tut,e);return}
  const rare=res.some(x=>CARD[x].r===3);const b=document.createElement('div');b.className='gc-burst';
  b.innerHTML='<span class="core"></span>'+Array.from({length:14},(_,i)=>{const a=(i/14)*Math.PI*2+Math.random()*.4;const d=40+Math.random()*30;
   return `<i style="--dx:${Math.cos(a)*d}vw;--dy:${Math.sin(a)*d*.8-20}vh;--rt:${Math.random()*540-270}deg;animation-delay:${i*25}ms"></i>`}).join('');
  gc.appendChild(b);FX.glow(gc.querySelector('.gc-bg'));if(rare)setTimeout(()=>FX.flash('#ffe6a8'),350);
- setTimeout(()=>GachaResult(res,tags,n,tut),1050)}
-function GachaResult(res,tags,n,tut){const cost=n===10?50:5;
+ setTimeout(()=>GachaResult(res,tags,n,tut,e),1050)}
+function GachaResult(res,tags,n,tut,e){const cost=n===10?50:5;const E=ERAS[e];
  show(`<div class="gc res" id="gc">
   <div class="gc-bg" ${IMG['背景_ガチャ']?`style="background-image:url(${IMG['背景_ガチャ']})"`:''}></div><div class="gc-shade"></div>
-  <div class="gc-top"><div class="gc-coin">${BM}<span>栞</span><b>${S.shiori}</b></div></div>
+  <div class="gc-top">${coinsHTML()}</div>
   <div class="gres ${n===1?'one':''}">${res.map((x,i)=>`<div class="gcell ${CARD[x].r===3?'rare':''}" data-i="${i}"><div class="flip"><div class="face front">${cardHTML(x,{noLv:true})}</div><div class="face back">✦</div></div>
    <span class="tag ${tags[i]==='NEW'?'':'sub'}">${tags[i]}</span></div>`).join('')}</div>
   <p class="gres-hint" id="ghint">タップで全部めくる</p>
-  <div class="gres-btns"><button class="p" id="gBack">${tut?'ストーリーにもどる':'もどる'}</button><button class="r" id="gAgain" ${tut?'hidden':''} ${S.shiori<cost?'disabled':''}>もう一度 ${n}頁めくる（栞${cost}）</button></div></div>`);
+  <div class="gres-btns"><button class="p" id="gBack">${tut?'ストーリーにもどる':'もどる'}</button><button class="r" id="gAgain" ${tut?'hidden':''} ${S.sh[e]<cost?'disabled':''}>もう一度 ${n}回めくる（${E.k}の栞${cost}）</button></div></div>`);
  const cells=[...document.querySelectorAll('.gcell')];let timers=[];
  const openAll=()=>{timers.forEach(clearTimeout);cells.forEach(c=>c.classList.add('open'));const h=$('#ghint');if(h)h.remove()};
  cells.forEach((c,i)=>timers.push(setTimeout(()=>{c.classList.add('open');if(i===cells.length-1){const h=$('#ghint');if(h)h.remove()}},250+i*170)));
- $('#gc').addEventListener('click',e=>{if(!e.target.closest('button'))openAll()});
- $('#gBack').onclick=()=>{if(tut){const d=GOPT.done;GOPT={};if(d)FX.pageTurn(d);return}FX.pageTurn(Gacha)};$('#gAgain').onclick=()=>{openAll();pull(n)};
- if(!tut&&S.pity>=50){S.pity-=50;save();setTimeout(()=>{openAll();chooseCard('50回めくった記念に、好きな頁を1枚選んでください',m=>{const r=giveCard(m);autoParty();save();toast(m+'の頁を手に入れた'+r)})},250+cells.length*170+600)}}
+ $('#gc').addEventListener('click',ev=>{if(!ev.target.closest('button'))openAll()});
+ $('#gBack').onclick=()=>{if(tut){const d=GOPT.done;GOPT={};if(d)FX.pageTurn(d);return}FX.pageTurn(()=>Gacha())};$('#gAgain').onclick=()=>{openAll();GERA=e;pull(n)};
+ if(!tut&&S.pt[e]>=50){S.pt[e]-=50;save();setTimeout(()=>{openAll();chooseCard(`${E.k}で50回めくった記念に、${E.k}の好きな頁を1枚選んでください`,m=>{const r=giveCard(m);autoParty();save();refreshCoins();toast(m+'の頁を手に入れた'+r)},{pool:gachaPool(e),confirm:true})},250+cells.length*170+600)}}
 
-function chooseCard(title,cb){const pool=gachaPool();
- modal(`<h3>${esc(title)}</h3><div class="grid">${pool.map(c=>`<div data-pick="${esc(c.n)}">${cardHTML(c.n,{forceOwn:true})}</div>`).join('')}</div>`);
- document.querySelectorAll('[data-pick]').forEach(d=>d.onclick=()=>{const n=d.dataset.pick;closeModal(true);cb(n)})}
+/* 頁を1枚選ぶ。confirm:true なら「これで交換しますか？」と確かめる。cancel:true なら、やめるボタンを出す */
+function chooseCard(title,cb,opt={}){const pool=opt.pool||gachaPool();
+ modal(`<h3>${esc(title)}</h3><div class="grid">${pool.map(c=>`<div data-pick="${esc(c.n)}">${cardHTML(c.n,{forceOwn:true})}</div>`).join('')}</div>${opt.cancel?'<div class="row"><button class="btn light" data-close>やめる</button></div>':''}`);
+ document.querySelectorAll('[data-pick]').forEach(d=>d.onclick=()=>{const n=d.dataset.pick;closeModal(true);
+  if(!opt.confirm){cb(n);return}
+  modal(`<h3>確認</h3><div style="width:150px;margin:0 auto 10px">${cardHTML(n,{forceOwn:true})}</div><p style="text-align:center;line-height:1.8">${esc(n)}の頁と交換します。<br>よろしいですか？</p>
+   <div class="row" style="justify-content:center"><button class="btn red" id="cfY">交換する</button><button class="btn light" id="cfN">選び直す</button></div>`);
+  $('#cfY').onclick=()=>{closeModal(true);cb(n)};$('#cfN').onclick=()=>{closeModal(true);chooseCard(title,cb,opt)}})}
 
 /* ---------- party ---------- */
 function Party(){const owned=CARDS.filter(c=>lv(c.n)&&!isSP(c.n));const ch=Math.max(1,Math.min(STORY.length-1,nextChapter()||STORY.length-1));const tm=teamMult(ch,'');
@@ -4183,13 +4313,13 @@ const B32='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 function bitsPush(arr,v,n){for(let i=n-1;i>=0;i--)arr.push((v>>i)&1)}
 function bitsRead(st,n){let v=0;for(let i=0;i<n;i++)v=(v<<1)|st.b[st.p++];return v}
 function hash16(bits){let h=0x9e37;for(let i=0;i<bits.length;i++){h=((h<<5)-h+bits[i]+(i%7)*13)&0xffff}return h}
-/* 復活の呪文 v4：全15章・全カード・全問題に対応（中世の巻の呪文とは互換性がありません） */
+/* 復活の呪文 v5：栞と天井を時代別に（v4の呪文も読める。v4の栞は正解した問題の時代の割合で分ける） */
 function gammaPush(a,n){const k=Math.floor(Math.log2(n));for(let i=0;i<k;i++)a.push(0);bitsPush(a,n,k+1)}
 function gammaRead(st){let k=0;while(st.p<st.b.length&&st.b[st.p]===0){k++;st.p++;if(k>24)return null}if(st.p+k+1>st.b.length)return null;return bitsRead(st,k+1)}
 function payload(){const b=[];bitsPush(b,(S.prologue?1:0)|(S.tutorial?2:0),8);let cl=0;for(let i=0;i<NCH;i++)if(S.cleared[i])cl|=1<<i;bitsPush(b,cl,16);
- bitsPush(b,Math.min(S.shiori,16383),14);bitsPush(b,S.pity%64,6);bitsPush(b,Math.min(S.shiryo,255),8);
+ S.sh.forEach(x=>bitsPush(b,Math.min(x,16383),14));S.pt.forEach(x=>bitsPush(b,x%64,6));bitsPush(b,Math.min(S.shiryo,255),8);
  CARDS.forEach(c=>bitsPush(b,lv(c.n),3));QUIZ_ORDER.forEach(id=>bitsPush(b,S.qs[id]||0,2));return b}
-function encode(){const p=payload();const out=[];bitsPush(out,4,8);
+function encode(){const p=payload();const out=[];bitsPush(out,5,8);
  const rle=[];rle.push(p[0]);let i=0;while(i<p.length){let j=i;while(j<p.length&&p[j]===p[i])j++;gammaPush(rle,j-i);i=j}
  if(rle.length<p.length){out.push(1);out.push(...rle)}else{out.push(0);out.push(...p)}
  bitsPush(out,hash16(p),16);while(out.length%5)out.push(0);
@@ -4198,13 +4328,13 @@ function encode(){const p=payload();const out=[];bitsPush(out,4,8);
 function decode(str){const N=decodeRaw(str);return N?normState(N):null}
 function decodeRaw(str){str=str.toUpperCase().replace(/[\s\-ー－]/g,'').replace(/O/g,'0').replace(/[IL]/g,'1');
  const b=[];for(const ch of str){const v=B32.indexOf(ch);if(v<0)return null;bitsPush(b,v,5)}
- if(b.length<8)return null;const st={b,p:0};const ver=bitsRead(st,8);if(ver!==4)return null;
- try{const L=52+CARDS.length*3+QUIZ_ORDER.length*2;const mode=b[st.p++];let p=[];
+ if(b.length<8)return null;const st={b,p:0};const ver=bitsRead(st,8);if(ver!==4&&ver!==5)return null;
+ try{const L=(ver===5?92:52)+CARDS.length*3+QUIZ_ORDER.length*2;const mode=b[st.p++];let p=[];
   if(mode===1){let cur=b[st.p++];while(p.length<L){const n=gammaRead(st);if(!n||n>L)return null;for(let i=0;i<n;i++)p.push(cur);cur^=1}if(p.length!==L)return null}
   else{if(st.p+L>b.length)return null;p=b.slice(st.p,st.p+L);st.p+=L}
   if(st.p+16>b.length)return null;if(hash16(p)!==bitsRead(st,16))return null;
   const ps={b:p,p:0};const f=bitsRead(ps,8);const N=freshState();N.prologue=!!(f&1);N.tutorial=!!(f&2);const cl=bitsRead(ps,16);N.cleared=Array.from({length:NCH},(_,i)=>!!(cl&(1<<i)));
-  N.shiori=bitsRead(ps,14);N.pity=bitsRead(ps,6);N.shiryo=bitsRead(ps,8);
+  if(ver===5){N.sh=[0,1,2].map(()=>bitsRead(ps,14));N.pt=[0,1,2].map(()=>bitsRead(ps,6))}else{N.shiori=bitsRead(ps,14);N.pity=bitsRead(ps,6);delete N.sh;delete N.pt}N.shiryo=bitsRead(ps,8);
   CARDS.forEach(c=>{const v=bitsRead(ps,3);if(v)N.cards[c.n]=Math.min(5,v)});QUIZ_ORDER.forEach(id=>{const v=bitsRead(ps,2);if(v)N.qs[id]=v});return N}
  catch(e){return null}}
 
