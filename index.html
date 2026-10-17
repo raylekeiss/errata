@@ -179,9 +179,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   background:radial-gradient(ellipse at 50% 38%,rgba(7,12,31,0) 40%,rgba(7,12,31,.55) 100%),
   linear-gradient(180deg,rgba(7,12,31,.35) 0,rgba(7,12,31,0) 22%,rgba(7,12,31,0) 58%,rgba(7,12,31,.82) 100%)}
 .h-logo{position:absolute;left:clamp(16px,3vw,40px);top:calc(env(safe-area-inset-top,0px) + clamp(12px,2.4vh,28px));z-index:3;text-align:center}
-.h-logo .lg-wrap{position:relative;display:inline-block;padding:0 .35em}
+.h-logo .lg-wrap{position:relative;display:inline-block;padding:0}
 .h-logo .lg{font-size:clamp(40px,6.4vw,76px);font-weight:600;letter-spacing:.14em;color:#f4efe2;text-shadow:0 2px 14px rgba(0,0,0,.6);display:block;line-height:1.1;position:relative}
-.h-logo svg{position:absolute;left:-8%;top:-18%;width:116%;height:136%;overflow:visible;pointer-events:none}
+.h-logo .lg-img{display:block;width:clamp(170px,27vw,330px);height:auto;filter:drop-shadow(0 2px 12px rgba(0,0,0,.6))}
 .h-logo .lg-sub{margin:.3em 0 0;font-size:clamp(13px,1.5vw,17px);letter-spacing:.32em;color:#e9e1cc;opacity:.9}
 .h-shiori{position:absolute;right:clamp(16px,3vw,40px);top:calc(env(safe-area-inset-top,0px) + clamp(12px,2.4vh,28px));z-index:3;
   display:flex;align-items:center;gap:10px;padding:8px 22px 8px 12px;min-width:180px;
@@ -310,19 +310,20 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 /* ===== short screens (phones in landscape) ===== */
 @media (max-height:520px) and (orientation:landscape){
   :root{--shelf-h:24vh}
-  .h-logo .lg{font-size:34px}.h-logo .lg-sub{font-size:11px}
+  .h-logo .lg-img{width:150px}.h-logo .lg-sub{font-size:11px}
   .h-shiori{min-width:120px;padding:4px 14px 4px 8px}.h-shiori b{font-size:18px}.h-shiori svg{width:22px;height:22px}
   .burger{width:40px;height:40px}.home .h-shiori{right:calc(clamp(16px,3vw,40px) + 50px)}
   .tome{font-size:13px;gap:2px;padding:4px 4px 4px 16px}.tome .ic{width:24px;height:24px}.tome .flo{display:none}.tome.lead .nx{font-size:10px}
   .bubble{font-size:13px;padding:10px 12px 14px;top:22%;max-width:30vw}.oshi-chg{top:calc(22% - 40px);font-size:12px;min-height:30px;padding:4px 10px}
 }
 @media (max-width:520px) and (orientation:portrait){
-  .h-logo .lg{font-size:36px}.h-shiori{min-width:110px}.h-shiori b{font-size:18px}
+  .h-logo .lg-img{width:160px}.h-shiori{min-width:110px}.h-shiori b{font-size:18px}
   .tome{font-size:13px}.tome .flo{display:none}
   .bubble{font-size:13px;max-width:58vw}
 }
 
-#title .logo{font-size:min(calc(150*var(--u)),16vw);white-space:nowrap}
+#title .logo{font-size:min(calc(150*var(--u)),16vw);white-space:nowrap;padding:0;letter-spacing:0;line-height:0}
+#title .logo-img{display:block;width:min(calc(820*var(--u)),88vw);height:auto;filter:drop-shadow(0 4px 18px rgba(0,0,0,.55))}
 #title .subtitle{font-size:max(13px,calc(22*var(--u)));margin:0 0 calc(30*var(--u))}
 #title .titlebtns{width:max(240px,calc(380*var(--u)));gap:calc(12*var(--u))}
 #title .titlebtns .btn{min-height:max(42px,calc(60*var(--u)));font-size:max(15px,calc(20*var(--u)));padding:calc(10*var(--u)) 20px}
@@ -3679,7 +3680,7 @@ app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){con
 
 /* ---------- title ---------- */
 function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div class="title-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
- <h1 class="logo">エラータ<svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 70 C30 40, 60 90, 92 30"/></svg></h1>
+ <h1 class="logo"><img class="logo-img" src="${IMG_BASE}img/logo.webp" alt="エラータ ERRATA" draggable="false"></h1>
  <p class="subtitle">世界史探究</p>
  <div class="titlebtns">
   ${CLOUD&&!CL.ready?'<p id="clWait" style="opacity:.85;line-height:1.8">学校アカウントの記録を確認しています…</p>':''}<div id="tbtns" style="display:${CLOUD&&!CL.ready?'none':'contents'}">
@@ -3724,7 +3725,7 @@ function Home(){const nx=nextChapter();const o=oshiName();
   <div class="home-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="drift" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="home-shade"></div>
-  <header class="h-logo"><div class="lg-wrap"><svg viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="150" cy="62" rx="146" ry="36" fill="none" stroke="#c4302b" stroke-width="1.4" transform="rotate(-7 150 62)" stroke-dasharray="330 16 5 16"/><path d="M266 16l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="#e0423a"/><path d="M34 94l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#f2e8cf"/></svg><span class="lg">エラータ</span></div>
+  <header class="h-logo"><div class="lg-wrap"><img class="lg-img" src="${IMG_BASE}img/logo.webp" alt="エラータ ERRATA" draggable="false"></div>
    <p class="lg-sub">― 世界史探究 ―</p></header>
   <button class="burger" id="burger" aria-label="メニュー"><span></span></button>
   <div class="h-coins">${coinsHTML()}</div>
