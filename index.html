@@ -2422,7 +2422,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "紙魚が本を開き、ページのすき間から黒いもちもちとした、黒光りする虫のようななにかをつまみ出した。"},
     {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたして暴れている。"},
     {"t": "l", "s": "シミ", "x": "いただきます。"},
-    {"t": "d", "x": "【道具：なし】紙魚はそれを、ためらいなく口に入れる。行の文字が「ラスコー洞窟（フランス）」に戻る。"},
+    {"t": "d", "x": "【表情：食事】【道具：なし】紙魚はそれを、ためらいなく口に入れる。行の文字が「ラスコー洞窟（フランス）」に戻る。"},
     {"t": "choice", "o": ["今の、何ですか？", "食べました……よね？"], "to": [38, 40]},
     {"t": "l", "s": "シミ", "x": "誤植。歴史の書き間違いだよ。妖怪みたいなものかな。"},
     {"t": "jump", "to": 42},
@@ -2497,7 +2497,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "よっぽど、否定されたのが悔しかったんだね。"},
     {"t": "l", "s": "主人公", "x": "ハンムラビ法典に、勝手に書き足されてますよ！！"},
     {"t": "l", "s": "シミ", "x": "本物は全282条だからね。この一条はおまけだ。いただきます。"},
-    {"t": "d", "x": "紙魚が石碑の端から黒い虫をつまみ出し、口に入れる。283条目の文字が消える。"},
+    {"t": "d", "x": "【表情：食事】紙魚が石碑の端から黒い虫をつまみ出し、口に入れる。283条目の文字が消える。"},
     {"t": "l", "s": "シミ", "x": "ちなみに、本物の法典には、ビールの値段をごまかした酒場の女主人を溺死刑にする条文があるんだよ。"},
     {"t": "l", "s": "主人公", "x": "溺死刑の基準がわからない……。"},
     {"t": "l", "s": "シミ", "x": "当時の「酒」は腐りにくく、長持ちする貴重なカロリー源だったからね。今とは価値が全く違うんだ。"},
@@ -2937,7 +2937,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "ヌル", "x": "……いいけど。"},
     {"t": "d", "x": "紙魚が、書架のすき間の○○に気づく。"},
     {"t": "l", "s": "シミ", "x": "あれ、新人さん。この棚、誤植が多くてね。今日はごちそうだよ。"},
-    {"t": "d", "x": "紙魚はいつもの調子で、光る本から黒い虫をつまみ出して口に入れる。振り返ると、ヌルの姿はもうない。"},
+    {"t": "d", "x": "【表情：食事】紙魚はいつもの調子で、光る本から黒い虫をつまみ出して口に入れる。振り返ると、ヌルの姿はもうない。"},
     {"t": "l", "s": "主人公", "x": "ヌルさんが持って行った頁は？"},
     {"t": "l", "s": "シミ", "x": "聞いてたのか。盗み聞きは感心しないね。"},
     {"t": "d", "x": "紙魚はまた肩をすくめた。"},
@@ -2980,7 +2980,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "大きな声で呻き、そのままコンラッドは口に入れた桃を吐き出した。"},
     {"t": "l", "s": "主人公", "x": "きったな……って、真っ黒じゃないですか！"},
     {"t": "l", "s": "シミ", "x": "本当だ、桃の中身が墨みたいに真っ黒だね。"},
-    {"t": "d", "x": "紙魚がコンラッドに近づいて、横の枝から果実ひとつもぎ取り、かじる。"},
+    {"t": "d", "x": "【表情：食事】紙魚がコンラッドに近づいて、横の枝から果実ひとつもぎ取り、かじる。"},
     {"t": "l", "s": "シミ", "x": "思った通り、誤植の味だ。博士、これは食べても不老不死にはならないよ。おなか壊すから吐き出しちゃいな……"},
     {"t": "l", "s": "コンラッド", "x": "クソ……理想郷まで誤植で荒らすとは、無粋なやつめ。"},
     {"t": "d", "x": "コンラッドは自分の失敗をごまかすように強く首を振り、憤慨したように桃型の誤植を芝生にたたきつける。ふいに、コンラッドがこめかみを押さえてよろめいた。"},
@@ -3236,10 +3236,12 @@ const DATA=JSON.parse(document.getElementById('errata-data').textContent);
 const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
-"シミ": "img/e559cb7f8cf9.webp",
+"シミ": "img/shimi.webp",
+"シミ_笑顔": "img/shimi_smile.webp",
+"シミ_食事": "img/shimi_eat.webp",
 "背景_ホーム": "img/f8e8df074d29.webp",
 "背景_ガチャ": "img/07db51d41132.webp",
-"シミ_顔": "img/86a67b9dcce5.webp",
+"シミ_顔": "img/shimi_face.webp",
 "ゴーストライター": "img/3145da1f4fd8.webp",
 "背景_目次": "img/c2198cf54ff1.webp",
 "ディオクレティアヌス": "img/c05f5fc64600.webp",
@@ -3566,6 +3568,8 @@ const IMG={
      FX.pageTurn(次の処理) ページを捲って切り替え  【演出：頁めくり】
    ===================================================================== */
 if(IMG_BASE)for(const k in IMG)if(!/^(data:|https?:)/.test(IMG[k]))IMG[k]=IMG_BASE+IMG[k];
+/* 表情差分は先に読み込んでおく（切り替え時のちらつき防止） */
+for(const k in IMG)if(/_(笑顔|食事)$/.test(k)){const i=new Image();i.src=IMG[k]}
 const FX={
  busy:false,
  reduce(){try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}},
@@ -3921,16 +3925,19 @@ function typePage(){stopType();const say=$('#say'),nx=$('#nxt');const t=PL.pages
  PL.typing=setInterval(()=>{n++;say.textContent=t.slice(0,n);if(n>=t.length)finishType()},ms)}
 function finishType(){stopType();$('#say').textContent=PL.pages[PL.pg];$('#nxt').classList.add('on')}
 function setFig(html,cls){const f=$('#fig');if(f.dataset.html===html)return;f.dataset.html=html;f.dataset.who='';f.className='vn-fig'+(cls?' '+cls:'');f.innerHTML=html}
-/* ト書き・台詞の中の【道具：名前】【道具：なし】【演出：揺れ】などを読む */
+/* ト書き・台詞の中の【道具：名前】【道具：なし】【演出：揺れ】【表情：笑顔】などを読む
+   【表情：○○】…台詞ならその話し手、ト書きなら場にいてその表情を持つ人（いなければシミ）の立ち絵をその行だけ差し替える。
+   いま使える表情：シミ＝笑顔・食事（誤植を食べる） */
 const FX_NAME={'揺れ':'shake','大きく揺れ':'shakeBig','光る':'glow','閃光':'flash','強調':'spotlight'};
 const MEMO_SVG='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 220"><g transform="rotate(-4 150 110)"><rect x="40" y="30" width="220" height="160" fill="#f3ead6" stroke="#b8923f" stroke-width="3"/><text x="150" y="80" font-size="26" text-anchor="middle" fill="#3a2a1a" font-family="serif" font-weight="700">辞　令</text><text x="150" y="118" font-size="13" text-anchor="middle" fill="#3a2a1a" font-family="serif">本日付で史書庫司書に任ずる</text><text x="225" y="160" font-size="14" text-anchor="end" fill="#3a2a1a" font-family="serif">館長</text><path d="M232 20c22 18 30 50 22 86-14-22-24-54-22-86z" fill="#fafafa" stroke="#222" stroke-width="2"/><path d="M243 30c4 26 4 50 11 76" stroke="#111" stroke-width="2" fill="none"/><path d="M240 60c6 4 10 10 13 18" stroke="#111" stroke-width="4" fill="none"/></g></svg>');
 function ITEM_FB(n){if(n==='誤植ミニサイズ')return IMG['道具_誤植ミニサイズ']||IMG['誤植']||null;if(n==='館長のメモ')return MEMO_SVG;return null}
-function tagsOf(t){const r={fx:[],text:String(t)};r.text=r.text.replace(/【道具：([^】]*)】/g,(m,n)=>{n=n.trim();r.item=(n==='なし'||!n)?null:n;return ''}).replace(/【演出：([^】]*)】/g,(m,n)=>{if(FX_NAME[n.trim()])r.fx.push(FX_NAME[n.trim()]);return ''}).trim();return r}
+function tagsOf(t){const r={fx:[],text:String(t)};r.text=r.text.replace(/【道具：([^】]*)】/g,(m,n)=>{n=n.trim();r.item=(n==='なし'||!n)?null:n;return ''}).replace(/【演出：([^】]*)】/g,(m,n)=>{if(FX_NAME[n.trim()])r.fx.push(FX_NAME[n.trim()]);return ''}).replace(/【表情：([^】]*)】/g,(m,n)=>{n=n.trim();r.ex=(n==='通常'||!n)?null:n;return ''}).trim();return r}
 function setItem(n){const el=$('#item');if(!el)return;const src=n&&(IMG['道具_'+n]||ITEM_FB(n));if(PL)PL.item=n||null;
  if(!src){el.hidden=true;el.innerHTML='';el.dataset.n='';return}if(el.dataset.n===n)return;el.dataset.n=n;el.innerHTML=`<img src="${src}" alt="${esc(n)}">`;el.hidden=false}
 function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;
  say.className='vn-text';const tg=tagsOf(sp(e.x));let txt=tg.text;if(tg.item!==undefined)setItem(tg.item);
  let tgt=null; /* 光る・強調の対象 */
+ let who=null; /* 表情を変える人 */
  if(e.t==='d'){np.hidden=true;say.classList.add('desc');
   if(e.img&&IMG[e.img]){soloFig(`<img src="${IMG[e.img]}" alt=""${e.sil?' class="sil"':''}>`);tgt='#fig'}
   else{castExits(txt);if(!PL.solo){const m=castMentioned(txt);if(m)tgt=m;castRender(null)}}}
@@ -3945,9 +3952,11 @@ function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;
   else if(summon&&CARD[name]&&name!=='主人公'){const was=$('#fig').dataset.who;soloFig(cardHTML(name,{forceOwn:true}),'card-fig');$('#fig').dataset.who=name;if(was!==name)setTimeout(()=>{FX.glow('#fig');FX.spotlight('#fig')},60);tgt='#fig'}
   else if(name!=='主人公'&&(IMG[key]||['シミ','ゴーストライター','コンラッド','ヌル'].includes(key))){
     if(e.sil&&IMG[key]){soloFig(`<img src="${IMG[key]}" alt="" class="sil">`);tgt='#fig'}
-    else{castSpeak(key);tgt=`#cast .cm[data-k="${key}"]`}}
+    else{castSpeak(key);who=key;tgt=`#cast .cm[data-k="${key}"]`}}
   else if(!PL.solo)castRender(null);
  }
+ if(e.t==='d'&&tg.ex&&!PL.solo){const m=PL.cast.find(x=>IMG[x.k+'_'+tg.ex]);if(m)who=m.k;else if(IMG['シミ_'+tg.ex]){castSpeak('シミ');who='シミ'}if(who&&!tgt)tgt=`#cast .cm[data-k="${who}"]`}
+ castFaces(who,tg.ex);
  const fx=tg.fx.slice();if(e.fx)fx.push(e.fx);
  fx.forEach(f=>setTimeout(()=>{
   if(f==='glow'){if(e.t==='d'&&!e.img)FX._replay($('#vnbg'),'bg-glow',1450);else if(tgt)FX.glow(tgt)}
@@ -3980,6 +3989,8 @@ function castRender(talker){const box=$('#cast');if(!box)return;const L=PL.cast;
   el.style.left=pos[i]+'%';
   const was=el.classList.contains('talk');el.classList.toggle('talk',m.k===talker);el.classList.toggle('solo',L.length===1&&!talker);
   if(m.k===talker&&!was&&L.length>1)FX._replay(el,'hopping',340)})}
+/* 立ち絵の表情：指定された人だけ差分にし、ほかは通常に戻す */
+function castFaces(who,ex){const box=$('#cast');if(!box)return;[...box.children].forEach(el=>{const k=el.dataset.k,img=el.querySelector('img');if(!img||!IMG[k])return;const src=(k===who&&ex&&IMG[k+'_'+ex])||IMG[k];if(img.getAttribute('src')!==src)img.setAttribute('src',src)})}
 function isLibBg(k){return !k||/^背景_書庫/.test(k)}
 /* ---------- 本の世界へ：あらゆる文字が足もとから立ちのぼる ---------- */
 const GLYPH_SRC=['史書頁歴名王帝民国記文字年代誤植時空海山河都城神言葉読書','一二三四五六七八九十百千万','0123456789','あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん',
