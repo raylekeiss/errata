@@ -6,6 +6,7 @@
 - `img/` … 画像
 - `credits.html` / `credits.json` … 肖像の出典一覧
 - `tools/get_credits.py` … 出典情報を集め直すスクリプト
+- `drill/chusei.html` … 中世の巻 一問一答ドリル（単体で動く試験対策用。252問）
 
 ## 学校アカウント保存版（GAS）
 
