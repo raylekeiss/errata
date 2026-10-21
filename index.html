@@ -4350,7 +4350,7 @@ function Gacha(opt={}){GOPT=opt;const tut=!!opt.tut;if(tut)GERA=0;const e=GERA,E
     <button class="gp ten ${tut||S.sh[e]<50?'off':''}" id="g10"><b>10回めくる</b><span>${ribbon(e)}${E.k}の栞　50</span></button>
    </div>
   </div>
-  ${tut?'':`<nav class="gc-links"><button id="gRate">提供割合 ›</button><button id="gList">収録キャラ一覧 ›</button><button id="gHist">ガチャ履歴 ›</button><button id="gEx">史料片の交換 ›</button></nav>`}
+  ${tut?'':`<nav class="gc-links"><button id="gRate">提供割合 ›</button><button id="gList">収録一覧 ›</button><button id="gHist">ガチャ履歴 ›</button><button id="gEx">史料片の交換 ›</button></nav>`}
  </div>`);
  const go=i=>{if(tut||i===GERA)return;GERA=(i+3)%3;Gacha(opt)};
  document.querySelectorAll('.gc-tab').forEach(t=>t.onclick=()=>go(+t.dataset.era));
