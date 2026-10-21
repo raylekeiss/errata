@@ -169,13 +169,17 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .pv-opt{display:grid;gap:6px;align-content:start;text-align:left;padding:16px 18px;background:#fff;color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:3px;min-height:56px;cursor:pointer}
 .pv-opt:hover,.pv-opt:focus-visible{border-color:var(--proof);border-left-color:var(--proof);outline:none}
 .pv-t{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:.08em}
+.pv-t small{font-family:var(--sans);font-weight:400;font-size:13px;letter-spacing:.02em;color:var(--mute);margin-left:.3em}
 .pv-d{font-size:14px;line-height:1.6;color:var(--mute)}
 .pv-note{font-size:13px;margin:12px 0}
-/* ストーリー中のシステム文 */
-.vn-name.sys{--nc:#3d5266}
-.vn .vn-name.sys{letter-spacing:.3em}
-.vn .vn-name.sys::before{display:none}
-.vn-text.sys{color:#cfe0ef}
+/* ストーリー中のシステム文：物語の枠とは別物に見せる（明るい角丸パネル・ゴシック体・青） */
+.vn .vn-box.sys{background:rgba(236,243,250,.96);border-radius:calc(22*var(--u));box-shadow:0 0 0 2px #4f9fd0,0 0 30px rgba(79,159,208,.45),0 12px 30px rgba(0,0,0,.45)}
+.vn .vn-box.sys .vn-text{font-family:var(--sans);font-weight:500;color:#13233a;letter-spacing:.04em}
+.vn .vn-box.sys .vn-name{font-family:var(--sans);background:#13233a;color:#9fd8ff;letter-spacing:.3em;border-radius:999px;min-width:0;text-shadow:none;box-shadow:0 0 0 2px #4f9fd0,0 4px 12px rgba(0,0,0,.4)}
+.vn .vn-box.sys .vn-name::before{content:"i";display:inline-block;width:1.25em;height:1.25em;line-height:1.25em;text-align:center;border-radius:50%;background:#4f9fd0;color:#fff;font:italic 800 .8em/1.25em Georgia,serif;letter-spacing:0;transform:none;opacity:1;margin-right:.7em;vertical-align:.1em}
+.vn .vn-box.sys .vn-next{background:#4f9fd0}
+/* ドリル画面のコンラッド（未登場のあいだは灰色） */
+.gc-shimi.kon.unmet img{filter:grayscale(1) brightness(.62) contrast(.9);opacity:.8}
 .detail{display:grid;grid-template-columns:160px 1fr;gap:18px}
 @media (max-width:520px){.detail{grid-template-columns:1fr}}
 .detail dl{margin:0;font-size:15px;line-height:1.7}
@@ -717,9 +721,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .bt-enemy.img.boss{width:calc(420*var(--u));top:calc(70*var(--u))}
 @media (orientation:portrait){.bt-enemy.img{width:calc(440*var(--u));top:calc(100*var(--u))}.bt-enemy.img.boss{width:calc(500*var(--u));top:calc(80*var(--u))}}
 
-.dr-mode{position:absolute;z-index:6;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 74px);display:flex;gap:6px;background:rgba(7,12,31,.6);padding:4px;border-radius:999px;border:1px solid rgba(201,162,74,.5)}
+.dr-mode{position:absolute;z-index:6;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 98*var(--u));white-space:nowrap;display:flex;gap:6px;background:rgba(7,12,31,.6);padding:4px;border-radius:999px;border:1px solid rgba(201,162,74,.5)}
 .dr-mode button{padding:6px 14px;border-radius:999px;color:#e6c77a;font-family:var(--serif);font-size:14px;letter-spacing:.08em}
 .dr-mode button.on{background:#c9a24a;color:#1a1408;font-weight:700}
+@media (orientation:portrait) and (min-width:601px){.dr-mode{top:calc(env(safe-area-inset-top,0px) + 166*var(--u))}.dr .shelf2{top:calc(206*var(--u))}.dr .gc-shimi.kon{bottom:calc(-170*var(--u))}}
 @media (orientation:portrait) and (max-width:600px){.dr-mode{top:calc(env(safe-area-inset-top,0px) + 118px)}}
 .sm-parts{display:flex;gap:calc(var(--sw)*.006);margin-bottom:calc(var(--sw)*.01)}
 .sm-parts button{font-family:var(--serif);font-size:calc(var(--sw)*.011);padding:.25em .9em;border:1px solid #b8923f;border-radius:2px;color:#8a6d3a;background:rgba(246,238,219,.6);letter-spacing:.1em}
@@ -3684,7 +3689,7 @@ function evOf(ch){return ch===0&&S&&S.pv==='short'&&STORY_SHORT?STORY_SHORT:STOR
 const QUIZ_ORDER=Q.map(q=>q.id);
 const HELPER={1:'ラメス2世',2:'アショーカ王',3:'始皇帝',4:'武帝',5:'ペリクレス',6:'カエサル',7:'カール大帝',8:'アブー＝バクル',9:'太宗',10:'グレゴリウス7世',11:'チンギス＝ハン',12:'康熙帝',13:'コロンブス',14:'ルター',15:'ナポレオン'};
 const NCH=15; // 章の数
-const PARTS=[{n:'第1部',t:'名を残す者、名を消す者',sub:'文明の誕生から　ギリシア・ヘレニズムまで',chs:[0,1,2,3,4,5],story:'史書庫の古い本に、「世界初」を自分の名前で書き足す学者があらわれた。一方で、偉人の名前だけが静かに消えていく。名を残したい男と、名を消したい女。二人を追って、古代の書架をめぐろう。'},{n:'第2部',t:'理想の帝国',sub:'ローマから　中世ヨーロッパまで',chs:[6,7,8,9,10],story:'この部の物語は準備中です。ドリルと頁めくりは、もう遊べます。'},{n:'第3部',t:'つながる世界',sub:'宋・モンゴルから　革命の時代まで',chs:[11,12,13,14,15],story:'この部の物語は準備中です。ドリルと頁めくりは、もう遊べます。'}];
+const PARTS=[{n:'第1部',t:'名を残す者、\n名を消す者',sub:'文明の誕生から　ギリシア・ヘレニズムまで',chs:[0,1,2,3,4,5],story:'史書庫の古い本に、「世界初」を自分の名前で書き足す学者があらわれた。一方で、偉人の名前だけが静かに消えていく。名を残したい男と、名を消したい女。二人を追って、古代の書架をめぐろう。'},{n:'第2部',t:'理想の帝国',sub:'ローマから　中世ヨーロッパまで',chs:[6,7,8,9,10],story:'この部の物語は準備中です。ドリルと頁めくりは、もう遊べます。'},{n:'第3部',t:'つながる世界',sub:'宋・モンゴルから　革命の時代まで',chs:[11,12,13,14,15],story:'この部の物語は準備中です。ドリルと頁めくりは、もう遊べます。'}];
 const VOLS=DATA.vols;
 /* 特別な頁：宗教の創始者。★なし・ガチャ/編成/バトル補正の対象外 */
 /* 物語・バトルの背景：章ごとの既定背景（未用意ならホーム背景） */
@@ -3723,9 +3728,9 @@ function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHT
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
 function freshState(){return{name:'',prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
-  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'シミ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
+  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
 /* 記録の章数をそろえる */
-function normState(N){N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
+function normState(N){if(N.oshi==='シミ'&&!N.oshiSet)N.oshi='ハンムラビ';N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
  /* 栞を時代別に（古い記録は、正解した問題の時代の割合で分ける） */
  if(!Array.isArray(N.sh)||N.sh.length!==3){const tot=N.shiori||0;const w=[0,0,0];const qs=N.qs||{};
   for(const id in qs)if(qs[id]===1&&QBYID[id])w[eraOfCh(QBYID[id].ch)]++;const W=w[0]+w[1]+w[2];
@@ -3814,7 +3819,7 @@ function Home(){const nx=nextChapter();const o=oshiName();
   <button class="burger" id="burger" aria-label="メニュー"><span></span></button>
   <div class="h-coins">${coinsHTML()}</div>
   <div class="oshi ${(o==='シミ'||CHARA[o])?'':'cardmode'}" id="oshi" role="button" aria-label="ひとこと">${oshiHTML}</div>
-  <button class="oshi-chg" id="oshiChg">推しを変える</button>
+  <button class="oshi-chg" id="oshiChg">人物を変更する</button>
   <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}${FLO.replace('class="flo"','class="ink"')}</div>
   <nav class="shelf" aria-label="メニュー">
    ${btn('lead','story','story','ストーリー',`<span class="nx">${nx===null?'続きは準備中':(nx===0?'序章':CHNAME[nx])+'へ'}</span><span class="ribbon"></span>`)}
@@ -3833,7 +3838,7 @@ const TOUR=[['[data-go="story"]','ストーリー','光っている本を追い�
  ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
  ['[data-go="zukan"]','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
  ['[data-go="code"]','復活の呪文','記録はこの端末に保存されるけど、ときどき呪文を書き写しておくと安心だよ。ほかの端末でも続きから遊べるからね。'],
- ['#oshiChg','推しを変える','手に入れた頁の人物を、ホームに飾れるよ。'],
+ ['#oshiChg','人物を変更する','手に入れた頁の人物を、ホームに飾れるよ。'],
  ['#burger','メニュー',TOUCH?'文字の速さの設定や、復活の呪文はここからだよ。':'全画面表示や、文字の速さの設定はここからだよ。']];
 let TOUR_I=-1;
 function homeTour(i=0){const old=$('#coach');if(old)old.remove();TOUR_I=i;
@@ -3857,13 +3862,13 @@ function zfBar(){const own=p=>CARDS.filter(c=>partOf(c.st)===p);return `<div cla
  <div class="zf-row">${['',...ATTRS].map(a=>`<button data-za="${a}" class="${ZF.attr===a?'on':''} ${a?ATTR_CLASS(a):''}">${a||'すべて'}</button>`).join('')}</div></div>`}
 function zfBind(re){document.querySelectorAll('[data-zp]').forEach(b=>b.onclick=e=>{e.stopPropagation();ZF.part=+b.dataset.zp;re()});document.querySelectorAll('[data-za]').forEach(b=>b.onclick=e=>{e.stopPropagation();ZF.attr=b.dataset.za;re()})}
 function chooseOshi(){const owned=zfList(CARDS.filter(c=>lv(c.n)));
- modal(`<h3>ホームに飾る推しを選ぶ</h3>${zfBar()}<div class="grid">
+ modal(`<h3>ホームに飾る人物を選ぶ</h3>${zfBar()}<div class="grid">
   <div data-oshi="シミ"><div class="card" style="--c:#2f5d8a"><div class="art">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="" style="object-position:50% 0">`:silhouette()}</div><div class="nm">シミ</div></div></div>
   ${p1Clear()?Object.keys(CHARA).map(n=>`<div data-oshi="${n}"><div class="card" style="--c:${CHARA[n].c}"><div class="art">${IMG[n]?`<img src="${IMG[n]}" alt="" style="object-position:50% 0">`:silhouette()}</div><div class="nm">${n}</div></div></div>`).join(''):''}
   ${owned.map(c=>`<div data-oshi="${esc(c.n)}">${cardHTML(c.n)}</div>`).join('')}</div>
   ${owned.length?'':'<p class="muted">この条件で選べる頁はまだありません。</p>'}
   <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
- document.querySelectorAll('[data-oshi]').forEach(d=>d.onclick=()=>{S.oshi=d.dataset.oshi;save();homeLine=-1;closeModal(true);Home()});zfBind(chooseOshi)}
+ document.querySelectorAll('[data-oshi]').forEach(d=>d.onclick=()=>{S.oshi=d.dataset.oshi;S.oshiSet=true;save();homeLine=-1;closeModal(true);Home()});zfBind(chooseOshi)}
 function nextChapter(){if(!S.prologue)return 0;for(let i=0;i<Math.min(NCH,STORY.length-1);i++)if(!S.cleared[i])return i+1;return null}
 
 /* ---------- story ---------- */
@@ -3886,7 +3891,7 @@ function StoryMenu(){const nx=nextChapter();if(nx!==null&&PART===0&&partOf(nx)>0
  show(`<div class="sm" id="smenu"><div class="sm-fill" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="sm-stage" ${IMG['背景_目次']?`style="background-image:url(${IMG['背景_目次']})"`:''}>
    <div class="sm-page sm-left"><div class="sm-parts">${PARTS.map((p,k)=>`<button data-part="${k}" class="${k===PART?'on':''}">${p.n}</button>`).join('')}</div>
-    <h2 class="vol">${esc(P.t)}</h2><p class="sub">${esc(P.sub)}</p>
+    <h2 class="vol">${esc(P.t).replace(/\n/g,'<br>')}</h2><p class="sub">${esc(P.sub)}</p>
     <svg class="orn" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M0 5h88M112 5h88" stroke="#b8923f" stroke-width="1"/><path d="M100 0l4 5-4 5-4-5z" fill="#b8923f"/></svg>
     <p class="story">${esc(P.story)}</p>
     <div class="prog">修復<b>${fixed}</b>／${inPart.length}<span class="pbar"><i style="width:${100*fixed/total}%"></i></span></div></div>
@@ -4015,11 +4020,11 @@ function ITEM_FB(n){if(n==='誤植ミニサイズ')return IMG['道具_誤植ミ�
 function tagsOf(t){const r={fx:[],text:String(t)};r.text=r.text.replace(/【道具：([^】]*)】/g,(m,n)=>{n=n.trim();r.item=(n==='なし'||!n)?null:n;return ''}).replace(/【演出：([^】]*)】/g,(m,n)=>{if(FX_NAME[n.trim()])r.fx.push(FX_NAME[n.trim()]);return ''}).replace(/【表情：([^】]*)】/g,(m,n)=>{n=n.trim();r.ex=(n==='通常'||!n)?null:n;return ''}).trim();return r}
 function setItem(n){const el=$('#item');if(!el)return;const src=n&&(IMG['道具_'+n]||ITEM_FB(n));if(PL)PL.item=n||null;
  if(!src){el.hidden=true;el.innerHTML='';el.dataset.n='';return}if(el.dataset.n===n)return;el.dataset.n=n;el.innerHTML=`<img src="${src}" alt="${esc(n)}">`;el.hidden=false}
-function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;
+function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;{const tb=$('#tb');if(tb)tb.classList.toggle('sys',e.t==='sys')}
  say.className='vn-text';const tg=tagsOf(sp(e.x));let txt=tg.text;if(tg.item!==undefined)setItem(tg.item);
  let tgt=null; /* 光る・強調の対象 */
  let who=null; /* 表情を変える人 */
- if(e.t==='sys'){np.hidden=false;np.textContent='SYSTEM';np.className='vn-name sys';say.classList.add('sys');if(!PL.solo)castRender(null)}
+ if(e.t==='sys'){np.hidden=false;np.textContent='SYSTEM';np.className='vn-name sys';if(!PL.solo)castRender(null)}
  else if(e.t==='d'){np.hidden=true;say.classList.add('desc');
   if(e.img&&IMG[e.img]){soloFig(`<img src="${IMG[e.img]}" alt=""${e.sil?' class="sil"':''}>`);tgt='#fig'}
   else{castExits(txt);if(!PL.solo){const m=castMentioned(txt);if(m)tgt=m;castRender(null)}}}
@@ -4143,11 +4148,11 @@ function playChapterAt(ch,i){S.prog={ch,i};playChapter(ch)}
 function startPrologue(o){o=o||{};const play=()=>o.turn?FX.pageTurn(()=>playChapter(0)):playChapter(0);
  if(S.prog&&S.prog.ch===0&&S.prog.i>0){play();return}
  if(!STORY_SHORT){S.pv='full';play();return}
- modal(`<h3>序章の読み方を選んでください</h3>
-  <p class="pv-lead">ストーリーをじっくり楽しみたい人は「しっかり読む」、早く遊びはじめたい人は「さくっと読む」を選んでください。<br><b>どちらを選んでも、このあとのストーリーやゲームで困ることはありません。</b></p>
+ modal(`<h3>チュートリアルの長さを選んでください</h3>
+  <p class="pv-lead">ストーリーをじっくり楽しみたい人は「しっかり読む」、<br>早く遊びはじめたい人は「さくっと読む」を選んでください。<br><b>どちらを選んでも、このあとのストーリーやゲームで困ることはありません。</b></p>
   <div class="pv-opts">
-   <button class="pv-opt" data-pv="full"><span class="pv-t">しっかり読む</span><span class="pv-d">図書館のしくみや紙魚とのやりとりを、ゆっくり読みます。</span></button>
-   <button class="pv-opt" data-pv="short"><span class="pv-t">さくっと読む</span><span class="pv-d">必要なことだけ聞いて、すぐに仕事を始めます。</span></button>
+   <button class="pv-opt" data-pv="full"><span class="pv-t">しっかり読む<small>（5〜6分）</small></span><span class="pv-d">世界観やキャラクターとのやり取りを、丁寧に表示します。</span></button>
+   <button class="pv-opt" data-pv="short"><span class="pv-t">さくっと読む<small>（3分）</small></span><span class="pv-d">必要なことだけ聞いて、すぐにゲームを開始できます。</span></button>
   </div>
   <p class="muted pv-note">もう一方の序章は、あとから目次で読むことができます。</p>
   <div class="row"><button class="btn light" data-close>やめる</button></div>`);
@@ -4255,7 +4260,11 @@ const EMB={
 9:'<path d="M12 6v36" stroke="currentColor" stroke-width="3"/><path d="M14 8h22l-6 7 6 7H14z" fill="currentColor"/>',
 10:'<circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2" fill="none"/><path d="M24 8l4 16-4 16-4-16z" fill="currentColor"/><path d="M8 24l16-3 16 3-16 3z" fill="currentColor" opacity=".6"/>',
 11:'<path d="M38 6C26 9 17 18 13 32l-3 9 7-5c12-4 19-15 21-30z" fill="currentColor"/><path d="M13 32l-4 10" stroke="currentColor" stroke-width="2"/>'};
-const DR_LINES=['どの章から解く？　間違えたところは、何度でも解き直していいんだよ。','前に間違えた問題に正解すると、栞が多めにもらえるよ。','10問ずつ出るからね。気楽にいこう。'];
+const DR_LINES=['どの章から解くのかね。間違えた問題は、何度でも解き直したまえ。研究とはそういうものだ。','前に間違えた問題に正解すれば、栞が多めにもらえる。失敗を取り返した者には、報酬があって然るべきだ。','10問ずつ出る。手早く片付けたまえ。','このドリルの監修は私だ。……と書き足したいところだが、やめておこう。'];
+const DR_VOL_LINE='試験範囲ごとに、まとめて解けるぞ。範囲の問題から10問ずつ出る。';
+/* ドリル画面の人物はコンラッド。ストーリーで初めて登場する台詞を過ぎるまでは、灰色でセリフなし */
+const KON_FIRST=(()=>{for(let c=1;c<STORY.length;c++){const i=STORY[c].ev.findIndex(e=>e.s==='コンラッド'||e.img==='コンラッド');if(i>=0)return {c,i}}return null})();
+function konradMet(){if(!KON_FIRST)return true;const {c,i}=KON_FIRST;if(S.cleared&&S.cleared[c-1])return true;const at=(S.prog&&S.prog.ch===c)?S.prog.i:((S.mid&&S.mid[c])||0);return at>i}
 function vtitle(s){const c=[...s].map(x=>x==='ー'?'丨':x==='＝'?'‖':x);const cols=c.length<=8?[c]:[c.slice(0,Math.ceil(c.length/2)),c.slice(Math.ceil(c.length/2))];
  return cols.map(col=>`<span class="col">${col.map(x=>`<b>${esc(x)}</b>`).join('')}</span>`).join('')}
 function poolOf(key){return typeof key==='number'?Q.filter(q=>q.ch===key):Q.filter(q=>q.v===key)}
@@ -4269,8 +4278,8 @@ function QuizMenu(){
   <div class="gc-title">ドリル</div>
   <div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div>
   <div class="dr-mode"><button data-mode="ch" class="${DRMODE==='ch'?'on':''}">章で選ぶ</button><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button></div>
-  <div class="gc-shimi">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="">`:''}</div>
-  <div class="gc-say"><span class="who">シミ</span>${esc(DRMODE==='ch'?DR_LINES[Math.floor(Math.random()*DR_LINES.length)]:'テストの範囲ごとに、まとめて解けるよ。範囲の問題から10問ずつ出るからね。')}</div>
+  <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
+  ${konradMet()?`<div class="gc-say"><span class="who">コンラッド</span>${esc(DRMODE==='ch'?DR_LINES[Math.floor(Math.random()*DR_LINES.length)]:DR_VOL_LINE)}</div>`:''}
   <div class="shelf2-board"></div>
   <div class="shelf2" id="shelf">${keys.map((key,ix)=>{const st=chStat(key);const on=Math.round(5*st.done/Math.max(1,st.n));const isCh=typeof key==='number';
    const name=isCh?CHT[key]:VOLS.find(v=>v.code===key).name;
