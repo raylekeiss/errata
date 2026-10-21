@@ -161,6 +161,21 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .modal{position:fixed;inset:0;background:rgba(14,18,32,.7);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
 .modal .box{max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:22px}
 .modal h3{font-family:var(--serif);margin:0 0 12px;font-size:21px}
+/* 序章の選択 */
+.pv-lead{line-height:1.85;margin:0 0 14px}
+.pv-lead b{color:var(--proof);font-weight:600}
+.pv-opts{display:grid;gap:10px}
+@media (min-width:560px){.pv-opts{grid-template-columns:1fr 1fr}}
+.pv-opt{display:grid;gap:6px;align-content:start;text-align:left;padding:16px 18px;background:#fff;color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:3px;min-height:56px;cursor:pointer}
+.pv-opt:hover,.pv-opt:focus-visible{border-color:var(--proof);border-left-color:var(--proof);outline:none}
+.pv-t{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:.08em}
+.pv-d{font-size:14px;line-height:1.6;color:var(--mute)}
+.pv-note{font-size:13px;margin:12px 0}
+/* ストーリー中のシステム文 */
+.vn-name.sys{--nc:#3d5266}
+.vn .vn-name.sys{letter-spacing:.3em}
+.vn .vn-name.sys::before{display:none}
+.vn-text.sys{color:#cfe0ef}
 .detail{display:grid;grid-template-columns:160px 1fr;gap:18px}
 @media (max-width:520px){.detail{grid-template-columns:1fr}}
 .detail dl{margin:0;font-size:15px;line-height:1.7}
@@ -2425,30 +2440,22 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "bg", "v": "背景_書庫_書架"},
     {"t": "l", "s": "シミ", "x": "ちょうどいい。この本を使って説明しようか。本に「誤植」があると、本自体がこんな風に光って教えてくれるんだ。"},
     {"t": "d", "x": "紙魚が光る本を開き、ページのすき間から黒いもちもちとした、黒光りする虫のようななにかをつまみ出した。"},
-    {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたして暴れている。"},
-    {"t": "l", "s": "シミ", "x": "いただきます。"},
-    {"t": "d", "x": "【表情：食事】【道具：なし】紙魚はそれを、ためらいなく口に入れる。【改行】すると、虫がいたところに書かれていた「ラスコー洞窟（ブランズ）」という文字が消えた。【改行】紙魚は空欄になったそこに、羽ペンで「ラスコー洞窟（フランス）」と書き込んだ。"},
-    {"t": "choice", "o": ["今の、何ですか？", "食べました……よね？"], "to": [43, 45]},
+    {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたして暴れている。紙魚はそれを、慣れた手つきでエプロンのポケットにしまった。"},
+    {"t": "d", "x": "【道具：なし】すると、虫がいたところに書かれていた「ラスコー洞窟（ブランズ）」という文字が消えた。【改行】紙魚は空欄になったそこに、羽ペンで「ラスコー洞窟（フランス）」と書き込んだ。"},
+    {"t": "choice", "o": ["今の、何ですか？", "ポケットに入れました……よね？"], "to": [42, 44]},
     {"t": "l", "s": "シミ", "x": "あれが誤植。歴史の書き間違いだよ。"},
-    {"t": "jump", "to": 47},
-    {"t": "l", "s": "シミ", "x": "うん、食べた。驚かせてごめんね。あれが誤植っていって、歴史の書き間違いなんだ。"},
-    {"t": "jump", "to": 47},
+    {"t": "jump", "to": 46},
+    {"t": "l", "s": "シミ", "x": "うん。あとで片付けるから。あれが誤植っていって、歴史の書き間違いなんだ。"},
+    {"t": "jump", "to": 46},
     {"t": "l", "s": "シミ", "x": "魔物とでもいうのかな。本の中に、ときどき紛れ込むんだよ。放っておくと増えて、本当の記述をどんどんかじっていく。"},
     {"t": "l", "s": "シミ", "x": "そうなると、外の世界がめちゃくちゃになって、最終的には矛盾に耐えきれなくなって世界が滅びかけてしまうんだ。"},
-    {"t": "l", "s": "シミ", "x": "誤植は偶然に発生するものもあるし、故意にできるものもある。俺たち司書の仕事は、主にこれを修正することだよ。【改行】もちろん、君が食べる必要はないよ。これは俺がやらなきゃいけないことなんだ。"},
-    {"t": "choice", "o": ["……おいしいんですか？", "おなか、壊さないんですか……？"], "to": [51, 53]},
-    {"t": "l", "s": "シミ", "x": "インクの味だから美味しくはないけど、うーん……慣れたかな。"},
-    {"t": "jump", "to": 55},
-    {"t": "l", "s": "シミ", "x": "うーん……俺は普通の人間じゃないからね。ちょっとオエっとはするけど、もう慣れたかな。"},
-    {"t": "jump", "to": 55},
-    {"t": "l", "s": "主人公", "x": "慣れるくらい食べてるんですね。"},
-    {"t": "l", "s": "シミ", "x": "長くいるからね。"},
+    {"t": "l", "s": "シミ", "x": "誤植は偶然に発生するものもあるし、故意にできるものもある。俺たち司書の仕事は、主にこれを修正することだよ。"},
     {"t": "l", "s": "シミ", "x": "ちなみに、君は歴史についてどの程度詳しい？"},
-    {"t": "choice", "o": ["……世界史は苦手科目です", "教科書に載ってることくらいなら……？"], "to": [59, 61]},
+    {"t": "choice", "o": ["……世界史は苦手科目です", "教科書に載ってることくらいなら……？"], "to": [51, 53]},
     {"t": "l", "s": "シミ", "x": "じゃあ、俺みたいに自力で本の内容を修正するのは難しいかもね。"},
-    {"t": "jump", "to": 63},
+    {"t": "jump", "to": 55},
     {"t": "l", "s": "シミ", "x": "勉強熱心なのはいいことだね。でも、教科書くらいだと、俺みたいに自分の知識で本の内容を修正するのは難しいかもね。"},
-    {"t": "jump", "to": 63},
+    {"t": "jump", "to": 55},
     {"t": "d", "x": "紙魚がエプロンのポケットから、人物が描かれた一枚の紙を取り出す。紙魚はその紙をこちらに差し出した。"},
     {"t": "l", "s": "シミ", "x": "ちょっと見てみて。これは「頁（ページ）」。【改行】歴史上の人物について書かれた、文字通りこの図書館の本の１ページだよ。【改行】誤植を見つけたら、その出来事にいちばん詳しい人の頁を呼び出して、証言してもらうといい。"},
     {"t": "l", "s": "シミ", "x": "頁（ページ）は、書庫のあちこちの本に挟まってる。"},
@@ -2470,11 +2477,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "最初の仕事を終え、○○はほっと一息をつく。すると、書架の上のほうで、いくつもの本が次々と同時に光り始めた。どれも、オリエントの階の方向だ。", "fx": "flash"},
     {"t": "l", "s": "主人公", "x": "あの本、全部、さっきまでは光ってなかったのに……。"},
     {"t": "l", "s": "シミ", "x": "……うーーん、誤植の増え方が異常だな。どうやら、誰かが意思をもって本を書き換えていっているみたいだ。……新人さん、初日からで悪いんだけど、手伝ってもらえるかな。"},
-    {"t": "choice", "o": ["もちろんです", "……がんばります"], "to": [85, 87]},
+    {"t": "choice", "o": ["もちろんです", "……がんばります"], "to": [77, 79]},
     {"t": "l", "s": "シミ", "x": "ありがとう。心強いよ。"},
-    {"t": "jump", "to": 89},
+    {"t": "jump", "to": 81},
     {"t": "l", "s": "シミ", "x": "うん、それで十分。俺も一緒だから。"},
-    {"t": "jump", "to": 89}
+    {"t": "jump", "to": 81}
   ]},
   {"title": "世界初の男", "ev": [
     {"t": "bg", "v": "背景_書庫_書架"},
@@ -2507,8 +2514,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "主人公", "x": "……私怨がすごい。"},
     {"t": "l", "s": "シミ", "x": "よっぽど、否定されたのが悔しかったんだね。"},
     {"t": "l", "s": "主人公", "x": "ハンムラビ法典に、勝手に書き足されてますよ！！"},
-    {"t": "l", "s": "シミ", "x": "本物は全282条だからね。この一条はおまけだ。いただきます。"},
-    {"t": "d", "x": "【表情：食事】紙魚が石碑の端から黒い虫をつまみ出し、口に入れる。283条目の文字が消える。"},
+    {"t": "l", "s": "シミ", "x": "本物は全282条だからね。この一条はおまけだ。"},
+    {"t": "d", "x": "紙魚が石碑の端から黒い虫をつまみ出し、エプロンのポケットにしまう。283条目の文字が消える。"},
     {"t": "l", "s": "シミ", "x": "ちなみに、本物の法典には、ビールの値段をごまかした酒場の女主人を溺死刑にする条文があるんだよ。"},
     {"t": "l", "s": "主人公", "x": "溺死刑の基準がわからない……。"},
     {"t": "l", "s": "シミ", "x": "当時の「酒」は腐りにくく、長持ちする貴重なカロリー源だったからね。今とは価値が全く違うんだ。"},
@@ -2947,8 +2954,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "よかったら、ヌルさんが預かっておいてくれる？"},
     {"t": "l", "s": "ヌル", "x": "……いいけど。"},
     {"t": "d", "x": "紙魚が、書架のすき間の○○に気づく。"},
-    {"t": "l", "s": "シミ", "x": "あれ、新人さん。この棚、誤植が多くてね。今日はごちそうだよ。"},
-    {"t": "d", "x": "【表情：食事】紙魚はいつもの調子で、光る本から黒い虫をつまみ出して口に入れる。振り返ると、ヌルの姿はもうない。"},
+    {"t": "l", "s": "シミ", "x": "あれ、新人さん。この棚、誤植が多くてね。今日は大漁だよ。"},
+    {"t": "d", "x": "紙魚はいつもの調子で、光る本から黒い虫をつまみ出して、エプロンのポケットにしまう。振り返ると、ヌルの姿はもうない。"},
     {"t": "l", "s": "主人公", "x": "ヌルさんが持って行った頁は？"},
     {"t": "l", "s": "シミ", "x": "聞いてたのか。盗み聞きは感心しないね。"},
     {"t": "d", "x": "紙魚はまた肩をすくめた。"},
@@ -3235,6 +3242,65 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "さ、新人さん。……そうか、もう後輩が二人もいたら、新人さんとは呼べないね。○○さん、今日も、一つずつ直していこうか。"},
     {"t": "act", "a": "reward", "v": 5, "c": "アレクサンドロス大王"}
   ]}
+],
+"storyShort": [
+  {"t": "bg", "v": "背景_書庫_扉"},
+  {"t": "d", "x": "重い扉の前に立っている。手には一枚の紙。"},
+  {"t": "d", "x": "【道具：館長のメモ】「辞令　本日付で史書庫司書に任ずる　館長」【改行】紙の端に、白と黒の細い羽根が一本、留めてある。"},
+  {"t": "act", "a": "name"},
+  {"t": "l", "s": "主人公", "x": "【道具：なし】そうだ。今日から、ここで働くんだった。"},
+  {"t": "d", "x": "○○は扉を押し開けた。"},
+  {"t": "bg", "v": "背景_書庫_カウンター"},
+  {"t": "d", "x": "天井が見えないほど高い本棚の谷。その真ん中に、小さなカウンターがある。【改行】背の高い白髪の男が、本を棚に戻している。"},
+  {"t": "l", "s": "シミ", "x": "あ、新人さん？　待ってたよ。"},
+  {"t": "l", "s": "シミ", "x": "紙魚（シミ）です。ここで司書をしてる。よろしくね。"},
+  {"t": "l", "s": "主人公", "x": "○○です。よろしくお願いします。"},
+  {"t": "l", "s": "シミ", "x": "じゃあ早速、業務の説明しちゃうね。"},
+  {"t": "l", "s": "シミ", "x": "ここの本には、宇宙が始まってから今までの出来事が、全部書いてある。王様の話も、戦争の話も、どこかの村の小麦の値段もね。"},
+  {"t": "choice", "o": ["何冊あるんですか？", "一人で管理してるんですか？"], "to": [14, 16]},
+  {"t": "l", "s": "シミ", "x": "数えたことはあるよ。途中でやめたけどね。"},
+  {"t": "jump", "to": 19},
+  {"t": "l", "s": "シミ", "x": "館長もいるよ。めったに顔を出さないけどね。"},
+  {"t": "l", "s": "シミ", "x": "【道具：館長のメモ】用があるときは、その羽根が付いたメモが届くから。"},
+  {"t": "jump", "to": 19},
+  {"t": "l", "s": "シミ", "x": "【道具：なし】大事なのはここから。ここの本に書いてあることは、そのまま外の世界の歴史になるんだ。"},
+  {"t": "l", "s": "シミ", "x": "本の文字が一文字でも変われば、外の世界の歴史も、教科書も、それに合わせて変わっちゃう。"},
+  {"t": "d", "x": "そのとき、近くの棚の一冊が白く光った。", "fx": "flash"},
+  {"t": "l", "s": "シミ", "x": "お、ちょうどいい。"},
+  {"t": "d", "x": "紙魚は光る本を開き、ページのすき間から、黒くてもちもちした、虫のようななにかをつまみ出した。"},
+  {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたさせている。紙魚はそれを、慣れた手つきでエプロンのポケットにしまった。"},
+  {"t": "d", "x": "【道具：なし】虫がいたところに書かれていた「ラスコー洞窟（ブランズ）」という文字が消えている。【改行】紙魚は空欄に、羽ペンで「ラスコー洞窟（フランス）」と書き込んだ。"},
+  {"t": "choice", "o": ["今の、何ですか？", "ポケットに入れました……よね？"], "to": [27, 29]},
+  {"t": "l", "s": "シミ", "x": "あれが誤植。歴史の書き間違いだよ。"},
+  {"t": "jump", "to": 32},
+  {"t": "l", "s": "シミ", "x": "うん。あとで片付けるから。"},
+  {"t": "l", "s": "シミ", "x": "あれは誤植。歴史の書き間違いだよ。"},
+  {"t": "jump", "to": 32},
+  {"t": "l", "s": "シミ", "x": "誤植が出ると、本がああやって光って知らせてくれる。見つけたら、正しく直す。これが俺たちの仕事。"},
+  {"t": "l", "s": "シミ", "x": "ただ、正しいことを知らないと直せない。というわけで、新人さんにはまず勉強してもらいます。"},
+  {"t": "sys", "x": "歴史クイズに正解すると「栞（しおり）」が手に入ります。まずは3問、挑戦してみましょう。"},
+  {"t": "act", "a": "tquiz", "v": ["ORI-Q01-002", "ORI-Q01-003", "ORI-Q01-004"]},
+  {"t": "l", "s": "シミ", "x": "お疲れさま。じゃあ、その栞で本をめくってみて。本のあちこちに、歴史上の人物の「頁（ページ）」が挟まってるんだ。"},
+  {"t": "sys", "x": "栞5枚で、人物の「頁」を1枚手に入れられます。頁は、誤植を直すときに力を貸してくれます。"},
+  {"t": "act", "a": "tgacha"},
+  {"t": "l", "s": "シミ", "x": "ハンムラビ王か。大物だよ。良い頁が出たね。"},
+  {"t": "bg", "v": "背景_書庫_書架"},
+  {"t": "d", "x": "奥の「メソポタミア」の棚で、別の本がまぶしく光った。", "fx": "flash"},
+  {"t": "d", "x": "紙魚が本を開くと、小さな誤植が余白までびっしり並んでいた。誤植たちはひとつに固まって、大きな虫になった。", "fx": "shake"},
+  {"t": "d", "x": "ページには「世界最古の法典の一つをつくったのは、コンラッド博士である」と書かれている。"},
+  {"t": "l", "s": "主人公", "x": "……コンラッド博士？"},
+  {"t": "l", "s": "シミ", "x": "初めて見る名前だね。まあ、ちょうどいいや。さっきの頁に証言してもらおう。"},
+  {"t": "sys", "x": "誤植とのバトルでは、まず誤りを正せる人物の頁を選び、次に正しい内容を選びます。"},
+  {"t": "act", "a": "tbattle"},
+  {"t": "l", "s": "シミ", "x": "ハンムラビ法典は全282条。「目には目を、歯には歯を」で有名だね。ただし、罰の重さは身分によって違ったんだ。"},
+  {"t": "d", "x": "ほっとしたのもつかの間、書架の上のほうで、いくつもの本が次々に光り始めた。どれも、オリエントの階のほうだ。", "fx": "flash"},
+  {"t": "l", "s": "シミ", "x": "……あれ全部、さっきまで光ってなかったな。誰かが、わざと書き換えてるね。"},
+  {"t": "l", "s": "シミ", "x": "新人さん、初日から残業になるけど、いい？"},
+  {"t": "choice", "o": ["はい", "……残業代、出ますか？"], "to": [53, 55]},
+  {"t": "l", "s": "シミ", "x": "助かる。じゃあ、上の階に行こうか。"},
+  {"t": "jump", "to": 57},
+  {"t": "l", "s": "シミ", "x": "館長に聞いておくね。たぶん出ないけど。"},
+  {"t": "jump", "to": 57}
 ],
 "chapters": {"1":"古代オリエント","2":"古代インド","3":"中国の成立","4":"漢帝国と魏晋南北朝","5":"ギリシアとヘレニズム","6":"ローマとイラン","7":"キリスト教と西ヨーロッパ","8":"イスラーム世界","9":"隋・唐と東アジア","10":"中世ヨーロッパの盛衰","11":"宋とモンゴル帝国","12":"明・清","13":"ルネサンスと大航海時代","14":"宗教改革と主権国家","15":"革命の時代"},
 "vols": [{"code":"ORI","name":"古代オリエント"},{"code":"IND","name":"古代インド"},{"code":"CHN","name":"古代中国"},{"code":"GRM","name":"ギリシア・ローマ"},{"code":"MED","name":"中世"},{"code":"EAS","name":"東アジア"},{"code":"MOD","name":"近世"}]
@@ -3612,6 +3678,9 @@ try{document.documentElement.classList.toggle('embedded',!CLOUD&&window.self!==w
 const ATTR_CLASS=a=>'k-'+a;
 const CARDS=DATA.cards.filter(c=>!c.x), CARD=Object.fromEntries(DATA.cards.map(c=>[c.n,c]));
 const K=DATA.K, Q=DATA.Q, STORY=DATA.story;
+/* 序章は「しっかり版」(story[0]) と「さくっと版」(storyShort) の2つ。S.pv が 'short' ならさくっと版を読む */
+const STORY_SHORT=DATA.storyShort||null;
+function evOf(ch){return ch===0&&S&&S.pv==='short'&&STORY_SHORT?STORY_SHORT:STORY[ch].ev}
 const QUIZ_ORDER=Q.map(q=>q.id);
 const HELPER={1:'ラメス2世',2:'アショーカ王',3:'始皇帝',4:'武帝',5:'ペリクレス',6:'カエサル',7:'カール大帝',8:'アブー＝バクル',9:'太宗',10:'グレゴリウス7世',11:'チンギス＝ハン',12:'康熙帝',13:'コロンブス',14:'ルター',15:'ナポレオン'};
 const NCH=15; // 章の数
@@ -3653,7 +3722,7 @@ function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div cla
 function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
-function freshState(){return{name:'',prologue:false,cleared:Array(NCH).fill(false),tutorial:false,
+function freshState(){return{name:'',prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
   shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'シミ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
 /* 記録の章数をそろえる */
 function normState(N){N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
@@ -3705,8 +3774,8 @@ function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div
   ${TOUCH?'':'<button class="fs-link" id="fsT">全画面で遊ぶ</button>'}
  </div></div>`);
  {const fb=$('#fsT');if(fb)fb.onclick=toggleFS}
- $('#newg').onclick=()=>{const go=()=>{S=freshState();save();playChapter(0)};if(hasSave())askYes('いまの記録を消して、はじめから遊びますか？','はじめから遊ぶ',go);else go()};
- const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():playChapter(0)};
+ $('#newg').onclick=()=>{const go=()=>{S=freshState();save();startPrologue()};if(hasSave())askYes('いまの記録を消して、はじめから遊びますか？','はじめから遊ぶ',go);else go()};
+ const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():startPrologue()};
  $('#spell').onclick=SpellInput}
 
 /* ---------- home ---------- */
@@ -3829,7 +3898,7 @@ function StoryMenu(){const nx=nextChapter();if(nx!==null&&PART===0&&partOf(nx)>0
  document.querySelectorAll('.toc-row').forEach(b=>b.onclick=()=>{const ch=+b.dataset.ch;
   if(b.dataset.ex!=='1'){FX.shake(b);toast('この章は、まだ誤植に食われていて読めないみたい（準備中）');return}
   if(b.dataset.ok!=='1'){FX.shake(b);toast('前の章を修復すると、読めるようになります');return}
-  FX._replay(b,'fx-glow',500);FX.pageTurn(()=>playChapter(ch))})}
+  FX._replay(b,'fx-glow',500);if(ch===0){startPrologue({turn:true});return}FX.pageTurn(()=>playChapter(ch))})}
 
 /* ---------- settings (kept apart from the save data) ---------- */
 const CFG_KEY='errata_cfg';
@@ -3868,8 +3937,8 @@ function closeDrawer(){const a=$('#drawer'),b=$('#drawerBg');if(a)a.remove();if(
 /* ---------- story player ---------- */
 let PL=null;
 const _pre=new Set();function preload(u){if(!u||_pre.has(u)||u.startsWith('data:'))return;_pre.add(u);const i=new Image();i.decoding='async';i.src=u}
-function preloadCh(ch){const st=STORY[ch];if(!st)return;preload(bgOf(ch,null));st.ev.forEach(e=>{if(e.t==='bg')preload(IMG[e.v]);if(e.t==='l'&&IMG[e.s])preload(IMG[e.s]);if(e.img)preload(IMG[e.img]);if(e.t==='act'&&e.a==='battle'&&K[e.v])preload(IMG[K[e.v].who])})}
-function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.prog.i:((S.mid&&S.mid[ch])||0);PL={ch,i:resume,ev:STORY[ch].ev,pages:null,pg:0,typing:null,full:'',cast:[],ln:0,solo:false};
+function preloadCh(ch){const st=STORY[ch];if(!st)return;preload(bgOf(ch,null));evOf(ch).forEach(e=>{if(e.t==='bg')preload(IMG[e.v]);if(e.t==='l'&&IMG[e.s])preload(IMG[e.s]);if(e.img)preload(IMG[e.img]);if(e.t==='act'&&e.a==='battle'&&K[e.v])preload(IMG[K[e.v].who])})}
+function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.prog.i:((S.mid&&S.mid[ch])||0);PL={ch,i:resume,ev:evOf(ch),pages:null,pg:0,typing:null,full:'',cast:[],ln:0,solo:false};
  let bgk=null,itk=null;for(let k=0;k<resume&&k<PL.ev.length;k++){const e=PL.ev[k];if(e.t==='bg')bgk=e.v;if(e.x){const t=tagsOf(e.x);if(t.item!==undefined)itk=t.item}}PL.bg=bgk;PL.item=itk;const bgu=bgOf(ch,bgk);
  show(`<div class="vn" id="story">
   <div class="vn-bg" id="vnbg" ${bgu?`style="background-image:url(${bgu})"`:''}></div>
@@ -3950,7 +4019,8 @@ function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;
  say.className='vn-text';const tg=tagsOf(sp(e.x));let txt=tg.text;if(tg.item!==undefined)setItem(tg.item);
  let tgt=null; /* 光る・強調の対象 */
  let who=null; /* 表情を変える人 */
- if(e.t==='d'){np.hidden=true;say.classList.add('desc');
+ if(e.t==='sys'){np.hidden=false;np.textContent='SYSTEM';np.className='vn-name sys';say.classList.add('sys');if(!PL.solo)castRender(null)}
+ else if(e.t==='d'){np.hidden=true;say.classList.add('desc');
   if(e.img&&IMG[e.img]){soloFig(`<img src="${IMG[e.img]}" alt=""${e.sil?' class="sil"':''}>`);tgt='#fig'}
   else{castExits(txt);if(!PL.solo){const m=castMentioned(txt);if(m)tgt=m;castRender(null)}}}
  else{
@@ -4069,6 +4139,19 @@ function runAct(e){
  step()}
 function resumeStory(){const ch=PL.ch,i=PL.i;playChapterAt(ch,i)}
 function playChapterAt(ch,i){S.prog={ch,i};playChapter(ch)}
+/* 序章の選択：途中から再開するときはそのまま続きへ。はじめから読むときは「しっかり／さくっと」を選ぶ */
+function startPrologue(o){o=o||{};const play=()=>o.turn?FX.pageTurn(()=>playChapter(0)):playChapter(0);
+ if(S.prog&&S.prog.ch===0&&S.prog.i>0){play();return}
+ if(!STORY_SHORT){S.pv='full';play();return}
+ modal(`<h3>序章の読み方を選んでください</h3>
+  <p class="pv-lead">ストーリーをじっくり楽しみたい人は「しっかり読む」、早く遊びはじめたい人は「さくっと読む」を選んでください。<br><b>どちらを選んでも、このあとのストーリーやゲームで困ることはありません。</b></p>
+  <div class="pv-opts">
+   <button class="pv-opt" data-pv="full"><span class="pv-t">しっかり読む</span><span class="pv-d">図書館のしくみや紙魚とのやりとりを、ゆっくり読みます。</span></button>
+   <button class="pv-opt" data-pv="short"><span class="pv-t">さくっと読む</span><span class="pv-d">必要なことだけ聞いて、すぐに仕事を始めます。</span></button>
+  </div>
+  <p class="muted pv-note">もう一方の序章は、あとから目次で読むことができます。</p>
+  <div class="row"><button class="btn light" data-close>やめる</button></div>`);
+ document.querySelectorAll('.pv-opt').forEach(b=>b.onclick=()=>{S.pv=b.dataset.pv;S.prog=null;save();closeModal(true);play()})}
 function askName(cb){modal(`<h3>名前を入力してください</h3><p class="muted">物語の中で呼ばれる名前です（8文字まで）。</p><input type="text" id="nm" maxlength="8" value="カコ" placeholder="例：カコ"><div class="row"><button class="btn" id="nmok">決定</button></div>`);
  setTimeout(()=>{const n=$('#nm');if(n)n.focus()},50);
  $('#nmok').onclick=()=>{const v=$('#nm').value.trim();if(!v){toast('名前を入れてください');return}S.name=v;save();closeModal();cb()}}
