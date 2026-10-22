@@ -927,6 +927,48 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
  .gc-links button{flex:1 1 40%}
  .gb-tx{max-width:70%}
 }
+/* ===== 箱庭 ===== */
+.nw-stage{position:relative;flex:1;min-height:0;display:flex}
+#nwSvg{width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.nw-grid line{stroke:transparent}
+#nwSvg.editing .nw-grid line{stroke:rgba(255,240,200,.38);stroke-width:1}
+.nw-it{cursor:pointer}
+#nwSvg.editing .nw-it.sel{filter:drop-shadow(0 0 3px #ffd36a) drop-shadow(0 0 2px #ffd36a)}
+.nw-ghost{opacity:.9}.nw-ghost.ng{opacity:.5}
+.nw-fp.ok{fill:rgba(120,220,140,.32);stroke:#6fdc8c;stroke-width:2}
+.nw-fp.ng{fill:rgba(230,80,70,.32);stroke:#e05a4a;stroke-width:2}
+.nw-selbar{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:rgba(14,18,32,.9);border:1px solid #c9a24a;border-radius:4px;padding:6px 8px;color:#efe6d2;z-index:3;max-width:calc(100% - 24px)}
+.nw-selbar[hidden]{display:none}
+.nw-selbar .nm{font-family:var(--serif);font-weight:600;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.nw-selbar button{flex:0 0 auto;min-height:40px;padding:6px 12px;background:#f6eedb;color:#2a2320;border:1px solid #c9a24a;border-radius:3px;font-size:15px}
+.nw-hint{position:absolute;left:0;right:0;top:4px;text-align:center;margin:0;font-size:13px;color:rgba(233,225,204,.72);pointer-events:none;padding:0 16px}
+.nw-tools{display:flex;gap:12px;justify-content:center;padding:8px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.nw-tools .btn{flex:1;max-width:260px}
+.nw-tools .btn:not(.light){background:#8a2a25;color:#f6eedb;border:1px solid #c9a24a}
+.nw-th{width:72px;height:72px;flex:0 0 72px}
+.nw-info{display:flex;gap:16px;align-items:flex-start}
+.nw-info .nw-th{width:110px;height:110px;flex-basis:110px}
+.nw-info h3{margin-top:4px}
+.nw-say{line-height:1.8;margin:0}
+.nw-say .who{display:block;font-weight:600;color:#8a2a25;margin-bottom:2px;font-size:14px}
+.nw-tabs{display:flex;gap:8px;margin-bottom:10px}
+.nw-tabs button{flex:1;min-height:44px;border:1px solid var(--line);background:#f6eedb;color:#2a2320;border-radius:3px;font-size:16px}
+.nw-tabs button.on{background:var(--ec);color:#fff;border-color:var(--ec)}
+.nw-have{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.nw-have .rb{width:18px;height:26px}.nw-have b{font-size:20px}
+.nw-row{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.nw-row .tx{flex:1;min-width:0}
+.nw-row small{display:block;color:#7a6a50;font-size:13px}
+.nw-row p{margin:4px 0 0;font-size:14px;line-height:1.6}
+.nw-row .btn{min-height:44px;padding:8px 12px;font-size:14px;white-space:nowrap}
+.nw-row .btn[disabled]{opacity:.5}
+@media (max-width:560px){.nw-row{flex-wrap:wrap}.nw-row .btn{width:100%}}
+.nw-h4{font-family:var(--serif);margin:14px 0 8px;font-size:16px}
+.nw-inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.nw-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:#f6eedb;border:1px solid var(--line);border-radius:3px;font-size:13px;color:#2a2320;line-height:1.35}
+.nw-cell small{color:#7a6a50;font-size:12px}
+.nw-inv.pages{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
+.nw-cell.pg{padding:2px;background:none;border:none}
 </style>
 </head>
 <body>
@@ -3307,6 +3349,30 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"t": "l", "s": "シミ", "x": "館長に聞いておくね。たぶん出ないけど。"},
   {"t": "jump", "to": 57}
 ],
+"furniture": [
+  {"k":"A1","n":"粘土板の書棚","e":0,"t":"floor","w":1,"d":1,"h":120,"c":"#b08d5b","p":5,"x":"メソポタミアでは、粘土板に葦のペンを押しつけて楔形文字を書いたんだ。アッシュルバニパル王の図書館は焼け落ちたけど、そのおかげで粘土板が焼き固められて、今まで残ったんだよ。"},
+  {"k":"A2","n":"パピルスの巻物棚","e":0,"t":"floor","w":1,"d":1,"h":110,"c":"#c9b27a","p":5,"x":"パピルスは、ナイルの岸に生える草の茎を薄く裂いて、縦と横に重ねて作るんだ。英語のpaperの語源だよ。"},
+  {"k":"A3","n":"ロゼッタ＝ストーン（複製）","e":0,"t":"floor","w":1,"d":1,"h":100,"c":"#5d5b60","p":10,"x":"同じ内容が、神聖文字・民用文字・ギリシア文字の3つで刻まれているんだ。シャンポリオンはギリシア語の部分を手がかりに、神聖文字を解読したよ。本物は大英博物館にあるね。"},
+  {"k":"A4","n":"ドーリア式の円柱","e":0,"t":"floor","w":1,"d":1,"h":200,"c":"#ddd3bf","p":10,"x":"飾りの少ない、どっしりした柱だね。パルテノン神殿もこの様式なんだ。柱の真ん中が少しふくらんでいるのは、まっすぐに見せるための工夫なんだって。"},
+  {"k":"A5","n":"寝椅子（クリネ）","e":0,"t":"floor","w":2,"d":1,"h":60,"c":"#8c4f37","p":15,"x":"ギリシアの宴会シュンポシオンでは、寝椅子に横になって飲みながら語り合ったんだ。プラトンの『饗宴』も、そういう席の話だよ。"},
+  {"k":"A6","n":"兵馬俑（複製）","e":0,"t":"floor","w":1,"d":1,"h":150,"c":"#a3866a","p":10,"x":"始皇帝の陵墓の近くで、1974年に井戸を掘っていた農民が見つけたんだ。8000体ほどあって、顔が一体ずつ違うと言われているよ。"},
+  {"k":"A7","n":"青銅の鼎","e":0,"t":"floor","w":1,"d":1,"h":80,"c":"#4f7a6a","p":5,"x":"殷や周で、祖先や神をまつるのに使った器だよ。鼎は王の権威のしるしで、楚の荘王が周の鼎の重さを尋ねた話から「鼎の軽重を問う」という言葉ができたんだ。"},
+  {"k":"A8","n":"獅子狩りの浮き彫り","e":0,"t":"wall","w":2,"h":100,"y":80,"c":"#b9a888","p":10,"x":"アッシリアのアッシュルバニパル王がライオンを狩る場面だよ。王の獅子狩りは、国を守る力を見せる儀式でもあったんだ。"},
+  {"k":"M1","n":"写本台","e":1,"t":"floor","w":1,"d":1,"h":110,"c":"#7a5434","p":5,"x":"修道院の写字室では、修道士たちがここで本を一字ずつ書き写していたんだ。羊皮紙は羊や子牛の皮だから、大きな聖書一冊に数百頭ぶんが要ったんだって。"},
+  {"k":"M2","n":"鎖つきの書架","e":1,"t":"floor","w":2,"d":1,"h":160,"c":"#5e3d24","p":15,"x":"本がとても高価だったから、盗まれないように鎖で棚につないでいたんだ。イギリスのヘレフォード大聖堂には、今も鎖つきの図書館が残っているよ。"},
+  {"k":"M3","n":"聖遺物箱","e":1,"t":"floor","w":1,"d":1,"h":70,"c":"#c19a3e","p":10,"x":"聖人の骨や遺品を納めた箱だよ。巡礼者たちは聖遺物を拝むために、サンティアゴ＝デ＝コンポステーラまで何か月もかけて歩いたんだ。"},
+  {"k":"M4","n":"アストロラーベ","e":1,"t":"floor","w":1,"d":1,"h":120,"c":"#b8873a","p":10,"x":"星の高さを測って、時刻や方角を知る道具だよ。イスラーム世界で磨かれて、礼拝の時刻やメッカの方角を知るのにも使われたんだ。"},
+  {"k":"M5","n":"板金鎧","e":1,"t":"floor","w":1,"d":1,"h":170,"c":"#8d949c","p":10,"x":"全身を覆う板金の鎧は、14〜15世紀に広まったんだ。重そうに見えるけど20〜25キロほどで、着たまま馬に乗れたらしいよ。"},
+  {"k":"M6","n":"ステンドグラス","e":1,"t":"wall","w":1,"h":160,"y":40,"c":"#3f5fa8","p":10,"x":"ゴシック様式の教会は、壁を薄くして大きな窓を開け、ステンドグラスで聖書の物語を描いたんだ。字が読めない人も、絵で教えを知ることができたんだよ。"},
+  {"k":"M7","n":"バイユーの刺繍（複製）","e":1,"t":"wall","w":2,"h":70,"y":110,"c":"#d9c9a0","p":15,"x":"ノルマン人のイングランド征服を描いた、70メートル近い布の絵巻だよ。タペストリーと呼ばれるけど、実は織物じゃなくて刺繍なんだ。"},
+  {"k":"E1","n":"ベハイムの地球儀","e":2,"t":"floor","w":1,"d":1,"h":120,"c":"#4b7fa3","p":10,"x":"1492年に完成した、現存する最古の地球儀だよ。コロンブスが帰ってくる前に作られたから、アメリカ大陸は描かれていないんだ。"},
+  {"k":"E2","n":"活版印刷機","e":2,"t":"floor","w":2,"d":1,"h":150,"c":"#6b4a2e","p":15,"x":"グーテンベルクは、ぶどう絞り機を改良して印刷機を作ったと言われているんだ。印刷のおかげで、ルターのドイツ語訳聖書は一気に広まったよ。"},
+  {"k":"E3","n":"望遠鏡","e":2,"t":"floor","w":1,"d":1,"h":130,"c":"#9a7b4f","p":10,"x":"ガリレイは自分で望遠鏡を作って、1610年に木星の4つの衛星を見つけたんだ。地球のまわりを回らない天体があることは、地動説の追い風になったよ。"},
+  {"k":"E4","n":"振り子時計","e":2,"t":"floor","w":1,"d":1,"h":190,"c":"#5a3a22","p":10,"x":"ガリレイが気づいた振り子の等時性を使って、ホイヘンスが振り子時計を作ったんだ。それまで1日に15分ほどあった誤差が、1分ほどに減ったんだって。"},
+  {"k":"E5","n":"東インド会社の茶箱","e":2,"t":"floor","w":1,"d":1,"h":60,"c":"#a0703c","p":5,"x":"18世紀のイギリス東インド会社は、中国の茶を大量に運んだんだ。代金の銀が足りなくなって、のちのアヘン貿易につながっていくよ。"},
+  {"k":"E6","n":"ペルシア絨毯","e":2,"t":"floor","w":2,"d":2,"h":6,"c":"#9c2f2f","p":15,"x":"サファヴィー朝の時代には宮廷の工房で絨毯が織られて、ヨーロッパにも運ばれたんだ。結び目が細かいほど、精密な模様が描けるんだよ。"},
+  {"k":"E7","n":"メルカトルの世界地図","e":2,"t":"wall","w":2,"h":100,"y":80,"c":"#d8c597","p":10,"x":"メルカトルが1569年に作った地図は、角度が正しく描かれるから航海に便利だったんだ。そのかわり極に近いほど大きく描かれて、グリーンランドがアフリカと同じくらいに見えるんだよ。"}
+],
 "chapters": {"1":"古代オリエント","2":"古代インド","3":"中国の成立","4":"漢帝国と魏晋南北朝","5":"ギリシアとヘレニズム","6":"ローマとイラン","7":"キリスト教と西ヨーロッパ","8":"イスラーム世界","9":"隋・唐と東アジア","10":"中世ヨーロッパの盛衰","11":"宋とモンゴル帝国","12":"明・清","13":"ルネサンスと大航海時代","14":"宗教改革と主権国家","15":"革命の時代"},
 "vols": [{"code":"ORI","name":"古代オリエント"},{"code":"IND","name":"古代インド"},{"code":"CHN","name":"古代中国"},{"code":"GRM","name":"ギリシア・ローマ"},{"code":"MED","name":"中世"},{"code":"EAS","name":"東アジア"},{"code":"MOD","name":"近世"}]
 }
@@ -3728,7 +3794,7 @@ function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHT
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
 function freshState(){return{name:'',prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
-  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,t:0}}
+  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,room:{f:[],w:[],inv:{}},t:0}}
 /* 記録の章数をそろえる */
 function normState(N){if(N.oshi==='シミ'&&!N.oshiSet)N.oshi='ハンムラビ';N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
  /* 栞を時代別に（古い記録は、正解した問題の時代の割合で分ける） */
@@ -3765,7 +3831,7 @@ function blobSVG(boss){if(IMG[boss?'誤植_ボス':'誤植']||IMG['誤植'])retu
 function show(html){app.innerHTML=html;const t=app.querySelector('.gc-top');if(t&&!TOUCH&&!t.querySelector('.fs-mini')){const b=document.createElement('button');b.className='gc-back fs-mini';b.setAttribute('aria-label','全画面');b.title='全画面';b.innerHTML='<svg viewBox=\x220 0 24 24\x22 width=\x2220\x22 height=\x2220\x22 aria-hidden=\x22true\x22><path d=\x22M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\x22 fill=\x22none\x22 stroke=\x22currentColor\x22 stroke-width=\x222.2\x22 stroke-linecap=\x22round\x22 stroke-linejoin=\x22round\x22/></svg>';b.onclick=e=>{e.stopPropagation();toggleFS()};t.prepend(b)}}
 function shioriBadge(){return `<span class="shiori3">${ERAS.map((E,i)=>`${E.k}<b>${S.sh[i]}</b>`).join('')}</span>`}
 function topbar(title,backTo='home'){return `<div class="bar"><button class="back" data-go="${backTo}">戻る</button><h2>${esc(title)}</h2>${shioriBadge()}</div>`}
-app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,code:CodeScreen,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
+app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,niwa:Niwa,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
 
 /* ---------- title ---------- */
 function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div class="title-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
@@ -3774,24 +3840,22 @@ function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div
  <div class="titlebtns">
   ${CLOUD&&!CL.ready?'<p id="clWait" style="opacity:.85;line-height:1.8">学校アカウントの記録を確認しています…</p>':''}<div id="tbtns" style="display:${CLOUD&&!CL.ready?'none':'contents'}">
   ${hasSave()?'<button class="btn main" id="cont">つづきから</button>':''}
-  <button class="btn ${hasSave()?'':'main'}" id="newg">はじめから</button>
-  <button class="btn" id="spell">復活の呪文を入力</button></div>
+  <button class="btn ${hasSave()?'':'main'}" id="newg">はじめから</button></div>
   ${TOUCH?'':'<button class="fs-link" id="fsT">全画面で遊ぶ</button>'}
  </div></div>`);
  {const fb=$('#fsT');if(fb)fb.onclick=toggleFS}
  $('#newg').onclick=()=>{const go=()=>{S=freshState();save();startPrologue()};if(hasSave())askYes('いまの記録を消して、はじめから遊びますか？','はじめから遊ぶ',go);else go()};
- const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():startPrologue()};
- $('#spell').onclick=SpellInput}
+ const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():startPrologue()}}
 
 /* ---------- home ---------- */
-const SHIMI_IDLE=['今日はどの棚から読む？','テストが近いなら、ドリルの「試験範囲で選ぶ」が便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
+const SHIMI_IDLE=['今日はどの棚から読む？','箱庭の家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、ドリルの「試験範囲で選ぶ」が便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
 const ICON={
  story:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="24" cy="24" r="15"/><circle cx="24" cy="24" r="10" stroke-width="1"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke-linecap="round"/><path d="M24 12l3.5 12L24 36l-3.5-12z" fill="currentColor" stroke="none"/></svg>',
  drill:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M38 6c-10 2-18 10-22 22l-3 7 6-4c10-3 17-12 19-25z"/><path d="M16 28l-6 14" stroke-linecap="round"/><path d="M22 22l-5 5" stroke-width="1"/><path d="M30 38h10M30 43h6" stroke-linecap="round"/></svg>',
  gacha:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 14c6-2 12-2 18 2 6-4 12-4 18-2v24c-6-2-12-2-18 2-6-4-12-4-18-2z"/><path d="M24 16v24"/><path d="M28 12c4-5 9-6 12-5-3 2-5 5-6 9"/><path d="M38 4l1 2.5 2.5 1-2.5 1L38 11l-1-2.5-2.5-1 2.5-1z" fill="currentColor" stroke="none"/></svg>',
  party:'<svg class="ic" viewBox="0 0 48 48" fill="currentColor"><circle cx="24" cy="16" r="6"/><path d="M14 40c0-8 4-13 10-13s10 5 10 13z"/><circle cx="11" cy="21" r="4.5" opacity=".75"/><path d="M3 40c0-6 3-10 8-10 2 0 3.5.6 4.6 1.6C13 34 12 37 12 40z" opacity=".75"/><circle cx="37" cy="21" r="4.5" opacity=".75"/><path d="M45 40c0-6-3-10-8-10-2 0-3.5.6-4.6 1.6C35 34 36 37 36 40z" opacity=".75"/></svg>',
  zukan:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 34l16 6 16-6v5l-16 6-16-6z" fill="currentColor"/><path d="M8 26l16 6 16-6M8 26l16-6 16 6"/><path d="M8 26v6l16 6 16-6v-6"/><path d="M24 4l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="currentColor" stroke="none"/></svg>',
- spell:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="24" cy="24" r="16" stroke-dasharray="2 3"/><path d="M24 6l3 14 14 4-14 4-3 14-3-14-14-4 14-4z" fill="currentColor" stroke="none"/><circle cx="24" cy="24" r="3" fill="#efe6d2" stroke="none"/></svg>'};
+ niwa:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M24 30L6 21V9l18 9z" fill="currentColor" opacity=".18"/><path d="M24 30l18-9V9L24 18z" fill="currentColor" opacity=".32"/><path d="M6 9l18 9 18-9M24 18v12M6 9v12l18 9 18-9V9"/><path d="M6 21l18 9 18-9 0 6-18 9-18-9z" fill="currentColor"/><path d="M30 22l6-3v-6l-6 3z" fill="currentColor"/><path d="M12 19l5 2.5v-4L12 15z" stroke-width="1.2"/></svg>'};
 const FLO='<svg class="flo" viewBox="0 0 40 14" fill="none" stroke="#b5302a" stroke-width="1.2" stroke-linecap="round"><path d="M2 11c6-1 9-7 14-7 4 0 2 6-2 5s1-7 8-6c5 1 8 4 16 1"/><path d="M34 3l2 2-2 2"/></svg>';
 let homeLine=-1;
 const CHARA={'コンラッド':{c:'#a5621b',lines:['研究員という肩書きも、悪くはない。名刺の文字は大きめに頼んだがね。','今日の調べ物は済んだかね？　私は『三国志演義』をもう一周するところだ。','ドリルの正答率が低いようでは、私の助手は務まらんぞ。','頁をめくるたびに一喜一憂するのは、発掘と同じだな。','ネフェルティティの胸像の片目の謎は、まだ解けていない。だから面白いのだ。']},
@@ -3826,8 +3890,8 @@ function Home(){const nx=nextChapter();const o=oshiName();
    ${btn('','quiz','drill','ドリル')}
    ${btn('','gacha','gacha','頁をめくる')}
    ${btn('','party','party','編成')}
+   ${btn('','niwa','niwa','箱庭')}
    ${btn('','zukan','zukan','図鑑')}
-   ${btn('','code','spell','復活の呪文')}
   </nav></div>`);
  const talk=()=>{$('#bubble').innerHTML=homeBubble()+FLO.replace('class="flo"','class="ink"')};
  $('#bubble').onclick=talk;$('#oshi').onclick=talk;$('#oshiChg').onclick=chooseOshi;$('#burger').onclick=openDrawer;
@@ -3836,10 +3900,10 @@ const TOUR=[['[data-go="story"]','ストーリー','光っている本を追い�
  ['[data-go="quiz"]','ドリル','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「試験範囲で選ぶ」に切りかえると、範囲の問題だけを解けるよ。'],
  ['[data-go="gacha"]','頁をめくる','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
  ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
+ ['[data-go="niwa"]','箱庭','君の書斎を好きに飾れるよ。家具は栞と交換できるし、手に入れた頁は額に入れて壁に掛けられるんだ。'],
  ['[data-go="zukan"]','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
- ['[data-go="code"]','復活の呪文','記録はこの端末に保存されるけど、ときどき呪文を書き写しておくと安心だよ。ほかの端末でも続きから遊べるからね。'],
  ['#oshiChg','人物を変更する','手に入れた頁の人物を、ホームに飾れるよ。'],
- ['#burger','メニュー',TOUCH?'文字の速さの設定や、復活の呪文はここからだよ。':'全画面表示や、文字の速さの設定はここからだよ。']];
+ ['#burger','メニュー',TOUCH?'文字の速さの設定は、ここからだよ。':'全画面表示や、文字の速さの設定はここからだよ。']];
 let TOUR_I=-1;
 function homeTour(i=0){const old=$('#coach');if(old)old.remove();TOUR_I=i;
  if(i>=TOUR.length){TOUR_I=-1;toast('説明はおしまい。いってらっしゃい');return}
@@ -3926,14 +3990,12 @@ function openDrawer(){closeDrawer();
  d.innerHTML=`<h3>メニュー<button id="dwClose" aria-label="閉じる">×</button></h3>
   ${TOUCH?'':`<button class="item" id="dwFS">${isFS()?'全画面表示をやめる':'全画面で表示する'}<small>ブラウザで直接開いているときに使えます</small></button>`}
   <div class="grp">文字の表示の速さ<div class="seg">${['slow','normal','fast','instant'].map(sp).join('')}</div></div>
-  <button class="item" id="dwSpell">復活の呪文<small>いまの記録を呪文にして書き写す</small></button>
   <button class="item" id="dwFx">演出の見本<small>揺れ・光る・強調・ページめくりを試せます</small></button>
   <a class="item" href="${IMG_BASE}credits.html" ${CLOUD?'target="_blank" rel="noopener"':''} style="text-decoration:none">画像の出典<small>肖像の作者とライセンスの一覧</small></a>
   <button class="item" id="dwTitle">タイトルに戻る<small>記録は自動で保存されています</small></button>`;
  document.body.append(bg,d);
  bg.onclick=closeDrawer;$('#dwClose').onclick=closeDrawer;
  {const fb=$('#dwFS');if(fb)fb.onclick=()=>{toggleFS();closeDrawer()}}
- $('#dwSpell').onclick=()=>{closeDrawer();CodeScreen()};
  $('#dwTitle').onclick=()=>{closeDrawer();FX.pageTurn(Title)};
  $('#dwFx').onclick=()=>{closeDrawer();FX.pageTurn(FxLab)};
  d.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{CFG.speed=b.dataset.sp;saveCfg();d.querySelectorAll('[data-sp]').forEach(x=>x.classList.toggle('on',x===b))})}
@@ -4430,48 +4492,188 @@ function Zukan(){const L=zfList(CARDS);show(`<div class="screen">${topbar('図�
   <dt>どんな人？</dt><dd>${esc(c.f)}</dd>${isSP(c.n)?`<dt>入手</dt><dd>ストーリーで受けとる特別な頁</dd><dt>特別な頁</dt><dd>宗教の創始者の頁です。★や凸はなく、ガチャ・編成・バトルには登場しません。</dd>`:own?`<dt>スキル</dt><dd>${esc(c.sk)}</dd><dt>凸</dt><dd>${lv(c.n)-1}凸（最大4凸）</dd>`:'<dt>入手</dt><dd>'+(c.dist&&c.st<STORY.length?CHNAME[c.st]+'のクリア報酬、または頁をめくると出ることがある':'頁をめくると出ることがある')+'</dd>'}</dl></div></div>
   <div class="row"><button class="btn" data-close>閉じる</button></div>`)})}
 
-/* ---------- 復活の呪文 ---------- */
-const B32='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
-function bitsPush(arr,v,n){for(let i=n-1;i>=0;i--)arr.push((v>>i)&1)}
-function bitsRead(st,n){let v=0;for(let i=0;i<n;i++)v=(v<<1)|st.b[st.p++];return v}
-function hash16(bits){let h=0x9e37;for(let i=0;i<bits.length;i++){h=((h<<5)-h+bits[i]+(i%7)*13)&0xffff}return h}
-/* 復活の呪文 v5：栞と天井を時代別に（v4の呪文も読める。v4の栞は正解した問題の時代の割合で分ける） */
-function gammaPush(a,n){const k=Math.floor(Math.log2(n));for(let i=0;i<k;i++)a.push(0);bitsPush(a,n,k+1)}
-function gammaRead(st){let k=0;while(st.p<st.b.length&&st.b[st.p]===0){k++;st.p++;if(k>24)return null}if(st.p+k+1>st.b.length)return null;return bitsRead(st,k+1)}
-function payload(){const b=[];bitsPush(b,(S.prologue?1:0)|(S.tutorial?2:0),8);let cl=0;for(let i=0;i<NCH;i++)if(S.cleared[i])cl|=1<<i;bitsPush(b,cl,16);
- S.sh.forEach(x=>bitsPush(b,Math.min(x,16383),14));S.pt.forEach(x=>bitsPush(b,x%64,6));bitsPush(b,Math.min(S.shiryo,255),8);
- CARDS.forEach(c=>bitsPush(b,lv(c.n),3));QUIZ_ORDER.forEach(id=>bitsPush(b,S.qs[id]||0,2));return b}
-function encode(){const p=payload();const out=[];bitsPush(out,5,8);
- const rle=[];rle.push(p[0]);let i=0;while(i<p.length){let j=i;while(j<p.length&&p[j]===p[i])j++;gammaPush(rle,j-i);i=j}
- if(rle.length<p.length){out.push(1);out.push(...rle)}else{out.push(0);out.push(...p)}
- bitsPush(out,hash16(p),16);while(out.length%5)out.push(0);
- let s='';for(let i=0;i<out.length;i+=5){let v=0;for(let j=0;j<5;j++)v=(v<<1)|out[i+j];s+=B32[v]}
- return s.match(/.{1,4}/g).join(' ')}
-function decode(str){const N=decodeRaw(str);return N?normState(N):null}
-function decodeRaw(str){str=str.toUpperCase().replace(/[\s\-ー－]/g,'').replace(/O/g,'0').replace(/[IL]/g,'1');
- const b=[];for(const ch of str){const v=B32.indexOf(ch);if(v<0)return null;bitsPush(b,v,5)}
- if(b.length<8)return null;const st={b,p:0};const ver=bitsRead(st,8);if(ver!==4&&ver!==5)return null;
- try{const L=(ver===5?92:52)+CARDS.length*3+QUIZ_ORDER.length*2;const mode=b[st.p++];let p=[];
-  if(mode===1){let cur=b[st.p++];while(p.length<L){const n=gammaRead(st);if(!n||n>L)return null;for(let i=0;i<n;i++)p.push(cur);cur^=1}if(p.length!==L)return null}
-  else{if(st.p+L>b.length)return null;p=b.slice(st.p,st.p+L);st.p+=L}
-  if(st.p+16>b.length)return null;if(hash16(p)!==bitsRead(st,16))return null;
-  const ps={b:p,p:0};const f=bitsRead(ps,8);const N=freshState();N.prologue=!!(f&1);N.tutorial=!!(f&2);const cl=bitsRead(ps,16);N.cleared=Array.from({length:NCH},(_,i)=>!!(cl&(1<<i)));
-  if(ver===5){N.sh=[0,1,2].map(()=>bitsRead(ps,14));N.pt=[0,1,2].map(()=>bitsRead(ps,6))}else{N.shiori=bitsRead(ps,14);N.pity=bitsRead(ps,6);delete N.sh;delete N.pt}N.shiryo=bitsRead(ps,8);
-  CARDS.forEach(c=>{const v=bitsRead(ps,3);if(v)N.cards[c.n]=Math.min(5,v)});QUIZ_ORDER.forEach(id=>{const v=bitsRead(ps,2);if(v)N.qs[id]=v});return N}
- catch(e){return null}}
+/* ---------- 箱庭 ---------- */
+/* 斜め見下ろし（横2：縦1）の部屋。家具は栞と交換し、もようがえで置く。
+   家具の絵を描くときの大きさ（1マス＝横96・縦48）
+   ・床の家具：幅 (w+d)×48、高さ (w+d)×24＋h。下の端に床のマスがくるように描く
+   ・壁の家具：左の壁に掛けた向きで、幅 w×48、高さ h＋w×24。右の壁では左右反転して使う
+   描いた絵は IMG に「家具_キー」（例：家具_A1）で登録すれば、仮の箱の代わりに表示される */
+const NW={N:8,TW:96,TH:48,WH:240,PX:40,PT:26};
+NW.a=NW.TW/2;NW.b=NW.TH/2;NW.W=NW.N*NW.TW+NW.PX*2;NW.OX=NW.W/2;NW.OY=NW.PT+NW.WH;NW.H=NW.OY+NW.N*NW.TH+30;
+const FURN=DATA.furniture||[];
+const FBY=Object.fromEntries(FURN.map(f=>[f.k,f]));
+const FRAME={k:'頁',t:'wall',w:1,h:96,y:76};
+let NWS={edit:false,sel:null,drag:null,tab:0};
 
-function CodeScreen(){const code=encode();
- show(`<div class="screen">${topbar('復活の呪文')}<div class="scroll"><div class="pane paper"><h3>いまの記録の呪文</h3>
- <p style="line-height:1.8">記録はこの端末に自動で保存されています。ただ、ブラウザの履歴を消すと記録も消えることがあるので、ときどきこの呪文を書き写しておきましょう。別の端末でも、この呪文で続きから遊べます。</p>
- <div class="code">${code}</div><p class="muted" style="font-size:14px;line-height:1.7">数字の0と1だけを使っていて、アルファベットのO・I・Lは使っていません。名前は呪文に含まれないので、入力したときにもう一度決めます。</p>
- <div class="row"><button class="btn light" id="cp">呪文をコピー</button></div></div></div></div>`);
- $('#cp').onclick=()=>{try{navigator.clipboard.writeText(code).then(()=>toast('コピーしました'),()=>toast('コピーできませんでした。書き写してください'))}catch(e){toast('コピーできませんでした。書き写してください')}}}
-function SpellInput(){modal(`<h3>復活の呪文を入力</h3><textarea id="sp" rows="4" placeholder="4文字ずつ区切られていても、そのまま入力できます"></textarea>
- <div class="row"><button class="btn" id="spok">この呪文で再開する</button><button class="btn light" data-close>やめる</button></div>`);
- $('#spok').onclick=()=>{const N=decode($('#sp').value);if(!N){toast('呪文が正しくありません。打ち間違いがないか確かめてください');return}
-  S=N;autoParty();closeModal(true);askName(()=>{saveNow();toast('記録を復活させました');Home()})}}
+function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
+ if(!Array.isArray(R.f))R.f=[];if(!Array.isArray(R.w))R.w=[];if(!R.inv||typeof R.inv!=='object')R.inv={};
+ R.f=R.f.filter(o=>FBY[o.k]&&FBY[o.k].t==='floor');
+ R.w=R.w.filter(o=>o.k==='頁'?(CARD[o.n]&&lv(o.n)&&!isSP(o.n)):(FBY[o.k]&&FBY[o.k].t==='wall'));
+ return R}
+function nwPlaced(k){const R=S.room;return R.f.filter(o=>o.k===k).length+R.w.filter(o=>o.k===k).length}
+function nwSpare(k){return (S.room.inv[k]||0)-nwPlaced(k)}
+const g2s=(x,y)=>[NW.OX+(x-y)*NW.a,NW.OY+(x+y)*NW.b];
+function s2g(X,Y){const u=(X-NW.OX)/NW.a,v=(Y-NW.OY)/NW.b;return[(u+v)/2,(v-u)/2]}
+function fpOf(o){const f=FBY[o.k];return o.m?[f.d,f.w]:[f.w,f.d]}
+function wfOf(o){return o.k==='頁'?FRAME:FBY[o.k]}
 
+/* ---- 置ける場所かどうか ---- */
+function floorFree(o,skip){const [w,d]=fpOf(o);if(o.x<0||o.y<0||o.x+w>NW.N||o.y+d>NW.N)return false;
+ return S.room.f.every(q=>{if(q===skip)return true;const [qw,qd]=fpOf(q);return o.x+w<=q.x||q.x+qw<=o.x||o.y+d<=q.y||q.y+qd<=o.y})}
+function wallFree(o,skip){const ww=wfOf(o).w;if(o.p<0||o.p+ww>NW.N)return false;
+ return S.room.w.every(q=>q===skip||q.s!==o.s||o.p+ww<=q.p||q.p+wfOf(q).w<=o.p)}
+/* 新しく置く家具は、部屋のまんなかに近い空きから */
+function findFloorSpot(k){const c=(NW.N-1)/2;const C=[];for(let y=0;y<NW.N;y++)for(let x=0;x<NW.N;x++)C.push([Math.abs(x-c)+Math.abs(y-c)+(x+y)*.01,x,y]);C.sort((p,q)=>p[0]-q[0]);
+ for(const [,x,y] of C)for(const m of [0,1]){const o={k,x,y,m};if(floorFree(o))return o}return null}
+function findWallSpot(k,n){const c=(NW.N-1)/2;const P=[...Array(NW.N).keys()].sort((p,q)=>Math.abs(p-c)-Math.abs(q-c));
+ for(const p of P)for(const s of ['L','R']){const o={k,s,p};if(n)o.n=n;if(wallFree(o))return o}return null}
 
+/* ---- 絵 ---- */
+function shade(hex,t){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
+ const f=t<0?0:255,k=Math.abs(t);r=Math.round(r+(f-r)*k);g=Math.round(g+(f-g)*k);b=Math.round(b+(f-b)*k);return `rgb(${r},${g},${b})`}
+function floorBox(o){const f=FBY[o.k];const [w,d]=fpOf(o);const BW=(w+d)*NW.a,BH=(w+d)*NW.b+f.h;
+ const [lx]=g2s(o.x,o.y+d);const [,by]=g2s(o.x+w,o.y+d);return{x:lx,y:by-BH,w:BW,h:BH}}
+function wallBox(o){const f=wfOf(o);const BW=f.w*NW.a,BH=f.h+f.w*NW.b;const by=NW.OY+(o.p+f.w)*NW.b-f.y;
+ return{x:o.s==='L'?NW.OX-(o.p+f.w)*NW.a:NW.OX+o.p*NW.a,y:by-BH,w:BW,h:BH}}
+function floorArt(f){const a=NW.a,b=NW.b,{w,d,h,c}=f;const P=p=>p.map(v=>v.join(',')).join(' ');
+ const T=[d*a,0],R=[(d+w)*a,w*b],B=[w*a,(w+d)*b],L=[0,d*b];const dn=p=>[p[0],p[1]+h];
+ if(IMG['家具_'+f.k])return `<image href="${IMG['家具_'+f.k]}" width="${(w+d)*a}" height="${(w+d)*b+h}" preserveAspectRatio="xMidYMax meet"/>`;
+ const ln='stroke="rgba(30,20,10,.55)" stroke-width="1.2" stroke-linejoin="round"';
+ let s=`<polygon points="${P([L,B,dn(B),dn(L)])}" fill="${shade(c,-.18)}" ${ln}/><polygon points="${P([B,R,dn(R),dn(B)])}" fill="${shade(c,-.38)}" ${ln}/><polygon points="${P([T,R,B,L])}" fill="${shade(c,.14)}" ${ln}/>`;
+ const m=(p,q,t)=>[p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t];
+ s+=`<polygon points="${P([m(T,B,.18),m(R,L,.18),m(B,T,.18),m(L,R,.18)])}" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1"/>`;
+ return s}
+function wallArt(f){const a=NW.a,b=NW.b,BW=f.w*a,{h,c}=f;
+ if(IMG['家具_'+f.k])return `<image href="${IMG['家具_'+f.k]}" width="${BW}" height="${h+f.w*b}" preserveAspectRatio="xMidYMax meet"/>`;
+ return `<polygon points="0,${f.w*b} ${BW},0 ${BW},${h} 0,${h+f.w*b}" fill="${shade(c,-.05)}" stroke="rgba(30,20,10,.6)" stroke-width="1.5"/>
+ <polygon points="6,${f.w*b+3} ${BW-6},6 ${BW-6},${h-6} 6,${h+f.w*b-9}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/>`}
+let nwUid=0;
+function frameArt(o){const f=FRAME,a=NW.a,b=NW.b,BW=f.w*a,h=f.h;const id='nwc'+(++nwUid);
+ const M=o.s==='L'?`matrix(1,-.5,0,1,0,${f.w*b})`:'matrix(1,.5,0,1,0,0)';const src=IMG[o.n];const c=CARD[o.n];
+ return `<g transform="${M}"><rect x="0" y="0" width="${BW}" height="${h}" fill="#7a5a2a" stroke="#3a2812" stroke-width="1.5"/>
+ <rect x="4" y="4" width="${BW-8}" height="${h-8}" fill="#e9dfc6"/><clipPath id="${id}"><rect x="6" y="6" width="${BW-12}" height="${h-12}"/></clipPath>
+ ${src?`<image href="${src}" x="6" y="6" width="${BW-12}" height="${h-12}" preserveAspectRatio="xMidYMin slice" clip-path="url(#${id})"/>`:`<text x="${BW/2}" y="${h/2}" font-size="11" text-anchor="middle" fill="#5a4220">${esc((c&&c.n||'').slice(0,4))}</text>`}</g>`}
+function thumbSVG(f){if(f.t==='wall'){const BW=f.w*NW.a,BH=f.h+f.w*NW.b;return `<svg viewBox="-4 -4 ${BW+8} ${BH+8}" class="nw-th">${wallArt(f)}</svg>`}
+ const BW=(f.w+f.d)*NW.a,BH=(f.w+f.d)*NW.b+f.h;return `<svg viewBox="-4 -4 ${BW+8} ${BH+8}" class="nw-th">${floorArt(f)}</svg>`}
+
+/* ---- 部屋を描く ---- */
+function nwRoomBase(){const {N,a,b,OX,OY,WH}=NW;const P=p=>p.map(v=>v.join(',')).join(' ');
+ const L0=[OX-N*a,OY+N*b],R0=[OX+N*a,OY+N*b],F=[OX,OY+N*NW.TH];const up=(p,t)=>[p[0],p[1]-t];
+ let s=`<polygon points="${P([up([OX,OY],WH),[OX,OY],L0,up(L0,WH)])}" fill="#e7d8b8"/><polygon points="${P([up([OX,OY],WH),up(R0,WH),R0,[OX,OY]])}" fill="#d6c39c"/>`;
+ /* 腰板と回り縁 */
+ s+=`<polygon points="${P([up([OX,OY],56),[OX,OY],L0,up(L0,56)])}" fill="#6b4a2e"/><polygon points="${P([up([OX,OY],56),up(R0,56),R0,[OX,OY]])}" fill="#5a3d25"/>`;
+ s+=`<polyline points="${P([up(L0,58),up([OX,OY],58),up(R0,58)])}" fill="none" stroke="#3a2812" stroke-width="3"/>`;
+ s+=`<polyline points="${P([up(L0,WH-10),up([OX,OY],WH-10),up(R0,WH-10)])}" fill="none" stroke="#8a6a3e" stroke-width="5"/>`;
+ for(let i=1;i<N;i++){const l=g2s(0,i),r=g2s(i,0);s+=`<line x1="${l[0]}" y1="${l[1]-56}" x2="${l[0]}" y2="${l[1]}" stroke="rgba(0,0,0,.25)"/><line x1="${r[0]}" y1="${r[1]-56}" x2="${r[0]}" y2="${r[1]}" stroke="rgba(0,0,0,.25)"/>`}
+ s+=`<line x1="${OX}" y1="${OY-WH}" x2="${OX}" y2="${OY}" stroke="rgba(60,40,20,.35)" stroke-width="1.5"/>`;
+ /* 床 */
+ s+=`<polygon points="${P([[OX,OY],R0,F,L0])}" fill="#9a7148"/>`;
+ for(let i=0;i<=N*2;i++){const p=g2s(i/2,0),q=g2s(i/2,N);s+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="rgba(60,35,15,${i%2?.12:.22})"/>`}
+ let grid='';for(let i=0;i<=N;i++){const p=g2s(0,i),q=g2s(N,i),r=g2s(i,0),t=g2s(i,N);grid+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/><line x1="${r[0]}" y1="${r[1]}" x2="${t[0]}" y2="${t[1]}"/>`}
+ s+=`<g class="nw-grid">${grid}</g>`;
+ s+=`<polygon points="${P([[OX,OY],R0,F,L0])}" fill="none" stroke="#3a2812" stroke-width="2"/>`;
+ return s}
+function nwOrderFloor(list){const n=list.length;const box=list.map(o=>{const [w,d]=fpOf(o);return{x:o.x,y:o.y,w,d}});
+ const behind=(A,B)=>(A.x+A.w<=B.x&&!(B.y+B.d<=A.y))||(A.y+A.d<=B.y&&!(B.x+B.w<=A.x));
+ const indeg=Array(n).fill(0),out=Array.from({length:n},()=>[]);
+ for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(i!==j&&behind(box[i],box[j])){out[i].push(j);indeg[j]++}
+ const res=[];const done=Array(n).fill(false);
+ while(res.length<n){let pick=-1;for(let i=0;i<n;i++)if(!done[i]&&indeg[i]===0&&(pick<0||box[i].x+box[i].y<box[pick].x+box[pick].y))pick=i;
+  if(pick<0){for(let i=0;i<n;i++)if(!done[i]&&(pick<0||box[i].x+box[i].y<box[pick].x+box[pick].y))pick=i}
+  done[pick]=true;res.push(list[pick]);out[pick].forEach(j=>indeg[j]--)}return res}
+function nwItemG(o,kind,i,extra=''){const sel=(NWS.sel&&NWS.sel.o===o)||extra.includes('sel')?' sel':'';
+ const open=`<g class="nw-it${sel}" data-i="${kind}${i}"`;
+ if(kind==='f'){const B=floorBox(o);const art=floorArt(FBY[o.k]);
+  return `${open} transform="translate(${B.x} ${B.y})">${o.m?`<g transform="translate(${B.w} 0) scale(-1 1)">${art}</g>`:art}</g>`}
+ const B=wallBox(o);if(o.k==='頁')return `${open} transform="translate(${B.x} ${B.y})">${frameArt(o)}</g>`;
+ const art=wallArt(FBY[o.k]);return `${open} transform="translate(${B.x} ${B.y})">${o.s==='R'?`<g transform="translate(${B.w} 0) scale(-1 1)">${art}</g>`:art}</g>`}
+function nwFootprint(o,kind,ok){const P=p=>p.map(v=>v.join(',')).join(' ');let pts;
+ if(kind==='f'){const [w,d]=fpOf(o);pts=[g2s(o.x,o.y),g2s(o.x+w,o.y),g2s(o.x+w,o.y+d),g2s(o.x,o.y+d)]}
+ else{const ww=wfOf(o).w;const A=o.s==='L'?g2s(0,o.p):g2s(o.p,0),Bp=o.s==='L'?g2s(0,o.p+ww):g2s(o.p+ww,0);pts=[[A[0],A[1]-NW.WH+12],[Bp[0],Bp[1]-NW.WH+12],Bp,A]}
+ return `<polygon points="${P(pts)}" class="nw-fp ${ok?'ok':'ng'}"/>`}
+function nwDraw(){const svg=$('#nwSvg');if(!svg)return;nwUid=0;const R=S.room;
+ const dragO=NWS.drag&&NWS.drag.moved?NWS.drag:null;
+ let s=nwRoomBase();
+ if(NWS.edit&&NWS.sel){const D=dragO&&dragO.o===NWS.sel.o?dragO:null;s+=nwFootprint(D?Object.assign({},D.o,D.c):NWS.sel.o,NWS.sel.kind,D?D.ok:true)}
+ s+=R.w.map((o,i)=>dragO&&dragO.o===o?'':nwItemG(o,'w',i)).join('');
+ s+=nwOrderFloor(R.f.filter(o=>!(dragO&&dragO.o===o))).map(o=>nwItemG(o,'f',R.f.indexOf(o))).join('');
+ if(dragO){const L=dragO.kind==='f'?R.f:R.w;s+=`<g class="nw-ghost ${dragO.ok?'':'ng'}">${nwItemG(Object.assign({},dragO.o,dragO.c),dragO.kind,L.indexOf(dragO.o),'sel')}</g>`}
+ svg.innerHTML=s;svg.classList.toggle('editing',NWS.edit)}
+
+/* ---- 画面 ---- */
+function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab||0};
+ show(`<div class="screen nw-screen">${topbar('箱庭')}
+ <div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="箱庭"></svg>
+  <div class="nw-selbar" id="nwSel" hidden></div><p class="nw-hint" id="nwHint"></p></div>
+ <div class="nw-tools" id="nwTools"></div></div>`);
+ nwTools();nwDraw();nwBind()}
+function nwTools(){const t=$('#nwTools');if(!t)return;
+ t.innerHTML=NWS.edit?`<button class="btn light" id="nwPut">持ち物から置く</button><button class="btn" id="nwDone">完了</button>`
+  :`<button class="btn" id="nwEdit">もようがえ</button><button class="btn light" id="nwShop">家具をそろえる</button>`;
+ const h=$('#nwHint');if(h)h.textContent=NWS.edit?'家具をタップして選び、ドラッグで動かせます':'家具をタップすると、紙魚が説明してくれます';
+ if(NWS.edit){$('#nwPut').onclick=nwInventory;$('#nwDone').onclick=()=>{NWS.edit=false;NWS.sel=null;save();nwTools();nwSelBar();nwDraw()}}
+ else{$('#nwEdit').onclick=()=>{NWS.edit=true;nwTools();nwDraw()};$('#nwShop').onclick=()=>nwShop()}}
+function nwSelBar(){const b=$('#nwSel');if(!b)return;const sel=NWS.edit&&NWS.sel;if(!sel){b.hidden=true;return}
+ const o=sel.o;const nm=o.k==='頁'?o.n:FBY[o.k].n;b.hidden=false;
+ b.innerHTML=`<span class="nm">${esc(nm)}</span><button id="nwFlip">${sel.kind==='f'?'向きを変える':'反対の壁へ'}</button><button id="nwStow">しまう</button>`;
+ $('#nwFlip').onclick=()=>{if(sel.kind==='f'){const c=Object.assign({},o,{m:o.m?0:1});if(!floorFree(c,o)){toast('ここでは向きを変えられません');return}o.m=c.m}
+   else{const c=Object.assign({},o,{s:o.s==='L'?'R':'L'});if(!wallFree(c,o)){toast('反対の壁の同じ場所がふさがっています');return}o.s=c.s}
+   save();nwDraw()};
+ $('#nwStow').onclick=()=>{const L=sel.kind==='f'?S.room.f:S.room.w;L.splice(L.indexOf(o),1);NWS.sel=null;save();nwSelBar();nwDraw()}}
+function nwPt(e){const svg=$('#nwSvg');const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+function nwFind(id){if(!id)return null;const kind=id[0],i=+id.slice(1);const o=(kind==='f'?S.room.f:S.room.w)[i];return o?{kind,o}:null}
+function nwBind(){const svg=$('#nwSvg');
+ svg.addEventListener('pointerdown',e=>{const g=e.target.closest('.nw-it');const it=g&&nwFind(g.dataset.i);
+  if(!NWS.edit)return;
+  if(!it){NWS.sel=null;nwSelBar();nwDraw();return}
+  e.preventDefault();NWS.sel=it;const p=nwPt(e);
+  NWS.drag={o:it.o,kind:it.kind,start:p,c:it.kind==='f'?{x:it.o.x,y:it.o.y}:{s:it.o.s,p:it.o.p},ok:true,moved:false,id:e.pointerId,
+   t0:it.kind==='w'?(it.o.s==='R'?(p.x-NW.OX)/NW.a:(NW.OX-p.x)/NW.a)-it.o.p:0};
+  try{svg.setPointerCapture(e.pointerId)}catch(_){}nwSelBar();nwDraw()});
+ svg.addEventListener('pointermove',e=>{const D=NWS.drag;if(!D||e.pointerId!==D.id)return;const p=nwPt(e);
+  if(!D.moved&&Math.hypot(p.x-D.start.x,p.y-D.start.y)<8)return;D.moved=true;const o=D.o;
+  if(D.kind==='f'){const [w,d]=fpOf(o);const g0=s2g(D.start.x,D.start.y),g1=s2g(p.x,p.y);
+   const x=Math.max(0,Math.min(NW.N-w,Math.round(o.x+g1[0]-g0[0]))),y=Math.max(0,Math.min(NW.N-d,Math.round(o.y+g1[1]-g0[1])));
+   D.c={x,y};D.ok=floorFree(Object.assign({},o,D.c),o)}
+  else{const s=p.x>=NW.OX?'R':'L';const t=s==='R'?(p.x-NW.OX)/NW.a:(NW.OX-p.x)/NW.a;const ww=wfOf(o).w;
+   const pp=Math.max(0,Math.min(NW.N-ww,Math.round(t-D.t0)));D.c={s,p:pp};D.ok=wallFree(Object.assign({},o,D.c),o)}
+  nwDraw()});
+ const end=e=>{const D=NWS.drag;if(!D||e.pointerId!==D.id)return;NWS.drag=null;
+  if(D.moved){if(D.ok){Object.assign(D.o,D.c);save()}else toast('ほかの家具と重なるので、置けません')}
+  nwDraw()};
+ svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+ /* 説明はタップを離したあとに開く（押した瞬間に開くと、離したときのタップで閉じてしまうため） */
+ svg.addEventListener('click',e=>{if(NWS.edit)return;const g=e.target.closest('.nw-it');const it=g&&nwFind(g.dataset.i);if(it)nwInfo(it.o)})}
+
+/* ---- 説明 ---- */
+function nwInfo(o){if(o.k==='頁'){const c=CARD[o.n];modal(`<div class="detail"><div>${cardHTML(o.n)}</div><div><h3>${esc(o.n)}</h3><p style="line-height:1.8">${esc(c.f)}</p></div></div><div class="row"><button class="btn" data-close>閉じる</button></div>`);return}
+ const f=FBY[o.k];modal(`<div class="nw-info">${thumbSVG(f)}<div><h3>${esc(f.n)}</h3><p class="nw-say"><span class="who">シミ</span>${esc(f.x)}</p></div></div><div class="row"><button class="btn" data-close>閉じる</button></div>`)}
+
+/* ---- 持ち物から置く ---- */
+function nwInventory(){const items=FURN.filter(f=>nwSpare(f.k)>0);const hung=new Set(S.room.w.filter(o=>o.k==='頁').map(o=>o.n));
+ const pages=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!hung.has(c.n));
+ modal(`<h3>持ち物から置く</h3>
+ <h4 class="nw-h4">家具</h4>${items.length?`<div class="nw-inv">${items.map(f=>`<button class="nw-cell" data-k="${f.k}">${thumbSVG(f)}<span>${esc(f.n)}</span><small>${f.t==='wall'?'壁':'床'}・のこり${nwSpare(f.k)}</small></button>`).join('')}</div>`:'<p class="muted">置いていない家具はありません。「家具をそろえる」で栞と交換できます。</p>'}
+ <h4 class="nw-h4">額に入れて飾る頁</h4>${pages.length?`<div class="nw-inv pages">${pages.map(c=>`<button class="nw-cell pg" data-n="${esc(c.n)}">${cardHTML(c.n,{noLv:true})}</button>`).join('')}</div>`:'<p class="muted">飾れる頁はありません。</p>'}
+ <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
+ document.querySelectorAll('.nw-cell[data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];
+  const o=f.t==='wall'?findWallSpot(f.k):findFloorSpot(f.k);if(!o){toast(f.t==='wall'?'壁に空きがありません':'床に空きがありません');return}
+  (f.t==='wall'?S.room.w:S.room.f).push(o);NWS.sel={kind:f.t==='wall'?'w':'f',o};closeModal(true);save();nwSelBar();nwDraw()});
+ document.querySelectorAll('.nw-cell[data-n]').forEach(b=>b.onclick=()=>{const o=findWallSpot('頁',b.dataset.n);if(!o){toast('壁に空きがありません');return}
+  S.room.w.push(o);NWS.sel={kind:'w',o};closeModal(true);save();nwSelBar();nwDraw()})}
+
+/* ---- 家具をそろえる（栞と交換） ---- */
+function nwShop(){const e=NWS.tab;const L=FURN.filter(f=>f.e===e);
+ modal(`<h3>家具をそろえる</h3><div class="nw-tabs">${ERAS.map((E,i)=>`<button data-e="${i}" class="${i===e?'on':''}" style="--ec:${E.c}">${E.k}</button>`).join('')}</div>
+ <div class="nw-have">${ribbon(e)}<span>${ERAS[e].k}の栞</span><b>${S.sh[e]}</b>枚</div>
+ <div class="nw-shop">${L.map(f=>{const own=S.room.inv[f.k]||0;const can=S.sh[e]>=f.p;
+  return `<div class="nw-row">${thumbSVG(f)}<div class="tx"><b>${esc(f.n)}</b><small>${f.t==='wall'?`壁・幅${f.w}`:`床・${f.w}×${f.d}`}${own?`　持っている数：${own}`:''}</small><p>${esc(f.x)}</p></div>
+  <button class="btn ${can?'':'light'}" data-k="${f.k}" ${can?'':'disabled'}>${ERAS[e].k}の栞${f.p}枚</button></div>`}).join('')}</div>
+ <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
+ document.querySelectorAll('.nw-tabs [data-e]').forEach(b=>b.onclick=()=>{NWS.tab=+b.dataset.e;nwShop()});
+ document.querySelectorAll('.nw-row [data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];
+  askYes(`${ERAS[e].k}の栞${f.p}枚で「${f.n}」と交換しますか？`,'交換する',()=>{if(S.sh[e]<f.p){toast('栞が足りません');return}
+   S.sh[e]-=f.p;S.room.inv[f.k]=(S.room.inv[f.k]||0)+1;saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('持ち物に入れました。「もようがえ」で置けます');nwShop()},()=>nwShop())})}
 
 /* ---------- 記録を守る ---------- */
 /* アプリ切替・タブを閉じる直前にも保存（遊び始めてからのみ。タイトル画面で古い記録を上書きしないため） */
@@ -4504,7 +4706,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 Title();
 cloudInit();
-if(!CLOUD&&!storageOK())modal(`<h3>この開き方では記録が残りません</h3><p style="line-height:1.8">プライベートブラウズで開いているなど、記録を保存できない状態です。ふつうのタブで開き直すか、遊んだあとにメニューの「復活の呪文」を書き写しておいてください。</p><div class="row"><button class="btn" data-close>わかった</button></div>`);
+if(!CLOUD&&!storageOK())modal(`<h3>この開き方では記録が残りません</h3><p style="line-height:1.8">プライベートブラウズで開いているなど、記録を保存できない状態です。ふつうのタブで開き直してください。</p><div class="row"><button class="btn" data-close>わかった</button></div>`);
 </script>
 </body>
 </html>
