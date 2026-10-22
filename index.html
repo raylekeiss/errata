@@ -4614,7 +4614,7 @@ function imgAspect(src){if(NWASP[src])return NWASP[src];NWASP[src]=1;const i=new
 function wallMats(){const {N,a,b,OX,OY,WH}=NW;
  /* (s,z)：s＝壁ぞいのマス、z＝壁の上端からの高さ。左の壁は左端から、右の壁は奥から並べる */
  return{L:`matrix(${a},${-b},0,1,${OX-N*a},${OY-WH+N*b})`,R:`matrix(${a},${b},0,1,${OX},${OY-WH})`}}
-function skinPreview(f){if(f.t==='wall'){const src=IMG['壁紙_'+f.k];
+function skinPreview(f){if(f.t==='wall'){const src=IMG['壁紙_'+f.k]||IMG['壁紙_'+f.k+'_L'];
   return `<svg viewBox="0 0 120 90" class="nw-th sk">${src?`<image href="${src}" width="120" height="90" preserveAspectRatio="xMidYMid slice"/>`:`<rect width="120" height="90" fill="${f.c}"/><rect y="68" width="120" height="22" fill="${f.c2}"/>`}</svg>`}
  const src=IMG['床_'+f.k];return `<svg viewBox="0 0 120 90" class="nw-th sk">${src?`<image href="${src}" width="120" height="90" preserveAspectRatio="xMidYMid slice"/>`:`<rect width="120" height="90" fill="${f.c}"/>${floorPatLines(f,120,90,30)}`}</svg>`}
 function floorPatLines(f,w,h,u){let s='';const st='stroke="rgba(40,20,10,.28)" stroke-width="1"';
@@ -4624,13 +4624,20 @@ function floorPatLines(f,w,h,u){let s='';const st='stroke="rgba(40,20,10,.28)" s
  return s}
 function nwRoomBase(){const {N,a,b,OX,OY,WH}=NW;const R=S.room;const wf=SKBY[R.wall],ff=SKBY[R.floor];
  const L0=[OX-N*a,OY+N*b],R0=[OX+N*a,OY+N*b],F=[OX,OY+N*NW.TH];const up=(p,t)=>[p[0],p[1]-t];const M=wallMats();
- let s='<defs>';const wsrc=IMG['壁紙_'+wf.k],fsrc=IMG['床_'+ff.k];
+ let s='<defs>';const fit=wf.fit||'repeat';
+ /* 壁紙の貼り方：repeat＝横につなぐ／span＝横長の1枚を左右の壁にまたがせる／pair＝左右の壁に別々の1枚（壁紙_キー_L・壁紙_キー_R） */
+ const wL=fit==='pair'?IMG['壁紙_'+wf.k+'_L']:IMG['壁紙_'+wf.k],wR=fit==='pair'?IMG['壁紙_'+wf.k+'_R']:IMG['壁紙_'+wf.k];
+ const wsrc=fit==='repeat'?IMG['壁紙_'+wf.k]:null,whole=fit!=='repeat'&&wL&&wR,fsrc=IMG['床_'+ff.k];
+ if(whole)s+=`<clipPath id="nwWC"><rect width="${N}" height="${WH}"/></clipPath>`;
  if(wsrc){const rw=WH*imgAspect(wsrc)/NW.EDGE;s+=`<pattern id="nwWP" patternUnits="userSpaceOnUse" width="${rw}" height="${WH}"><image href="${wsrc}" width="${rw}" height="${WH}" preserveAspectRatio="none"/></pattern>`}
  if(fsrc){const rp=ff.rep||4;s+=`<pattern id="nwFP" patternUnits="userSpaceOnUse" width="${rp}" height="${rp}"><image href="${fsrc}" width="${rp}" height="${rp}" preserveAspectRatio="none"/></pattern>`}
  s+='</defs>';
  /* 壁 */
  for(const side of ['L','R']){const dim=side==='R'?' opacity=".86"':'';
-  if(wsrc)s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="url(#nwWP)"/></g>${side==='R'?`<g transform="${M.R}"><rect width="${N}" height="${WH}" fill="rgba(0,0,0,.12)"/></g>`:''}`;
+  const shadeR=side==='R'?`<g transform="${M.R}"><rect width="${N}" height="${WH}" fill="rgba(0,0,0,.12)"/></g>`:'';
+  if(whole){const src=side==='L'?wL:wR;const x=fit==='span'&&side==='R'?-N:0,w=fit==='span'?2*N:N;
+   s+=`<g transform="${M[side]}"><g clip-path="url(#nwWC)"><image href="${src}" x="${x}" width="${w}" height="${WH}" preserveAspectRatio="none"/></g></g>${shadeR}`}
+  else if(wsrc)s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="url(#nwWP)"/></g>${shadeR}`;
   else{s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="${side==='R'?shade(wf.c,-.08):wf.c}"/><rect y="${WH-56}" width="${N}" height="56" fill="${side==='R'?shade(wf.c2,-.15):wf.c2}"/>`;
    for(let i=2;i<N;i+=2)s+=`<line x1="${i}" y1="${WH-56}" x2="${i}" y2="${WH}" stroke="rgba(0,0,0,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
    s+=`<line x1="0" y1="${WH-57}" x2="${N}" y2="${WH-57}" stroke="#3a2812" stroke-width="3" vector-effect="non-scaling-stroke"/><line x1="0" y1="10" x2="${N}" y2="10" stroke="${shade(wf.c2,.2)}" stroke-width="5" vector-effect="non-scaling-stroke"/></g>`}}
