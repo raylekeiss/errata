@@ -967,6 +967,15 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .nw-inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
 .nw-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:#f6eedb;border:1px solid var(--line);border-radius:3px;font-size:13px;color:#2a2320;line-height:1.35}
 .nw-cell small{color:#7a6a50;font-size:12px}
+.nw-reset{position:absolute;right:10px;top:8px;z-index:3;min-height:36px;padding:4px 12px;background:rgba(14,18,32,.85);color:#efe6d2;border:1px solid #c9a24a;border-radius:3px;font-size:14px}
+.nw-reset[hidden]{display:none}
+.nw-bub{position:absolute;z-index:4;max-width:min(320px,80%);background:#f6eedb;color:#2a2320;border:1px solid #c9a24a;border-radius:6px;padding:8px 12px;font-size:15px;line-height:1.6;box-shadow:0 6px 16px rgba(0,0,0,.4);pointer-events:none}
+.nw-bub[hidden]{display:none}
+.nw-bub .who{display:block;font-size:12px;font-weight:600;color:#8a2a25}
+.nw-h4 small{font-family:var(--sans);font-weight:400;font-size:12px;color:#7a6a50;margin-left:8px}
+.nw-cell.on{border-color:#8a2a25;box-shadow:inset 0 0 0 2px #8a2a25}
+.nw-inv.sk .nw-th.sk,.nw-row .nw-th.sk{width:96px;height:72px;flex-basis:96px;border:1px solid var(--line)}
+.nw-owned{font-size:14px;color:#7a6a50;white-space:nowrap;padding:0 8px}
 .nw-inv.pages{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
 .nw-cell.pg{padding:2px;background:none;border:none}
 </style>
@@ -3350,28 +3359,38 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"t": "jump", "to": 57}
 ],
 "furniture": [
-  {"k":"A1","n":"粘土板の書棚","e":0,"t":"floor","w":1,"d":1,"h":120,"c":"#b08d5b","p":5,"x":"メソポタミアでは、粘土板に葦のペンを押しつけて楔形文字を書いたんだ。アッシュルバニパル王の図書館は焼け落ちたけど、そのおかげで粘土板が焼き固められて、今まで残ったんだよ。"},
-  {"k":"A2","n":"パピルスの巻物棚","e":0,"t":"floor","w":1,"d":1,"h":110,"c":"#c9b27a","p":5,"x":"パピルスは、ナイルの岸に生える草の茎を薄く裂いて、縦と横に重ねて作るんだ。英語のpaperの語源だよ。"},
-  {"k":"A3","n":"ロゼッタ＝ストーン（複製）","e":0,"t":"floor","w":1,"d":1,"h":100,"c":"#5d5b60","p":10,"x":"同じ内容が、神聖文字・民用文字・ギリシア文字の3つで刻まれているんだ。シャンポリオンはギリシア語の部分を手がかりに、神聖文字を解読したよ。本物は大英博物館にあるね。"},
-  {"k":"A4","n":"ドーリア式の円柱","e":0,"t":"floor","w":1,"d":1,"h":200,"c":"#ddd3bf","p":10,"x":"飾りの少ない、どっしりした柱だね。パルテノン神殿もこの様式なんだ。柱の真ん中が少しふくらんでいるのは、まっすぐに見せるための工夫なんだって。"},
-  {"k":"A5","n":"寝椅子（クリネ）","e":0,"t":"floor","w":2,"d":1,"h":60,"c":"#8c4f37","p":15,"x":"ギリシアの宴会シュンポシオンでは、寝椅子に横になって飲みながら語り合ったんだ。プラトンの『饗宴』も、そういう席の話だよ。"},
-  {"k":"A6","n":"兵馬俑（複製）","e":0,"t":"floor","w":1,"d":1,"h":150,"c":"#a3866a","p":10,"x":"始皇帝の陵墓の近くで、1974年に井戸を掘っていた農民が見つけたんだ。8000体ほどあって、顔が一体ずつ違うと言われているよ。"},
-  {"k":"A7","n":"青銅の鼎","e":0,"t":"floor","w":1,"d":1,"h":80,"c":"#4f7a6a","p":5,"x":"殷や周で、祖先や神をまつるのに使った器だよ。鼎は王の権威のしるしで、楚の荘王が周の鼎の重さを尋ねた話から「鼎の軽重を問う」という言葉ができたんだ。"},
-  {"k":"A8","n":"獅子狩りの浮き彫り","e":0,"t":"wall","w":2,"h":100,"y":80,"c":"#b9a888","p":10,"x":"アッシリアのアッシュルバニパル王がライオンを狩る場面だよ。王の獅子狩りは、国を守る力を見せる儀式でもあったんだ。"},
-  {"k":"M1","n":"写本台","e":1,"t":"floor","w":1,"d":1,"h":110,"c":"#7a5434","p":5,"x":"修道院の写字室では、修道士たちがここで本を一字ずつ書き写していたんだ。羊皮紙は羊や子牛の皮だから、大きな聖書一冊に数百頭ぶんが要ったんだって。"},
-  {"k":"M2","n":"鎖つきの書架","e":1,"t":"floor","w":2,"d":1,"h":160,"c":"#5e3d24","p":15,"x":"本がとても高価だったから、盗まれないように鎖で棚につないでいたんだ。イギリスのヘレフォード大聖堂には、今も鎖つきの図書館が残っているよ。"},
-  {"k":"M3","n":"聖遺物箱","e":1,"t":"floor","w":1,"d":1,"h":70,"c":"#c19a3e","p":10,"x":"聖人の骨や遺品を納めた箱だよ。巡礼者たちは聖遺物を拝むために、サンティアゴ＝デ＝コンポステーラまで何か月もかけて歩いたんだ。"},
-  {"k":"M4","n":"アストロラーベ","e":1,"t":"floor","w":1,"d":1,"h":120,"c":"#b8873a","p":10,"x":"星の高さを測って、時刻や方角を知る道具だよ。イスラーム世界で磨かれて、礼拝の時刻やメッカの方角を知るのにも使われたんだ。"},
-  {"k":"M5","n":"板金鎧","e":1,"t":"floor","w":1,"d":1,"h":170,"c":"#8d949c","p":10,"x":"全身を覆う板金の鎧は、14〜15世紀に広まったんだ。重そうに見えるけど20〜25キロほどで、着たまま馬に乗れたらしいよ。"},
-  {"k":"M6","n":"ステンドグラス","e":1,"t":"wall","w":1,"h":160,"y":40,"c":"#3f5fa8","p":10,"x":"ゴシック様式の教会は、壁を薄くして大きな窓を開け、ステンドグラスで聖書の物語を描いたんだ。字が読めない人も、絵で教えを知ることができたんだよ。"},
-  {"k":"M7","n":"バイユーの刺繍（複製）","e":1,"t":"wall","w":2,"h":70,"y":110,"c":"#d9c9a0","p":15,"x":"ノルマン人のイングランド征服を描いた、70メートル近い布の絵巻だよ。タペストリーと呼ばれるけど、実は織物じゃなくて刺繍なんだ。"},
-  {"k":"E1","n":"ベハイムの地球儀","e":2,"t":"floor","w":1,"d":1,"h":120,"c":"#4b7fa3","p":10,"x":"1492年に完成した、現存する最古の地球儀だよ。コロンブスが帰ってくる前に作られたから、アメリカ大陸は描かれていないんだ。"},
-  {"k":"E2","n":"活版印刷機","e":2,"t":"floor","w":2,"d":1,"h":150,"c":"#6b4a2e","p":15,"x":"グーテンベルクは、ぶどう絞り機を改良して印刷機を作ったと言われているんだ。印刷のおかげで、ルターのドイツ語訳聖書は一気に広まったよ。"},
-  {"k":"E3","n":"望遠鏡","e":2,"t":"floor","w":1,"d":1,"h":130,"c":"#9a7b4f","p":10,"x":"ガリレイは自分で望遠鏡を作って、1610年に木星の4つの衛星を見つけたんだ。地球のまわりを回らない天体があることは、地動説の追い風になったよ。"},
-  {"k":"E4","n":"振り子時計","e":2,"t":"floor","w":1,"d":1,"h":190,"c":"#5a3a22","p":10,"x":"ガリレイが気づいた振り子の等時性を使って、ホイヘンスが振り子時計を作ったんだ。それまで1日に15分ほどあった誤差が、1分ほどに減ったんだって。"},
-  {"k":"E5","n":"東インド会社の茶箱","e":2,"t":"floor","w":1,"d":1,"h":60,"c":"#a0703c","p":5,"x":"18世紀のイギリス東インド会社は、中国の茶を大量に運んだんだ。代金の銀が足りなくなって、のちのアヘン貿易につながっていくよ。"},
-  {"k":"E6","n":"ペルシア絨毯","e":2,"t":"floor","w":2,"d":2,"h":6,"c":"#9c2f2f","p":15,"x":"サファヴィー朝の時代には宮廷の工房で絨毯が織られて、ヨーロッパにも運ばれたんだ。結び目が細かいほど、精密な模様が描けるんだよ。"},
-  {"k":"E7","n":"メルカトルの世界地図","e":2,"t":"wall","w":2,"h":100,"y":80,"c":"#d8c597","p":10,"x":"メルカトルが1569年に作った地図は、角度が正しく描かれるから航海に便利だったんだ。そのかわり極に近いほど大きく描かれて、グリーンランドがアフリカと同じくらいに見えるんだよ。"}
+  {"k":"A1","n":"粘土板の書棚","e":0,"t":"floor","w":2,"d":2,"h":120,"c":"#b08d5b","p":5,"x":"メソポタミアでは、粘土板に葦のペンを押しつけて楔形文字を書いたんだ。アッシュルバニパル王の図書館は焼け落ちたけど、そのおかげで粘土板が焼き固められて、今まで残ったんだよ。"},
+  {"k":"A2","n":"パピルスの巻物棚","e":0,"t":"floor","w":2,"d":2,"h":110,"c":"#c9b27a","p":5,"x":"パピルスは、ナイルの岸に生える草の茎を薄く裂いて、縦と横に重ねて作るんだ。英語のpaperの語源だよ。"},
+  {"k":"A3","n":"ロゼッタ＝ストーン（複製）","e":0,"t":"floor","w":2,"d":2,"h":100,"c":"#5d5b60","p":10,"x":"同じ内容が、神聖文字・民用文字・ギリシア文字の3つで刻まれているんだ。シャンポリオンはギリシア語の部分を手がかりに、神聖文字を解読したよ。本物は大英博物館にあるね。"},
+  {"k":"A4","n":"ドーリア式の円柱","e":0,"t":"floor","w":2,"d":2,"h":200,"c":"#ddd3bf","p":10,"x":"飾りの少ない、どっしりした柱だね。パルテノン神殿もこの様式なんだ。柱の真ん中が少しふくらんでいるのは、まっすぐに見せるための工夫なんだって。"},
+  {"k":"A5","n":"寝椅子（クリネ）","e":0,"t":"floor","w":4,"d":2,"h":60,"c":"#8c4f37","p":15,"x":"ギリシアの宴会シュンポシオンでは、寝椅子に横になって飲みながら語り合ったんだ。プラトンの『饗宴』も、そういう席の話だよ。"},
+  {"k":"A6","n":"兵馬俑（複製）","e":0,"t":"floor","w":2,"d":2,"h":150,"c":"#a3866a","p":10,"x":"始皇帝の陵墓の近くで、1974年に井戸を掘っていた農民が見つけたんだ。8000体ほどあって、顔が一体ずつ違うと言われているよ。"},
+  {"k":"A7","n":"青銅の鼎","e":0,"t":"floor","w":2,"d":2,"h":80,"c":"#4f7a6a","p":5,"x":"殷や周で、祖先や神をまつるのに使った器だよ。鼎は王の権威のしるしで、楚の荘王が周の鼎の重さを尋ねた話から「鼎の軽重を問う」という言葉ができたんだ。"},
+  {"k":"A8","n":"獅子狩りの浮き彫り","e":0,"t":"wall","w":4,"h":100,"y":80,"c":"#b9a888","p":10,"x":"アッシリアのアッシュルバニパル王がライオンを狩る場面だよ。王の獅子狩りは、国を守る力を見せる儀式でもあったんだ。"},
+  {"k":"M1","n":"写本台","e":1,"t":"floor","w":2,"d":2,"h":110,"c":"#7a5434","p":5,"x":"修道院の写字室では、修道士たちがここで本を一字ずつ書き写していたんだ。羊皮紙は羊や子牛の皮だから、大きな聖書一冊に数百頭ぶんが要ったんだって。"},
+  {"k":"M2","n":"鎖つきの書架","e":1,"t":"floor","w":4,"d":2,"h":160,"c":"#5e3d24","p":15,"x":"本がとても高価だったから、盗まれないように鎖で棚につないでいたんだ。イギリスのヘレフォード大聖堂には、今も鎖つきの図書館が残っているよ。"},
+  {"k":"M3","n":"聖遺物箱","e":1,"t":"floor","w":2,"d":2,"h":70,"c":"#c19a3e","p":10,"x":"聖人の骨や遺品を納めた箱だよ。巡礼者たちは聖遺物を拝むために、サンティアゴ＝デ＝コンポステーラまで何か月もかけて歩いたんだ。"},
+  {"k":"M4","n":"アストロラーベ","e":1,"t":"floor","w":2,"d":2,"h":120,"c":"#b8873a","p":10,"x":"星の高さを測って、時刻や方角を知る道具だよ。イスラーム世界で磨かれて、礼拝の時刻やメッカの方角を知るのにも使われたんだ。"},
+  {"k":"M5","n":"板金鎧","e":1,"t":"floor","w":2,"d":2,"h":170,"c":"#8d949c","p":10,"x":"全身を覆う板金の鎧は、14〜15世紀に広まったんだ。重そうに見えるけど20〜25キロほどで、着たまま馬に乗れたらしいよ。"},
+  {"k":"M6","n":"ステンドグラス","e":1,"t":"wall","w":2,"h":160,"y":40,"c":"#3f5fa8","p":10,"x":"ゴシック様式の教会は、壁を薄くして大きな窓を開け、ステンドグラスで聖書の物語を描いたんだ。字が読めない人も、絵で教えを知ることができたんだよ。"},
+  {"k":"M7","n":"バイユーの刺繍（複製）","e":1,"t":"wall","w":4,"h":70,"y":110,"c":"#d9c9a0","p":15,"x":"ノルマン人のイングランド征服を描いた、70メートル近い布の絵巻だよ。タペストリーと呼ばれるけど、実は織物じゃなくて刺繍なんだ。"},
+  {"k":"E1","n":"ベハイムの地球儀","e":2,"t":"floor","w":2,"d":2,"h":120,"c":"#4b7fa3","p":10,"x":"1492年に完成した、現存する最古の地球儀だよ。コロンブスが帰ってくる前に作られたから、アメリカ大陸は描かれていないんだ。"},
+  {"k":"E2","n":"活版印刷機","e":2,"t":"floor","w":4,"d":2,"h":150,"c":"#6b4a2e","p":15,"x":"グーテンベルクは、ぶどう絞り機を改良して印刷機を作ったと言われているんだ。印刷のおかげで、ルターのドイツ語訳聖書は一気に広まったよ。"},
+  {"k":"E3","n":"望遠鏡","e":2,"t":"floor","w":2,"d":2,"h":130,"c":"#9a7b4f","p":10,"x":"ガリレイは自分で望遠鏡を作って、1610年に木星の4つの衛星を見つけたんだ。地球のまわりを回らない天体があることは、地動説の追い風になったよ。"},
+  {"k":"E4","n":"振り子時計","e":2,"t":"floor","w":2,"d":2,"h":190,"c":"#5a3a22","p":10,"x":"ガリレイが気づいた振り子の等時性を使って、ホイヘンスが振り子時計を作ったんだ。それまで1日に15分ほどあった誤差が、1分ほどに減ったんだって。"},
+  {"k":"E5","n":"東インド会社の茶箱","e":2,"t":"floor","w":2,"d":2,"h":60,"c":"#a0703c","p":5,"x":"18世紀のイギリス東インド会社は、中国の茶を大量に運んだんだ。代金の銀が足りなくなって、のちのアヘン貿易につながっていくよ。"},
+  {"k":"E6","n":"ペルシア絨毯","e":2,"t":"floor","w":4,"d":4,"h":6,"c":"#9c2f2f","p":15,"x":"サファヴィー朝の時代には宮廷の工房で絨毯が織られて、ヨーロッパにも運ばれたんだ。結び目が細かいほど、精密な模様が描けるんだよ。"},
+  {"k":"E7","n":"メルカトルの世界地図","e":2,"t":"wall","w":4,"h":100,"y":80,"c":"#d8c597","p":10,"x":"メルカトルが1569年に作った地図は、角度が正しく描かれるから航海に便利だったんだ。そのかわり極に近いほど大きく描かれて、グリーンランドがアフリカと同じくらいに見えるんだよ。"}
+],
+"roomskins": [
+  {"k":"W0","n":"生成りの漆喰","t":"wall","e":-1,"p":0,"c":"#e7d8b8","c2":"#6b4a2e","x":"図書館のもとの壁。落ちついた色で、どんな家具にも合うよ。"},
+  {"k":"W1","n":"ナイルの青","t":"wall","e":0,"p":10,"c":"#3f6a86","c2":"#c9a24a","x":"エジプトの青は、銅を使った人工の顔料なんだ。「エジプシャン・ブルー」は、世界で最初の合成顔料と言われているよ。"},
+  {"k":"W2","n":"修道院の石壁","t":"wall","e":1,"p":10,"c":"#a39c8e","c2":"#5d564b","x":"ロマネスク様式の修道院は、厚い石の壁に小さな窓。中は昼でも薄暗かったんだ。"},
+  {"k":"W3","n":"ロココの壁紙","t":"wall","e":2,"p":10,"c":"#c8d8c0","c2":"#e8e2cf","x":"ロココは、淡い色と曲線の装飾が特徴だよ。サンスーシ宮殿の内装が代表的だね。"},
+  {"k":"F0","n":"オークの床板","t":"floor","e":-1,"p":0,"c":"#9a7148","pat":"plank","x":"図書館のもとの床。足音がよく響くから、夜はちょっと怖いんだ。"},
+  {"k":"F1","n":"テラコッタのタイル","t":"floor","e":0,"p":10,"c":"#b5653e","pat":"tile","x":"テラコッタは、素焼きの土のこと。イタリア語で「焼いた土」という意味だよ。"},
+  {"k":"F2","n":"石畳","t":"floor","e":1,"p":10,"c":"#8b8a84","pat":"tile","x":"ローマ人が敷いた石畳の道は、中世になってもヨーロッパ各地で使われ続けたんだ。"},
+  {"k":"F3","n":"寄木細工の床","t":"floor","e":2,"p":10,"c":"#8a5a33","pat":"parquet","x":"ヴェルサイユ宮殿の床は、木片を組み合わせた寄木細工なんだ。模様の名前は「ヴェルサイユ」そのものだよ。"}
 ],
 "chapters": {"1":"古代オリエント","2":"古代インド","3":"中国の成立","4":"漢帝国と魏晋南北朝","5":"ギリシアとヘレニズム","6":"ローマとイラン","7":"キリスト教と西ヨーロッパ","8":"イスラーム世界","9":"隋・唐と東アジア","10":"中世ヨーロッパの盛衰","11":"宋とモンゴル帝国","12":"明・清","13":"ルネサンスと大航海時代","14":"宗教改革と主権国家","15":"革命の時代"},
 "vols": [{"code":"ORI","name":"古代オリエント"},{"code":"IND","name":"古代インド"},{"code":"CHN","name":"古代中国"},{"code":"GRM","name":"ギリシア・ローマ"},{"code":"MED","name":"中世"},{"code":"EAS","name":"東アジア"},{"code":"MOD","name":"近世"}]
@@ -4493,86 +4512,139 @@ function Zukan(){const L=zfList(CARDS);show(`<div class="screen">${topbar('図�
   <div class="row"><button class="btn" data-close>閉じる</button></div>`)})}
 
 /* ---------- 箱庭 ---------- */
-/* 斜め見下ろし（横2：縦1）の部屋。家具は栞と交換し、もようがえで置く。
-   家具の絵を描くときの大きさ（1マス＝横96・縦48）
-   ・床の家具：幅 (w+d)×48、高さ (w+d)×24＋h。下の端に床のマスがくるように描く
-   ・壁の家具：左の壁に掛けた向きで、幅 w×48、高さ h＋w×24。右の壁では左右反転して使う
-   描いた絵は IMG に「家具_キー」（例：家具_A1）で登録すれば、仮の箱の代わりに表示される */
-const NW={N:8,TW:96,TH:48,WH:240,PX:40,PT:26};
-NW.a=NW.TW/2;NW.b=NW.TH/2;NW.W=NW.N*NW.TW+NW.PX*2;NW.OX=NW.W/2;NW.OY=NW.PT+NW.WH;NW.H=NW.OY+NW.N*NW.TH+30;
+/* 斜め見下ろし（横2：縦1）の書斎。16×16マス。家具は栞と交換し、もようがえで置く。
+   絵の大きさ（ゲーム内の単位。描くときはこの2倍がおすすめ。1マス＝横48・縦24）
+   ・床の家具：幅 (w+d)×24、高さ (w+d)×12＋h。下の端に床のマスがくるように描く
+   ・壁の家具：左の壁に掛けた向きで、幅 w×24、高さ h＋w×12。右の壁では左右反転して使う
+   ・SDキャラ：幅96、高さ198（足元の菱形の中心が、下から24の位置）
+   ・壁紙：模様1回ぶんを、壁の高さいっぱいの長方形で描く（横につなげて貼る）
+   ・床：正方形で描く（rep マス四方に1枚。データの rep で変えられる）
+   絵は IMG に「家具_A1」「SD_シミ」「SD_シミ_2」「壁紙_W1」「床_F1」のように登録すると、仮の絵の代わりに表示される */
+const NW={N:16,TW:48,TH:24,WH:240,PX:40,PT:26};
+NW.a=NW.TW/2;NW.b=NW.TH/2;NW.W=NW.N*NW.TW+NW.PX*2;NW.OX=NW.W/2;NW.OY=NW.PT+NW.WH;NW.H=NW.OY+NW.N*NW.TH+30;NW.EDGE=Math.hypot(NW.a,NW.b);
 const FURN=DATA.furniture||[];
 const FBY=Object.fromEntries(FURN.map(f=>[f.k,f]));
-const FRAME={k:'頁',t:'wall',w:1,h:96,y:76};
-let NWS={edit:false,sel:null,drag:null,tab:0};
+const SKINS=DATA.roomskins||[];
+const SKBY=Object.fromEntries(SKINS.map(f=>[f.k,f]));
+const FRAME={k:'頁',t:'wall',w:2,h:96,y:76};
+const SDDEF={k:'SD',t:'floor',w:2,d:2,h:150};
+/* SDキャラ：表示できる人。ok がそろったら選べる。差分は IMG の「SD_名前」「SD_名前_2」… */
+const SD_LIST=[
+ {n:'主人公',c:'#6f86ad',ok:()=>true,say:()=>['……よし、今日もがんばろう。','この部屋、だいぶ書斎らしくなってきた。','栞、もう少し集めたいな。']},
+ {n:'シミ',c:'#cfc8b6',ok:()=>true,say:()=>SHIMI_IDLE},
+ {n:'コンラッド',c:'#a5621b',ok:()=>p1Clear(),say:()=>CHARA['コンラッド'].lines},
+ {n:'ヌル',c:'#5b5470',ok:()=>p1Clear(),say:()=>CHARA['ヌル'].lines}];
+const SDBY=Object.fromEntries(SD_LIST.map(c=>[c.n,c]));
+let NWS={edit:false,sel:null,drag:null,tab:0,z:{s:1,x:0,y:0}};
+const NWPTR=new Map();
 
 function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
  if(!Array.isArray(R.f))R.f=[];if(!Array.isArray(R.w))R.w=[];if(!R.inv||typeof R.inv!=='object')R.inv={};
- R.f=R.f.filter(o=>FBY[o.k]&&FBY[o.k].t==='floor');
+ if(!Array.isArray(R.skins))R.skins=[];if(!SKBY[R.wall])R.wall='W0';if(!SKBY[R.floor])R.floor='F0';
+ /* 8×8マスの記録は、位置を2倍にして16×16マスへ */
+ if(R.v!==2){R.f.forEach(o=>{o.x*=2;o.y*=2});R.w.forEach(o=>{o.p*=2});R.v=2}
+ R.f=R.f.filter(o=>o.k==='SD'?(SDBY[o.n]&&SDBY[o.n].ok()):(FBY[o.k]&&FBY[o.k].t==='floor'));
  R.w=R.w.filter(o=>o.k==='頁'?(CARD[o.n]&&lv(o.n)&&!isSP(o.n)):(FBY[o.k]&&FBY[o.k].t==='wall'));
  return R}
+function skinOwned(k){const f=SKBY[k];return !!f&&(f.p===0||S.room.skins.includes(k))}
 function nwPlaced(k){const R=S.room;return R.f.filter(o=>o.k===k).length+R.w.filter(o=>o.k===k).length}
 function nwSpare(k){return (S.room.inv[k]||0)-nwPlaced(k)}
 const g2s=(x,y)=>[NW.OX+(x-y)*NW.a,NW.OY+(x+y)*NW.b];
 function s2g(X,Y){const u=(X-NW.OX)/NW.a,v=(Y-NW.OY)/NW.b;return[(u+v)/2,(v-u)/2]}
-function fpOf(o){const f=FBY[o.k];return o.m?[f.d,f.w]:[f.w,f.d]}
-function wfOf(o){return o.k==='頁'?FRAME:FBY[o.k]}
+function defOf(o){return o.k==='SD'?SDDEF:o.k==='頁'?FRAME:FBY[o.k]}
+function fpOf(o){const f=defOf(o);return o.m?[f.d,f.w]:[f.w,f.d]}
+function nameOf(o){return o.k==='SD'?(o.n==='主人公'?(S.name||'主人公'):o.n):o.k==='頁'?o.n:FBY[o.k].n}
 
 /* ---- 置ける場所かどうか ---- */
 function floorFree(o,skip){const [w,d]=fpOf(o);if(o.x<0||o.y<0||o.x+w>NW.N||o.y+d>NW.N)return false;
  return S.room.f.every(q=>{if(q===skip)return true;const [qw,qd]=fpOf(q);return o.x+w<=q.x||q.x+qw<=o.x||o.y+d<=q.y||q.y+qd<=o.y})}
-function wallFree(o,skip){const ww=wfOf(o).w;if(o.p<0||o.p+ww>NW.N)return false;
- return S.room.w.every(q=>q===skip||q.s!==o.s||o.p+ww<=q.p||q.p+wfOf(q).w<=o.p)}
-/* 新しく置く家具は、部屋のまんなかに近い空きから */
-function findFloorSpot(k){const c=(NW.N-1)/2;const C=[];for(let y=0;y<NW.N;y++)for(let x=0;x<NW.N;x++)C.push([Math.abs(x-c)+Math.abs(y-c)+(x+y)*.01,x,y]);C.sort((p,q)=>p[0]-q[0]);
- for(const [,x,y] of C)for(const m of [0,1]){const o={k,x,y,m};if(floorFree(o))return o}return null}
-function findWallSpot(k,n){const c=(NW.N-1)/2;const P=[...Array(NW.N).keys()].sort((p,q)=>Math.abs(p-c)-Math.abs(q-c));
+function wallFree(o,skip){const ww=defOf(o).w;if(o.p<0||o.p+ww>NW.N)return false;
+ return S.room.w.every(q=>q===skip||q.s!==o.s||o.p+ww<=q.p||q.p+defOf(q).w<=o.p)}
+/* 新しく置くものは、部屋のまんなかに近い空きから */
+function findFloorSpot(k,n){const c=(NW.N-2)/2;const C=[];for(let y=0;y<NW.N;y++)for(let x=0;x<NW.N;x++)C.push([Math.abs(x-c)+Math.abs(y-c)+(x+y)*.01,x,y]);C.sort((p,q)=>p[0]-q[0]);
+ for(const [,x,y] of C)for(const m of [0,1]){const o={k,x,y,m};if(n)o.n=n;if(floorFree(o))return o}return null}
+function findWallSpot(k,n){const c=(NW.N-2)/2;const P=[...Array(NW.N).keys()].sort((p,q)=>Math.abs(p-c)-Math.abs(q-c));
  for(const p of P)for(const s of ['L','R']){const o={k,s,p};if(n)o.n=n;if(wallFree(o))return o}return null}
 
 /* ---- 絵 ---- */
 function shade(hex,t){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
  const f=t<0?0:255,k=Math.abs(t);r=Math.round(r+(f-r)*k);g=Math.round(g+(f-g)*k);b=Math.round(b+(f-b)*k);return `rgb(${r},${g},${b})`}
-function floorBox(o){const f=FBY[o.k];const [w,d]=fpOf(o);const BW=(w+d)*NW.a,BH=(w+d)*NW.b+f.h;
+const PTS=p=>p.map(v=>v.map(n=>+n.toFixed(2)).join(',')).join(' ');
+function floorBox(o){const f=defOf(o);const [w,d]=fpOf(o);const BW=(w+d)*NW.a,BH=(w+d)*NW.b+f.h;
  const [lx]=g2s(o.x,o.y+d);const [,by]=g2s(o.x+w,o.y+d);return{x:lx,y:by-BH,w:BW,h:BH}}
-function wallBox(o){const f=wfOf(o);const BW=f.w*NW.a,BH=f.h+f.w*NW.b;const by=NW.OY+(o.p+f.w)*NW.b-f.y;
+function wallBox(o){const f=defOf(o);const BW=f.w*NW.a,BH=f.h+f.w*NW.b;const by=NW.OY+(o.p+f.w)*NW.b-f.y;
  return{x:o.s==='L'?NW.OX-(o.p+f.w)*NW.a:NW.OX+o.p*NW.a,y:by-BH,w:BW,h:BH}}
-function floorArt(f){const a=NW.a,b=NW.b,{w,d,h,c}=f;const P=p=>p.map(v=>v.join(',')).join(' ');
- const T=[d*a,0],R=[(d+w)*a,w*b],B=[w*a,(w+d)*b],L=[0,d*b];const dn=p=>[p[0],p[1]+h];
+function floorArt(f){const a=NW.a,b=NW.b,{w,d,h,c}=f;
  if(IMG['家具_'+f.k])return `<image href="${IMG['家具_'+f.k]}" width="${(w+d)*a}" height="${(w+d)*b+h}" preserveAspectRatio="xMidYMax meet"/>`;
- const ln='stroke="rgba(30,20,10,.55)" stroke-width="1.2" stroke-linejoin="round"';
- let s=`<polygon points="${P([L,B,dn(B),dn(L)])}" fill="${shade(c,-.18)}" ${ln}/><polygon points="${P([B,R,dn(R),dn(B)])}" fill="${shade(c,-.38)}" ${ln}/><polygon points="${P([T,R,B,L])}" fill="${shade(c,.14)}" ${ln}/>`;
+ const T=[d*a,0],R=[(d+w)*a,w*b],B=[w*a,(w+d)*b],L=[0,d*b];const dn=p=>[p[0],p[1]+h];
+ const ln='stroke="rgba(30,20,10,.55)" stroke-width="1" stroke-linejoin="round"';
+ let s=`<polygon points="${PTS([L,B,dn(B),dn(L)])}" fill="${shade(c,-.18)}" ${ln}/><polygon points="${PTS([B,R,dn(R),dn(B)])}" fill="${shade(c,-.38)}" ${ln}/><polygon points="${PTS([T,R,B,L])}" fill="${shade(c,.14)}" ${ln}/>`;
  const m=(p,q,t)=>[p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t];
- s+=`<polygon points="${P([m(T,B,.18),m(R,L,.18),m(B,T,.18),m(L,R,.18)])}" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1"/>`;
+ s+=`<polygon points="${PTS([m(T,B,.18),m(R,L,.18),m(B,T,.18),m(L,R,.18)])}" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1"/>`;
  return s}
 function wallArt(f){const a=NW.a,b=NW.b,BW=f.w*a,{h,c}=f;
  if(IMG['家具_'+f.k])return `<image href="${IMG['家具_'+f.k]}" width="${BW}" height="${h+f.w*b}" preserveAspectRatio="xMidYMax meet"/>`;
  return `<polygon points="0,${f.w*b} ${BW},0 ${BW},${h} 0,${h+f.w*b}" fill="${shade(c,-.05)}" stroke="rgba(30,20,10,.6)" stroke-width="1.5"/>
- <polygon points="6,${f.w*b+3} ${BW-6},6 ${BW-6},${h-6} 6,${h+f.w*b-9}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/>`}
+ <polygon points="5,${f.w*b+2.5} ${BW-5},5 ${BW-5},${h-5} 5,${h+f.w*b-7.5}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/>`}
 let nwUid=0;
 function frameArt(o){const f=FRAME,a=NW.a,b=NW.b,BW=f.w*a,h=f.h;const id='nwc'+(++nwUid);
- const M=o.s==='L'?`matrix(1,-.5,0,1,0,${f.w*b})`:'matrix(1,.5,0,1,0,0)';const src=IMG[o.n];const c=CARD[o.n];
+ const M=o.s==='L'?`matrix(1,-.5,0,1,0,${f.w*b})`:'matrix(1,.5,0,1,0,0)';const src=IMG[o.n];
  return `<g transform="${M}"><rect x="0" y="0" width="${BW}" height="${h}" fill="#7a5a2a" stroke="#3a2812" stroke-width="1.5"/>
  <rect x="4" y="4" width="${BW-8}" height="${h-8}" fill="#e9dfc6"/><clipPath id="${id}"><rect x="6" y="6" width="${BW-12}" height="${h-12}"/></clipPath>
- ${src?`<image href="${src}" x="6" y="6" width="${BW-12}" height="${h-12}" preserveAspectRatio="xMidYMin slice" clip-path="url(#${id})"/>`:`<text x="${BW/2}" y="${h/2}" font-size="11" text-anchor="middle" fill="#5a4220">${esc((c&&c.n||'').slice(0,4))}</text>`}</g>`}
+ ${src?`<image href="${src}" x="6" y="6" width="${BW-12}" height="${h-12}" preserveAspectRatio="xMidYMin slice" clip-path="url(#${id})"/>`:`<text x="${BW/2}" y="${h/2}" font-size="11" text-anchor="middle" fill="#5a4220">${esc(o.n.slice(0,4))}</text>`}</g>`}
+/* SDキャラ（絵がないあいだは、色つきの簡単なシルエット） */
+function sdVariants(n){let k=1;while(IMG['SD_'+n+'_'+(k+1)])k++;return IMG['SD_'+n]?k:1}
+function sdArt(o){const c=SDBY[o.n]||{c:'#888'};const v=o.v||0;const BW=96,BH=198,cx=48,fy=174;
+ const key=v?'SD_'+o.n+'_'+(v+1):'SD_'+o.n;
+ if(IMG[key]||IMG['SD_'+o.n])return `<ellipse cx="${cx}" cy="${fy}" rx="26" ry="11" fill="rgba(0,0,0,.25)"/><image href="${IMG[key]||IMG['SD_'+o.n]}" width="${BW}" height="${BH}" preserveAspectRatio="xMidYMax meet"/>`;
+ const col=c.c,dk=shade(col,-.35);
+ return `<ellipse cx="${cx}" cy="${fy}" rx="26" ry="11" fill="rgba(0,0,0,.25)"/>
+ <path d="M${cx-20} ${fy-4}c0-26 6-44 20-46c14 2 20 20 20 46q-20 7-40 0z" fill="${col}" stroke="${dk}" stroke-width="1.5"/>
+ <rect x="${cx-11}" y="${fy-8}" width="8" height="9" rx="3" fill="${dk}"/><rect x="${cx+3}" y="${fy-8}" width="8" height="9" rx="3" fill="${dk}"/>
+ <circle cx="${cx}" cy="${fy-74}" r="27" fill="${col}" stroke="${dk}" stroke-width="1.5"/>
+ <ellipse cx="${cx-9}" cy="${fy-72}" rx="3" ry="4" fill="${dk}"/><ellipse cx="${cx+9}" cy="${fy-72}" rx="3" ry="4" fill="${dk}"/>`}
+function sdLabel(o){if(IMG['SD_'+o.n])return '';const c=SDBY[o.n]||{c:'#888'};return `<text x="48" y="144" font-size="11" text-anchor="middle" fill="${shade(c.c,-.45)}" font-weight="700">${esc(nameOf(o).slice(0,5))}</text>`}
 function thumbSVG(f){if(f.t==='wall'){const BW=f.w*NW.a,BH=f.h+f.w*NW.b;return `<svg viewBox="-4 -4 ${BW+8} ${BH+8}" class="nw-th">${wallArt(f)}</svg>`}
  const BW=(f.w+f.d)*NW.a,BH=(f.w+f.d)*NW.b+f.h;return `<svg viewBox="-4 -4 ${BW+8} ${BH+8}" class="nw-th">${floorArt(f)}</svg>`}
+function sdThumb(n){const o={k:'SD',n,x:0,y:0};return `<svg viewBox="0 0 96 198" class="nw-th">${sdArt(o)}${sdLabel(o)}</svg>`}
 
-/* ---- 部屋を描く ---- */
-function nwRoomBase(){const {N,a,b,OX,OY,WH}=NW;const P=p=>p.map(v=>v.join(',')).join(' ');
- const L0=[OX-N*a,OY+N*b],R0=[OX+N*a,OY+N*b],F=[OX,OY+N*NW.TH];const up=(p,t)=>[p[0],p[1]-t];
- let s=`<polygon points="${P([up([OX,OY],WH),[OX,OY],L0,up(L0,WH)])}" fill="#e7d8b8"/><polygon points="${P([up([OX,OY],WH),up(R0,WH),R0,[OX,OY]])}" fill="#d6c39c"/>`;
- /* 腰板と回り縁 */
- s+=`<polygon points="${P([up([OX,OY],56),[OX,OY],L0,up(L0,56)])}" fill="#6b4a2e"/><polygon points="${P([up([OX,OY],56),up(R0,56),R0,[OX,OY]])}" fill="#5a3d25"/>`;
- s+=`<polyline points="${P([up(L0,58),up([OX,OY],58),up(R0,58)])}" fill="none" stroke="#3a2812" stroke-width="3"/>`;
- s+=`<polyline points="${P([up(L0,WH-10),up([OX,OY],WH-10),up(R0,WH-10)])}" fill="none" stroke="#8a6a3e" stroke-width="5"/>`;
- for(let i=1;i<N;i++){const l=g2s(0,i),r=g2s(i,0);s+=`<line x1="${l[0]}" y1="${l[1]-56}" x2="${l[0]}" y2="${l[1]}" stroke="rgba(0,0,0,.25)"/><line x1="${r[0]}" y1="${r[1]-56}" x2="${r[0]}" y2="${r[1]}" stroke="rgba(0,0,0,.25)"/>`}
+/* ---- 壁紙と床（平面の絵を、斜めの面に貼る） ---- */
+const NWASP={};
+function imgAspect(src){if(NWASP[src])return NWASP[src];NWASP[src]=1;const i=new Image();i.onload=()=>{NWASP[src]=i.naturalWidth/i.naturalHeight||1;nwDraw()};i.src=src;return 1}
+function wallMats(){const {N,a,b,OX,OY,WH}=NW;
+ /* (s,z)：s＝壁ぞいのマス、z＝壁の上端からの高さ。左の壁は左端から、右の壁は奥から並べる */
+ return{L:`matrix(${a},${-b},0,1,${OX-N*a},${OY-WH+N*b})`,R:`matrix(${a},${b},0,1,${OX},${OY-WH})`}}
+function skinPreview(f){if(f.t==='wall'){const src=IMG['壁紙_'+f.k];
+  return `<svg viewBox="0 0 120 90" class="nw-th sk">${src?`<image href="${src}" width="120" height="90" preserveAspectRatio="xMidYMid slice"/>`:`<rect width="120" height="90" fill="${f.c}"/><rect y="68" width="120" height="22" fill="${f.c2}"/>`}</svg>`}
+ const src=IMG['床_'+f.k];return `<svg viewBox="0 0 120 90" class="nw-th sk">${src?`<image href="${src}" width="120" height="90" preserveAspectRatio="xMidYMid slice"/>`:`<rect width="120" height="90" fill="${f.c}"/>${floorPatLines(f,120,90,30)}`}</svg>`}
+function floorPatLines(f,w,h,u){let s='';const st='stroke="rgba(40,20,10,.28)" stroke-width="1"';
+ if(f.pat==='tile'){for(let x=u;x<w;x+=u)s+=`<line x1="${x}" y1="0" x2="${x}" y2="${h}" ${st}/>`;for(let y=u;y<h;y+=u)s+=`<line x1="0" y1="${y}" x2="${w}" y2="${y}" ${st}/>`}
+ else if(f.pat==='parquet'){for(let y=0;y<h;y+=u/2)for(let x=0;x<w;x+=u){const o=(Math.round(y/(u/2))%2)*u/2;s+=`<line x1="${x+o}" y1="${y}" x2="${x+o}" y2="${y+u/2}" ${st}/>`}for(let y=u/2;y<h;y+=u/2)s+=`<line x1="0" y1="${y}" x2="${w}" y2="${y}" ${st}/>`}
+ else{for(let y=u/3;y<h;y+=u/3)s+=`<line x1="0" y1="${y}" x2="${w}" y2="${y}" ${st}/>`;for(let y=0;y<h;y+=u/3)for(let x=((y/(u/3))%3)*u;x<w;x+=u*3)s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+u/3}" ${st}/>`}
+ return s}
+function nwRoomBase(){const {N,a,b,OX,OY,WH}=NW;const R=S.room;const wf=SKBY[R.wall],ff=SKBY[R.floor];
+ const L0=[OX-N*a,OY+N*b],R0=[OX+N*a,OY+N*b],F=[OX,OY+N*NW.TH];const up=(p,t)=>[p[0],p[1]-t];const M=wallMats();
+ let s='<defs>';const wsrc=IMG['壁紙_'+wf.k],fsrc=IMG['床_'+ff.k];
+ if(wsrc){const rw=WH*imgAspect(wsrc)/NW.EDGE;s+=`<pattern id="nwWP" patternUnits="userSpaceOnUse" width="${rw}" height="${WH}"><image href="${wsrc}" width="${rw}" height="${WH}" preserveAspectRatio="none"/></pattern>`}
+ if(fsrc){const rp=ff.rep||4;s+=`<pattern id="nwFP" patternUnits="userSpaceOnUse" width="${rp}" height="${rp}"><image href="${fsrc}" width="${rp}" height="${rp}" preserveAspectRatio="none"/></pattern>`}
+ s+='</defs>';
+ /* 壁 */
+ for(const side of ['L','R']){const dim=side==='R'?' opacity=".86"':'';
+  if(wsrc)s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="url(#nwWP)"/></g>${side==='R'?`<g transform="${M.R}"><rect width="${N}" height="${WH}" fill="rgba(0,0,0,.12)"/></g>`:''}`;
+  else{s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="${side==='R'?shade(wf.c,-.08):wf.c}"/><rect y="${WH-56}" width="${N}" height="56" fill="${side==='R'?shade(wf.c2,-.15):wf.c2}"/>`;
+   for(let i=2;i<N;i+=2)s+=`<line x1="${i}" y1="${WH-56}" x2="${i}" y2="${WH}" stroke="rgba(0,0,0,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+   s+=`<line x1="0" y1="${WH-57}" x2="${N}" y2="${WH-57}" stroke="#3a2812" stroke-width="3" vector-effect="non-scaling-stroke"/><line x1="0" y1="10" x2="${N}" y2="10" stroke="${shade(wf.c2,.2)}" stroke-width="5" vector-effect="non-scaling-stroke"/></g>`}}
  s+=`<line x1="${OX}" y1="${OY-WH}" x2="${OX}" y2="${OY}" stroke="rgba(60,40,20,.35)" stroke-width="1.5"/>`;
- /* 床 */
- s+=`<polygon points="${P([[OX,OY],R0,F,L0])}" fill="#9a7148"/>`;
- for(let i=0;i<=N*2;i++){const p=g2s(i/2,0),q=g2s(i/2,N);s+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="rgba(60,35,15,${i%2?.12:.22})"/>`}
+ /* 床（マス目の座標に貼る） */
+ const FM=`matrix(${a},${b},${-a},${b},${OX},${OY})`;
+ if(fsrc)s+=`<g transform="${FM}"><rect width="${N}" height="${N}" fill="url(#nwFP)"/></g>`;
+ else s+=`<g transform="${FM}"><rect width="${N}" height="${N}" fill="${ff.c}"/><g transform="scale(${1/30})">${floorPatLines(ff,N*30,N*30,60).replace(/stroke-width="1"/g,'stroke-width="1" vector-effect="non-scaling-stroke"')}</g></g>`;
  let grid='';for(let i=0;i<=N;i++){const p=g2s(0,i),q=g2s(N,i),r=g2s(i,0),t=g2s(i,N);grid+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/><line x1="${r[0]}" y1="${r[1]}" x2="${t[0]}" y2="${t[1]}"/>`}
  s+=`<g class="nw-grid">${grid}</g>`;
- s+=`<polygon points="${P([[OX,OY],R0,F,L0])}" fill="none" stroke="#3a2812" stroke-width="2"/>`;
+ s+=`<polygon points="${PTS([[OX,OY],R0,F,L0])}" fill="none" stroke="#3a2812" stroke-width="2"/>`;
  return s}
+
+/* ---- 重なり順 ---- */
 function nwOrderFloor(list){const n=list.length;const box=list.map(o=>{const [w,d]=fpOf(o);return{x:o.x,y:o.y,w,d}});
  const behind=(A,B)=>(A.x+A.w<=B.x&&!(B.y+B.d<=A.y))||(A.y+A.d<=B.y&&!(B.x+B.w<=A.x));
  const indeg=Array(n).fill(0),out=Array.from({length:n},()=>[]);
@@ -4583,14 +4655,14 @@ function nwOrderFloor(list){const n=list.length;const box=list.map(o=>{const [w,
   done[pick]=true;res.push(list[pick]);out[pick].forEach(j=>indeg[j]--)}return res}
 function nwItemG(o,kind,i,extra=''){const sel=(NWS.sel&&NWS.sel.o===o)||extra.includes('sel')?' sel':'';
  const open=`<g class="nw-it${sel}" data-i="${kind}${i}"`;
- if(kind==='f'){const B=floorBox(o);const art=floorArt(FBY[o.k]);
-  return `${open} transform="translate(${B.x} ${B.y})">${o.m?`<g transform="translate(${B.w} 0) scale(-1 1)">${art}</g>`:art}</g>`}
+ if(kind==='f'){const B=floorBox(o);const art=o.k==='SD'?sdArt(o):floorArt(FBY[o.k]);
+  return `${open} transform="translate(${B.x} ${B.y})">${o.m?`<g transform="translate(${B.w} 0) scale(-1 1)">${art}</g>`:art}${o.k==='SD'?sdLabel(o):''}</g>`}
  const B=wallBox(o);if(o.k==='頁')return `${open} transform="translate(${B.x} ${B.y})">${frameArt(o)}</g>`;
  const art=wallArt(FBY[o.k]);return `${open} transform="translate(${B.x} ${B.y})">${o.s==='R'?`<g transform="translate(${B.w} 0) scale(-1 1)">${art}</g>`:art}</g>`}
-function nwFootprint(o,kind,ok){const P=p=>p.map(v=>v.join(',')).join(' ');let pts;
+function nwFootprint(o,kind,ok){let pts;
  if(kind==='f'){const [w,d]=fpOf(o);pts=[g2s(o.x,o.y),g2s(o.x+w,o.y),g2s(o.x+w,o.y+d),g2s(o.x,o.y+d)]}
- else{const ww=wfOf(o).w;const A=o.s==='L'?g2s(0,o.p):g2s(o.p,0),Bp=o.s==='L'?g2s(0,o.p+ww):g2s(o.p+ww,0);pts=[[A[0],A[1]-NW.WH+12],[Bp[0],Bp[1]-NW.WH+12],Bp,A]}
- return `<polygon points="${P(pts)}" class="nw-fp ${ok?'ok':'ng'}"/>`}
+ else{const ww=defOf(o).w;const A=o.s==='L'?g2s(0,o.p):g2s(o.p,0),Bp=o.s==='L'?g2s(0,o.p+ww):g2s(o.p+ww,0);pts=[[A[0],A[1]-NW.WH+12],[Bp[0],Bp[1]-NW.WH+12],Bp,A]}
+ return `<polygon points="${PTS(pts)}" class="nw-fp ${ok?'ok':'ng'}"/>`}
 function nwDraw(){const svg=$('#nwSvg');if(!svg)return;nwUid=0;const R=S.room;
  const dragO=NWS.drag&&NWS.drag.moved?NWS.drag:null;
  let s=nwRoomBase();
@@ -4598,24 +4670,41 @@ function nwDraw(){const svg=$('#nwSvg');if(!svg)return;nwUid=0;const R=S.room;
  s+=R.w.map((o,i)=>dragO&&dragO.o===o?'':nwItemG(o,'w',i)).join('');
  s+=nwOrderFloor(R.f.filter(o=>!(dragO&&dragO.o===o))).map(o=>nwItemG(o,'f',R.f.indexOf(o))).join('');
  if(dragO){const L=dragO.kind==='f'?R.f:R.w;s+=`<g class="nw-ghost ${dragO.ok?'':'ng'}">${nwItemG(Object.assign({},dragO.o,dragO.c),dragO.kind,L.indexOf(dragO.o),'sel')}</g>`}
- svg.innerHTML=s;svg.classList.toggle('editing',NWS.edit)}
+ svg.innerHTML=s;svg.classList.toggle('editing',NWS.edit);nwApplyZoom()}
+
+/* ---- 拡大・縮小（2本指／ホイール）と移動 ---- */
+const NWZMAX=3.2;
+function nwView(){const z=NWS.z;const w=NW.W/z.s,h=NW.H/z.s;return{x:z.x,y:z.y,w,h}}
+function nwClampZoom(){const z=NWS.z;z.s=Math.max(1,Math.min(NWZMAX,z.s));const w=NW.W/z.s,h=NW.H/z.s;
+ z.x=Math.max(0,Math.min(NW.W-w,z.x));z.y=Math.max(0,Math.min(NW.H-h,z.y));if(z.s===1){z.x=0;z.y=0}}
+function nwApplyZoom(){const svg=$('#nwSvg');if(!svg)return;nwClampZoom();const v=nwView();svg.setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`);
+ const r=$('#nwReset');if(r)r.hidden=NWS.z.s<=1.01}
+/* 画面上の点 → 部屋の座標（指定した拡大率と位置のときの値） */
+function nwScreenK(){const svg=$('#nwSvg');const rc=svg.getBoundingClientRect();const v=nwView();const k=Math.min(rc.width/v.w,rc.height/v.h);
+ return{rc,k,ox:(rc.width-v.w*k)/2,oy:(rc.height-v.h*k)/2}}
+function nwToWorld(cx,cy){const v=nwView();const {rc,k,ox,oy}=nwScreenK();return[v.x+(cx-rc.left-ox)/k,v.y+(cy-rc.top-oy)/k]}
+function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来るように */const z=NWS.z;z.s=Math.max(1,Math.min(NWZMAX,ns));
+ const v=nwView();const {rc,k,ox,oy}=nwScreenK();z.x=P[0]-(cx-rc.left-ox)/k;z.y=P[1]-(cy-rc.top-oy)/k;nwApplyZoom()}
 
 /* ---- 画面 ---- */
-function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab||0};
+function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab||0,z:{s:1,x:0,y:0}};NWPTR.clear();
  show(`<div class="screen nw-screen">${topbar('箱庭')}
  <div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="箱庭"></svg>
+  <button class="nw-reset" id="nwReset" hidden aria-label="全体を表示">全体</button>
+  <div class="nw-bub" id="nwBub" hidden></div>
   <div class="nw-selbar" id="nwSel" hidden></div><p class="nw-hint" id="nwHint"></p></div>
  <div class="nw-tools" id="nwTools"></div></div>`);
+ $('#nwReset').onclick=()=>{NWS.z={s:1,x:0,y:0};nwApplyZoom()};
  nwTools();nwDraw();nwBind()}
 function nwTools(){const t=$('#nwTools');if(!t)return;
- t.innerHTML=NWS.edit?`<button class="btn light" id="nwPut">持ち物から置く</button><button class="btn" id="nwDone">完了</button>`
+ t.innerHTML=NWS.edit?`<button class="btn light" id="nwPut">持ち物</button><button class="btn" id="nwDone">完了</button>`
   :`<button class="btn" id="nwEdit">もようがえ</button><button class="btn light" id="nwShop">家具をそろえる</button>`;
- const h=$('#nwHint');if(h)h.textContent=NWS.edit?'家具をタップして選び、ドラッグで動かせます':'家具をタップすると、紙魚が説明してくれます';
+ const h=$('#nwHint');if(h)h.textContent=NWS.edit?'タップで選んでドラッグで動かす・2本指で拡大':'タップすると説明やひとこと・2本指で拡大';
  if(NWS.edit){$('#nwPut').onclick=nwInventory;$('#nwDone').onclick=()=>{NWS.edit=false;NWS.sel=null;save();nwTools();nwSelBar();nwDraw()}}
- else{$('#nwEdit').onclick=()=>{NWS.edit=true;nwTools();nwDraw()};$('#nwShop').onclick=()=>nwShop()}}
+ else{$('#nwEdit').onclick=()=>{NWS.edit=true;nwHideBub();nwTools();nwDraw()};$('#nwShop').onclick=()=>nwShop()}}
 function nwSelBar(){const b=$('#nwSel');if(!b)return;const sel=NWS.edit&&NWS.sel;if(!sel){b.hidden=true;return}
- const o=sel.o;const nm=o.k==='頁'?o.n:FBY[o.k].n;b.hidden=false;
- b.innerHTML=`<span class="nm">${esc(nm)}</span><button id="nwFlip">${sel.kind==='f'?'向きを変える':'反対の壁へ'}</button><button id="nwStow">しまう</button>`;
+ const o=sel.o;b.hidden=false;
+ b.innerHTML=`<span class="nm">${esc(nameOf(o))}</span><button id="nwFlip">${sel.kind==='f'?'向きを変える':'反対の壁へ'}</button><button id="nwStow">しまう</button>`;
  $('#nwFlip').onclick=()=>{if(sel.kind==='f'){const c=Object.assign({},o,{m:o.m?0:1});if(!floorFree(c,o)){toast('ここでは向きを変えられません');return}o.m=c.m}
    else{const c=Object.assign({},o,{s:o.s==='L'?'R':'L'});if(!wallFree(c,o)){toast('反対の壁の同じ場所がふさがっています');return}o.s=c.s}
    save();nwDraw()};
@@ -4623,57 +4712,94 @@ function nwSelBar(){const b=$('#nwSel');if(!b)return;const sel=NWS.edit&&NWS.sel
 function nwPt(e){const svg=$('#nwSvg');const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
 function nwFind(id){if(!id)return null;const kind=id[0],i=+id.slice(1);const o=(kind==='f'?S.room.f:S.room.w)[i];return o?{kind,o}:null}
 function nwBind(){const svg=$('#nwSvg');
- svg.addEventListener('pointerdown',e=>{const g=e.target.closest('.nw-it');const it=g&&nwFind(g.dataset.i);
-  if(!NWS.edit)return;
-  if(!it){NWS.sel=null;nwSelBar();nwDraw();return}
-  e.preventDefault();NWS.sel=it;const p=nwPt(e);
-  NWS.drag={o:it.o,kind:it.kind,start:p,c:it.kind==='f'?{x:it.o.x,y:it.o.y}:{s:it.o.s,p:it.o.p},ok:true,moved:false,id:e.pointerId,
-   t0:it.kind==='w'?(it.o.s==='R'?(p.x-NW.OX)/NW.a:(NW.OX-p.x)/NW.a)-it.o.p:0};
-  try{svg.setPointerCapture(e.pointerId)}catch(_){}nwSelBar();nwDraw()});
- svg.addEventListener('pointermove',e=>{const D=NWS.drag;if(!D||e.pointerId!==D.id)return;const p=nwPt(e);
-  if(!D.moved&&Math.hypot(p.x-D.start.x,p.y-D.start.y)<8)return;D.moved=true;const o=D.o;
+ const pinchStart=()=>{const [p1,p2]=[...NWPTR.values()];NWS.pinch={d:Math.hypot(p1.x-p2.x,p1.y-p2.y)||1,s:NWS.z.s,P:nwToWorld((p1.x+p2.x)/2,(p1.y+p2.y)/2)};
+  if(NWS.drag){NWS.drag=null;nwDraw()}NWS.pan=null;NWS.tapCancel=true};
+ svg.addEventListener('pointerdown',e=>{NWPTR.set(e.pointerId,{x:e.clientX,y:e.clientY});try{svg.setPointerCapture(e.pointerId)}catch(_){}
+  if(NWPTR.size===2){pinchStart();return}if(NWPTR.size>2)return;
+  NWS.tapCancel=false;NWS.down={x:e.clientX,y:e.clientY};
+  const g=e.target.closest('.nw-it');const it=g&&nwFind(g.dataset.i);
+  if(NWS.edit&&it){e.preventDefault();NWS.sel=it;const p=nwPt(e);
+   NWS.drag={o:it.o,kind:it.kind,start:p,c:it.kind==='f'?{x:it.o.x,y:it.o.y}:{s:it.o.s,p:it.o.p},ok:true,moved:false,id:e.pointerId,
+    t0:it.kind==='w'?(it.o.s==='R'?(p.x-NW.OX)/NW.a:(NW.OX-p.x)/NW.a)-it.o.p:0};
+   nwSelBar();nwDraw();return}
+  /* 何もないところ（ふだんは家具の上も）を1本指でなぞると、拡大中は移動 */
+  NWS.pan={id:e.pointerId,x:e.clientX,y:e.clientY,z0:{x:NWS.z.x,y:NWS.z.y}}});
+ svg.addEventListener('pointermove',e=>{if(!NWPTR.has(e.pointerId))return;NWPTR.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(NWS.pinch&&NWPTR.size>=2){const [p1,p2]=[...NWPTR.values()];const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+   nwZoomAt((p1.x+p2.x)/2,(p1.y+p2.y)/2,NWS.pinch.s*d/NWS.pinch.d,NWS.pinch.P);return}
+  if(NWS.down&&Math.hypot(e.clientX-NWS.down.x,e.clientY-NWS.down.y)>8)NWS.tapCancel=true;
+  const P=NWS.pan;if(P&&P.id===e.pointerId){if(NWS.z.s>1){const {k}=nwScreenK();NWS.z.x=P.z0.x-(e.clientX-P.x)/k;NWS.z.y=P.z0.y-(e.clientY-P.y)/k;nwApplyZoom()}return}
+  const D=NWS.drag;if(!D||e.pointerId!==D.id)return;const p=nwPt(e);
+  if(!D.moved&&Math.hypot(p.x-D.start.x,p.y-D.start.y)<6)return;D.moved=true;const o=D.o;
   if(D.kind==='f'){const [w,d]=fpOf(o);const g0=s2g(D.start.x,D.start.y),g1=s2g(p.x,p.y);
    const x=Math.max(0,Math.min(NW.N-w,Math.round(o.x+g1[0]-g0[0]))),y=Math.max(0,Math.min(NW.N-d,Math.round(o.y+g1[1]-g0[1])));
    D.c={x,y};D.ok=floorFree(Object.assign({},o,D.c),o)}
-  else{const s=p.x>=NW.OX?'R':'L';const t=s==='R'?(p.x-NW.OX)/NW.a:(NW.OX-p.x)/NW.a;const ww=wfOf(o).w;
+  else{const s=p.x>=NW.OX?'R':'L';const t=s==='R'?(p.x-NW.OX)/NW.a:(NW.OX-p.x)/NW.a;const ww=defOf(o).w;
    const pp=Math.max(0,Math.min(NW.N-ww,Math.round(t-D.t0)));D.c={s,p:pp};D.ok=wallFree(Object.assign({},o,D.c),o)}
   nwDraw()});
- const end=e=>{const D=NWS.drag;if(!D||e.pointerId!==D.id)return;NWS.drag=null;
-  if(D.moved){if(D.ok){Object.assign(D.o,D.c);save()}else toast('ほかの家具と重なるので、置けません')}
+ const end=e=>{if(!NWPTR.has(e.pointerId))return;NWPTR.delete(e.pointerId);
+  if(NWS.pinch){if(NWPTR.size<2)NWS.pinch=null;return}
+  if(NWS.pan&&NWS.pan.id===e.pointerId){NWS.pan=null;if(NWS.edit&&!NWS.tapCancel&&e.type==='pointerup'){NWS.sel=null;nwSelBar();nwDraw()}return}
+  const D=NWS.drag;if(!D||e.pointerId!==D.id)return;NWS.drag=null;
+  if(D.moved){if(D.ok){Object.assign(D.o,D.c);save()}else toast('ほかのものと重なるので、置けません')}
   nwDraw()};
  svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
  /* 説明はタップを離したあとに開く（押した瞬間に開くと、離したときのタップで閉じてしまうため） */
- svg.addEventListener('click',e=>{if(NWS.edit)return;const g=e.target.closest('.nw-it');const it=g&&nwFind(g.dataset.i);if(it)nwInfo(it.o)})}
+ svg.addEventListener('click',e=>{if(NWS.edit||NWS.tapCancel)return;const g=e.target.closest('.nw-it');const it=g&&nwFind(g.dataset.i);if(it)nwInfo(it.o,g)});
+ svg.addEventListener('wheel',e=>{e.preventDefault();const P=nwToWorld(e.clientX,e.clientY);nwZoomAt(e.clientX,e.clientY,NWS.z.s*Math.exp(-e.deltaY*.0015),P)},{passive:false});
+ /* iPad Safariのピンチで画面全体が拡大されないように */
+ ['gesturestart','gesturechange'].forEach(t=>svg.addEventListener(t,e=>e.preventDefault()))}
 
-/* ---- 説明 ---- */
-function nwInfo(o){if(o.k==='頁'){const c=CARD[o.n];modal(`<div class="detail"><div>${cardHTML(o.n)}</div><div><h3>${esc(o.n)}</h3><p style="line-height:1.8">${esc(c.f)}</p></div></div><div class="row"><button class="btn" data-close>閉じる</button></div>`);return}
+/* ---- 説明・ひとこと ---- */
+let nwBubT=0;
+function nwHideBub(){const b=$('#nwBub');if(b)b.hidden=true}
+function nwInfo(o,g){if(o.k==='SD'){const c=SDBY[o.n];const L=c.say()||[];const line=L[Math.floor(Math.random()*L.length)]||'……';
+  const nv=sdVariants(o.n);if(nv>1){o.v=((o.v||0)+1)%nv;save();nwDraw()}
+  const b=$('#nwBub'),st=$('#nwStage');if(!b||!st)return;const el=st.querySelector(`[data-i="${g.dataset.i}"]`)||g;const r=el.getBoundingClientRect(),sr=st.getBoundingClientRect();
+  b.innerHTML=`<span class="who">${esc(nameOf(o))}</span>${esc(line)}`;b.hidden=false;
+  const w=b.offsetWidth;b.style.left=Math.max(8,Math.min(sr.width-w-8,r.left-sr.left+r.width/2-w/2))+'px';b.style.top=Math.max(4,r.top-sr.top-b.offsetHeight-6)+'px';
+  clearTimeout(nwBubT);nwBubT=setTimeout(nwHideBub,3600);return}
+ if(o.k==='頁'){const c=CARD[o.n];modal(`<div class="detail"><div>${cardHTML(o.n)}</div><div><h3>${esc(o.n)}</h3><p style="line-height:1.8">${esc(c.f)}</p></div></div><div class="row"><button class="btn" data-close>閉じる</button></div>`);return}
  const f=FBY[o.k];modal(`<div class="nw-info">${thumbSVG(f)}<div><h3>${esc(f.n)}</h3><p class="nw-say"><span class="who">シミ</span>${esc(f.x)}</p></div></div><div class="row"><button class="btn" data-close>閉じる</button></div>`)}
 
-/* ---- 持ち物から置く ---- */
-function nwInventory(){const items=FURN.filter(f=>nwSpare(f.k)>0);const hung=new Set(S.room.w.filter(o=>o.k==='頁').map(o=>o.n));
- const pages=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!hung.has(c.n));
- modal(`<h3>持ち物から置く</h3>
+/* ---- 持ち物（家具・頁・キャラ・壁紙・床） ---- */
+function nwInventory(){const R=S.room;const items=FURN.filter(f=>nwSpare(f.k)>0);const hung=new Set(R.w.filter(o=>o.k==='頁').map(o=>o.n));
+ const pages=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!hung.has(c.n));const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));
+ const sds=SD_LIST.filter(c=>c.ok());const own=t=>SKINS.filter(f=>f.t===t&&skinOwned(f.k));
+ const skinRow=(t,cur)=>`<div class="nw-inv sk">${own(t).map(f=>`<button class="nw-cell${f.k===cur?' on':''}" data-sk="${f.k}">${skinPreview(f)}<span>${esc(f.n)}</span>${f.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`;
+ modal(`<h3>持ち物</h3>
  <h4 class="nw-h4">家具</h4>${items.length?`<div class="nw-inv">${items.map(f=>`<button class="nw-cell" data-k="${f.k}">${thumbSVG(f)}<span>${esc(f.n)}</span><small>${f.t==='wall'?'壁':'床'}・のこり${nwSpare(f.k)}</small></button>`).join('')}</div>`:'<p class="muted">置いていない家具はありません。「家具をそろえる」で栞と交換できます。</p>'}
+ <h4 class="nw-h4">キャラクター<small>タップで呼ぶ・帰す</small></h4><div class="nw-inv">${sds.map(c=>`<button class="nw-cell${shown.has(c.n)?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span>${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><small>${shown.has(c.n)?'いる':'いない'}</small></button>`).join('')}</div>
  <h4 class="nw-h4">額に入れて飾る頁</h4>${pages.length?`<div class="nw-inv pages">${pages.map(c=>`<button class="nw-cell pg" data-n="${esc(c.n)}">${cardHTML(c.n,{noLv:true})}</button>`).join('')}</div>`:'<p class="muted">飾れる頁はありません。</p>'}
+ <h4 class="nw-h4">壁紙</h4>${skinRow('wall',R.wall)}
+ <h4 class="nw-h4">床</h4>${skinRow('floor',R.floor)}
  <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
+ const placed=(kind,o)=>{NWS.sel={kind,o};closeModal(true);save();nwSelBar();nwDraw()};
  document.querySelectorAll('.nw-cell[data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];
   const o=f.t==='wall'?findWallSpot(f.k):findFloorSpot(f.k);if(!o){toast(f.t==='wall'?'壁に空きがありません':'床に空きがありません');return}
-  (f.t==='wall'?S.room.w:S.room.f).push(o);NWS.sel={kind:f.t==='wall'?'w':'f',o};closeModal(true);save();nwSelBar();nwDraw()});
+  (f.t==='wall'?R.w:R.f).push(o);placed(f.t==='wall'?'w':'f',o)});
  document.querySelectorAll('.nw-cell[data-n]').forEach(b=>b.onclick=()=>{const o=findWallSpot('頁',b.dataset.n);if(!o){toast('壁に空きがありません');return}
-  S.room.w.push(o);NWS.sel={kind:'w',o};closeModal(true);save();nwSelBar();nwDraw()})}
+  R.w.push(o);placed('w',o)});
+ document.querySelectorAll('.nw-cell[data-sd]').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
+  if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1);save();nwSelBar();nwDraw();nwInventory();return}
+  const o=findFloorSpot('SD',n);if(!o){toast('床に空きがありません');return}R.f.push(o);placed('f',o)});
+ document.querySelectorAll('.nw-cell[data-sk]').forEach(b=>b.onclick=()=>{const f=SKBY[b.dataset.sk];if(f.t==='wall')R.wall=f.k;else R.floor=f.k;save();nwDraw();nwInventory()})}
 
 /* ---- 家具をそろえる（栞と交換） ---- */
-function nwShop(){const e=NWS.tab;const L=FURN.filter(f=>f.e===e);
+function nwShop(){const e=NWS.tab;const L=FURN.filter(f=>f.e===e);const SK=SKINS.filter(f=>f.e===e);
+ const row=(th,f,owned,note)=>{const can=S.sh[e]>=f.p;return `<div class="nw-row">${th}<div class="tx"><b>${esc(f.n)}</b><small>${note}</small><p>${esc(f.x)}</p></div>
+  ${owned===true?'<span class="nw-owned">交換ずみ</span>':`<button class="btn ${can?'':'light'}" data-${SKBY[f.k]?'sk':'k'}="${f.k}" ${can?'':'disabled'}>${ERAS[e].k}の栞${f.p}枚</button>`}</div>`};
  modal(`<h3>家具をそろえる</h3><div class="nw-tabs">${ERAS.map((E,i)=>`<button data-e="${i}" class="${i===e?'on':''}" style="--ec:${E.c}">${E.k}</button>`).join('')}</div>
  <div class="nw-have">${ribbon(e)}<span>${ERAS[e].k}の栞</span><b>${S.sh[e]}</b>枚</div>
- <div class="nw-shop">${L.map(f=>{const own=S.room.inv[f.k]||0;const can=S.sh[e]>=f.p;
-  return `<div class="nw-row">${thumbSVG(f)}<div class="tx"><b>${esc(f.n)}</b><small>${f.t==='wall'?`壁・幅${f.w}`:`床・${f.w}×${f.d}`}${own?`　持っている数：${own}`:''}</small><p>${esc(f.x)}</p></div>
-  <button class="btn ${can?'':'light'}" data-k="${f.k}" ${can?'':'disabled'}>${ERAS[e].k}の栞${f.p}枚</button></div>`}).join('')}</div>
+ <div class="nw-shop">${L.map(f=>{const own=S.room.inv[f.k]||0;return row(thumbSVG(f),f,own,`${f.t==='wall'?`壁・幅${f.w}`:`床・${f.w}×${f.d}`}${own?`　持っている数：${own}`:''}`)}).join('')}
+ ${SK.length?`<h4 class="nw-h4">壁紙と床</h4>${SK.map(f=>row(skinPreview(f),f,skinOwned(f.k),f.t==='wall'?'壁紙':'床')).join('')}`:''}</div>
  <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
  document.querySelectorAll('.nw-tabs [data-e]').forEach(b=>b.onclick=()=>{NWS.tab=+b.dataset.e;nwShop()});
- document.querySelectorAll('.nw-row [data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];
-  askYes(`${ERAS[e].k}の栞${f.p}枚で「${f.n}」と交換しますか？`,'交換する',()=>{if(S.sh[e]<f.p){toast('栞が足りません');return}
-   S.sh[e]-=f.p;S.room.inv[f.k]=(S.room.inv[f.k]||0)+1;saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('持ち物に入れました。「もようがえ」で置けます');nwShop()},()=>nwShop())})}
+ const buy=(f,give)=>askYes(`${ERAS[e].k}の栞${f.p}枚で「${f.n}」と交換しますか？`,'交換する',()=>{if(S.sh[e]<f.p){toast('栞が足りません');return}
+   S.sh[e]-=f.p;give();saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('持ち物に入れました。「もようがえ」の「持ち物」から使えます');nwShop()},()=>nwShop());
+ document.querySelectorAll('.nw-row [data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];buy(f,()=>{S.room.inv[f.k]=(S.room.inv[f.k]||0)+1})});
+ document.querySelectorAll('.nw-row [data-sk]').forEach(b=>b.onclick=()=>{const f=SKBY[b.dataset.sk];buy(f,()=>{if(!S.room.skins.includes(f.k))S.room.skins.push(f.k)})})}
+
 
 /* ---------- 記録を守る ---------- */
 /* アプリ切替・タブを閉じる直前にも保存（遊び始めてからのみ。タイトル画面で古い記録を上書きしないため） */
