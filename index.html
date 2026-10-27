@@ -3429,6 +3429,7 @@ const IMG={
 "家具_A10": "img/furn_A10.webp",
 "家具_E5": "img/furn_E5.webp",
 "家具_A11": "img/furn_A11.webp",
+"SD_シミ": "img/sd_shimi.webp",
 "シミ_笑顔": "img/shimi_smile.webp",
 "シミ_食事": "img/shimi_eat.webp",
 "背景_ホーム": "img/f8e8df074d29.webp",
@@ -4553,6 +4554,7 @@ const SKINS=DATA.roomskins||[];
 const SKBY=Object.fromEntries(SKINS.map(f=>[f.k,f]));
 const FRAME={k:'頁',t:'wall',w:2,h:68,y:44};
 const SDDEF={k:'SD',t:'floor',w:2,d:2,h:150};
+const SD_H=122; // SDの絵の表示の高さ
 /* SDキャラ：表示できる人。ok がそろったら選べる。差分は IMG の「SD_名前」「SD_名前_2」… */
 const SD_LIST=[
  {n:'主人公',c:'#6f86ad',ok:()=>true,say:()=>['……よし、今日もがんばろう。','この部屋、だいぶ書斎らしくなってきた。','栞、もう少し集めたいな。']},
@@ -4623,7 +4625,9 @@ function frameArt(o){const f=FRAME,a=NW.a,b=NW.b,BW=f.w*a,h=f.h;const id='nwc'+(
 function sdVariants(n){let k=1;while(IMG['SD_'+n+'_'+(k+1)])k++;return IMG['SD_'+n]?k:1}
 function sdArt(o){const c=SDBY[o.n]||{c:'#888'};const v=o.v||0;const BW=96,BH=198,cx=48,fy=174;
  const key=v?'SD_'+o.n+'_'+(v+1):'SD_'+o.n;
- if(IMG[key]||IMG['SD_'+o.n])return `<ellipse cx="${cx}" cy="${fy}" rx="26" ry="11" fill="rgba(0,0,0,.25)"/><image href="${IMG[key]||IMG['SD_'+o.n]}" width="${BW}" height="${BH}" preserveAspectRatio="xMidYMax meet"/>`;
+ /* SDの絵：余白を切った絵を、足元が床のマスの中心に来るように、高さSD_Hで表示（横幅は絵の比率しだい） */
+ const src=IMG[key]||IMG['SD_'+o.n];
+ if(src){const H=SD_H,W=H*imgAspect(src);return `<ellipse cx="${cx}" cy="${fy+1}" rx="22" ry="8" fill="rgba(0,0,0,.25)"/><image href="${src}" x="${(cx-W/2).toFixed(1)}" y="${fy+3-H}" width="${W.toFixed(1)}" height="${H}" preserveAspectRatio="none"/>`}
  const col=c.c,dk=shade(col,-.35);
  return `<ellipse cx="${cx}" cy="${fy}" rx="26" ry="11" fill="rgba(0,0,0,.25)"/>
  <path d="M${cx-20} ${fy-4}c0-26 6-44 20-46c14 2 20 20 20 46q-20 7-40 0z" fill="${col}" stroke="${dk}" stroke-width="1.5"/>
