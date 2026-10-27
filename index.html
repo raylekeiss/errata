@@ -3376,6 +3376,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"t": "jump", "to": 57}
 ],
 "furniture": [
+  {"k":"B1","n":"司書室のキッチン","e":-1,"t":"floor","g":"家具","w":6,"d":2,"h":62,"c":"#c07a45","p":0,"x":"図書館の奥にある、司書のための台所だよ。クッキーは焼きたてだから、つまんでいいよ。本の上で食べるのはだめだけどね。"},
+  {"k":"B2","n":"お茶のテーブル","e":-1,"t":"floor","g":"家具","w":4,"d":3,"h":36,"c":"#c08a55","p":0,"x":"休憩用のテーブルだよ。読みながらお茶を飲むなら、カップは本から離して置こうね。紅茶のしみは、誤植よりしつこいから。"},
+  {"k":"B3","n":"ソファ","e":-1,"t":"floor","g":"家具","w":5,"d":2,"h":38,"c":"#b98c7c","p":0,"x":"閉館後、ここで寝ている司書がいるらしいよ。……俺じゃないよ。"},
   {"k":"A1","n":"粘土板の書棚","e":0,"t":"floor","g":"本棚","w":2,"d":2,"h":80,"c":"#b08d5b","p":5,"x":"メソポタミアでは、粘土板に葦のペンを押しつけて楔形文字を書いたんだ。アッシュルバニパル王の図書館は焼け落ちたけど、そのおかげで粘土板が焼き固められて、今まで残ったんだよ。"},
   {"k":"A2","n":"パピルスの巻物棚","e":0,"t":"floor","g":"本棚","w":2,"d":2,"h":73,"c":"#c9b27a","p":5,"x":"パピルスは、ナイルの岸に生える草の茎を薄く裂いて、縦と横に重ねて作るんだ。英語のpaperの語源だよ。"},
   {"k":"A3","n":"ロゼッタ＝ストーン（複製）","e":0,"t":"floor","g":"置物","w":2,"d":2,"h":67,"c":"#5d5b60","p":10,"x":"同じ内容が、神聖文字・民用文字・ギリシア文字の3つで刻まれているんだ。シャンポリオンはギリシア語の部分を手がかりに、神聖文字を解読したよ。本物は大英博物館にあるね。"},
@@ -3430,6 +3433,9 @@ const IMG={
 "家具_E5": "img/furn_E5.webp",
 "家具_A11": "img/furn_A11.webp",
 "SD_シミ": "img/sd_shimi.webp",
+"家具_B1": "img/furn_B1.webp",
+"家具_B2": "img/furn_B2.webp",
+"家具_B3": "img/furn_B3.webp",
 "シミ_笑顔": "img/shimi_smile.webp",
 "シミ_食事": "img/shimi_eat.webp",
 "背景_ホーム": "img/f8e8df074d29.webp",
@@ -4570,6 +4576,9 @@ function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
  if(!Array.isArray(R.skins))R.skins=[];if(!SKBY[R.wall])R.wall='W0';if(!SKBY[R.floor])R.floor='F0';
  /* 8×8マスの記録は、位置を2倍にして16×16マスへ */
  if(R.v!==2){R.f.forEach(o=>{o.x*=2;o.y*=2});R.w.forEach(o=>{o.p*=2});R.v=2}
+ /* 最初から持っている家具（e:-1）。はじめて箱庭を開いたときは、空いていれば置いておく */
+ FURN.filter(f=>f.e===-1).forEach(f=>{if(!(R.inv[f.k]>0))R.inv[f.k]=1});
+ if(!R.init){R.init=1;[{k:'B1',x:1,y:0,m:0},{k:'B3',x:9,y:0,m:0},{k:'B2',x:9,y:4,m:0}].forEach(o=>{if(FBY[o.k]&&nwPlaced(o.k)<R.inv[o.k]&&floorFree(o))R.f.push(o)})}
  /* 向きを変えられない家具（文字入りなど）は、もとの向きに戻す */
  R.f.forEach(o=>{const f=FBY[o.k];if(f&&f.nf&&o.m&&!IMG['家具_'+o.k+'_m']&&f.w===f.d)o.m=0});
  R.f=R.f.filter(o=>o.k==='SD'?(SDBY[o.n]&&SDBY[o.n].ok()):(FBY[o.k]&&FBY[o.k].t==='floor'));
