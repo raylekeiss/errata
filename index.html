@@ -4700,7 +4700,10 @@ function nwRoomBase(){const {N,a,b,OX,OY,WH}=NW;const R=S.room;const wf=SKBY[R.w
  return s}
 
 /* ---- 重なり順 ---- */
-function nwOrderFloor(list){const n=list.length;const box=list.map(o=>{const [w,d]=fpOf(o);return{x:o.x,y:o.y,w,d}});
+function nwOrderFloor(list){const n=list.length;const box=list.map(o=>{const [w,d]=fpOf(o);
+  /* 歩いている途中のキャラは、出発したマスと行き先のマスを合わせた範囲で前後を決める */
+  const st=o.k==='SD'&&NWW.st.get(o);if(st&&st.from){const x=Math.min(o.x,st.from[0]),y=Math.min(o.y,st.from[1]);return{x,y,w:w+Math.abs(o.x-st.from[0]),d:d+Math.abs(o.y-st.from[1])}}
+  return{x:o.x,y:o.y,w,d}});
  const behind=(A,B)=>(A.x+A.w<=B.x&&!(B.y+B.d<=A.y))||(A.y+A.d<=B.y&&!(B.x+B.w<=A.x));
  const indeg=Array(n).fill(0),out=Array.from({length:n},()=>[]);
  for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(i!==j&&behind(box[i],box[j])){out[i].push(j);indeg[j]++}
@@ -4895,21 +4898,30 @@ function nwPath(o){const N=NW.N,[w,d]=fpOf(o);const key=(x,y)=>y*N+x;const prev=
  while(k!==key(o.x,o.y)){path.unshift([k%N,Math.floor(k/N)]);k=prev.get(k)}return path}
 function nwWanderTick(ts){const svg=$('#nwSvg');if(!svg){NWW.raf=0;return}NWW.raf=requestAnimationFrame(nwWanderTick);
  const dt=NWW.last?Math.min(100,ts-NWW.last):16;NWW.last=ts;
- const busy=NWS.edit||NWS.drag||NWS.pinch||$('#modal');const R=S.room;const STEP=520;
- R.f.forEach((o,i)=>{if(o.k!=='SD')return;let st=NWW.st.get(o);if(!st){st={wait:800+Math.random()*2500,path:null,t:0,from:null,ph:Math.random()*6.3};NWW.st.set(o,st)}
-  let fx=o.x,fy=o.y,moving=false;
+ const busy=NWS.edit||NWS.drag||NWS.pinch||$('#modal');const R=S.room;const STEP=520;let redraw=false;
+ const SDs=R.f.filter(o=>o.k==='SD');
+ /* 1回目：全員の動きを決める（描き直しは最後に1回だけ。途中で描き直すと、ほかのキャラが一瞬ずれるため） */
+ SDs.forEach(o=>{let st=NWW.st.get(o);if(!st){st={wait:800+Math.random()*2500,path:null,t:0,from:null,ph:Math.random()*6.3,mv:0};NWW.st.set(o,st)}
+  st.fx=o.x;st.fy=o.y;let moving=false;
   if(!busy){
-   if(st.path&&st.from){st.t+=dt;const k=Math.min(1,st.t/STEP);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;fx=st.from[0]+(o.x-st.from[0])*e;fy=st.from[1]+(o.y-st.from[1])*e;moving=true;
-    if(k>=1){st.from=null;if(!st.path.length){st.path=null;st.wait=1500+Math.random()*4000}}}
+   if(st.path&&st.from){st.t+=dt;const k=Math.min(1,st.t/STEP);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;st.fx=st.from[0]+(o.x-st.from[0])*e;st.fy=st.from[1]+(o.y-st.from[1])*e;moving=true;
+    if(k>=1){st.from=null;st.fx=o.x;st.fy=o.y;redraw=true;if(!st.path.length){st.path=null;st.wait=1500+Math.random()*4000}}}
    if(st.path&&!st.from&&st.path.length){const [nx,ny]=st.path.shift();const c=Object.assign({},o,{x:nx,y:ny});
-    if(!floorFree(c,o)){st.path=null;st.wait=600+Math.random()*1200}
-    else{const dx=nx-o.x,dy=ny-o.y;const m=(dx>0||dy<0)?1:0;st.from=[o.x,o.y];st.t=0;o.x=nx;o.y=ny;fx=st.from[0];fy=st.from[1];moving=true;
-     if(o.m!==m)o.m=m;nwDraw()}}
+    /* ほかのキャラが今まさに出ていこうとしているマスにも入らない */
+    const clash=SDs.some(q=>{if(q===o)return false;const t=NWW.st.get(q);return t&&t.from&&Math.abs(t.from[0]-nx)<2&&Math.abs(t.from[1]-ny)<2});
+    if(clash||!floorFree(c,o)){st.path=null;st.wait=600+Math.random()*1200}
+    else{const dx=nx-o.x,dy=ny-o.y;const m=(dx>0||dy<0)?1:0;st.from=[o.x,o.y];st.t=0;o.x=nx;o.y=ny;st.fx=st.from[0];st.fy=st.from[1];moving=true;
+     if(o.m!==m)o.m=m;redraw=true}}
    if(!st.path){st.wait-=dt;if(st.wait<=0){st.path=nwPath(o);if(!st.path)st.wait=2000+Math.random()*3000}}}
-  else if(st.from){st.from=null}
-  st.ph+=dt/1000*(moving?7:2.4);const bob=Math.sin(st.ph)*(moving?3.2:1.4)-(moving?2:0);
-  const el=svg.querySelector(`:scope > [data-i="f${i}"]`);if(!el)return;const B=floorBox(Object.assign({},o,{x:fx,y:fy}));
-  el.setAttribute('transform',`translate(${B.x.toFixed(2)} ${(B.y+bob).toFixed(2)})`)})}
+  else if(st.from){st.from=null;st.fx=o.x;st.fy=o.y;redraw=true}
+  /* 歩く・止まるで揺れ方がぱっと変わらないように、少しずつ切りかえる */
+  st.mv+=((moving?1:0)-st.mv)*Math.min(1,dt/180);
+  st.ph+=dt/1000*(2.4+4.6*st.mv);st.bob=Math.sin(st.ph)*(1.4+1.8*st.mv)-2*st.mv});
+ if(redraw)nwDraw();
+ /* 2回目：位置を当てはめる */
+ SDs.forEach(o=>{const st=NWW.st.get(o);if(!st)return;const i=R.f.indexOf(o);
+  const el=svg.querySelector(`:scope > [data-i="f${i}"]`);if(!el)return;const B=floorBox(Object.assign({},o,{x:st.fx,y:st.fy}));
+  el.setAttribute('transform',`translate(${B.x.toFixed(2)} ${(B.y+st.bob).toFixed(2)})`)})}
 
 /* ---------- 記録を守る ---------- */
 /* アプリ切替・タブを閉じる直前にも保存（遊び始めてからのみ。タイトル画面で古い記録を上書きしないため） */
