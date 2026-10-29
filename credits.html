@@ -35,11 +35,12 @@ li a{color:var(--red);word-break:break-all}
     <h2>人物の肖像について</h2>
     <p>人物の頁（カード）に使っている肖像は、Wikimedia Commons で公開されている画像を、縮小・切り抜きして使っています。作者とライセンスは下の一覧のとおりです。</p>
     <p>CC BY-SA のライセンスの画像を加工したものは、同じ CC BY-SA のライセンスのもとで扱われます。</p>
+    <p>箱庭の家具のうち、写真を使ったもの（【箱庭】と付けたもの）も同じく Wikimedia Commons の画像を加工しています。</p>
     <p>シミ・コンラッドなどの登場人物の絵は、このゲームの制作者によるものです。</p>
   </div>
   <div class="paper">
-    <h2>肖像の一覧</h2>
-    <input id="q" type="search" placeholder="人物名で探す" aria-label="人物名で探す">
+    <h2>肖像と写真の一覧</h2>
+    <input id="q" type="search" placeholder="名前で探す" aria-label="名前で探す">
     <p class="muted" id="count"></p>
     <ul id="list"></ul>
   </div>
@@ -49,7 +50,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 let DATA={};
 function render(){const q=document.getElementById('q').value.trim();
   const names=Object.keys(DATA).filter(n=>!q||n.includes(q)).sort((a,b)=>a.localeCompare(b,'ja'));
-  document.getElementById('count').textContent=names.length+'人';
+  document.getElementById('count').textContent=names.length+'件';
   document.getElementById('list').innerHTML=names.map(n=>{const c=DATA[n];
     return `<li><b>${esc(n)}</b><span class="lic">${esc(c.license)}</span>作者：${esc(c.author)}<br><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.file)}</a></li>`}).join('')}
 fetch('credits.json').then(r=>r.json()).then(d=>{DATA=d;render()}).catch(()=>{document.getElementById('count').textContent='一覧を読み込めませんでした。'});
