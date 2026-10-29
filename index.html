@@ -5089,25 +5089,25 @@ const LX_DEFAULT_DECK=[].concat(Array(6).fill('B:兵士'),Array(5).fill('B:衛�
 const LX_TPL={
  '君主':[
   {id:'単体攻撃',type:'atk',cost:1,fx:{dmg:9},m:'dmg'},
-  {id:'全体攻撃',type:'atk',cost:1,fx:{dmgAll:7},m:'dmgAll'},
+  {id:'全体攻撃',type:'atk',cost:2,fx:{dmgAll:9},m:'dmgAll'},
   {id:'重い一撃',type:'atk',cost:2,fx:{dmg:12,vul:2},m:'dmg'},
   {id:'連撃',type:'atk',cost:1,fx:{dmg:5,hits:2},m:'dmg',half:true},
   {id:'威信',type:'pow',cost:1,fx:{str:2},m:'str',third:true}],
  '臣下':[
-  {id:'守り',type:'skl',cost:1,fx:{blk:8},m:'blk'},
-  {id:'守りと補給',type:'skl',cost:1,fx:{blk:7,draw:1},m:'blk'},
-  {id:'献策',type:'skl',cost:0,fx:{blk:4},m:'blk',half:true},
-  {id:'盾と剣',type:'atk',cost:1,fx:{dmg:5,blk:5},m:'both'},
-  {id:'忠誠',type:'pow',cost:1,fx:{pBlkEnd:3},m:'pBlkEnd',half:true}],
+  {id:'守り',type:'skl',cost:1,fx:{blk:6},m:'blk'},
+  {id:'守りと補給',type:'skl',cost:1,fx:{blk:5,draw:1},m:'blk'},
+  {id:'献策',type:'skl',cost:0,fx:{blk:3},m:'blk',half:true},
+  {id:'盾と剣',type:'atk',cost:1,fx:{dmg:5,blk:4},m:'both'},
+  {id:'忠誠',type:'pow',cost:1,fx:{pBlkEnd:2},m:'pBlkEnd',half:true}],
  '思想家':[
   {id:'説得',type:'atk',cost:0,fx:{dmg:3,weak:1},m:'dmg',half:true},
   {id:'教化',type:'skl',cost:1,fx:{draw:2,blk:2},m:'blk'},
   {id:'論駁',type:'atk',cost:1,fx:{dmg:3,vul:2,weak:2},m:'dmg'},
-  {id:'回心',type:'skl',cost:0,fx:{draw:2,exhaust:true},m:'draw',third:true},
+  {id:'回心',type:'skl',cost:0,fx:{draw:2,exhaust:true},m:null},
   {id:'破門',type:'skl',cost:2,fx:{dmg:6,stun:1},m:'dmg'}],
  '学者・芸術家':[
-  {id:'著作',type:'pow',cost:1,fx:{pDraw:1,blk:3},m:'blk'},
-  {id:'建築',type:'pow',cost:2,fx:{pBlkEnd:5},m:'pBlkEnd',half:true},
+  {id:'著作',type:'pow',cost:1,fx:{pDraw:1,blk:2},m:'blk'},
+  {id:'建築',type:'pow',cost:2,fx:{pBlkEnd:4},m:'pBlkEnd',half:true},
   {id:'研究',type:'pow',cost:1,fx:{pEnergy:1,blk:2},m:'blk',r3:true},
   {id:'記録',type:'pow',cost:1,fx:{pAtkBlk:2},m:'pAtkBlk',half:true},
   {id:'作品',type:'pow',cost:1,fx:{pAoe:3},m:'pAoe',half:true}]};
@@ -5132,19 +5132,19 @@ const LX_POT={
 const lxPick=(e,arr)=>{let i;do{i=Math.floor(Math.random()*arr.length)}while(arr.length>1&&i===e.li);e.li=i;return arr[i]};
 const lxAlt=(e,arr)=>{e.ai=(e.ai==null?-1:e.ai)+1;return arr[e.ai%arr.length]};
 const LX_EN={
- '誤字':{hp:[40,44],ai:(e,X)=>X.turn===1?(e.li=0,{d:11}):lxPick(e,[{d:11},{d:7,b:5},{str:3}])},
- '脱字':{hp:[36,40],ai:e=>lxAlt(e,[{d:6,disc:1},{d:9}])},
- '衍字':{hp:[46,50],ai:e=>lxPick(e,[{d:8},{d:5,weak:1}]),note:'HPが半分を切ると2体に分裂する'},
- '小さな衍字':{hp:[0,0],ai:e=>lxPick(e,[{d:5},{d:3,weak:1}])},
- '乱丁':{hp:[44,48],ai:e=>lxAlt(e,[{d:9},{d:4,shuf:1}])},
- '墨汚れ':{hp:[38,42],ai:e=>lxAlt(e,[{d:5,weak:1},{d:5,vul:1}])},
- 'かすれ':{hp:[32,36],ai:e=>lxAlt(e,[{b:12},{d:10}])},
- '落丁':{hp:[80,80],elite:true,ai:e=>lxAlt(e,[{d:7,steal:2},{d:18}])},
- '裏写り':{hp:[85,85],elite:true,ai:e=>lxAlt(e,[{mir:1},{d:10,weak:1}])},
- 'ちいさな誤植':{hp:[18,18],ai:e=>lxPick(e,[{d:5},{d:3,weak:1},{b:6}])},
- '改竄':{hp:[160,160],boss:true,ai:(e,X)=>X.turn%3===0?{kai:1,d:30}:lxAlt(e,[{d:12},{dirty:2,b:10}]),note:'2ターンに1度、山札に「汚れ頁」を混ぜる'},
- '偽書':{hp:[170,170],boss:true,ai:(e,X)=>X.turn%3===0?{kai:1,d:8,n:4}:lxAlt(e,[{d:9,copy:1},{d:6,n:2}]),note:'プレイヤーの威信を写し取る'},
- '焚書':{hp:[150,150],boss:true,burn:true,ai:(e,X)=>X.turn%3===0?{kai:1,clr:1,d:25}:lxAlt(e,[{d:14},{d:7,vul:2}]),note:'毎ターン、捨て札の頁を1枚その戦闘から消す'}};
+ '誤字':{hp:[40,44],ai:(e,X)=>X.turn===1?(e.li=0,{d:13}):lxPick(e,[{d:13},{d:9,b:6},{str:3}])},
+ '脱字':{hp:[36,40],ai:e=>lxAlt(e,[{d:8,disc:1},{d:12}])},
+ '衍字':{hp:[46,50],ai:e=>lxPick(e,[{d:11},{d:7,weak:1}]),note:'HPが半分を切ると2体に分裂する'},
+ '小さな衍字':{hp:[0,0],ai:e=>lxPick(e,[{d:7},{d:5,weak:1}])},
+ '乱丁':{hp:[44,48],ai:e=>lxAlt(e,[{d:12},{d:6,shuf:1}])},
+ '墨汚れ':{hp:[38,42],ai:e=>lxAlt(e,[{d:7,weak:1},{d:7,vul:1}])},
+ 'かすれ':{hp:[32,36],ai:e=>lxAlt(e,[{b:14},{d:14}])},
+ '落丁':{hp:[90,90],elite:true,ai:e=>lxAlt(e,[{d:9,steal:2},{d:22}])},
+ '裏写り':{hp:[95,95],elite:true,ai:e=>lxAlt(e,[{mir:1},{d:13,weak:1}])},
+ 'ちいさな誤植':{hp:[18,18],ai:e=>lxPick(e,[{d:6},{d:4,weak:1},{b:6}])},
+ '改竄':{hp:[180,180],boss:true,ai:(e,X)=>X.turn%3===0?{kai:1,d:36}:lxAlt(e,[{d:16},{dirty:2,b:12}]),note:'2ターンに1度、山札に「汚れ頁」を混ぜる'},
+ '偽書':{hp:[190,190],boss:true,ai:(e,X)=>X.turn%3===0?{kai:1,d:10,n:4}:lxAlt(e,[{d:12,copy:1},{d:8,n:2}]),note:'プレイヤーの威信を写し取る'},
+ '焚書':{hp:[170,170],boss:true,burn:true,ai:(e,X)=>X.turn%3===0?{kai:1,clr:1,d:32}:lxAlt(e,[{d:18},{d:10,vul:2}]),note:'毎ターン、捨て札の頁を1枚その戦闘から消す'}};
 const LX_EASY=[['誤字'],['脱字'],['墨汚れ'],['かすれ']];
 const LX_HARD=[['衍字'],['乱丁'],['誤字','かすれ'],['脱字','墨汚れ'],['墨汚れ','かすれ']];
 const LX_ELITE=[['落丁'],['裏写り'],['ちいさな誤植','ちいさな誤植','ちいさな誤植','ちいさな誤植']];
@@ -5158,12 +5158,12 @@ function lxDef(id,ann){
  let base,bonus=ann?3:0,person=false,attr='base',name,rar=0,lvl=0;
  if(LX_BASE[id]){base=LX_BASE[id];name=base.name}
  else{const c=CARD[id];if(!c)return null;person=true;attr=c.a;name=id;rar=c.r;lvl=Math.max(1,lv(id));
-  base=lxTplOf(id);bonus+=(c.r===3?4:c.r===2?2:0)+(lvl-1)}
+  base=lxTplOf(id);bonus+=(c.r===3?2:c.r===2?1:0)+(lvl-1);if(c.r===3&&lvl>=5&&(base.cost<2||base.fx.dmgAll!=null))bonus+=2}
  const fx=Object.assign({},base.fx);let cost=base.cost;
  const m=base.m;const add=base.third?Math.floor(bonus/3):base.half?Math.floor(bonus/2):bonus;
  if(m==='both'){fx.dmg+=Math.ceil(bonus/2);fx.blk+=Math.ceil(bonus/2)}else if(m&&fx[m]!=null)fx[m]+=add;
- /* ★3の節目：2凸で1枚多く引く、4凸でコスト−1 */
- if(person&&rar===3){if(lvl>=3)fx.draw=(fx.draw||0)+1;if(lvl>=5)cost=Math.max(0,cost-1)}
+ /* ★3の節目：2凸で1枚多く引く。4凸でコスト2以上の頁はコスト−1（全体攻撃は除く）、それ以外は主な数値＋2 */
+ if(person&&rar===3){if(lvl>=3)fx.draw=(fx.draw||0)+1;if(lvl>=5&&cost>=2&&fx.dmgAll==null)cost--}
  const d={id,name,type:base.type,cost,fx,person,attr,rar,ann:!!ann,tpl:base.id||'',ic:base.ic};
  d.text=lxFxText(fx);d.target=fx.dmg!=null||!!fx.vul||!!fx.weak||!!fx.stun;return d}
 function lxFxText(f){const a=[];
@@ -5201,11 +5201,12 @@ function lxLib(){if(!S.lib||typeof S.lib!=='object')S.lib={};const L=S.lib;
 
 /* ---------- クイズ ---------- */
 const lxWait=ms=>new Promise(r=>setTimeout(r,FX.reduce()?Math.min(ms,80):ms));
-function lxQFor(n){const R=S.lib.run;const used=new Set(R?R.usedQ:[]);
- let pool=Q.filter(q=>(q.q+q.a).includes(n));
- if(!pool.length)pool=Q.filter(q=>(q.x||'').includes(n));
- if(!pool.length)pool=Q.filter(q=>q.ch===(CARD[n]||{}).st);
- if(!pool.length)pool=Q;
+/* 答えがその人物の名前になる問題（頁を見れば答えがわかる）は出さない */
+function lxQFor(n){const R=S.lib.run;const used=new Set(R?R.usedQ:[]);const ok=q=>!q.a.includes(n)&&!q.d.some(d=>d.includes(n));
+ let pool=Q.filter(q=>q.q.includes(n)&&ok(q));
+ if(!pool.length)pool=Q.filter(q=>(q.x||'').includes(n)&&ok(q));
+ if(!pool.length)pool=Q.filter(q=>q.ch===(CARD[n]||{}).st&&ok(q));
+ if(!pool.length)pool=Q.filter(ok);
  const fresh=pool.filter(q=>!used.has(q.id));const q=(fresh.length?fresh:pool)[Math.floor(Math.random()*(fresh.length?fresh:pool).length)];
  if(R){R.usedQ.push(q.id);if(R.usedQ.length>400)R.usedQ.splice(0,100)}return q}
 function lxOverlay(inner){const o=document.createElement('div');o.className='lx-ov';o.id='lxov';o.innerHTML=`<div class="lx-qp">${inner}</div>`;$('#lx').appendChild(o);return o}
