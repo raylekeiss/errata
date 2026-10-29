@@ -249,7 +249,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 @media (prefers-reduced-motion:reduce){.drift i{animation:none}}
 @media (orientation:portrait){
   :root{--shelf-h:min(26vh,300px)}
-  .shelf{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;height:var(--shelf-h)}
+  .shelf{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;height:var(--shelf-h)}
   .tome,.tome.lead{height:100%}
   .oshi{height:78vh;bottom:calc(var(--shelf-h) - 10vh)}
   .oshi.cardmode{bottom:calc(var(--shelf-h) + 12vh)}
@@ -995,6 +995,111 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .nw-owned{font-size:14px;color:#7a6a50;white-space:nowrap;padding:0 8px}
 .nw-inv.pages{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
 .nw-cell.pg{padding:2px;background:none;border:none}
+
+/* ===== 図書館探索 ===== */
+.lx{position:fixed;inset:0;overflow:hidden;background:#070c1f;color:#f3ecdc;font-family:var(--serif);--cw:max(82px,calc(132*var(--u)));--hand-h:max(176px,calc(262*var(--u)))}
+.lx-top{position:absolute;z-index:4;top:calc(env(safe-area-inset-top,0px) + 10px);left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.lx-me{width:min(300px,46vw)}
+.lx-hpbar{position:relative;height:24px;background:rgba(0,0,0,.55);border:1px solid rgba(236,226,200,.35);border-radius:2px;overflow:hidden}
+.lx-hpbar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#c23b34,#7e1b18);transition:width .3s}
+.lx-hpbar span{position:relative;display:block;text-align:center;font:700 13px/24px var(--sans);letter-spacing:.04em;text-shadow:0 1px 2px #000}
+.lx-hpbar.e{height:18px}.lx-hpbar.e span{font-size:12px;line-height:18px}
+.lx-st{min-height:6px}
+.lx-st i{display:inline-block;font:600 12px/1.5 var(--sans);font-style:normal;padding:1px 7px;border-radius:2px;margin:4px 4px 0 0;color:#fff;background:#3a3f55}
+.lx-st .s-blk{background:#2e5c7a}.lx-st .s-str{background:#8a2e3a}.lx-st .s-vul{background:#9a6216}.lx-st .s-weak{background:#55507a}.lx-st .s-pw{background:#3e6f4c}
+.lx-gear{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:52vw}
+.lx-relic{display:inline-block;font:600 12px/1.4 var(--sans);padding:4px 9px;border-radius:2px;background:rgba(30,26,18,.75);color:#e6c77a;border:1px solid rgba(201,162,74,.6);margin:0 6px 4px 0}
+.lx-relic.pot{color:#bfe3c6;border-color:rgba(120,190,140,.6)}
+.lx-pot{font:700 13px/1.3 var(--sans);padding:8px 12px;min-height:40px;border-radius:2px;background:linear-gradient(#e8f4e4,#c6e0c0);color:#21422a;box-shadow:inset 0 0 0 1px #5d8a46}
+.lx-bonus{position:absolute;z-index:3;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + max(78px,calc(84*var(--u))));text-align:center;font:600 max(12px,calc(15*var(--u)))/1.4 var(--sans);letter-spacing:.06em;white-space:nowrap}
+.lx-bonus span{display:inline-block;padding:4px 14px;border-radius:2px;background:rgba(10,14,30,.6);color:#d9ceb2}
+.lx-bonus .ok{background:rgba(201,162,74,.9);color:#2a1d05;box-shadow:0 0 18px rgba(255,214,140,.6)}
+.lx-ens{position:absolute;z-index:2;left:0;right:0;top:max(118px,calc(130*var(--u)));bottom:calc(var(--hand-h) + 8px);display:flex;justify-content:center;align-items:center;gap:max(10px,calc(28*var(--u)));padding:0 12px}
+.lx-e{position:relative;width:max(104px,calc(178*var(--u)));text-align:center;cursor:pointer;padding:6px;border-radius:4px;transition:transform .15s}
+.lx-e.boss{width:max(170px,calc(300*var(--u)))}.lx-e.elite{width:max(130px,calc(220*var(--u)))}
+.lx-e.tg{background:rgba(201,162,74,.12);box-shadow:inset 0 0 0 2px rgba(201,162,74,.75)}
+.lx-e .blob{width:78%;margin:4px auto 2px}
+.lx-e .blob svg,.lx-e .blob img{display:block;width:100%;height:auto;max-height:calc(220*var(--u));object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
+.lx-ename{font-weight:600;font-size:max(14px,calc(18*var(--u)));letter-spacing:.1em;margin:2px 0 4px;text-shadow:0 2px 4px #000}
+.lx-it{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;min-height:26px}
+.lx-it span,.lx-it b{font:700 max(12px,calc(14*var(--u)))/1.5 var(--sans);padding:1px 8px;border-radius:2px;color:#fff;background:#4a4f66}
+.lx-it .atk{background:#a3262a}.lx-it .def{background:#2e5c7a}.lx-it .buf{background:#8a2e3a}.lx-it .dbf{background:#5b4a86}.lx-it .ok,.lx-it.ok{background:#3e7a4f;color:#fff;font:700 13px/1.5 var(--sans);padding:1px 8px;border-radius:2px}
+.lx-it .kai{background:#ffd54a;color:#4a0a0a;animation:lxkai 1s ease-in-out infinite}
+@keyframes lxkai{50%{box-shadow:0 0 14px #ffd54a}}
+.lx-act{animation:lxact .4s ease-out}
+@keyframes lxact{30%{transform:translateY(14px) scale(1.06)}}
+.lx-bottom{position:absolute;z-index:5;left:0;right:0;bottom:0;height:var(--hand-h);display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:8px;padding:0 12px calc(env(safe-area-inset-bottom,0px) + 10px);
+  background:linear-gradient(180deg,transparent,rgba(7,12,31,.75) 40%)}
+.lx-side{display:flex;flex-direction:column;align-items:center;gap:8px;width:max(80px,calc(118*var(--u)));padding-bottom:6px}
+.lx-en{width:max(66px,calc(92*var(--u)));aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 40% 35%,#f6dd8e,#c9a24a 55%,#7a5b18);color:#2a1d05;box-shadow:0 0 0 3px #3b2a0c,0 0 20px rgba(255,214,140,.45)}
+.lx-en b{font-size:max(26px,calc(38*var(--u)));line-height:1}.lx-en small{font:700 12px var(--sans)}.lx-en span{font:600 10px var(--sans);letter-spacing:.05em}
+.lx-piles{font:600 12px/1.5 var(--sans);text-align:center;color:#d9ceb2}
+.lx-end{width:100%;min-height:62px;border-radius:3px;font:600 max(15px,calc(19*var(--u)))/1.2 var(--serif);letter-spacing:.08em;color:#f4e6c4;
+  background:radial-gradient(ellipse at 50% 40%,#9b2a2b,#5e1416);box-shadow:inset 0 0 0 2px #c9a24a,0 6px 16px rgba(0,0,0,.5)}
+.lx-end:disabled{opacity:.45}
+.lx-info{font:600 12px var(--sans);color:#d9ceb2;padding:6px 10px;min-height:36px;border:1px solid rgba(217,206,178,.4);border-radius:2px}
+.lx-hand{display:flex;justify-content:center;align-items:flex-end;min-width:0;padding-bottom:4px}
+.lx-hand .lxc{width:var(--cw);flex:none;transition:transform .15s;cursor:pointer}
+.lx-hand .lxc+.lxc{margin-left:clamp(calc(var(--cw)*-.55),calc((100% - var(--n)*var(--cw))/max(1,var(--n) - 1)),6px)}
+.lx-hand .lxc.sel{transform:translateY(-26px) scale(1.07);z-index:3;box-shadow:inset 0 0 0 3px #ffd54a,0 0 22px rgba(255,214,140,.8),0 10px 22px rgba(0,0,0,.6)}
+.lx-hand .lxc.dim{filter:saturate(.4) brightness(.8)}
+.lxc{position:relative;aspect-ratio:13/19;display:flex;flex-direction:column;padding:7px 7px 8px;border-radius:6px;color:#2a2320;
+  background:radial-gradient(ellipse at 50% 30%,#f7efdc,#e6d6b4);box-shadow:inset 0 0 0 3px var(--c,#6b5a3e),inset 0 0 0 4px rgba(201,162,74,.8),0 6px 14px rgba(0,0,0,.45)}
+.k-base{--c:#7a6440}.k-cur{--c:#2b2620}.lxc.k-cur{background:radial-gradient(ellipse at 50% 30%,#bdb3a0,#8f8470)}
+.lxc.t-pow{background:radial-gradient(ellipse at 50% 30%,#eef3e4,#d3dfc0)}
+.lxc-cost{position:absolute;z-index:2;top:-7px;left:-7px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font:800 17px/1 var(--serif);color:#2a1d05;background:radial-gradient(circle at 40% 35%,#f6dd8e,#c9a24a);box-shadow:0 0 0 2px #3b2a0c,0 2px 5px rgba(0,0,0,.5)}
+.lxc-art{position:relative;height:40%;border-radius:3px;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#2a3352,#151b30)}
+.lxc-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lxc-art>svg{position:absolute;inset:0;width:100%;height:100%}
+.lxc-ic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#e6c77a}.lxc-ic svg{width:52%;height:auto}
+.lxc-nm{margin-top:5px;text-align:center;font-weight:700;font-size:max(11px,calc(15*var(--u)));line-height:1.2;letter-spacing:.02em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.lxc-nm b{color:#3e7a4f}
+.lxc-ty{text-align:center;font:600 max(9px,calc(11*var(--u)))/1.3 var(--sans);color:var(--c,#6b5a3e);margin:2px 0}
+.lxc-tx{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font:500 max(10px,calc(13*var(--u)))/1.35 var(--sans);border-top:1px solid rgba(120,88,40,.3);padding-top:3px}
+.lx-ov{position:absolute;inset:0;z-index:40;background:rgba(7,12,31,.78);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadein .2s ease-out}
+.lx-qp{width:min(calc(880*var(--u)),94vw);max-height:96%;overflow:auto;display:flex;flex-direction:column;gap:max(10px,calc(14*var(--u)))}
+.lx-qh{margin:0;text-align:center;color:#f1e3bf;font:600 max(13px,calc(17*var(--u)))/1.5 var(--sans);letter-spacing:.06em;text-shadow:0 2px 6px #000}
+.lx-qh.warn{color:#ffd54a;font-size:max(15px,calc(20*var(--u)))}
+.lx-qs{margin:0;text-align:center;color:#f1e3bf;font:600 max(14px,calc(18*var(--u)))/1.5 var(--serif);letter-spacing:.08em}
+.lx-qbox{padding:max(12px,calc(18*var(--u))) max(16px,calc(26*var(--u)));border-radius:2px}
+.lx-qbox p{margin:0;font-size:max(16px,calc(22*var(--u)));line-height:1.7}
+.lx-qbox .slot{text-decoration:underline;text-decoration-color:#c4302b;text-decoration-thickness:3px;text-underline-offset:5px}
+.lx-qp .grid2{display:grid;grid-template-columns:1fr 1fr;gap:max(10px,calc(14*var(--u))) max(12px,calc(22*var(--u)))}
+.lx-float{position:absolute;z-index:35;pointer-events:none;transform:translate(-50%,-50%);font:800 max(24px,calc(38*var(--u)))/1 var(--serif);color:#fff;
+  text-shadow:0 3px 0 #7a1c1f,0 0 12px #000;animation:lxf 1.1s ease-out forwards;white-space:nowrap}
+.lx-float.me{color:#ff9a8f}.lx-float.blk{color:#a9d8ff;font-size:max(15px,calc(20*var(--u)))}
+@keyframes lxf{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}15%{opacity:1;transform:translate(-50%,-60%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-170%)}}
+.lx-menu{max-width:900px;margin:0 auto}
+.lx-dot{display:inline-block;font:600 12px/1.6 var(--sans);padding:2px 8px;margin:0 4px 4px 0;border-radius:2px;background:#e3dccb;color:#6d5f4a}
+.lx-dot.done{background:#cfc6b0;color:#9a8f78;text-decoration:line-through}.lx-dot.now{background:#7a1c1f;color:#f4e6c4}
+.lx-path{display:flex;align-items:center;flex-wrap:wrap;gap:6px 0}
+.lx-node{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;background:#e8dfca;color:#6d5f4a;box-shadow:inset 0 0 0 2px #c6b48a}
+.lx-node span{font:600 11px var(--sans)}.lx-node b{font:700 15px var(--serif)}
+.lx-node.done{opacity:.45}.lx-node.now{background:#7a1c1f;color:#f4e6c4;box-shadow:inset 0 0 0 3px #c9a24a,0 0 16px rgba(201,162,74,.6)}
+.lx-node.n-ボス b{color:#b5302a}.lx-node.now.n-ボス b{color:#ffd54a}
+.lx-ln{flex:0 0 14px;height:2px;background:#c6b48a}
+.lx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:16px 14px}
+.lx-grid.sm{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:12px;max-height:60vh;overflow:auto;padding:8px 4px}
+.lx-grid .lxc{width:100%}
+.lx-cell{position:relative;cursor:pointer}
+.lx-cell .lxc.in{box-shadow:inset 0 0 0 3px var(--c),inset 0 0 0 4px rgba(201,162,74,.8),0 0 0 3px #c9a24a,0 0 16px rgba(201,162,74,.7)}
+.lx-in{position:absolute;top:-8px;right:-4px;z-index:3;font:700 11px/1.6 var(--sans);padding:0 8px;border-radius:2px;background:#c9a24a;color:#2a1d05}
+.lx-cnt{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:8px}
+.lx-cnt button{width:42px;height:42px;border-radius:3px;background:var(--ink);color:var(--paper);font-size:20px;font-weight:700}
+.lx-cnt b{font:700 20px var(--serif);min-width:2em;text-align:center}
+.lx-deckhead{display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:5}
+.lx-deckhead b{font:700 30px var(--serif)}.lx-deckhead b.ng{color:#b5302a}.lx-deckhead span{line-height:1.6;font-size:14px}
+.lx-after{display:block;margin-top:4px;font-size:11px;line-height:1.4;color:#3e7a4f;text-align:center}
+@media (orientation:portrait){
+  .lx{--cw:max(76px,calc(124*var(--u)));--hand-h:max(186px,calc(300*var(--u)))}
+  .lx-qp .grid2{grid-template-columns:1fr}
+  .lx-bonus{white-space:normal;width:90vw}
+}
+@media (max-height:520px) and (orientation:landscape){
+  .lx{--cw:76px;--hand-h:150px}.lx-ens{top:96px}.lx-bonus{top:62px}.lx-e .blob{width:60%}
+}
 </style>
 </head>
 <body>
@@ -3889,7 +3994,7 @@ function blobSVG(boss){if(IMG[boss?'誤植_ボス':'誤植']||IMG['誤植'])retu
 function show(html){app.innerHTML=html;const t=app.querySelector('.gc-top');if(t&&!TOUCH&&!t.querySelector('.fs-mini')){const b=document.createElement('button');b.className='gc-back fs-mini';b.setAttribute('aria-label','全画面');b.title='全画面';b.innerHTML='<svg viewBox=\x220 0 24 24\x22 width=\x2220\x22 height=\x2220\x22 aria-hidden=\x22true\x22><path d=\x22M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\x22 fill=\x22none\x22 stroke=\x22currentColor\x22 stroke-width=\x222.2\x22 stroke-linecap=\x22round\x22 stroke-linejoin=\x22round\x22/></svg>';b.onclick=e=>{e.stopPropagation();toggleFS()};t.prepend(b)}}
 function shioriBadge(){return `<span class="shiori3">${ERAS.map((E,i)=>`${E.k}<b>${S.sh[i]}</b>`).join('')}</span>`}
 function topbar(title,backTo='home'){return `<div class="bar"><button class="back" data-go="${backTo}">戻る</button><h2>${esc(title)}</h2>${shioriBadge()}</div>`}
-app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,niwa:Niwa,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
+app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,niwa:Niwa,lib:LibMenu,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
 
 /* ---------- title ---------- */
 function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div class="title-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
@@ -3906,13 +4011,14 @@ function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div
  const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():startPrologue()}}
 
 /* ---------- home ---------- */
-const SHIMI_IDLE=['今日はどの棚から読む？','箱庭の家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、ドリルの「試験範囲で選ぶ」が便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
+const SHIMI_IDLE=['今日はどの棚から読む？','図書館探索は、頁の種類が多いほど戦い方が広がるよ。','箱庭の家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、ドリルの「試験範囲で選ぶ」が便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
 const ICON={
  story:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="24" cy="24" r="15"/><circle cx="24" cy="24" r="10" stroke-width="1"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke-linecap="round"/><path d="M24 12l3.5 12L24 36l-3.5-12z" fill="currentColor" stroke="none"/></svg>',
  drill:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M38 6c-10 2-18 10-22 22l-3 7 6-4c10-3 17-12 19-25z"/><path d="M16 28l-6 14" stroke-linecap="round"/><path d="M22 22l-5 5" stroke-width="1"/><path d="M30 38h10M30 43h6" stroke-linecap="round"/></svg>',
  gacha:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 14c6-2 12-2 18 2 6-4 12-4 18-2v24c-6-2-12-2-18 2-6-4-12-4-18-2z"/><path d="M24 16v24"/><path d="M28 12c4-5 9-6 12-5-3 2-5 5-6 9"/><path d="M38 4l1 2.5 2.5 1-2.5 1L38 11l-1-2.5-2.5-1 2.5-1z" fill="currentColor" stroke="none"/></svg>',
  party:'<svg class="ic" viewBox="0 0 48 48" fill="currentColor"><circle cx="24" cy="16" r="6"/><path d="M14 40c0-8 4-13 10-13s10 5 10 13z"/><circle cx="11" cy="21" r="4.5" opacity=".75"/><path d="M3 40c0-6 3-10 8-10 2 0 3.5.6 4.6 1.6C13 34 12 37 12 40z" opacity=".75"/><circle cx="37" cy="21" r="4.5" opacity=".75"/><path d="M45 40c0-6-3-10-8-10-2 0-3.5.6-4.6 1.6C35 34 36 37 36 40z" opacity=".75"/></svg>',
  zukan:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 34l16 6 16-6v5l-16 6-16-6z" fill="currentColor"/><path d="M8 26l16 6 16-6M8 26l16-6 16 6"/><path d="M8 26v6l16 6 16-6v-6"/><path d="M24 4l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="currentColor" stroke="none"/></svg>',
+ lib:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 44V20a14 14 0 0 1 28 0v24"/><path d="M16 44V22a8 8 0 0 1 16 0v22"/><path d="M6 44h36"/><path d="M20 44v-5h8v5M18 38h12M16 32h16" stroke-width="1.2"/><path d="M24 2l1.4 3.6 3.6 1.4-3.6 1.4L24 12l-1.4-3.6L19 7l3.6-1.4z" fill="currentColor" stroke="none"/></svg>',
  niwa:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M24 30L6 21V9l18 9z" fill="currentColor" opacity=".18"/><path d="M24 30l18-9V9L24 18z" fill="currentColor" opacity=".32"/><path d="M6 9l18 9 18-9M24 18v12M6 9v12l18 9 18-9V9"/><path d="M6 21l18 9 18-9 0 6-18 9-18-9z" fill="currentColor"/><path d="M30 22l6-3v-6l-6 3z" fill="currentColor"/><path d="M12 19l5 2.5v-4L12 15z" stroke-width="1.2"/></svg>'};
 const FLO='<svg class="flo" viewBox="0 0 40 14" fill="none" stroke="#b5302a" stroke-width="1.2" stroke-linecap="round"><path d="M2 11c6-1 9-7 14-7 4 0 2 6-2 5s1-7 8-6c5 1 8 4 16 1"/><path d="M34 3l2 2-2 2"/></svg>';
 let homeLine=-1;
@@ -3946,7 +4052,8 @@ function Home(){const nx=nextChapter();const o=oshiName();
   <nav class="shelf" aria-label="メニュー">
    ${btn('lead','story','story','ストーリー',`<span class="nx">${nx===null?'続きは準備中':(nx===0?'序章':CHNAME[nx])+'へ'}</span><span class="ribbon"></span>`)}
    ${btn('','quiz','drill','ドリル')}
-   ${btn('','gacha','gacha','頁をめくる')}
+   ${btn('','gacha','gacha','頁を<wbr>めくる')}
+   ${btn('','lib','lib','図書館<wbr>探索')}
    ${btn('','party','party','編成')}
    ${btn('','niwa','niwa','箱庭')}
    ${btn('','zukan','zukan','図鑑')}
@@ -3957,6 +4064,7 @@ function Home(){const nx=nextChapter();const o=oshiName();
 const TOUR=[['[data-go="story"]','ストーリー','光っている本を追いかけて、章ごとに誤植を直していくよ。続きの章は、前の章を修復すると読めるようになるんだ。'],
  ['[data-go="quiz"]','ドリル','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「試験範囲で選ぶ」に切りかえると、範囲の問題だけを解けるよ。'],
  ['[data-go="gacha"]','頁をめくる','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
+ ['[data-go="lib"]','図書館探索','手に入れた頁でデッキを組んで、書架の奥の誤植と戦うんだ。頁の種類が多いほど戦い方が広がるよ。最後まで進むと栞が1枚もらえる。'],
  ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
  ['[data-go="niwa"]','箱庭','君の書斎を好きに飾れるよ。家具は栞と交換できるし、手に入れた頁は額に入れて壁に掛けられるんだ。'],
  ['[data-go="zukan"]','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
@@ -4959,6 +5067,386 @@ function cloudInit(){if(!CLOUD)return;let done=false;
   .withFailureHandler(()=>{toast('学校アカウントの記録を読めませんでした。この端末の記録で続けます');ready()}).getSave()}
 setInterval(()=>cloudPush(false),60000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&window.__played)cloudPush(true)});
+
+/* ================================================================
+   図書館探索（頁を手札にして戦うカードモード）
+   ・デッキ：基本の頁（何枚でも）＋持っている人物の頁（1人1枚まで）、最低15枚
+   ・1ラン：戦闘→戦闘→？→戦闘→戦闘→休憩→ボス。完走で、ランダムな時代の栞1枚
+   ・1ターンに1問：そのターン最初に切った人物の頁でクイズ。正解ならそのターンの人物の頁が1.5倍
+   ・ボスは3ターンごとに「改変の予告」。改変問題（人物→内容）で大技を打ち消せる
+   数値を直すときは、下の LX_BASE（基本の頁）・LX_TPL（人物の頁の型）・LX_EN（敵）・LX_RELIC（装備）・LX_POT（薬）を書きかえる
+   ================================================================ */
+const LX_MIN=15, LX_HP=70, LX_ENERGY=3, LX_HAND=5, LX_BONUS=1.5;
+const LX_NODES=['戦闘','戦闘','？','戦闘','戦闘','休憩','ボス'];
+/* 基本の頁：m=注釈で強くなる数値 */
+const LX_BASE={
+ 'B:兵士':{name:'名もなき兵士',type:'atk',cost:1,fx:{dmg:6},m:'dmg',ic:'sword'},
+ 'B:衛士':{name:'書架の衛士',type:'skl',cost:1,fx:{blk:5},m:'blk',ic:'shield'},
+ 'B:写本':{name:'写本係',type:'skl',cost:1,fx:{blk:3,draw:1},m:'blk',ic:'quill'},
+ 'B:覚書':{name:'写字生の覚え書き',type:'atk',cost:1,fx:{dmg:4,vul:1},m:'dmg',ic:'scroll'}};
+const LX_DEFAULT_DECK=[].concat(Array(6).fill('B:兵士'),Array(5).fill('B:衛士'),Array(2).fill('B:写本'),Array(2).fill('B:覚書'));
+/* 人物の頁の型（属性ごと）。m=レアリティ・凸・注釈で上がる数値、half=上がり方が半分、r3=★3だけ */
+const LX_TPL={
+ '君主':[
+  {id:'単体攻撃',type:'atk',cost:1,fx:{dmg:9},m:'dmg'},
+  {id:'全体攻撃',type:'atk',cost:1,fx:{dmgAll:7},m:'dmgAll'},
+  {id:'重い一撃',type:'atk',cost:2,fx:{dmg:12,vul:2},m:'dmg'},
+  {id:'連撃',type:'atk',cost:1,fx:{dmg:5,hits:2},m:'dmg',half:true},
+  {id:'威信',type:'pow',cost:1,fx:{str:2},m:'str',third:true}],
+ '臣下':[
+  {id:'守り',type:'skl',cost:1,fx:{blk:8},m:'blk'},
+  {id:'守りと補給',type:'skl',cost:1,fx:{blk:7,draw:1},m:'blk'},
+  {id:'献策',type:'skl',cost:0,fx:{blk:4},m:'blk',half:true},
+  {id:'盾と剣',type:'atk',cost:1,fx:{dmg:5,blk:5},m:'both'},
+  {id:'忠誠',type:'pow',cost:1,fx:{pBlkEnd:3},m:'pBlkEnd',half:true}],
+ '思想家':[
+  {id:'説得',type:'atk',cost:0,fx:{dmg:3,weak:1},m:'dmg',half:true},
+  {id:'教化',type:'skl',cost:1,fx:{draw:2,blk:2},m:'blk'},
+  {id:'論駁',type:'atk',cost:1,fx:{dmg:3,vul:2,weak:2},m:'dmg'},
+  {id:'回心',type:'skl',cost:0,fx:{draw:2,exhaust:true},m:'draw',third:true},
+  {id:'破門',type:'skl',cost:2,fx:{dmg:6,stun:1},m:'dmg'}],
+ '学者・芸術家':[
+  {id:'著作',type:'pow',cost:1,fx:{pDraw:1,blk:3},m:'blk'},
+  {id:'建築',type:'pow',cost:2,fx:{pBlkEnd:5},m:'pBlkEnd',half:true},
+  {id:'研究',type:'pow',cost:1,fx:{pEnergy:1,blk:2},m:'blk',r3:true},
+  {id:'記録',type:'pow',cost:1,fx:{pAtkBlk:2},m:'pAtkBlk',half:true},
+  {id:'作品',type:'pow',cost:1,fx:{pAoe:3},m:'pAoe',half:true}]};
+const LX_TYPE={atk:'攻撃',skl:'策',pow:'持続'};
+/* 装備（ラン中ずっと効く） */
+const LX_RELIC={
+ '羅針盤':'戦闘の最初のターン、エネルギー＋1',
+ 'ロゼッタ＝ストーン':'戦闘の最初のターン、2枚多く引く',
+ 'ホプロンの盾':'戦闘の最初のターン、余白10',
+ '活版印刷機':'クイズに正解するたびに1枚引く',
+ '修道院の薬草':'戦闘に勝つたびにHPが6回復する'};
+/* 薬（使い切り。3つまで持てる） */
+const LX_POT={
+ 'テリアカ':'HPを15回復する',
+ '胡椒':'この戦闘中、威信＋2',
+ '茶':'エネルギー＋2',
+ '硝石':'敵全体に12ダメージ',
+ '乳香':'余白12'};
+/* 敵。ai(e,X)が次の行動（予告）を返す。d=攻撃、n=回数、b=余白、str=威信、weak/vul=プレイヤーに衰退/動揺、
+   disc=次のターン手札を捨てさせる、shuf=山札をかき混ぜ次の手札−1、steal=山札の上から抜き取る、dirty=汚れ頁を混ぜる、
+   copy=プレイヤーの威信を写す、mir=このターン受けたダメージの半分を返す、clr=余白を消す、kai=改変の予告 */
+const lxPick=(e,arr)=>{let i;do{i=Math.floor(Math.random()*arr.length)}while(arr.length>1&&i===e.li);e.li=i;return arr[i]};
+const lxAlt=(e,arr)=>{e.ai=(e.ai==null?-1:e.ai)+1;return arr[e.ai%arr.length]};
+const LX_EN={
+ '誤字':{hp:[40,44],ai:(e,X)=>X.turn===1?(e.li=0,{d:11}):lxPick(e,[{d:11},{d:7,b:5},{str:3}])},
+ '脱字':{hp:[36,40],ai:e=>lxAlt(e,[{d:6,disc:1},{d:9}])},
+ '衍字':{hp:[46,50],ai:e=>lxPick(e,[{d:8},{d:5,weak:1}]),note:'HPが半分を切ると2体に分裂する'},
+ '小さな衍字':{hp:[0,0],ai:e=>lxPick(e,[{d:5},{d:3,weak:1}])},
+ '乱丁':{hp:[44,48],ai:e=>lxAlt(e,[{d:9},{d:4,shuf:1}])},
+ '墨汚れ':{hp:[38,42],ai:e=>lxAlt(e,[{d:5,weak:1},{d:5,vul:1}])},
+ 'かすれ':{hp:[32,36],ai:e=>lxAlt(e,[{b:12},{d:10}])},
+ '落丁':{hp:[80,80],elite:true,ai:e=>lxAlt(e,[{d:7,steal:2},{d:18}])},
+ '裏写り':{hp:[85,85],elite:true,ai:e=>lxAlt(e,[{mir:1},{d:10,weak:1}])},
+ 'ちいさな誤植':{hp:[18,18],ai:e=>lxPick(e,[{d:5},{d:3,weak:1},{b:6}])},
+ '改竄':{hp:[160,160],boss:true,ai:(e,X)=>X.turn%3===0?{kai:1,d:30}:lxAlt(e,[{d:12},{dirty:2,b:10}]),note:'2ターンに1度、山札に「汚れ頁」を混ぜる'},
+ '偽書':{hp:[170,170],boss:true,ai:(e,X)=>X.turn%3===0?{kai:1,d:8,n:4}:lxAlt(e,[{d:9,copy:1},{d:6,n:2}]),note:'プレイヤーの威信を写し取る'},
+ '焚書':{hp:[150,150],boss:true,burn:true,ai:(e,X)=>X.turn%3===0?{kai:1,clr:1,d:25}:lxAlt(e,[{d:14},{d:7,vul:2}]),note:'毎ターン、捨て札の頁を1枚その戦闘から消す'}};
+const LX_EASY=[['誤字'],['脱字'],['墨汚れ'],['かすれ']];
+const LX_HARD=[['衍字'],['乱丁'],['誤字','かすれ'],['脱字','墨汚れ'],['墨汚れ','かすれ']];
+const LX_ELITE=[['落丁'],['裏写り'],['ちいさな誤植','ちいさな誤植','ちいさな誤植','ちいさな誤植']];
+const LX_BOSS=['改竄','偽書','焚書'];
+
+/* ---------- 頁の定義 ---------- */
+function lxHash(s){let h=0;for(const ch of s)h=(h*31+ch.charCodeAt(0))>>>0;return h}
+function lxTplOf(n){const c=CARD[n];const L=(LX_TPL[c.a]||LX_TPL['君主']).filter(t=>!t.r3||c.r===3);return L[lxHash(n)%L.length]}
+function lxDef(id,ann){
+ if(id==='X:汚れ')return {id,name:'汚れ頁',type:'cur',cost:0,fx:{},unplayable:true,person:false,text:'切れない。手札に残ると2ダメージ'};
+ let base,bonus=ann?3:0,person=false,attr='base',name,rar=0,lvl=0;
+ if(LX_BASE[id]){base=LX_BASE[id];name=base.name}
+ else{const c=CARD[id];if(!c)return null;person=true;attr=c.a;name=id;rar=c.r;lvl=Math.max(1,lv(id));
+  base=lxTplOf(id);bonus+=(c.r===3?4:c.r===2?2:0)+(lvl-1)}
+ const fx=Object.assign({},base.fx);let cost=base.cost;
+ const m=base.m;const add=base.third?Math.floor(bonus/3):base.half?Math.floor(bonus/2):bonus;
+ if(m==='both'){fx.dmg+=Math.ceil(bonus/2);fx.blk+=Math.ceil(bonus/2)}else if(m&&fx[m]!=null)fx[m]+=add;
+ /* ★3の節目：2凸で1枚多く引く、4凸でコスト−1 */
+ if(person&&rar===3){if(lvl>=3)fx.draw=(fx.draw||0)+1;if(lvl>=5)cost=Math.max(0,cost-1)}
+ const d={id,name,type:base.type,cost,fx,person,attr,rar,ann:!!ann,tpl:base.id||'',ic:base.ic};
+ d.text=lxFxText(fx);d.target=fx.dmg!=null||!!fx.vul||!!fx.weak||!!fx.stun;return d}
+function lxFxText(f){const a=[];
+ if(f.dmg!=null)a.push(f.hits>1?`攻撃${f.dmg}を${f.hits}回`:`攻撃${f.dmg}`);
+ if(f.dmgAll!=null)a.push(`全体に攻撃${f.dmgAll}`);
+ if(f.blk)a.push(`余白${f.blk}`);
+ if(f.vul)a.push(`動揺${f.vul}`);if(f.weak)a.push(`衰退${f.weak}`);
+ if(f.stun)a.push('敵の次の行動を止める');
+ if(f.draw)a.push(`${f.draw}枚引く`);
+ if(f.str)a.push(`威信＋${f.str}`);
+ if(f.pDraw)a.push(`毎ターン${f.pDraw}枚多く引く`);
+ if(f.pBlkEnd)a.push(`ターン終了時に余白${f.pBlkEnd}`);
+ if(f.pEnergy)a.push(`毎ターンエネルギー＋${f.pEnergy}`);
+ if(f.pAtkBlk)a.push(`攻撃の頁を切るたびに余白${f.pAtkBlk}`);
+ if(f.pAoe)a.push(`毎ターン敵全体に${f.pAoe}ダメージ`);
+ if(f.exhaust)a.push('廃棄');
+ return a.join('。')}
+const LX_IC={
+ sword:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M34 6l8 0 0 8-20 20M14 28l6 6M10 32l6 6M8 40l4-4"/></svg>',
+ shield:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M24 5l15 6v11c0 10-7 17-15 21-8-4-15-11-15-21V11z"/><path d="M24 12v26"/></svg>',
+ quill:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M38 6c-10 2-18 10-22 22l-3 7 6-4c10-3 17-12 19-25z"/><path d="M16 28l-6 14"/></svg>',
+ scroll:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M12 8h22a5 5 0 0 1 0 10H34v22H16a5 5 0 0 1-5-5V12a4 4 0 0 1 4-4z"/><path d="M17 18h11M17 25h11M17 32h8"/></svg>',
+ blot:'<svg viewBox="0 0 48 48"><path d="M24 6c7 0 9 6 14 8s8 7 6 14 2 11-3 15-13 5-18 4-11 2-15-4 1-11-2-16 3-12 8-15S17 6 24 6z" fill="#1a1712" opacity=".85"/></svg>'};
+function lxCardHTML(d,o={}){
+ const art=d.person?(IMG[d.id]?`<img src="${IMG[d.id]}" alt="" loading="lazy" decoding="async">`:silhouette()):`<i class="lxc-ic">${LX_IC[d.ic||'blot']}</i>`;
+ const cls=d.person?ATTR_CLASS(d.attr):d.unplayable?'k-cur':'k-base';
+ return `<div class="lxc ${cls} t-${d.type} ${o.cls||''}" ${o.attrs||''}><span class="lxc-cost">${d.unplayable?'－':d.cost}</span>
+  <div class="lxc-art">${art}</div><div class="lxc-nm">${esc(d.name)}${d.ann?'<b>＋</b>':''}</div>
+  <div class="lxc-ty">${d.person?'★'.repeat(d.rar)+'　':''}${LX_TYPE[d.type]||'状態'}</div><div class="lxc-tx">${esc(d.text)}</div></div>`}
+function lxOwnedPersons(){return CARDS.filter(c=>lv(c.n)&&!isSP(c.n))}
+function lxDeckValid(deck){return deck.filter(id=>LX_BASE[id]||(CARD[id]&&lv(id)&&!isSP(id)))}
+function lxLib(){if(!S.lib||typeof S.lib!=='object')S.lib={};const L=S.lib;
+ if(!Array.isArray(L.deck))L.deck=LX_DEFAULT_DECK.slice();L.deck=lxDeckValid(L.deck);
+ if(L.run===undefined)L.run=null;L.clears=L.clears||0;L.runs=L.runs||0;return L}
+
+/* ---------- クイズ ---------- */
+const lxWait=ms=>new Promise(r=>setTimeout(r,FX.reduce()?Math.min(ms,80):ms));
+function lxQFor(n){const R=S.lib.run;const used=new Set(R?R.usedQ:[]);
+ let pool=Q.filter(q=>(q.q+q.a).includes(n));
+ if(!pool.length)pool=Q.filter(q=>(q.x||'').includes(n));
+ if(!pool.length)pool=Q.filter(q=>q.ch===(CARD[n]||{}).st);
+ if(!pool.length)pool=Q;
+ const fresh=pool.filter(q=>!used.has(q.id));const q=(fresh.length?fresh:pool)[Math.floor(Math.random()*(fresh.length?fresh:pool).length)];
+ if(R){R.usedQ.push(q.id);if(R.usedQ.length>400)R.usedQ.splice(0,100)}return q}
+function lxOverlay(inner){const o=document.createElement('div');o.className='lx-ov';o.id='lxov';o.innerHTML=`<div class="lx-qp">${inner}</div>`;$('#lx').appendChild(o);return o}
+function lxAskQuiz(n){return new Promise(res=>{const q=lxQFor(n);
+ const o=lxOverlay(`<p class="lx-qh"><b>${esc(n)}</b>の頁を切る ── 正解すると、このターンの人物の頁が1.5倍</p>
+  <div class="lx-qbox parch"><p>${esc(q.q)}</p></div><div class="grid2" id="lxq">${shuffle([q.a,...q.d]).map(v=>`<button class="slip" data-v="${esc(v)}">${esc(v)}</button>`).join('')}</div>`);
+ o.querySelectorAll('#lxq .slip').forEach(b=>b.onclick=()=>{const ok=b.dataset.v===q.a;lockSlips('#lxq',q.a);if(!ok)b.classList.add('wrong');
+  setTimeout(()=>{o.querySelector('.lx-qp').insertAdjacentHTML('beforeend',noteHTML(ok?'ok':'ng',ok?'正解！':'不正解……',ok?'このターン、人物の頁が1.5倍':'このターンは強化なし',`${ok?'':`正しくは<b>${esc(q.a)}</b>。`}<span class="who">シミ</span>${esc(q.x||'')}`,'頁を切る'));
+   o.querySelector('#nx').onclick=()=>{o.remove();res(ok)}},450)})})}
+function lxKPool(){const L=Object.values(K).filter(k=>k&&k.who&&S.cleared[k.ch-1]);return L.length?L:Object.values(K).filter(k=>k&&k.who&&k.ch<=5)}
+function lxAskKai(boss){return new Promise(res=>{const R=S.lib.run;const pool=lxKPool();const fresh=pool.filter(k=>!R.usedK.includes(k.id));
+ const k=(fresh.length?fresh:pool)[Math.floor(Math.random()*(fresh.length?fresh:pool).length)];R.usedK.push(k.id);
+ const t=esc(k.t).replace(esc(k.slot),`<span class="slot">${esc(k.slot)}</span>`);
+ const o=lxOverlay(`<p class="lx-qh warn">改変の予告！　${esc(boss)}が歴史を書き換えようとしている</p>
+  <div class="lx-qbox parch"><p>${t}</p></div><p class="lx-qs">この改変を正せる人物は？</p><div class="grid2" id="lxk1">${shuffle([k.who,...k.wd]).map(v=>`<button class="slip ${lv(v)?'owned':''}" data-v="${esc(v)}">${esc(v)}</button>`).join('')}</div>`);
+ const end=(r,head,sub,body)=>{const p=o.querySelector('.lx-qp');p.insertAdjacentHTML('beforeend',noteHTML(r==='full'?'ok':'ng',head,sub,body,'戦闘にもどる'));o.querySelector('#nx').onclick=()=>{o.remove();res(r)}};
+ o.querySelectorAll('#lxk1 .slip').forEach(b=>b.onclick=()=>{lockSlips('#lxk1',k.who);
+  if(b.dataset.v!==k.who){b.classList.add('wrong');setTimeout(()=>end('none','人物がちがう……','大技をそのまま受ける',`正しくは<b>${esc(k.who)}</b>。下線の部分は「<b>${esc(k.ok)}</b>」が正しい。<br><span class="who">シミ</span>${esc(k.cm)}`),450);return}
+  setTimeout(()=>{o.querySelector('.lx-qs').textContent=`${k.who}「正しくは、こうだ」── 下線の部分を直すと？`;
+   const g=o.querySelector('#lxk1');g.id='lxk2';g.innerHTML=shuffle([k.ok,k.slot,...k.ng]).map(v=>`<button class="slip" data-v="${esc(v)}">${esc(v)}</button>`).join('');
+   g.querySelectorAll('.slip').forEach(x=>x.onclick=()=>{lockSlips('#lxk2',k.ok);const ok=x.dataset.v===k.ok;if(!ok)x.classList.add('wrong');
+    setTimeout(()=>ok?end('full','改変を打ち消した！','大技を無効にし、動揺2。このターン人物の頁が1.5倍',`<span class="who">シミ</span>${esc(k.cm)}`)
+     :end('who','内容がちがう……（人物は正解）','大技の威力が半分になる',`下線の部分は「<b>${esc(k.ok)}</b>」が正しい。<br><span class="who">シミ</span>${esc(k.cm)}`),450)})},400)})})}
+
+/* ---------- 戦闘 ---------- */
+let X=null;
+function lxMkEnemy(key,mult=1){const D=LX_EN[key];const hp=Math.round((D.hp[0]+Math.floor(Math.random()*(D.hp[1]-D.hp[0]+1)))*mult);
+ return {key,name:key,hp,max:hp,blk:0,st:{str:0,weak:0,vul:0},stun:0,it:null,li:-1,ai:null,dead:false}}
+let lxUid=0;
+function lxBattle(kind,keys,onWin){const R=S.lib.run;const mult=keys.length>1&&kind==='normal'?.75:1;
+ const pile=R.deck.map((id,i)=>({u:++lxUid,def:lxDef(id,R.ann.includes(i))})).filter(c=>c.def);
+ X={kind,en:keys.map(k=>lxMkEnemy(k,mult)),p:{hp:R.hp,max:R.max,blk:0,en:0,st:{str:0,weak:0,vul:0},discNext:0,handMinus:0},
+  pw:{draw:0,blkEnd:0,en:0,atkBlk:0,aoe:0},draw:shuffle(pile),hand:[],disc:[],exh:[],turn:0,qz:'none',dealt:0,sel:null,tg:0,busy:true,onWin,over:false};
+ lxRenderBase();lxStartTurn()}
+const lxAlive=()=>X.en.filter(e=>!e.dead);
+const lxHas=r=>S.lib.run.relics.includes(r);
+function lxDraw(n){for(let i=0;i<n;i++){if(X.hand.length>=10)break;if(!X.draw.length){if(!X.disc.length)break;X.draw=shuffle(X.disc);X.disc=[]}X.hand.push(X.draw.pop())}}
+function lxIntentOf(e){const D=LX_EN[e.key];const it=Object.assign({},D.ai(e,X));return it}
+function lxStartTurn(){if(X.over)return;X.turn++;X.p.blk=0;X.qz='none';X.dealt=0;X.sel=null;
+ X.p.en=LX_ENERGY+X.pw.en+(X.turn===1&&lxHas('羅針盤')?1:0);
+ if(X.turn===1&&lxHas('ホプロンの盾'))X.p.blk+=10;
+ if(X.pw.aoe)for(const e of lxAlive())lxHitE(e,X.pw.aoe);
+ if(lxCheckWin())return;
+ const n=LX_HAND+X.pw.draw+(X.turn===1&&lxHas('ロゼッタ＝ストーン')?2:0)-X.p.handMinus;X.p.handMinus=0;lxDraw(Math.max(1,n));
+ for(;X.p.discNext>0&&X.hand.length;X.p.discNext--){const i=Math.floor(Math.random()*X.hand.length);X.disc.push(...X.hand.splice(i,1))}X.p.discNext=0;
+ for(const e of lxAlive())e.it=lxIntentOf(e);
+ if(!lxAlive()[X.tg])X.tg=0;
+ const kb=lxAlive().find(e=>e.it&&e.it.kai);X.busy=!!kb;
+ lxRender();
+ if(kb){setTimeout(async()=>{const r=await lxAskKai(kb.name);
+   if(r==='full'){kb.it.cancel=true;kb.st.vul+=2;X.qz='ok';if(lxHas('活版印刷機'))lxDraw(1)}else{if(r==='who')kb.it.half=true;X.qz='ng'}
+   X.busy=false;lxRender()},FX.reduce()?50:650)}}
+function lxPDmg(base,t,person){let v=base+X.p.st.str;if(person&&X.qz==='ok')v*=LX_BONUS;if(X.p.st.weak>0)v*=.75;if(t&&t.st.vul>0)v*=1.5;return Math.max(0,Math.floor(v))}
+function lxPBlk(base,person){return Math.floor(base*(person&&X.qz==='ok'?LX_BONUS:1))}
+function lxFloat(el,txt,cls){const root=$('#lx');if(!root||!el)return;const r=el.getBoundingClientRect(),h=root.getBoundingClientRect();
+ const d=document.createElement('div');d.className='lx-float '+(cls||'');d.textContent=txt;d.style.left=(r.left-h.left+r.width/2)+'px';d.style.top=(r.top-h.top+r.height*.35)+'px';root.appendChild(d);setTimeout(()=>d.remove(),1100)}
+function lxHitE(e,v){const i=X.en.indexOf(e);const el=document.querySelector(`.lx-e[data-e="${i}"]`);
+ const ab=Math.min(e.blk,v);e.blk-=ab;const rest=v-ab;e.hp-=rest;X.dealt+=rest;lxFloat(el,rest?String(rest):'防がれた',rest?'':'blk');if(el)FX.shake(el);
+ if(e.hp<=0){e.hp=0;e.dead=true}
+ else if(e.key==='衍字'&&!e.split&&e.hp<=e.max/2){e.split=true;e.dead=true;const h=e.hp;
+  const a=lxMkEnemy('小さな衍字');a.hp=a.max=h;const b=lxMkEnemy('小さな衍字');b.hp=b.max=h;
+  a.it=lxIntentOf(a);b.it=lxIntentOf(b);X.en.push(a,b);toast('衍字が分裂した！')}}
+function lxHurtP(v){const ab=Math.min(X.p.blk,v);X.p.blk-=ab;const rest=v-ab;X.p.hp-=rest;R_sync();lxFloat($('#lxMe'),rest?'-'+rest:'防いだ',rest?'me':'blk');if(rest)FX.shake('#lx')}
+function R_sync(){S.lib.run.hp=Math.max(0,X.p.hp)}
+function lxCheckWin(){if(X.over)return true;if(lxAlive().length)return false;X.over=true;X.busy=true;lxRender();
+ setTimeout(()=>{const R=S.lib.run;R.hp=Math.max(1,X.p.hp);if(lxHas('修道院の薬草'))R.hp=Math.min(R.max,R.hp+6);const cb=X.onWin;X=null;save();cb()},FX.reduce()?100:900);return true}
+async function lxPlay(u,tgi){if(!X||X.busy||X.over)return;const c=X.hand.find(h=>h.u===u);if(!c)return;const d=c.def;
+ if(d.unplayable){toast('汚れ頁は切れない');return}
+ if(d.cost>X.p.en){toast('エネルギーが足りない');return}
+ const alive=lxAlive();let t=null;if(d.target){t=alive[tgi!=null?tgi:X.tg]||alive[0]}
+ X.busy=true;X.sel=null;
+ if(d.person&&X.qz==='none'){lxRender();const ok=await lxAskQuiz(d.id);X.qz=ok?'ok':'ng';if(ok&&lxHas('活版印刷機'))lxDraw(1)}
+ if(X.over)return;
+ X.p.en-=d.cost;X.hand=X.hand.filter(h=>h.u!==u);
+ const f=d.fx,P=d.person;
+ if(f.dmg!=null&&t){for(let i=0;i<(f.hits||1);i++){if(t.dead)break;lxHitE(t,lxPDmg(f.dmg,t,P));if(i+1<(f.hits||1))await lxWait(160)}}
+ if(f.dmgAll!=null)for(const e of lxAlive())lxHitE(e,lxPDmg(f.dmgAll,e,P));
+ if(f.blk)X.p.blk+=lxPBlk(f.blk,P);
+ if(t&&!t.dead){if(f.vul)t.st.vul+=f.vul;if(f.weak)t.st.weak+=f.weak;if(f.stun)t.stun=1}
+ if(f.str)X.p.st.str+=f.str;
+ if(f.pDraw)X.pw.draw+=f.pDraw;if(f.pBlkEnd)X.pw.blkEnd+=lxPBlk(f.pBlkEnd,P);if(f.pEnergy)X.pw.en+=f.pEnergy;if(f.pAtkBlk)X.pw.atkBlk+=f.pAtkBlk;if(f.pAoe)X.pw.aoe+=lxPBlk(f.pAoe,P);
+ if(d.type==='atk'&&X.pw.atkBlk)X.p.blk+=X.pw.atkBlk;
+ if(f.draw)lxDraw(f.draw);
+ if(d.type==='pow'||f.exhaust)X.exh.push(c);else X.disc.push(c);
+ X.busy=false;if(lxCheckWin())return;if(!lxAlive()[X.tg])X.tg=0;lxRender()}
+async function lxEndTurn(){if(!X||X.busy||X.over)return;X.busy=true;X.sel=null;
+ const dirt=X.hand.filter(c=>c.def.id==='X:汚れ').length;if(dirt){lxHurtP(2*dirt);if(X.p.hp<=0)return lxLose()}
+ X.disc.push(...X.hand);X.hand=[];
+ if(X.pw.blkEnd)X.p.blk+=X.pw.blkEnd;
+ if(X.p.st.weak>0)X.p.st.weak--;if(X.p.st.vul>0)X.p.st.vul--;
+ lxRender();await lxWait(350);
+ for(const e of X.en.slice()){if(e.dead||X.over)continue;e.blk=0;const el=()=>document.querySelector(`.lx-e[data-e="${X.en.indexOf(e)}"]`);
+  if(e.stun){e.stun=0;lxFloat(el(),'動けない','blk');await lxWait(450);continue}
+  const it=e.it||{};
+  if(it.cancel){lxFloat(el(),'改変は打ち消された','blk');await lxWait(500)}
+  else{
+   FX._replay(el(),'lx-act',400);
+   if(it.clr&&X.p.blk){X.p.blk=0;lxFloat($('#lxMe'),'余白が燃えた','me')}
+   if(it.b)e.blk+=it.b;if(it.str)e.st.str+=it.str;if(it.copy&&X.p.st.str>0)e.st.str+=X.p.st.str;
+   if(it.d!=null||it.mir){let base=it.mir?Math.max(5,Math.floor(X.dealt*.5)):it.d;if(it.half)base=Math.floor(base/2);
+    for(let i=0;i<(it.n||1);i++){let v=base+e.st.str;if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;lxHurtP(Math.max(0,Math.floor(v)));lxRender();if(X.p.hp<=0)return lxLose();if(i+1<(it.n||1))await lxWait(220)}}
+   if(it.weak)X.p.st.weak+=it.weak;if(it.vul)X.p.st.vul+=it.vul;
+   if(it.disc)X.p.discNext+=it.disc;
+   if(it.shuf){X.draw=shuffle(X.draw.concat(X.disc));X.disc=[];X.p.handMinus+=1;toast('山札がかき混ぜられた')}
+   if(it.steal){for(let i=0;i<it.steal;i++){if(!X.draw.length){X.draw=shuffle(X.disc);X.disc=[]}if(X.draw.length)X.exh.push(X.draw.pop())}toast(`山札の上から${it.steal}枚抜き取られた`)}
+   if(it.dirty){for(let i=0;i<it.dirty;i++){const c={u:++lxUid,def:lxDef('X:汚れ')};X.draw.splice(Math.floor(Math.random()*(X.draw.length+1)),0,c)}toast(`山札に汚れ頁が${it.dirty}枚混ざった`)}
+   await lxWait(420)}
+  if(LX_EN[e.key].burn&&X.disc.length){const i=Math.floor(Math.random()*X.disc.length);const b=X.disc.splice(i,1)[0];X.exh.push(b);toast(`「${b.def.name}」が燃やされた（この戦闘中）`)}
+  if(e.st.weak>0)e.st.weak--;if(e.st.vul>0)e.st.vul--;
+  lxRender()}
+ lxStartTurn()}
+function lxLose(){X.over=true;X.busy=true;const R=S.lib.run;S.lib.run=null;X=null;saveNow();
+ setTimeout(()=>modal(`<h3>探索は失敗に終わった</h3><p style="line-height:1.8">誤植に押し返されてしまった。<br>デッキを組み直して、もう一度挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu),400)}
+function lxUsePot(i){if(!X||X.busy||X.over)return;const R=S.lib.run;const k=R.pots[i];if(!k)return;
+ askYes(`${k}を使いますか？\n${LX_POT[k]}`,'使う',()=>{R.pots.splice(i,1);
+  if(k==='テリアカ'){X.p.hp=Math.min(X.p.max,X.p.hp+15);R_sync()}
+  if(k==='胡椒')X.p.st.str+=2;if(k==='茶')X.p.en+=2;if(k==='乳香')X.p.blk+=12;
+  if(k==='硝石')for(const e of lxAlive())lxHitE(e,12);
+  save();if(!lxCheckWin())lxRender()})}
+
+/* ---------- 戦闘の表示 ---------- */
+function lxIntentHTML(e){const it=e.it||{};const a=[];
+ if(it.kai)a.push('<b class="kai">改変</b>');
+ if(it.cancel)return '<span class="lx-it ok">打ち消された</span>';
+ if(it.mir)a.push(`<span class="atk">裏写り（このターンに受けたダメージの半分）</span>`);
+ if(it.d!=null){let v=it.d+e.st.str;if(it.half)v=Math.floor(v/2);if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;v=Math.floor(v);a.push(`<span class="atk">攻撃 ${v}${it.n>1?'×'+it.n:''}</span>`)}
+ if(it.clr)a.push('<span class="dbf">余白を燃やす</span>');
+ if(it.b)a.push(`<span class="def">守り</span>`);if(it.str||it.copy)a.push('<span class="buf">強化</span>');
+ if(it.weak||it.vul||it.disc||it.shuf||it.steal||it.dirty)a.push('<span class="dbf">妨害</span>');
+ if(it.half)a.push('<span class="ok">威力半減</span>');
+ return `<span class="lx-it">${a.join('')}</span>`}
+function lxStHTML(st,blk){const a=[];if(blk)a.push(`<i class="s-blk">余白${blk}</i>`);if(st.str)a.push(`<i class="s-str">威信${st.str}</i>`);if(st.vul)a.push(`<i class="s-vul">動揺${st.vul}</i>`);if(st.weak)a.push(`<i class="s-weak">衰退${st.weak}</i>`);return a.join('')}
+function lxRenderBase(){const R=S.lib.run;
+ show(`<div class="lx" id="lx"><div class="bt-bg" style="background-image:url(${IMG['背景_ホーム']||''})"></div><div class="bt-shade"></div>
+  <div class="lx-top"><div class="lx-me" id="lxMe"></div><div class="lx-gear" id="lxGear"></div></div>
+  <div class="lx-bonus" id="lxBonus"></div>
+  <div class="lx-ens" id="lxEn"></div>
+  <div class="lx-bottom"><div class="lx-side"><div class="lx-en" id="lxEnergy"></div><div class="lx-piles" id="lxPiles"></div></div>
+   <div class="lx-hand" id="lxHand"></div>
+   <div class="lx-side r"><button class="lx-end" id="lxEndB">ターン終了</button><button class="lx-info" id="lxInfo">遊び方</button></div></div></div>`);
+ $('#lxEndB').onclick=lxEndTurn;$('#lxInfo').onclick=lxHelp;
+ $('#lxEn').onclick=e=>{const el=e.target.closest('.lx-e');if(!el||!X||X.busy)return;const i=+el.dataset.e;const ai=lxAlive().indexOf(X.en[i]);if(ai<0)return;X.tg=ai;
+  const s=X.sel&&X.hand.find(h=>h.u===X.sel);if(s&&s.def.target){lxPlay(s.u,ai);return}lxRender()};
+ $('#lxHand').onclick=e=>{const el=e.target.closest('.lxc');if(!el||!X||X.busy)return;const u=+el.dataset.u;const c=X.hand.find(h=>h.u===u);if(!c)return;
+  if(c.def.unplayable){toast('汚れ頁は切れない。ターン終了時に手札にあると2ダメージ');return}
+  if(X.sel===u)lxPlay(u);
+  else{X.sel=u;lxRender();if(c.def.cost>X.p.en)toast('エネルギーが足りない')}};}
+function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAlive();
+ $('#lxMe').innerHTML=`<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div><div class="lx-st">${lxStHTML(X.p.st,X.p.blk)}${X.pw.draw?`<i class="s-pw">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw">毎ターン全体${X.pw.aoe}</i>`:''}</div>`;
+ $('#lxGear').innerHTML=R.relics.map(r=>`<span class="lx-relic" title="${esc(LX_RELIC[r])}">${esc(r)}</span>`).join('')+R.pots.map((p,i)=>`<button class="lx-pot" data-p="${i}">${esc(p)}</button>`).join('');
+ $('#lxGear').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>lxUsePot(+b.dataset.p));
+ $('#lxBonus').innerHTML=X.qz==='ok'?'<span class="ok">クイズ正解！　このターン、人物の頁が1.5倍</span>':X.qz==='ng'?'<span>このターンのクイズは終了</span>':'<span>このターン最初に切った人物の頁でクイズ</span>';
+ $('#lxEn').innerHTML=X.en.map((e,i)=>e.dead?'':`<div class="lx-e ${LX_EN[e.key].boss?'boss':''} ${LX_EN[e.key].elite?'elite':''} ${alive[X.tg]===e?'tg':''}" data-e="${i}">
+   ${lxIntentHTML(e)}<div class="blob">${blobSVG(!!LX_EN[e.key].boss)}</div><div class="lx-ename">${esc(e.name)}</div>
+   <div class="lx-hpbar e"><i style="width:${100*e.hp/e.max}%"></i><span>${e.hp}／${e.max}</span></div><div class="lx-st">${lxStHTML(e.st,e.blk)}${e.stun?'<i class="s-weak">次の行動なし</i>':''}</div></div>`).join('');
+ $('#lxEnergy').innerHTML=`<b>${X.p.en}</b><small>／${LX_ENERGY+X.pw.en}</small><span>エネルギー</span>`;
+ $('#lxPiles').innerHTML=`山札 ${X.draw.length}　捨て札 ${X.disc.length}${X.exh.length?`　除外 ${X.exh.length}`:''}`;
+ const n=X.hand.length;$('#lxHand').style.setProperty('--n',n);
+ $('#lxHand').innerHTML=X.hand.map(c=>lxCardHTML(c.def,{cls:(X.sel===c.u?'sel ':'')+(c.def.cost>X.p.en||c.def.unplayable?'dim':''),attrs:`data-u="${c.u}"`})).join('');
+ $('#lxEndB').disabled=X.busy}
+function lxHelp(){modal(`<h3>図書館探索の遊び方</h3><div style="line-height:1.8;font-size:15px">
+ <p>毎ターン、エネルギー3と手札5枚で始まります。頁を<b>タップで選び、もう一度タップで切ります</b>。攻撃の頁は、敵をタップするとその敵を狙います。</p>
+ <p><b>そのターン最初に切った人物の頁</b>でクイズが出ます。正解すると、そのターンに切る人物の頁がすべて1.5倍になります（基本の頁は対象外）。</p>
+ <p>敵の頭上に、次の行動が予告されています。<b>余白</b>はそのターンのダメージを防ぎます（次の自分のターンの始めに消えます）。<b>威信</b>は攻撃が強くなる、<b>動揺</b>は受けるダメージが1.5倍、<b>衰退</b>は与えるダメージが0.75倍です。</p>
+ <p>ボスは3ターンごとに<b>改変の予告</b>をします。改変問題に正解すると、大技を打ち消せます。</p></div>
+ <div class="row" style="justify-content:center"><button class="btn" data-close>わかった</button></div>`)}
+
+/* ---------- 探索（メニュー・デッキ・道のり） ---------- */
+function LibMenu(){const L=lxLib();save();const R=L.run;const deck=L.deck;const persons=deck.filter(id=>!LX_BASE[id]).length;
+ show(`<div class="screen">${topbar('図書館探索')}<div class="scroll"><div class="lx-menu">
+  <div class="pane paper"><h3>書架の奥へ</h3><p style="line-height:1.8;margin:0 0 6px">手に入れた頁でデッキを組み、書架の奥にひそむ誤植を退治しよう。戦闘が5回、休憩が1回、最後にボスが待っている。最後まで進むと、どれかの時代の栞が1枚もらえる。</p>
+   <p class="muted" style="margin:0;font-size:13px">完走 ${L.clears}回　／　挑戦 ${L.runs}回</p></div>
+  ${R?`<div class="pane paper"><h3>探索のつづき</h3><p style="margin:0 0 10px">${LX_NODES.map((n,i)=>`<span class="lx-dot ${i<R.floor?'done':i===R.floor?'now':''}">${n}</span>`).join('')}</p><p style="margin:0 0 12px">HP ${R.hp}／${R.max}　デッキ${R.deck.length}枚</p>
+   <div class="row"><button class="btn" id="lxCont">つづきから</button><button class="btn light" id="lxGive">探索をあきらめる</button></div></div>`
+  :`<div class="pane paper"><h3>デッキ</h3><p style="margin:0 0 10px">${deck.length}枚（人物の頁 ${persons}枚・基本の頁 ${deck.length-persons}枚）</p>
+   <div class="row"><button class="btn" id="lxGo" ${deck.length<LX_MIN?'disabled':''}>探索をはじめる</button><button class="btn light" id="lxDeck">デッキを組む</button><button class="btn light" id="lxHelpB">遊び方</button></div>
+   ${deck.length<LX_MIN?`<p style="color:#b5302a;margin:8px 0 0">デッキは${LX_MIN}枚以上必要です。</p>`:''}</div>`}
+ </div></div></div>`);
+ if(R){$('#lxCont').onclick=()=>FX.pageTurn(lxMap);$('#lxGive').onclick=()=>askYes('探索をあきらめますか？\n栞はもらえません。','あきらめる',()=>{S.lib.run=null;save();LibMenu()})}
+ else{$('#lxGo').onclick=lxStartRun;$('#lxDeck').onclick=()=>FX.pageTurn(DeckEdit);$('#lxHelpB').onclick=lxHelp}}
+function DeckEdit(){const L=lxLib();const deck=L.deck;const persons=lxOwnedPersons().sort((a,b)=>ATTRS.indexOf(a.a)-ATTRS.indexOf(b.a)||b.r-a.r);
+ const cnt=k=>deck.filter(x=>x===k).length;
+ show(`<div class="screen">${topbar('デッキを組む','lib')}<div class="scroll">
+  <div class="pane paper lx-deckhead"><b class="${deck.length<LX_MIN?'ng':''}">${deck.length}枚</b><span>${LX_MIN}枚以上で探索に出られます。人物の頁は1人1枚まで、基本の頁は何枚でも入れられます。</span></div>
+  <div class="pane paper"><h3>基本の頁（図書館の備品）</h3><div class="lx-grid">${Object.keys(LX_BASE).map(k=>`<div class="lx-cell">${lxCardHTML(lxDef(k))}<div class="lx-cnt"><button data-dec="${k}" aria-label="減らす">－</button><b>${cnt(k)}</b><button data-inc="${k}" aria-label="増やす">＋</button></div></div>`).join('')}</div></div>
+  <div class="pane paper"><h3>人物の頁（タップで出し入れ）</h3>${persons.length?`<div class="lx-grid">${persons.map(c=>`<div class="lx-cell" data-tg="${esc(c.n)}">${lxCardHTML(lxDef(c.n),{cls:deck.includes(c.n)?'in':''})}${deck.includes(c.n)?'<span class="lx-in">デッキ</span>':''}</div>`).join('')}</div>`:'<p>まだ人物の頁を持っていません。ドリルで栞を集めて、頁をめくってみよう。</p>'}</div>
+ </div></div>`);
+ const upd=()=>{L.deck=deck;save();DeckEdit()};
+ app.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{deck.push(b.dataset.inc);upd()});
+ app.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const i=deck.lastIndexOf(b.dataset.dec);if(i>=0){deck.splice(i,1);upd()}});
+ app.querySelectorAll('[data-tg]').forEach(d=>d.onclick=()=>{const n=d.dataset.tg;const i=deck.indexOf(n);if(i>=0)deck.splice(i,1);else deck.push(n);upd()})}
+function lxStartRun(){const L=lxLib();if(L.deck.length<LX_MIN){toast(`デッキは${LX_MIN}枚以上必要です`);return}
+ L.runs++;L.run={deck:L.deck.slice(),ann:[],hp:LX_HP,max:LX_HP,floor:0,relics:[],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
+ save();FX.pageTurn(lxMap)}
+function lxMap(){const R=S.lib.run;if(!R)return LibMenu();
+ const label=(n,i)=>i===LX_NODES.length-1?`ボス`:n;
+ show(`<div class="screen">${topbar('図書館探索','lib')}<div class="scroll"><div class="lx-menu">
+  <div class="pane paper"><h3>道のり</h3><div class="lx-path">${LX_NODES.map((n,i)=>`<div class="lx-node ${i<R.floor?'done':i===R.floor?'now':''} n-${n==='？'?'q':n}"><span>${i+1}</span><b>${label(n,i)}</b></div>`).join('<i class="lx-ln"></i>')}</div>
+   <p style="margin:12px 0 0">HP ${R.hp}／${R.max}　デッキ${R.deck.length}枚　ボス：<b>${esc(R.boss)}</b>（${esc(LX_EN[R.boss].note||'')}）</p>
+   ${R.relics.length||R.pots.length?`<p style="margin:8px 0 0;line-height:1.8">${R.relics.map(r=>`<span class="lx-relic">${esc(r)}</span>`).join('')}${R.pots.map(p=>`<span class="lx-relic pot">${esc(p)}</span>`).join('')}</p>`:''}
+   <div class="row" style="margin-top:14px"><button class="btn main" id="lxNext">${R.floor<LX_NODES.length?`${label(LX_NODES[R.floor],R.floor)}へ進む`:'完了'}</button><button class="btn light" id="lxSee">デッキを見る</button></div></div>
+ </div></div></div>`);
+ $('#lxNext').onclick=()=>lxEnter();$('#lxSee').onclick=lxShowDeck}
+function lxShowDeck(){const R=S.lib.run;modal(`<h3>いまのデッキ（${R.deck.length}枚）</h3><div class="lx-grid sm">${R.deck.map((id,i)=>lxCardHTML(lxDef(id,R.ann.includes(i)))).join('')}</div><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)}
+function lxNextFloor(){const R=S.lib.run;R.floor++;R.q=null;save();if(R.floor>=LX_NODES.length)return lxComplete();FX.pageTurn(lxMap)}
+function lxEnter(){const R=S.lib.run;const n=LX_NODES[R.floor];const pick=a=>a[Math.floor(Math.random()*a.length)];
+ if(n==='戦闘'){const keys=pick(R.floor<2?LX_EASY:LX_HARD);crumbleCut(()=>lxBattle('normal',keys,()=>lxReward(false)))}
+ else if(n==='ボス'){bossCutLx(()=>lxBattle('boss',[R.boss],()=>{lxComplete()}))}
+ else if(n==='休憩')lxRest();
+ else{/* ？マス：中身は入ったときに決まる（途中でやめても同じ中身） */
+  if(!R.q){const r=Math.random();R.q=r<.4?'elite':r<.7?'relic':'pot';save()}
+  if(R.q==='elite'){toast('強い誤植が現れた！');crumbleCut(()=>lxBattle('elite',pick(LX_ELITE),()=>lxReward(true)))}
+  else if(R.q==='relic'){const r=lxGiveRelic();modal(`<h3>書架の奥で、なにか見つけた</h3><p style="line-height:1.8">${r?`装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'……と思ったら、ただの埃だった。'}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor)}
+  else{const p=lxGivePot();modal(`<h3>棚の上に小瓶があった</h3><p style="line-height:1.8">${p?`薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれない。少し休んで、HPが10回復した。'}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor)}}}
+function lxGiveRelic(){const R=S.lib.run;const L=Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r));if(!L.length)return null;const r=L[Math.floor(Math.random()*L.length)];R.relics.push(r);save();return r}
+function lxGivePot(){const R=S.lib.run;if(R.pots.length>=3){R.hp=Math.min(R.max,R.hp+10);save();return null}const L=Object.keys(LX_POT);const p=L[Math.floor(Math.random()*L.length)];R.pots.push(p);save();return p}
+function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg" style="background-image:url(${IMG['背景_ホーム']||''})"></div><div class="bt-shade"></div></div>`);
+ const o=document.createElement('div');o.className='bosscut';o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">${esc(S.lib.run.boss)}が現れた！</b><span class="bc-s">3ターンごとの「改変の予告」に気をつけよう</span></div>`;
+ let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#lx').appendChild(o);setTimeout(fin,FX.reduce()?600:2000)}
+function lxReward(elite){const R=S.lib.run;let relic=null;if(elite)relic=lxGiveRelic();
+ const inDeck=new Set(R.deck);let cand=shuffle(lxOwnedPersons().map(c=>c.n).filter(n=>!inDeck.has(n))).slice(0,3);
+ while(cand.length<3)cand.push(shuffle(Object.keys(LX_BASE))[0]);
+ show(`<div class="screen">${topbar('戦闘に勝った','lib')}<div class="scroll"><div class="lx-menu"><div class="pane paper">
+  ${relic?`<p style="line-height:1.8;margin:0 0 12px">装備「<b>${esc(relic)}</b>」を手に入れた。${esc(LX_RELIC[relic])}</p>`:''}
+  <h3>頁を1枚、デッキに加える</h3><p class="muted" style="margin:0 0 10px">加えずに進むこともできます（デッキが少ないほど、狙った頁を引きやすくなります）。</p>
+  <div class="lx-grid">${cand.map((id,i)=>`<div class="lx-cell" data-pick="${i}">${lxCardHTML(lxDef(id))}</div>`).join('')}</div>
+  <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" id="lxSkip">加えずに進む</button></div></div></div></div></div>`);
+ lxNoBack();app.querySelectorAll('[data-pick]').forEach(d=>d.onclick=()=>{R.deck.push(cand[+d.dataset.pick]);toast(`「${lxDef(cand[+d.dataset.pick]).name}」をデッキに加えた`);lxNextFloor()});
+ $('#lxSkip').onclick=lxNextFloor}
+/* 報酬・休憩の画面では「戻る」を出さない（戻ると同じマスをやり直せてしまうため） */
+function lxNoBack(){const b=app.querySelector('.bar .back');if(b)b.style.visibility='hidden'}
+function lxRest(){const R=S.lib.run;const heal=Math.floor(R.max*.3);
+ show(`<div class="screen">${topbar('休憩','lib')}<div class="scroll"><div class="lx-menu"><div class="pane paper"><h3>閲覧室でひと休み</h3>
+  <p style="margin:0 0 12px">HP ${R.hp}／${R.max}。どちらか1つを選べます。</p>
+  <div class="row"><button class="btn" id="lxHeal">休む（HPを${heal}回復）</button><button class="btn light" id="lxAnn">注釈を書き込む（頁を1枚強化）</button></div></div></div></div></div>`);
+ lxNoBack();$('#lxHeal').onclick=()=>{R.hp=Math.min(R.max,R.hp+heal);toast(`HPが${heal}回復した`);lxNextFloor()};
+ $('#lxAnn').onclick=()=>{const L=R.deck.map((id,i)=>({id,i})).filter(o=>!R.ann.includes(o.i));
+  modal(`<h3>注釈を書き込む頁を選ぶ</h3><p class="muted" style="margin:0 0 8px">強化はこの探索のあいだだけ。主な数値が上がります。</p><div class="lx-grid sm">${L.map(o=>`<div class="lx-cell" data-an="${o.i}">${lxCardHTML(lxDef(o.id))}<small class="lx-after">→ ${esc(lxDef(o.id,true).text)}</small></div>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn light" data-close>やめる</button></div>`);
+  document.querySelectorAll('[data-an]').forEach(d=>d.onclick=()=>{R.ann.push(+d.dataset.an);closeModal(true);toast('注釈を書き込んだ');lxNextFloor()})}}
+function lxComplete(){const e=Math.floor(Math.random()*3);S.sh[e]+=1;S.lib.clears=(S.lib.clears||0)+1;S.lib.run=null;saveNow();
+ FX.flash('#ffe6a8');modal(`<h3>探索を完走した！</h3><p style="line-height:1.8;text-align:center">書架の奥の誤植を退治した。<br>お礼に<b>${ERAS[e].k}の栞を1枚</b>もらった。</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
 
 Title();
 cloudInit();
