@@ -5077,6 +5077,8 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
    数値を直すときは、下の LX_BASE（基本の頁）・LX_TPL（人物の頁の型）・LX_EN（敵）・LX_RELIC（装備）・LX_POT（薬）を書きかえる
    ================================================================ */
 const LX_MIN=15, LX_HP=70, LX_ENERGY=3, LX_HAND=5, LX_BONUS=1.5;
+/* 改変の予告の結果：大技の威力にかける倍率（全問正解で4割減、人物だけ正解で2割減） */
+const LX_KAI_CUT={full:.6,who:.8};
 const LX_NODES=['戦闘','戦闘','？','戦闘','戦闘','休憩','ボス'];
 /* 基本の頁：m=注釈で強くなる数値 */
 const LX_BASE={
@@ -5228,8 +5230,8 @@ function lxAskKai(boss){return new Promise(res=>{const R=S.lib.run;const pool=lx
   setTimeout(()=>{o.querySelector('.lx-qs').textContent=`${k.who}「正しくは、こうだ」── 下線の部分を直すと？`;
    const g=o.querySelector('#lxk1');g.id='lxk2';g.innerHTML=shuffle([k.ok,k.slot,...k.ng]).map(v=>`<button class="slip" data-v="${esc(v)}">${esc(v)}</button>`).join('');
    g.querySelectorAll('.slip').forEach(x=>x.onclick=()=>{lockSlips('#lxk2',k.ok);const ok=x.dataset.v===k.ok;if(!ok)x.classList.add('wrong');
-    setTimeout(()=>ok?end('full','改変を打ち消した！','大技を無効にし、動揺2。このターン人物の頁が1.5倍',`<span class="who">シミ</span>${esc(k.cm)}`)
-     :end('who','内容がちがう……（人物は正解）','大技の威力が半分になる',`下線の部分は「<b>${esc(k.ok)}</b>」が正しい。<br><span class="who">シミ</span>${esc(k.cm)}`),450)})},400)})})}
+    setTimeout(()=>ok?end('full','改変を正した！','大技の威力が4割減り、動揺2。このターン人物の頁が1.5倍',`<span class="who">シミ</span>${esc(k.cm)}`)
+     :end('who','内容がちがう……（人物は正解）','大技の威力が2割減る',`下線の部分は「<b>${esc(k.ok)}</b>」が正しい。<br><span class="who">シミ</span>${esc(k.cm)}`),450)})},400)})})}
 
 /* ---------- 戦闘 ---------- */
 let X=null;
@@ -5257,7 +5259,7 @@ function lxStartTurn(){if(X.over)return;X.turn++;X.p.blk=0;X.qz='none';X.dealt=0
  const kb=lxAlive().find(e=>e.it&&e.it.kai);X.busy=!!kb;
  lxRender();
  if(kb){setTimeout(async()=>{const r=await lxAskKai(kb.name);
-   if(r==='full'){kb.it.cancel=true;kb.st.vul+=2;X.qz='ok';if(lxHas('活版印刷機'))lxDraw(1)}else{if(r==='who')kb.it.half=true;X.qz='ng'}
+   if(r==='full'){kb.it.cut=LX_KAI_CUT.full;kb.st.vul+=2;X.qz='ok';if(lxHas('活版印刷機'))lxDraw(1)}else{if(r==='who')kb.it.cut=LX_KAI_CUT.who;X.qz='ng'}
    X.busy=false;lxRender()},FX.reduce()?50:650)}}
 function lxPDmg(base,t,person){let v=base+X.p.st.str;if(person&&X.qz==='ok')v*=LX_BONUS;if(X.p.st.weak>0)v*=.75;if(t&&t.st.vul>0)v*=1.5;return Math.max(0,Math.floor(v))}
 function lxPBlk(base,person){return Math.floor(base*(person&&X.qz==='ok'?LX_BONUS:1))}
@@ -5301,12 +5303,11 @@ async function lxEndTurn(){if(!X||X.busy||X.over)return;X.busy=true;X.sel=null;
  for(const e of X.en.slice()){if(e.dead||X.over)continue;e.blk=0;const el=()=>document.querySelector(`.lx-e[data-e="${X.en.indexOf(e)}"]`);
   if(e.stun){e.stun=0;lxFloat(el(),'動けない','blk');await lxWait(450);continue}
   const it=e.it||{};
-  if(it.cancel){lxFloat(el(),'改変は打ち消された','blk');await lxWait(500)}
-  else{
+  {
    FX._replay(el(),'lx-act',400);
    if(it.clr&&X.p.blk){X.p.blk=0;lxFloat($('#lxMe'),'余白が燃えた','me')}
    if(it.b)e.blk+=it.b;if(it.str)e.st.str+=it.str;if(it.copy&&X.p.st.str>0)e.st.str+=X.p.st.str;
-   if(it.d!=null||it.mir){let base=it.mir?Math.max(5,Math.floor(X.dealt*.5)):it.d;if(it.half)base=Math.floor(base/2);
+   if(it.d!=null||it.mir){let base=it.mir?Math.max(5,Math.floor(X.dealt*.5)):it.d;if(it.cut)base=Math.floor(base*it.cut);
     for(let i=0;i<(it.n||1);i++){let v=base+e.st.str;if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;lxHurtP(Math.max(0,Math.floor(v)));lxRender();if(X.p.hp<=0)return lxLose();if(i+1<(it.n||1))await lxWait(220)}}
    if(it.weak)X.p.st.weak+=it.weak;if(it.vul)X.p.st.vul+=it.vul;
    if(it.disc)X.p.discNext+=it.disc;
@@ -5330,13 +5331,12 @@ function lxUsePot(i){if(!X||X.busy||X.over)return;const R=S.lib.run;const k=R.po
 /* ---------- 戦闘の表示 ---------- */
 function lxIntentHTML(e){const it=e.it||{};const a=[];
  if(it.kai)a.push('<b class="kai">改変</b>');
- if(it.cancel)return '<span class="lx-it ok">打ち消された</span>';
  if(it.mir)a.push(`<span class="atk">裏写り（このターンに受けたダメージの半分）</span>`);
- if(it.d!=null){let v=it.d+e.st.str;if(it.half)v=Math.floor(v/2);if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;v=Math.floor(v);a.push(`<span class="atk">攻撃 ${v}${it.n>1?'×'+it.n:''}</span>`)}
+ if(it.d!=null){let v=it.d+e.st.str;if(it.cut)v=Math.floor(v*it.cut);if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;v=Math.floor(v);a.push(`<span class="atk">攻撃 ${v}${it.n>1?'×'+it.n:''}</span>`)}
  if(it.clr)a.push('<span class="dbf">余白を燃やす</span>');
  if(it.b)a.push(`<span class="def">守り</span>`);if(it.str||it.copy)a.push('<span class="buf">強化</span>');
  if(it.weak||it.vul||it.disc||it.shuf||it.steal||it.dirty)a.push('<span class="dbf">妨害</span>');
- if(it.half)a.push('<span class="ok">威力半減</span>');
+ if(it.cut)a.push(`<span class="ok">威力${Math.round((1-it.cut)*10)}割減</span>`);
  return `<span class="lx-it">${a.join('')}</span>`}
 function lxStHTML(st,blk){const a=[];if(blk)a.push(`<i class="s-blk">余白${blk}</i>`);if(st.str)a.push(`<i class="s-str">威信${st.str}</i>`);if(st.vul)a.push(`<i class="s-vul">動揺${st.vul}</i>`);if(st.weak)a.push(`<i class="s-weak">衰退${st.weak}</i>`);return a.join('')}
 function lxRenderBase(){const R=S.lib.run;
@@ -5371,7 +5371,7 @@ function lxHelp(){modal(`<h3>図書館探索の遊び方</h3><div style="line-he
  <p>毎ターン、エネルギー3と手札5枚で始まります。頁を<b>タップで選び、もう一度タップで切ります</b>。攻撃の頁は、敵をタップするとその敵を狙います。</p>
  <p><b>そのターン最初に切った人物の頁</b>でクイズが出ます。正解すると、そのターンに切る人物の頁がすべて1.5倍になります（基本の頁は対象外）。</p>
  <p>敵の頭上に、次の行動が予告されています。<b>余白</b>はそのターンのダメージを防ぎます（次の自分のターンの始めに消えます）。<b>威信</b>は攻撃が強くなる、<b>動揺</b>は受けるダメージが1.5倍、<b>衰退</b>は与えるダメージが0.75倍です。</p>
- <p>ボスは3ターンごとに<b>改変の予告</b>をします。改変問題に正解すると、大技を打ち消せます。</p></div>
+ <p>ボスは3ターンごとに<b>改変の予告</b>をします。改変問題に全問正解すると大技の威力が4割減り、人物だけ正解なら2割減ります。</p></div>
  <div class="row" style="justify-content:center"><button class="btn" data-close>わかった</button></div>`)}
 
 /* ---------- 探索（メニュー・デッキ・道のり） ---------- */
