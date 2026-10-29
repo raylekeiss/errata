@@ -166,10 +166,16 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .pv-lead b{color:var(--proof);font-weight:600}
 .pv-opts{display:grid;gap:10px}
 /* 主人公の外見の選択 */
-.look-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 16px}
-.look-opt{display:flex;align-items:flex-end;justify-content:center;aspect-ratio:3/4;padding:10px 6px 6px;background:#fff;border:1px solid var(--line);border-radius:3px;cursor:pointer}
-.look-opt img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none}
-.look-opt.on{border:2px solid var(--gold);box-shadow:0 0 0 3px rgba(0,0,0,.06);background:#fffaf0}
+.look-wrap{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:16px;align-items:center;margin:12px 0 16px}
+.look-pv{display:flex;align-items:flex-end;justify-content:center;aspect-ratio:3/4;padding:10px 8px 6px;background:#fff;border:1px solid var(--line);border-radius:3px}
+.look-pv img{max-width:100%;max-height:100%;object-fit:contain}
+.look-lb{font-size:13px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+.look-sw{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.look-dot{width:44px;height:44px;border-radius:50%;background:var(--c);border:2px solid rgba(0,0,0,.18);cursor:pointer;padding:0}
+.look-dot.on{outline:3px solid var(--gold);outline-offset:3px}
+.look-tx{padding:8px 14px;background:#fff;border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.look-tx.on{border:2px solid var(--gold);background:#fffaf0}
+@media (max-width:420px){.look-wrap{grid-template-columns:1fr}.look-pv{max-width:170px;margin:0 auto}}
 @media (min-width:560px){.pv-opts{grid-template-columns:1fr 1fr}}
 .pv-opt{display:grid;gap:6px;align-content:start;text-align:left;padding:16px 18px;background:#fff;color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:3px;min-height:56px;cursor:pointer}
 .pv-opt:hover,.pv-opt:focus-visible{border-color:var(--proof);border-left-color:var(--proof);outline:none}
@@ -3556,6 +3562,15 @@ const IMG={
 "SD_主人公_肌1": "img/sd_hero_s1.webp",
 "SD_主人公_肌2": "img/sd_hero_s2.webp",
 "SD_主人公_肌3": "img/sd_hero_s3.webp",
+"SD_主人公_肌1_濃茶": "img/sd_hero_s1_濃茶.webp",
+"SD_主人公_肌1_黒": "img/sd_hero_s1_黒.webp",
+"SD_主人公_肌1_金": "img/sd_hero_s1_金.webp",
+"SD_主人公_肌2_濃茶": "img/sd_hero_s2_濃茶.webp",
+"SD_主人公_肌2_黒": "img/sd_hero_s2_黒.webp",
+"SD_主人公_肌2_金": "img/sd_hero_s2_金.webp",
+"SD_主人公_肌3_濃茶": "img/sd_hero_s3_濃茶.webp",
+"SD_主人公_肌3_黒": "img/sd_hero_s3_黒.webp",
+"SD_主人公_肌3_金": "img/sd_hero_s3_金.webp",
 "家具_B1": "img/furn_B1.webp",
 "家具_B2": "img/furn_B2.webp",
 "家具_B3": "img/furn_B3.webp",
@@ -4406,18 +4421,25 @@ function startPrologue(o){o=o||{};const play=()=>o.turn?FX.pageTurn(()=>playChap
 function askName(cb){modal(`<h3>名前を入力してください</h3><p class="muted">物語の中で呼ばれる名前です（8文字まで）。</p><input type="text" id="nm" maxlength="8" value="カコ" placeholder="例：カコ"><div class="row"><button class="btn" id="nmok">決定</button></div>`);
  setTimeout(()=>{const n=$('#nm');if(n)n.focus()},50);
  $('#nmok').onclick=()=>{const v=$('#nm').value.trim();if(!v){toast('名前を入れてください');return}S.name=v;save();closeModal();cb()}}
-/* 主人公の外見。いまは肌の色だけ。髪型・髪色（hair, color）は絵ができたら選べるようにする */
-const LOOK_SKINS=[1,2,3];
-function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.includes(l.skin)?l.skin:2,hair:l.hair||null,color:l.color||null}}
-/* 主人公のSDの絵の名前。髪の完成絵（SD_主人公_肌1_ボブ_黒 など）があればそれを、なければ肌だけの素体を使う */
-function heroKey(lk){lk=lk||lookOf();const full='SD_主人公_肌'+lk.skin+(lk.hair?'_'+lk.hair:'')+(lk.color?'_'+lk.color:'');
- return IMG[full]?full:'SD_主人公_肌'+lk.skin}
-function askLook(cb,o){o=o||{};let sel=(S.look&&S.look.skin)||null;
+/* 主人公の外見。肌（skin）・髪色（color）を選ぶ。後ろ髪の長さ（hair）は絵ができたら選べるようにする。前髪は必ずある */
+const LOOK_SKINS=[{k:1,c:'#e6a072'},{k:2,c:'#f7c9a6'},{k:3,c:'#f9dcc6'}];
+const LOOK_COLORS=[{k:'濃茶',c:'#4a2a14'},{k:'黒',c:'#2a1820'},{k:'金',c:'#cdb29f'}];
+const LOOK_HAIRS=[]; // 後ろ髪の長さ（例：{k:'ボブ',n:'ボブ'}）。絵ができたら足す
+function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,
+ color:LOOK_COLORS.some(o=>o.k===l.color)?l.color:'濃茶',hair:LOOK_HAIRS.some(o=>o.k===l.hair)?l.hair:(LOOK_HAIRS[0]||{}).k||null}}
+/* 主人公のSDの絵の名前。肌_後ろ髪_色 → 肌_色 → 肌だけ、の順にあるものを使う */
+function heroKey(lk){lk=Object.assign(lookOf(),lk||{});const b='SD_主人公_肌'+lk.skin;
+ for(const k of [lk.hair&&lk.color?b+'_'+lk.hair+'_'+lk.color:null,lk.color?b+'_'+lk.color:null,b])if(k&&IMG[k])return k;return b}
+function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color:cur.color,hair:cur.hair};
+ const sw=(grp,L)=>`<div class="look-sw" data-g="${grp}">${L.map(x=>`<button class="look-dot${sel[grp]===x.k?' on':''}" data-v="${x.k}" style="--c:${x.c}" aria-label="${grp==='skin'?'肌':'髪'}の色${L.indexOf(x)+1}"></button>`).join('')}</div>`;
  modal(`<h3>${o.title||'職員証の写真'}</h3><p class="muted">あなたの姿を選んでください。あとから箱庭の「キャラ」でいつでも変えられます。</p>
-  <div class="look-opts">${LOOK_SKINS.map(k=>`<button class="look-opt${sel===k?' on':''}" data-skin="${k}" aria-label="姿${k}"><img src="${IMG[heroKey({skin:k})]||''}" alt=""></button>`).join('')}</div>
-  <div class="row">${o.cancel?'<button class="btn light" data-close>やめる</button>':''}<button class="btn" id="lookok" ${sel?'':'disabled'}>決定</button></div>`,o.onCancel);
- document.querySelectorAll('.look-opt').forEach(b=>b.onclick=()=>{sel=+b.dataset.skin;document.querySelectorAll('.look-opt').forEach(x=>x.classList.toggle('on',x===b));$('#lookok').disabled=false});
- $('#lookok').onclick=()=>{if(!sel)return;S.look=Object.assign({},S.look||{},{skin:sel});save();closeModal(true);cb&&cb()}}
+  <div class="look-wrap"><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt=""></div>
+  <div class="look-ctl"><div class="look-lb">肌</div>${sw('skin',LOOK_SKINS)}<div class="look-lb">髪の色</div>${sw('color',LOOK_COLORS)}
+  ${LOOK_HAIRS.length?`<div class="look-lb">後ろ髪</div><div class="look-sw" data-g="hair">${LOOK_HAIRS.map(x=>`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}</div></div>
+  <div class="row">${o.cancel?'<button class="btn light" data-close>やめる</button>':''}<button class="btn" id="lookok">決定</button></div>`,o.onCancel);
+ document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=g==='skin'?+b.dataset.v:b.dataset.v;
+  b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#lookpv').src=IMG[heroKey(sel)]||''});
+ $('#lookok').onclick=()=>{S.look=Object.assign({},S.look||{},sel);save();closeModal(true);cb&&cb()}}
 function pickTutorial(){return 'ハンムラビ'}
 
 /* ---------- modal ---------- */
