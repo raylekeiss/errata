@@ -4392,7 +4392,7 @@ function pickTutorial(){return 'ハンムラビ'}
 
 /* ---------- modal ---------- */
 /* 確認ダイアログ（ブラウザ標準のconfirmは公開ページでは使えないため、画面内に出す） */
-function askYes(msg,yes,onYes,onNo){modal(`<h3>確認</h3><p style="line-height:1.8;white-space:pre-line">${esc(msg)}</p><div class="row"><button class="btn red" id="askY">${esc(yes)}</button><button class="btn light" data-close>やめる</button></div>`,onNo);
+function askYes(msg,yes,onYes,onNo,no='やめる'){modal(`<h3>確認</h3><p style="line-height:1.8;white-space:pre-line">${esc(msg)}</p><div class="row"><button class="btn red" id="askY">${esc(yes)}</button><button class="btn light" data-close>${esc(no)}</button></div>`,onNo);
  $('#askY').onclick=()=>{closeModal(true);onYes()}}
 let modalCb=null;
 function modal(html,cb){closeModal(true);const m=document.createElement('div');m.className='modal';m.id='modal';m.innerHTML=`<div class="box paper">${html}</div>`;document.body.appendChild(m);modalCb=cb||null;
@@ -4533,7 +4533,7 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   <div class="dr-paper parch"><p>${esc(q.q)}</p></div>
   <div class="dr-opts" id="qo">${shuffle([q.a,...q.d]).map(o=>`<button class="slip" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
   <div class="dr-note" id="qr"></div></div>`);
- const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes('ここでやめますか？（ここまでの栞はもらえます）','やめる',back)};
+ const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes('ドリルを中断しますか？（ここまでの栞はもらえます）','中断する',back,null,'ドリルを続ける')};
  document.querySelectorAll('#qo .slip').forEach(b=>b.onclick=()=>{document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=S.qs[q.id]||0;const ok=b.dataset.v===q.a;let g=0;
   const qe=eraOfCh(q.ch);if(ok){g=st===0?3:st===2?5:1;S.qs[q.id]=1;S.sh[qe]=Math.min(16383,S.sh[qe]+g);QZ.gain+=g;QZ.gainE[qe]+=g}else{b.classList.add('wrong');S.qs[q.id]=2;QZ.wrong.push(q)}
@@ -5394,7 +5394,7 @@ function DeckEdit(){const L=lxLib();const deck=L.deck;const persons=lxOwnedPerso
   <div class="pane paper"><h3>基本の頁（図書館の備品）</h3><div class="lx-grid">${Object.keys(LX_BASE).map(k=>`<div class="lx-cell">${lxCardHTML(lxDef(k))}<div class="lx-cnt"><button data-dec="${k}" aria-label="減らす">－</button><b>${cnt(k)}</b><button data-inc="${k}" aria-label="増やす">＋</button></div></div>`).join('')}</div></div>
   <div class="pane paper"><h3>人物の頁（タップで出し入れ）</h3>${persons.length?`<div class="lx-grid">${persons.map(c=>`<div class="lx-cell" data-tg="${esc(c.n)}">${lxCardHTML(lxDef(c.n),{cls:deck.includes(c.n)?'in':''})}${deck.includes(c.n)?'<span class="lx-in">デッキ</span>':''}</div>`).join('')}</div>`:'<p>まだ人物の頁を持っていません。ドリルで栞を集めて、頁をめくってみよう。</p>'}</div>
  </div></div>`);
- const upd=()=>{L.deck=deck;save();DeckEdit()};
+ const upd=()=>{const y=(app.querySelector('.scroll')||{}).scrollTop||0;L.deck=deck;save();DeckEdit();const sc=app.querySelector('.scroll');if(sc)sc.scrollTop=y};
  app.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{deck.push(b.dataset.inc);upd()});
  app.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const i=deck.lastIndexOf(b.dataset.dec);if(i>=0){deck.splice(i,1);upd()}});
  app.querySelectorAll('[data-tg]').forEach(d=>d.onclick=()=>{const n=d.dataset.tg;const i=deck.indexOf(n);if(i>=0)deck.splice(i,1);else deck.push(n);upd()})}
