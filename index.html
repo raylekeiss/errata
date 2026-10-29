@@ -165,6 +165,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .pv-lead{line-height:1.85;margin:0 0 14px}
 .pv-lead b{color:var(--proof);font-weight:600}
 .pv-opts{display:grid;gap:10px}
+/* 主人公の外見の選択 */
+.look-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 16px}
+.look-opt{display:flex;align-items:flex-end;justify-content:center;aspect-ratio:3/4;padding:10px 6px 6px;background:#fff;border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.look-opt img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none}
+.look-opt.on{border:2px solid var(--gold);box-shadow:0 0 0 3px rgba(0,0,0,.06);background:#fffaf0}
 @media (min-width:560px){.pv-opts{grid-template-columns:1fr 1fr}}
 .pv-opt{display:grid;gap:6px;align-content:start;text-align:left;padding:16px 18px;background:#fff;color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:3px;min-height:56px;cursor:pointer}
 .pv-opt:hover,.pv-opt:focus-visible{border-color:var(--proof);border-left-color:var(--proof);outline:none}
@@ -2610,6 +2615,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "l", "s": "シミ", "x": "【道具：なし】ここの本は、ただの記録じゃないんだ。【改行】この本に書いてあることが、そのまま外の世界の歴史になる。【改行】もし事故や故意で本の文字が一文字でも変われば、外の世界の歴史も、人々の記憶も、教科書の内容もそれに合わせてすべて変わってしまうんだ。"},
     {"t": "l", "s": "主人公", "x": "それって、すっごく責任重大ですね。"},
     {"t": "l", "s": "シミ", "x": "うん。だから、一緒にがんばろう。"},
+    {"t": "l", "s": "シミ", "x": "あ、案内の前に、職員証を作らなきゃね。写真を撮るから、そこの書架の前に立ってくれる？"},
+    {"t": "act", "a": "look"},
+    {"t": "l", "s": "シミ", "x": "うん、いい写真。これで正式に、史書庫の司書さんだ。"},
     {"t": "bg", "v": "背景_書庫_階段"},
     {"t": "d", "x": "新しい職場を案内すると言われ、二人で書架の間を歩いていく。【改行】この図書館はとても広いらしい。【改行】何階にも分かれていて、地下深くになればなるほど、宇宙のはじまりに近づいていくそうだ。【改行】大きな吹き抜けの階段を、何階か降りていく。本棚に提げられた看板には「文明の誕生」と書かれている。"},
     {"t": "l", "s": "シミ", "x": "この階から上が、人類の歴史なんだ。それより下の階は、人類の誕生以前の歴史が書かれてる。"},
@@ -2624,20 +2632,20 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "紙魚が光る本を開き、ページのすき間から黒いもちもちとした、黒光りする虫のようななにかをつまみ出した。"},
     {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたして暴れている。紙魚はそれを、慣れた手つきでエプロンのポケットにしまった。"},
     {"t": "d", "x": "【道具：なし】すると、虫がいたところに書かれていた「ラスコー洞窟（ブランズ）」という文字が消えた。【改行】紙魚は空欄になったそこに、羽ペンで「ラスコー洞窟（フランス）」と書き込んだ。"},
-    {"t": "choice", "o": ["今の、何ですか？", "ポケットに入れました……よね？"], "to": [42, 44]},
+    {"t": "choice", "o": ["今の、何ですか？", "ポケットに入れました……よね？"], "to": [45, 47]},
     {"t": "l", "s": "シミ", "x": "あれが誤植。歴史の書き間違いだよ。"},
-    {"t": "jump", "to": 46},
+    {"t": "jump", "to": 49},
     {"t": "l", "s": "シミ", "x": "うん。あとで片付けるから。あれが誤植っていって、歴史の書き間違いなんだ。"},
-    {"t": "jump", "to": 46},
+    {"t": "jump", "to": 49},
     {"t": "l", "s": "シミ", "x": "魔物とでもいうのかな。本の中に、ときどき紛れ込むんだよ。放っておくと増えて、本当の記述をどんどんかじっていく。"},
     {"t": "l", "s": "シミ", "x": "そうなると、外の世界がめちゃくちゃになって、最終的には矛盾に耐えきれなくなって世界が滅びかけてしまうんだ。"},
     {"t": "l", "s": "シミ", "x": "誤植は偶然に発生するものもあるし、故意にできるものもある。俺たち司書の仕事は、主にこれを修正することだよ。"},
     {"t": "l", "s": "シミ", "x": "ちなみに、君は歴史についてどの程度詳しい？"},
-    {"t": "choice", "o": ["……世界史は苦手科目です", "教科書に載ってることくらいなら……？"], "to": [51, 53]},
+    {"t": "choice", "o": ["……世界史は苦手科目です", "教科書に載ってることくらいなら……？"], "to": [54, 56]},
     {"t": "l", "s": "シミ", "x": "じゃあ、俺みたいに自力で本の内容を修正するのは難しいかもね。"},
-    {"t": "jump", "to": 55},
+    {"t": "jump", "to": 58},
     {"t": "l", "s": "シミ", "x": "勉強熱心なのはいいことだね。でも、教科書くらいだと、俺みたいに自分の知識で本の内容を修正するのは難しいかもね。"},
-    {"t": "jump", "to": 55},
+    {"t": "jump", "to": 58},
     {"t": "d", "x": "紙魚がエプロンのポケットから、人物が描かれた一枚の紙を取り出す。紙魚はその紙をこちらに差し出した。"},
     {"t": "l", "s": "シミ", "x": "ちょっと見てみて。これは「頁（ページ）」。【改行】歴史上の人物について書かれた、文字通りこの図書館の本の１ページだよ。【改行】誤植を見つけたら、その出来事にいちばん詳しい人の頁を呼び出して、証言してもらうといい。"},
     {"t": "l", "s": "シミ", "x": "頁（ページ）は、書庫のあちこちの本に挟まってる。"},
@@ -2659,11 +2667,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
     {"t": "d", "x": "最初の仕事を終え、○○はほっと一息をつく。すると、書架の上のほうで、いくつもの本が次々と同時に光り始めた。どれも、オリエントの階の方向だ。", "fx": "flash"},
     {"t": "l", "s": "主人公", "x": "あの本、全部、さっきまでは光ってなかったのに……。"},
     {"t": "l", "s": "シミ", "x": "……うーーん、誤植の増え方が異常だな。どうやら、誰かが意思をもって本を書き換えていっているみたいだ。……新人さん、初日からで悪いんだけど、手伝ってもらえるかな。"},
-    {"t": "choice", "o": ["もちろんです", "……がんばります"], "to": [77, 79]},
+    {"t": "choice", "o": ["もちろんです", "……がんばります"], "to": [80, 82]},
     {"t": "l", "s": "シミ", "x": "ありがとう。心強いよ。"},
-    {"t": "jump", "to": 81},
+    {"t": "jump", "to": 84},
     {"t": "l", "s": "シミ", "x": "うん、それで十分。俺も一緒だから。"},
-    {"t": "jump", "to": 81}
+    {"t": "jump", "to": 84}
   ]},
   {"title": "世界初の男", "ev": [
     {"t": "bg", "v": "背景_書庫_書架"},
@@ -3437,14 +3445,16 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"t": "l", "s": "シミ", "x": "あ、新人さん？　待ってたよ。"},
   {"t": "l", "s": "シミ", "x": "紙魚（シミ）です。ここで司書をしてる。よろしくね。"},
   {"t": "l", "s": "主人公", "x": "○○です。よろしくお願いします。"},
-  {"t": "l", "s": "シミ", "x": "じゃあ早速、業務の説明しちゃうね。"},
+  {"t": "l", "s": "シミ", "x": "あ、その前に職員証を作らなきゃ。写真を撮るから、そこに立ってくれる？"},
+  {"t": "act", "a": "look"},
+  {"t": "l", "s": "シミ", "x": "はい、できあがり。じゃあ早速、業務の説明しちゃうね。"},
   {"t": "l", "s": "シミ", "x": "ここの本には、宇宙が始まってから今までの出来事が、全部書いてある。王様の話も、戦争の話も、どこかの村の小麦の値段もね。"},
-  {"t": "choice", "o": ["何冊あるんですか？", "一人で管理してるんですか？"], "to": [14, 16]},
+  {"t": "choice", "o": ["何冊あるんですか？", "一人で管理してるんですか？"], "to": [16, 18]},
   {"t": "l", "s": "シミ", "x": "数えたことはあるよ。途中でやめたけどね。"},
-  {"t": "jump", "to": 19},
+  {"t": "jump", "to": 21},
   {"t": "l", "s": "シミ", "x": "館長もいるよ。めったに顔を出さないけどね。"},
   {"t": "l", "s": "シミ", "x": "【道具：館長のメモ】用があるときは、その羽根が付いたメモが届くから。"},
-  {"t": "jump", "to": 19},
+  {"t": "jump", "to": 21},
   {"t": "l", "s": "シミ", "x": "【道具：なし】大事なのはここから。ここの本に書いてあることは、そのまま外の世界の歴史になるんだ。"},
   {"t": "l", "s": "シミ", "x": "本の文字が一文字でも変われば、外の世界の歴史も、教科書も、それに合わせて変わっちゃう。"},
   {"t": "d", "x": "そのとき、近くの棚の一冊が白く光った。", "fx": "flash"},
@@ -3452,12 +3462,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"t": "d", "x": "紙魚は光る本を開き、ページのすき間から、黒くてもちもちした、虫のようななにかをつまみ出した。"},
   {"t": "d", "x": "【道具：誤植ミニサイズ】虫は短い手足をじたばたさせている。紙魚はそれを、慣れた手つきでエプロンのポケットにしまった。"},
   {"t": "d", "x": "【道具：なし】虫がいたところに書かれていた「ラスコー洞窟（ブランズ）」という文字が消えている。【改行】紙魚は空欄に、羽ペンで「ラスコー洞窟（フランス）」と書き込んだ。"},
-  {"t": "choice", "o": ["今の、何ですか？", "ポケットに入れました……よね？"], "to": [27, 29]},
+  {"t": "choice", "o": ["今の、何ですか？", "ポケットに入れました……よね？"], "to": [29, 31]},
   {"t": "l", "s": "シミ", "x": "あれが誤植。歴史の書き間違いだよ。"},
-  {"t": "jump", "to": 32},
+  {"t": "jump", "to": 34},
   {"t": "l", "s": "シミ", "x": "うん。あとで片付けるから。"},
   {"t": "l", "s": "シミ", "x": "あれは誤植。歴史の書き間違いだよ。"},
-  {"t": "jump", "to": 32},
+  {"t": "jump", "to": 34},
   {"t": "l", "s": "シミ", "x": "誤植が出ると、本がああやって光って知らせてくれる。見つけたら、正しく直す。これが俺たちの仕事。"},
   {"t": "l", "s": "シミ", "x": "ただ、正しいことを知らないと直せない。というわけで、新人さんにはまず勉強してもらいます。"},
   {"t": "sys", "x": "歴史クイズに正解すると「栞（しおり）」が手に入ります。まずは3問、挑戦してみましょう。"},
@@ -3478,11 +3488,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"t": "d", "x": "ほっとしたのもつかの間、書架の上のほうで、いくつもの本が次々に光り始めた。どれも、オリエントの階のほうだ。", "fx": "flash"},
   {"t": "l", "s": "シミ", "x": "……あれ全部、さっきまで光ってなかったな。誰かが、わざと書き換えてるね。"},
   {"t": "l", "s": "シミ", "x": "新人さん、初日から残業になるけど、いい？"},
-  {"t": "choice", "o": ["はい", "……残業代、出ますか？"], "to": [53, 55]},
+  {"t": "choice", "o": ["はい", "……残業代、出ますか？"], "to": [55, 57]},
   {"t": "l", "s": "シミ", "x": "助かる。じゃあ、上の階に行こうか。"},
-  {"t": "jump", "to": 57},
+  {"t": "jump", "to": 59},
   {"t": "l", "s": "シミ", "x": "館長に聞いておくね。たぶん出ないけど。"},
-  {"t": "jump", "to": 57}
+  {"t": "jump", "to": 59}
 ],
 "furniture": [
   {"k":"B1","n":"司書室のキッチン","e":-1,"t":"floor","g":"家具","w":4,"d":2,"h":46,"c":"#c07a45","p":0,"x":"図書館の奥にある、司書のための台所。焼きたてのクッキーは自由につまんでいいが、本の上で食べるのは禁止されている。"},
@@ -3543,6 +3553,9 @@ const IMG={
 "家具_E5": "img/furn_E5.webp",
 "家具_A11": "img/furn_A11.webp",
 "SD_シミ": "img/sd_shimi.webp",
+"SD_主人公_肌1": "img/sd_hero_s1.webp",
+"SD_主人公_肌2": "img/sd_hero_s2.webp",
+"SD_主人公_肌3": "img/sd_hero_s3.webp",
 "家具_B1": "img/furn_B1.webp",
 "家具_B2": "img/furn_B2.webp",
 "家具_B3": "img/furn_B3.webp",
@@ -3960,7 +3973,7 @@ function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div cla
 function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
-function freshState(){return{name:'',prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
+function freshState(){return{name:'',look:null,prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
   shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,room:{f:[],w:[],inv:{}},t:0}}
 /* 記録の章数をそろえる */
 function normState(N){if(N.oshi==='シミ'&&!N.oshiSet)N.oshi='ハンムラビ';N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
@@ -4190,7 +4203,7 @@ function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.pro
  const sk=$('#skipP');if(sk)sk.onclick=skipPrologue;
  setItem(PL.item);step()}
 document.addEventListener('keydown',e=>{if(!PL||!$('#story')||$('#modal')||$('.vn-choices'))return;if(e.key==='Enter'||e.key===' '){e.preventDefault();advance()}});
-function skipPrologue(){stopType();if(!S.name){askName(()=>skipPrologue());return}
+function skipPrologue(){stopType();if(!S.name){askName(()=>skipPrologue());return}if(!(S.look&&S.look.skin)){askLook(()=>skipPrologue());return}
  if(!S.tutorial){S.tutorial=true;giveCard(pickTutorial());}
  finishPrologue()}
 function finishPrologue(){S.prologue=true;S.prog=null;PL=null;S.tour=true;if(S.sh[0]<5)S.sh[0]=5;autoParty();saveNow();toast('序章を読み終えました');Home()}
@@ -4358,6 +4371,7 @@ function showChoice(e){stopType();const d=document.createElement('div');d.classN
  $('#story').appendChild(d)}
 function runAct(e){
  if(e.a==='name'){if(S.name)return step();askName(()=>step());return}
+ if(e.a==='look'){if(S.look&&S.look.skin)return step();askLook(()=>step());return}
  if(e.a==='tgacha'){if(S.tutorial)return step();if(S.sh[0]<5){S.sh[0]=5;save()}FX.pageTurn(()=>Gacha({tut:true,done:()=>resumeStory()}));return}
  if(e.a==='tbattle'){crumbleCut(()=>Battle(TUTORIAL_K,{tutorial:true,done:()=>resumeStory()}));return}
  if(e.a==='quizopen'){return step()}
@@ -4392,6 +4406,18 @@ function startPrologue(o){o=o||{};const play=()=>o.turn?FX.pageTurn(()=>playChap
 function askName(cb){modal(`<h3>名前を入力してください</h3><p class="muted">物語の中で呼ばれる名前です（8文字まで）。</p><input type="text" id="nm" maxlength="8" value="カコ" placeholder="例：カコ"><div class="row"><button class="btn" id="nmok">決定</button></div>`);
  setTimeout(()=>{const n=$('#nm');if(n)n.focus()},50);
  $('#nmok').onclick=()=>{const v=$('#nm').value.trim();if(!v){toast('名前を入れてください');return}S.name=v;save();closeModal();cb()}}
+/* 主人公の外見。いまは肌の色だけ。髪型・髪色（hair, color）は絵ができたら選べるようにする */
+const LOOK_SKINS=[1,2,3];
+function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.includes(l.skin)?l.skin:2,hair:l.hair||null,color:l.color||null}}
+/* 主人公のSDの絵の名前。髪の完成絵（SD_主人公_肌1_ボブ_黒 など）があればそれを、なければ肌だけの素体を使う */
+function heroKey(lk){lk=lk||lookOf();const full='SD_主人公_肌'+lk.skin+(lk.hair?'_'+lk.hair:'')+(lk.color?'_'+lk.color:'');
+ return IMG[full]?full:'SD_主人公_肌'+lk.skin}
+function askLook(cb,o){o=o||{};let sel=(S.look&&S.look.skin)||null;
+ modal(`<h3>${o.title||'職員証の写真'}</h3><p class="muted">あなたの姿を選んでください。あとから箱庭の「キャラ」でいつでも変えられます。</p>
+  <div class="look-opts">${LOOK_SKINS.map(k=>`<button class="look-opt${sel===k?' on':''}" data-skin="${k}" aria-label="姿${k}"><img src="${IMG[heroKey({skin:k})]||''}" alt=""></button>`).join('')}</div>
+  <div class="row">${o.cancel?'<button class="btn light" data-close>やめる</button>':''}<button class="btn" id="lookok" ${sel?'':'disabled'}>決定</button></div>`,o.onCancel);
+ document.querySelectorAll('.look-opt').forEach(b=>b.onclick=()=>{sel=+b.dataset.skin;document.querySelectorAll('.look-opt').forEach(x=>x.classList.toggle('on',x===b));$('#lookok').disabled=false});
+ $('#lookok').onclick=()=>{if(!sel)return;S.look=Object.assign({},S.look||{},{skin:sel});save();closeModal(true);cb&&cb()}}
 function pickTutorial(){return 'ハンムラビ'}
 
 /* ---------- modal ---------- */
@@ -4753,11 +4779,12 @@ function frameArt(o){const f=FRAME,a=NW.a,b=NW.b,BW=f.w*a,h=f.h;const id='nwc'+(
  <rect x="4" y="4" width="${BW-8}" height="${h-8}" fill="#e9dfc6"/><clipPath id="${id}"><rect x="6" y="6" width="${BW-12}" height="${h-12}"/></clipPath>
  ${src?`<image href="${src}" x="6" y="6" width="${BW-12}" height="${h-12}" preserveAspectRatio="xMidYMin slice" clip-path="url(#${id})"/>`:`<text x="${BW/2}" y="${h/2}" font-size="11" text-anchor="middle" fill="#5a4220">${esc(o.n.slice(0,4))}</text>`}</g>`}
 /* SDキャラ（絵がないあいだは、色つきの簡単なシルエット） */
-function sdVariants(n){let k=1;while(IMG['SD_'+n+'_'+(k+1)])k++;return IMG['SD_'+n]?k:1}
+function sdBase(n){return n==='主人公'?heroKey():'SD_'+n}
+function sdVariants(n){const b=sdBase(n);let k=1;while(IMG[b+'_'+(k+1)])k++;return IMG[b]?k:1}
 function sdArt(o){const c=SDBY[o.n]||{c:'#888'};const v=o.v||0;const BW=96,BH=198,cx=48,fy=174;
- const key=v?'SD_'+o.n+'_'+(v+1):'SD_'+o.n;
+ const base=sdBase(o.n),key=v?base+'_'+(v+1):base;
  /* SDの絵：余白を切った絵を、足元が床のマスの中心に来るように、高さSD_Hで表示（横幅は絵の比率しだい） */
- const src=IMG[key]||IMG['SD_'+o.n];
+ const src=IMG[key]||IMG[base];
  if(src){const H=SD_H,W=H*imgAspect(src);return `<ellipse cx="${cx}" cy="${fy+1}" rx="22" ry="8" fill="rgba(0,0,0,.25)"/><image href="${src}" x="${(cx-W/2).toFixed(1)}" y="${fy+3-H}" width="${W.toFixed(1)}" height="${H}" preserveAspectRatio="none"/>`}
  const col=c.c,dk=shade(col,-.35);
  return `<ellipse cx="${cx}" cy="${fy}" rx="26" ry="11" fill="rgba(0,0,0,.25)"/>
@@ -4765,7 +4792,7 @@ function sdArt(o){const c=SDBY[o.n]||{c:'#888'};const v=o.v||0;const BW=96,BH=19
  <rect x="${cx-11}" y="${fy-8}" width="8" height="9" rx="3" fill="${dk}"/><rect x="${cx+3}" y="${fy-8}" width="8" height="9" rx="3" fill="${dk}"/>
  <circle cx="${cx}" cy="${fy-74}" r="27" fill="${col}" stroke="${dk}" stroke-width="1.5"/>
  <ellipse cx="${cx-9}" cy="${fy-72}" rx="3" ry="4" fill="${dk}"/><ellipse cx="${cx+9}" cy="${fy-72}" rx="3" ry="4" fill="${dk}"/>`}
-function sdLabel(o){if(IMG['SD_'+o.n])return '';const c=SDBY[o.n]||{c:'#888'};return `<text x="48" y="144" font-size="11" text-anchor="middle" fill="${shade(c.c,-.45)}" font-weight="700">${esc(nameOf(o).slice(0,5))}</text>`}
+function sdLabel(o){if(IMG[sdBase(o.n)])return '';const c=SDBY[o.n]||{c:'#888'};return `<text x="48" y="144" font-size="11" text-anchor="middle" fill="${shade(c.c,-.45)}" font-weight="700">${esc(nameOf(o).slice(0,5))}</text>`}
 function thumbSVG(f){if(f.t==='wall'){const BW=f.w*NW.a,BH=f.h+f.w*NW.b;return `<svg viewBox="-4 -4 ${BW+8} ${BH+8}" class="nw-th">${wallArt(f)}</svg>`}
  const BW=(f.w+f.d)*NW.a,BH=(f.w+f.d)*NW.b+f.h;return `<svg viewBox="-4 -4 ${BW+8} ${BH+8}" class="nw-th">${floorArt(f)}</svg>`}
 function sdThumb(n){const o={k:'SD',n,x:0,y:0};return `<svg viewBox="0 0 96 198" class="nw-th">${sdArt(o)}${sdLabel(o)}</svg>`}
@@ -4980,12 +5007,13 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
 
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
- modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">箱庭にいるキャラは、空いている床をふらふら歩きます。</p>
+ modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">箱庭にいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿を変える</button></div>
  <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>`);
  document.querySelectorAll('.nw-crow').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
   if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1)}
   else{const o=findFloorSpot('SD',n);if(!o){toast('床に空きがありません');return}R.f.push(o)}
-  save();nwSelBar();nwDraw();nwCharaPanel()})}
+  save();nwSelBar();nwDraw();nwCharaPanel()});
+ const lb=$('#nwLook');if(lb)lb.onclick=()=>askLook(()=>{nwDraw();nwCharaPanel()},{title:'姿を変える',cancel:true,onCancel:nwCharaPanel})}
 
 /* ---- ショップ（栞と交換） ---- */
 function nwShop(){const e=NWS.tab;const cat=NWS.scat||'すべて';const CH=['すべて',...FCATS,'壁紙・床'];
