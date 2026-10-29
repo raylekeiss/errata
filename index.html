@@ -4968,7 +4968,7 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
  else{const own=t=>SKINS.filter(f=>f.t===t&&skinOwned(f.k));
   const row=(t,cur)=>`<div class="nw-inv sk">${own(t).map(f=>`<button class="nw-cell${f.k===cur?' on':''}" data-sk="${f.k}">${skinPreview(f)}<span>${esc(f.n)}</span>${f.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`;
   body=`<h4 class="nw-h4">壁紙</h4>${row('wall',R.wall)}<h4 class="nw-h4">床</h4>${row('floor',R.floor)}`}
- modal(`<div class="mhead"><h3>持ち物</h3><button class="btn light" data-close>閉じる</button></div>${nwChips(TABS,cat,'it')}<div class="nw-pane">${body}</div><div class="row"><button class="btn light" data-close>閉じる</button></div>`);
+ modal(`<div class="mhead"><h3>持ち物</h3><button class="btn light" data-close>閉じる</button></div>${nwChips(TABS,cat,'it')}<div class="nw-pane">${body}</div>`);
  document.querySelectorAll('.nw-chips [data-it]').forEach(b=>b.onclick=()=>nwInventory(b.dataset.it));
  const placed=(kind,o)=>{NWS.sel={kind,o};closeModal(true);save();nwSelBar();nwDraw()};
  document.querySelectorAll('.nw-cell[data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];if(nwSpare(f.k)<=0)return;
@@ -4981,8 +4981,7 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
  modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">箱庭にいるキャラは、空いている床をふらふら歩きます。</p>
- <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>
- <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
+ <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>`);
  document.querySelectorAll('.nw-crow').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
   if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1)}
   else{const o=findFloorSpot('SD',n);if(!o){toast('床に空きがありません');return}R.f.push(o)}
@@ -4998,8 +4997,7 @@ function nwShop(){const e=NWS.tab;const cat=NWS.scat||'すべて';const CH=['す
  <div class="nw-have">${ribbon(e)}<span>${ERAS[e].k}の栞</span><b>${S.sh[e]}</b>枚</div>
  <div class="nw-shop">${L.map(f=>{const own=S.room.inv[f.k]||0;return row(thumbSVG(f),f,own,`${catOf(f)}・${f.t==='wall'?`幅${f.w}`:`${f.w}×${f.d}マス`}${own?`　持っている数：${own}`:''}`)}).join('')}
  ${SK.map(f=>row(skinPreview(f),f,skinOwned(f.k),f.t==='wall'?'壁紙':'床')).join('')}
- ${L.length+SK.length?'':'<p class="muted">この時代のこの分類の品はありません。</p>'}</div>
- <div class="row"><button class="btn light" data-close>閉じる</button></div>`);
+ ${L.length+SK.length?'':'<p class="muted">この時代のこの分類の品はありません。</p>'}</div>`);
  document.querySelectorAll('.nw-tabs [data-e]').forEach(b=>b.onclick=()=>{NWS.tab=+b.dataset.e;nwShop()});
  document.querySelectorAll('.nw-chips [data-sc]').forEach(b=>b.onclick=()=>{NWS.scat=b.dataset.sc;nwShop()});
  const buy=(f,give)=>askYes(`${ERAS[e].k}の栞${f.p}枚で「${f.n}」と交換しますか？`,'交換する',()=>{if(S.sh[e]<f.p){toast('栞が足りません');return}
