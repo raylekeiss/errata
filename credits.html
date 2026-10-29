@@ -24,7 +24,8 @@ ul{list-style:none;margin:0;padding:0}
 li{padding:10px 0;border-top:1px solid rgba(120,88,40,.3);font-size:13px;line-height:1.7}
 li b{font-family:var(--serif);font-size:16px;color:#2a2320;margin-right:.6em}
 li a{color:var(--red);word-break:break-all}
-.lic{display:inline-block;font-size:11px;font-weight:700;padding:0 6px;border-radius:2px;background:#2a2320;color:var(--paper);margin-right:6px}
+li a.lic{color:var(--paper)}
+.lic,a.lic{display:inline-block;text-decoration:none;font-size:11px;font-weight:700;padding:0 6px;border-radius:2px;background:#2a2320;color:var(--paper);margin-right:6px}
 .muted{color:var(--mute)}
 </style>
 </head>
@@ -34,6 +35,7 @@ li a{color:var(--red);word-break:break-all}
   <div class="paper">
     <h2>人物の肖像について</h2>
     <p>人物の頁（カード）に使っている肖像は、Wikimedia Commons で公開されている画像を、縮小・切り抜きして使っています。作者とライセンスは下の一覧のとおりです。</p>
+    <p>どの画像も、縮小・切り抜き・変形（箱庭の家具では壁や床の傾きに合わせた変形と額縁の追加）をしています。ライセンス名を押すと、ライセンスの内容が開きます。</p>
     <p>CC BY-SA のライセンスの画像を加工したものは、同じ CC BY-SA のライセンスのもとで扱われます。</p>
     <p>箱庭の家具のうち、写真を使ったもの（【箱庭】と付けたもの）も同じく Wikimedia Commons の画像を加工しています。</p>
     <p>シミ・コンラッドなどの登場人物の絵は、このゲームの制作者によるものです。</p>
@@ -52,7 +54,8 @@ function render(){const q=document.getElementById('q').value.trim();
   const names=Object.keys(DATA).filter(n=>!q||n.includes(q)).sort((a,b)=>a.localeCompare(b,'ja'));
   document.getElementById('count').textContent=names.length+'件';
   document.getElementById('list').innerHTML=names.map(n=>{const c=DATA[n];
-    return `<li><b>${esc(n)}</b><span class="lic">${esc(c.license)}</span>作者：${esc(c.author)}<br><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.file)}</a></li>`}).join('')}
+    const m=/^CC (BY(?:-SA)?) ([\d.]+)$/.exec(c.license||'');const lu=m?`https://creativecommons.org/licenses/${m[1].toLowerCase()}/${m[2]}/deed.ja`:'';
+    return `<li><b>${esc(n)}</b>${lu?`<a class="lic" href="${lu}" target="_blank" rel="noopener">${esc(c.license)}</a>`:`<span class="lic">${esc(c.license)}</span>`}作者：${esc(c.author)}<br><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.file)}</a></li>`}).join('')}
 fetch('credits.json').then(r=>r.json()).then(d=>{DATA=d;render()}).catch(()=>{document.getElementById('count').textContent='一覧を読み込めませんでした。'});
 document.getElementById('q').addEventListener('input',render);
 </script>
