@@ -4802,15 +4802,18 @@ function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
  if(R.v!==2){R.f.forEach(o=>{o.x*=2;o.y*=2});R.w.forEach(o=>{o.p*=2});R.v=2}
  /* 最初から持っている家具（e:-1）。はじめて箱庭を開いたときは、空いていれば置いておく */
  FURN.filter(f=>f.e===-1).forEach(f=>{if(!(R.inv[f.k]>0))R.inv[f.k]=1});
- if(!R.init){R.init=1;[{k:'B1',x:1,y:0,m:0},{k:'B3',x:9,y:0,m:0},{k:'B2',x:9,y:3,m:0},{k:'B4',x:0,y:4,m:1}].forEach(o=>{if(FBY[o.k]&&nwPlaced(o.k)<R.inv[o.k]&&floorFree(o))R.f.push(o)})}
+ if(!R.init){R.init=1;[{k:'B1',x:1,y:0,m:0},{k:'B3',x:9,y:0,m:0},{k:'B2',x:9,y:3,m:0},{k:'B4',x:0,y:4,m:1}].forEach(o=>{if(FBY[o.k]&&nwPlaced(o.k)<(R.inv[o.k]||0)&&floorFree(o))R.f.push(o)})}
  /* 向きを変えられない家具（文字入りなど）は、もとの向きに戻す */
  R.f.forEach(o=>{const f=FBY[o.k];if(f&&f.nf&&o.m&&!IMG['家具_'+o.k+'_m']&&f.w===f.d)o.m=0});
  R.f=R.f.filter(o=>o.k==='SD'?(SDBY[o.n]&&SDBY[o.n].ok()):(FBY[o.k]&&FBY[o.k].t==='floor'));
  R.w=R.w.filter(o=>o.k==='頁'?(CARD[o.n]&&lv(o.n)&&!isSP(o.n)):(FBY[o.k]&&FBY[o.k].t==='wall'));
  return R}
-function skinOwned(k){const f=SKBY[k];return !!f&&(f.p===0||S.room.skins.includes(k))}
+/* テスト用アカウント（学校アカウント版でスプレッドシートの持ち主など）は、家具を全種類5つずつ持っている扱い。記録には書きこまない */
+function nwTester(){return !!(CL&&CL.tester)}
+function invOf(k){const n=(S.room.inv[k]||0);return nwTester()?Math.max(5,n):n}
+function skinOwned(k){const f=SKBY[k];return !!f&&(f.p===0||nwTester()||S.room.skins.includes(k))}
 function nwPlaced(k){const R=S.room;return R.f.filter(o=>o.k===k).length+R.w.filter(o=>o.k===k).length}
-function nwSpare(k){return (S.room.inv[k]||0)-nwPlaced(k)}
+function nwSpare(k){return invOf(k)-nwPlaced(k)}
 const g2s=(x,y)=>[NW.OX+(x-y)*NW.a,NW.OY+(x+y)*NW.b];
 function s2g(X,Y){const u=(X-NW.OX)/NW.a,v=(Y-NW.OY)/NW.b;return[(u+v)/2,(v-u)/2]}
 function defOf(o){return o.k==='SD'?SDDEF:o.k==='頁'?FRAME:FBY[o.k]}
@@ -4970,7 +4973,7 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
 
 /* ---- 画面 ---- */
 function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab||0,z:{s:1,x:0,y:0}};NWPTR.clear();
- show(`<div class="screen nw-screen">${topbar('箱庭')}
+ show(`<div class="screen nw-screen">${topbar(nwTester()?'箱庭（テスト用：家具すべて5つずつ）':'箱庭')}
  <div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="箱庭"></svg>
   <button class="nw-reset" id="nwReset" hidden aria-label="全体を表示">全体</button>
   <div class="nw-bub" id="nwBub" hidden></div>
@@ -5066,7 +5069,7 @@ function nwChips(list,cur,attr){return `<div class="nw-chips">${list.map(c=>`<bu
 /* ---- 持ち物（家具・頁・壁紙と床）。分類ごとに切りかえ ---- */
 function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=cat;const TABS=[...FCATS,'頁','壁紙・床'];
  let body='';
- if(FCATS.includes(cat)){const L=FURN.filter(f=>catOf(f)===cat&&(R.inv[f.k]||0)>0);
+ if(FCATS.includes(cat)){const L=FURN.filter(f=>catOf(f)===cat&&invOf(f.k)>0);
   body=L.length?`<div class="nw-inv">${L.map(f=>{const n=nwSpare(f.k);return `<button class="nw-cell" data-k="${f.k}" ${n>0?'':'disabled'}>${thumbSVG(f)}<span>${esc(f.n)}</span><small>${n>0?`のこり${n}`:'全部置いてあります'}</small></button>`}).join('')}</div>`
    :`<p class="muted">この分類の家具は、まだ持っていません。「ショップ」で栞と交換できます。</p>`}
  else if(cat==='頁'){const hung=new Set(R.w.filter(o=>o.k==='頁').map(o=>o.n));const pages=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!hung.has(c.n));
@@ -5167,7 +5170,7 @@ function cloudPush(force){if(!CLOUD||!CL.ready||CL.busy)return;if(!CL.dirty&&!fo
 function cloudInit(){if(!CLOUD)return;let done=false;
  const ready=()=>{if(done)return;done=true;CL.ready=true;if($('#title'))Title()};
  setTimeout(()=>{if(!done){toast('学校アカウントの記録を読めませんでした。この端末の記録で続けます');ready()}},12000);
- google.script.run.withSuccessHandler(r=>{if(done)return;
+ google.script.run.withSuccessHandler(r=>{if(done)return;CL.tester=!!(r&&r.tester);
    let local=null;try{local=JSON.parse(localStorage.getItem(SAVE_KEY)||'null')}catch(e){}
    let cloud=null;try{cloud=r&&r.data?JSON.parse(r.data):null}catch(e){}
    if(cloud&&(!local||(cloud.t||0)>(local.t||0))){CL.mem=JSON.stringify(cloud);try{localStorage.setItem(SAVE_KEY,CL.mem)}catch(e){}}

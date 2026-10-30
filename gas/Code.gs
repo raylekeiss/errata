@@ -37,12 +37,27 @@ function findRow_(sh, email) {
   return hit ? hit.getRow() : 0;
 }
 
+/**
+ * テスト用アカウントかどうか（箱庭の家具を全種類5つずつ持っている扱いになる。記録には残らない）
+ * ・このスプレッドシートの持ち主は自動でテスト用
+ * ・ほかの先生を足したいときは「プロジェクトの設定 → スクリプト プロパティ」に
+ *   TESTERS ＝ メールアドレス（複数ならカンマ区切り）を追加する
+ */
+function isTester_(email) {
+  try {
+    const owner = SpreadsheetApp.getActive().getOwner();
+    if (owner && owner.getEmail() === email) return true;
+  } catch (e) {}
+  const list = String(PropertiesService.getScriptProperties().getProperty('TESTERS') || '');
+  return list.split(',').map(s => s.trim()).filter(Boolean).indexOf(email) >= 0;
+}
+
 /** ゲームを開いた生徒の記録を返す */
 function getSave() {
   const email = me_();
   const sh = sheet_();
   const row = findRow_(sh, email);
-  return { email: email, data: row ? String(sh.getRange(row, COL_DATA).getValue() || '') : null };
+  return { email: email, tester: isTester_(email), data: row ? String(sh.getRange(row, COL_DATA).getValue() || '') : null };
 }
 
 /** ゲームから送られてきた記録を保存する */
