@@ -1198,6 +1198,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   .lxs-hero{top:70px}.lxs-hero h1{font-size:30px}.lxs-hero p{font-size:13px;line-height:1.7}.lxs-flo.big{margin:6px 0 8px}
   .lxs-deck svg{min-width:96px}.lxs-go{min-height:52px;font-size:17px}.lxs-b.light{min-height:48px}
 }
+
+/* 図書館探索の戦闘：背景を暗くぼかす */
+.lx .lx-bg{inset:-24px;filter:blur(6px) brightness(.45) saturate(.9)}
 </style>
 </head>
 <body>
@@ -5562,7 +5565,7 @@ function lxIntentHTML(e){const it=e.it||{};const a=[];
  return `<span class="lx-it" data-intent="${X.en.indexOf(e)}">${a.join('')}</span>`}
 function lxStHTML(st,blk){const a=[];if(blk)a.push(`<i class="s-blk" data-term="余白">余白${blk}</i>`);if(st.str)a.push(`<i class="s-str" data-term="威信">威信${st.str}</i>`);if(st.vul)a.push(`<i class="s-vul" data-term="動揺">動揺${st.vul}</i>`);if(st.weak)a.push(`<i class="s-weak" data-term="衰退">衰退${st.weak}</i>`);return a.join('')}
 function lxRenderBase(){const R=S.lib.run;
- show(`<div class="lx" id="lx"><div class="bt-bg" style="background-image:url(${IMG['背景_ホーム']||''})"></div><div class="bt-shade"></div>
+ show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="bt-shade"></div>
   <div class="lx-top"><div class="lx-me" id="lxMe"></div><div class="lx-gear" id="lxGear"></div></div>
   <div class="lx-bonus" id="lxBonus"></div>
   <div class="lx-ens" id="lxEn"></div><div class="lx-detail" id="lxDetail"></div>
@@ -5705,7 +5708,7 @@ function lxEnter(){const R=S.lib.run;const n=LX_NODES[R.floor];const pick=a=>a[M
   else{const p=lxGivePot();modal(`<h3>棚の上に小瓶があった</h3><p style="line-height:1.8">${p?`薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれない。少し休んで、HPが10回復した。'}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor)}}}
 function lxGiveRelic(){const R=S.lib.run;const L=Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r));if(!L.length)return null;const r=L[Math.floor(Math.random()*L.length)];R.relics.push(r);save();return r}
 function lxGivePot(){const R=S.lib.run;if(R.pots.length>=3){R.hp=Math.min(R.max,R.hp+10);save();return null}const L=Object.keys(LX_POT);const p=L[Math.floor(Math.random()*L.length)];R.pots.push(p);save();return p}
-function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg" style="background-image:url(${IMG['背景_ホーム']||''})"></div><div class="bt-shade"></div></div>`);
+function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="bt-shade"></div></div>`);
  const o=document.createElement('div');o.className='bosscut';o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">${esc(S.lib.run.boss)}が現れた！</b><span class="bc-s">3ターンごとの「改変の予告」に気をつけよう</span></div>`;
  let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#lx').appendChild(o);setTimeout(fin,FX.reduce()?600:2000)}
 function lxReward(elite){const R=S.lib.run;let relic=null;if(elite)relic=lxGiveRelic();
