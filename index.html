@@ -3563,14 +3563,32 @@ const IMG={
 "SD_主人公_肌2": "img/sd_hero_s2.webp",
 "SD_主人公_肌3": "img/sd_hero_s3.webp",
 "SD_主人公_肌1_濃茶": "img/sd_hero_s1_濃茶.webp",
-"SD_主人公_肌1_黒": "img/sd_hero_s1_黒.webp",
 "SD_主人公_肌1_金": "img/sd_hero_s1_金.webp",
+"SD_主人公_肌1_黒": "img/sd_hero_s1_黒.webp",
+"SD_主人公_肌1_ポニーテール_濃茶": "img/sd_hero_s1_ポニーテール_濃茶.webp",
+"SD_主人公_肌1_ポニーテール_金": "img/sd_hero_s1_ポニーテール_金.webp",
+"SD_主人公_肌1_ポニーテール_黒": "img/sd_hero_s1_ポニーテール_黒.webp",
+"SD_主人公_肌1_短髪_濃茶": "img/sd_hero_s1_短髪_濃茶.webp",
+"SD_主人公_肌1_短髪_金": "img/sd_hero_s1_短髪_金.webp",
+"SD_主人公_肌1_短髪_黒": "img/sd_hero_s1_短髪_黒.webp",
 "SD_主人公_肌2_濃茶": "img/sd_hero_s2_濃茶.webp",
-"SD_主人公_肌2_黒": "img/sd_hero_s2_黒.webp",
 "SD_主人公_肌2_金": "img/sd_hero_s2_金.webp",
+"SD_主人公_肌2_黒": "img/sd_hero_s2_黒.webp",
+"SD_主人公_肌2_ポニーテール_濃茶": "img/sd_hero_s2_ポニーテール_濃茶.webp",
+"SD_主人公_肌2_ポニーテール_金": "img/sd_hero_s2_ポニーテール_金.webp",
+"SD_主人公_肌2_ポニーテール_黒": "img/sd_hero_s2_ポニーテール_黒.webp",
+"SD_主人公_肌2_短髪_濃茶": "img/sd_hero_s2_短髪_濃茶.webp",
+"SD_主人公_肌2_短髪_金": "img/sd_hero_s2_短髪_金.webp",
+"SD_主人公_肌2_短髪_黒": "img/sd_hero_s2_短髪_黒.webp",
 "SD_主人公_肌3_濃茶": "img/sd_hero_s3_濃茶.webp",
-"SD_主人公_肌3_黒": "img/sd_hero_s3_黒.webp",
 "SD_主人公_肌3_金": "img/sd_hero_s3_金.webp",
+"SD_主人公_肌3_黒": "img/sd_hero_s3_黒.webp",
+"SD_主人公_肌3_ポニーテール_濃茶": "img/sd_hero_s3_ポニーテール_濃茶.webp",
+"SD_主人公_肌3_ポニーテール_金": "img/sd_hero_s3_ポニーテール_金.webp",
+"SD_主人公_肌3_ポニーテール_黒": "img/sd_hero_s3_ポニーテール_黒.webp",
+"SD_主人公_肌3_短髪_濃茶": "img/sd_hero_s3_短髪_濃茶.webp",
+"SD_主人公_肌3_短髪_金": "img/sd_hero_s3_短髪_金.webp",
+"SD_主人公_肌3_短髪_黒": "img/sd_hero_s3_短髪_黒.webp",
 "家具_B1": "img/furn_B1.webp",
 "家具_B2": "img/furn_B2.webp",
 "家具_B3": "img/furn_B3.webp",
@@ -4427,10 +4445,10 @@ function startPrologue(o){o=o||{};const play=()=>o.turn?FX.pageTurn(()=>playChap
 function askName(cb){modal(`<h3>名前を入力してください</h3><p class="muted">物語の中で呼ばれる名前です（8文字まで）。</p><input type="text" id="nm" maxlength="8" value="カコ" placeholder="例：カコ"><div class="row"><button class="btn" id="nmok">決定</button></div>`);
  setTimeout(()=>{const n=$('#nm');if(n)n.focus()},50);
  $('#nmok').onclick=()=>{const v=$('#nm').value.trim();if(!v){toast('名前を入れてください');return}S.name=v;save();closeModal();cb()}}
-/* 主人公の外見。肌（skin）・髪色（color）を選ぶ。後ろ髪の長さ（hair）は絵ができたら選べるようにする。前髪は必ずある */
+/* 主人公の外見。肌（skin）・髪色（color）・後ろ髪（hair）を選ぶ。前髪は必ずある */
 const LOOK_SKINS=[{k:1,c:'#e6a072'},{k:2,c:'#f7c9a6'},{k:3,c:'#f9dcc6'}];
-const LOOK_COLORS=[{k:'濃茶',c:'#4a2a14'},{k:'黒',c:'#2a1820'},{k:'金',c:'#cdb29f'}];
-const LOOK_HAIRS=[]; // 後ろ髪の長さ（例：{k:'ボブ',n:'ボブ'}）。絵ができたら足す
+const LOOK_COLORS=[{k:'濃茶',c:'#7d4130'},{k:'黒',c:'#3a3a3a'},{k:'金',c:'#c8ab99'}];
+const LOOK_HAIRS=[{k:'短髪',n:'ショート'},{k:'ポニーテール',n:'ポニーテール'}]; // 後ろ髪。ボブは絵ができたら {k:'ボブ',n:'ボブ'} を足す
 function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,
  color:LOOK_COLORS.some(o=>o.k===l.color)?l.color:'濃茶',hair:LOOK_HAIRS.some(o=>o.k===l.hair)?l.hair:(LOOK_HAIRS[0]||{}).k||null}}
 /* 主人公のSDの絵の名前。肌_後ろ髪_色 → 肌_色 → 肌だけ、の順にあるものを使う */
