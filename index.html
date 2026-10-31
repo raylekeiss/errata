@@ -1287,6 +1287,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lxs-b.light{min-height:max(50px,calc(66*var(--u)));padding:0 calc(28*var(--u))}
 .lxs-b{padding:0 calc(22*var(--u))}
 .lxs-go{min-height:max(56px,calc(84*var(--u)))}
+
+/* 戦闘：主人公は左から約2割、敵は右から約2割の位置に */
+.lx-stage{justify-content:space-between;gap:max(40px,4vw);padding:0 10vw}
+.lx-ens{justify-content:flex-end}
+@media (orientation:portrait){.lx-stage{padding:0 5vw;gap:max(16px,3vw)}}
 </style>
 </head>
 <body>
