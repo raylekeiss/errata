@@ -1415,6 +1415,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lx-fly .lxc{width:100%}
 .lx-hand .lxc.new{animation:lxnew 1.2s ease-out}
 @keyframes lxnew{0%{transform:translateY(-30px) scale(1.15);box-shadow:0 0 0 3px #b5302a,0 0 26px rgba(181,48,42,.9)}100%{transform:none}}
+
+/* ドリルの戻る・やめるは左上 */
+.gc-back.tl{position:absolute;z-index:6;left:calc(env(safe-area-inset-left,0px) + max(14px,calc(20*var(--u))));top:calc(env(safe-area-inset-top,0px) + max(12px,calc(18*var(--u))));min-width:72px}
+.dr.q .scr-title{left:calc(max(14px,calc(20*var(--u))) + 96px)}
+/* 箱庭の持ち物：頁の大きさをそろえる */
+.nw-cell.pg{align-items:stretch}.nw-cell.pg .card{width:100%}
 </style>
 </head>
 <body>
@@ -4897,7 +4903,7 @@ function QuizMenu(){
  const keys=DRMODE==='ch'?Object.keys(CHT).map(Number):VOLS.map(v=>v.code);
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
   <div class="gc-title">ドリル</div>
-  <div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div>
+  <button class="gc-back tl" data-go="home">戻る</button><div class="gc-top">${coinsHTML()}</div>
   <div class="dr-mode"><button data-mode="ch" class="${DRMODE==='ch'?'on':''}">章で選ぶ</button><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button></div>
   <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
   ${konradMet()?`<div class="gc-say"><span class="who">コンラッド</span>${esc(DRMODE==='ch'?DR_LINES[Math.floor(Math.random()*DR_LINES.length)]:DR_VOL_LINE)}</div>`:''}
@@ -4921,7 +4927,7 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}</small>`:''}</div>
   <div class="dr-tabs"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
-  <div class="gc-top">${QZ.tut?'':'<button class="gc-back" id="qQuit">やめる</button>'}${coinsHTML(qEras())}</div>
+  ${QZ.tut?'':'<button class="gc-back tl" id="qQuit">やめる</button>'}<div class="gc-top">${coinsHTML(qEras())}</div>
   <div class="dr-gain">この回の獲得　${gainText(QZ.gainE)}</div>
   <div class="dr-paper parch"><p>${esc(q.q)}</p></div>
   <div class="dr-opts" id="qo">${shuffle([q.a,...q.d]).map(o=>`<button class="slip" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
@@ -6037,7 +6043,13 @@ function lxStartRun(skipTut){const L=lxLib();
  L.runs++;L.run={stage:si,map:lxGenMap(si),at:null,cur:null,deck:lxRandomDeck(),ann:[],hp:LX_HP,max:LX_HP,relics:[],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
  save();FX.pageTurn(lxMap)}
 /* デッキ：持っている人物の頁からランダムに15枚。足りないぶんは基本の頁 */
-function lxRandomDeck(){const P=shuffle(lxOwnedPersons().map(c=>c.n)).slice(0,LX_MIN);return P.concat(shuffle(LX_DEFAULT_DECK).slice(0,LX_MIN-P.length))}
+/* 余白を張れる頁（余白・ターン終了時の余白） */
+const lxIsBlk=id=>{const d=lxDef(id);return !!d&&((d.fx.blk||0)>0||(d.fx.pBlkEnd||0)>0)};
+function lxRandomDeck(){const own=shuffle(lxOwnedPersons().map(c=>c.n));const P=own.slice(0,LX_MIN);let D=P.concat(shuffle(LX_DEFAULT_DECK).slice(0,LX_MIN-P.length));
+ /* 余白を張れる頁が3枚に満たなければ、持っている余白の頁と入れかえ、それでも足りなければ書架の衛士を入れる */
+ const spare=own.slice(LX_MIN).filter(lxIsBlk);
+ while(D.filter(lxIsBlk).length<3){const i=D.findIndex(id=>!lxIsBlk(id));if(i<0)break;D[i]=spare.length?spare.shift():'B:衛士'}
+ return shuffle(D)}
 /* 開いている層の一番上（完走した層の次まで） */
 function lxMaxStage(){const L=S.lib||{};return Math.min(LX_STAGES.length-1,(L.best==null?-1:L.best)+1)}
 const LX_ICON={
