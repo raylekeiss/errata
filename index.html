@@ -6043,13 +6043,15 @@ function lxStartRun(skipTut){const L=lxLib();
  L.runs++;L.run={stage:si,map:lxGenMap(si),at:null,cur:null,deck:lxRandomDeck(),ann:[],hp:LX_HP,max:LX_HP,relics:[],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
  save();FX.pageTurn(lxMap)}
 /* デッキ：持っている人物の頁からランダムに15枚。足りないぶんは基本の頁 */
-/* 余白を張れる頁（余白・ターン終了時の余白） */
+/* デッキの割合：攻撃6〜8枚・余白4〜5枚・残りはその他（引く・妨害・持続など）。足りない分は基本の頁で埋める */
+const LX_DECK_MIX={atk:[6,8],blk:[4,5]};
 const lxIsBlk=id=>{const d=lxDef(id);return !!d&&((d.fx.blk||0)>0||(d.fx.pBlkEnd||0)>0)};
-function lxRandomDeck(){const own=shuffle(lxOwnedPersons().map(c=>c.n));const P=own.slice(0,LX_MIN);let D=P.concat(shuffle(LX_DEFAULT_DECK).slice(0,LX_MIN-P.length));
- /* 余白を張れる頁が3枚に満たなければ、持っている余白の頁と入れかえ、それでも足りなければ書架の衛士を入れる */
- const spare=own.slice(LX_MIN).filter(lxIsBlk);
- while(D.filter(lxIsBlk).length<3){const i=D.findIndex(id=>!lxIsBlk(id));if(i<0)break;D[i]=spare.length?spare.shift():'B:衛士'}
- return shuffle(D)}
+function lxKind(id){const d=lxDef(id);if(!d)return 'oth';if(d.type==='atk')return 'atk';if(lxIsBlk(id))return 'blk';return 'oth'}
+function lxRandomDeck(){const rnd=([a,b])=>a+Math.floor(Math.random()*(b-a+1));
+ const nA=rnd(LX_DECK_MIX.atk),nB=rnd(LX_DECK_MIX.blk),nO=LX_MIN-nA-nB;
+ const own=shuffle(lxOwnedPersons().map(c=>c.n));const by={atk:[],blk:[],oth:[]};own.forEach(n=>by[lxKind(n)].push(n));
+ const take=(k,n,fill)=>{const L=by[k].splice(0,n);while(L.length<n)L.push(fill);return L};
+ return shuffle([...take('atk',nA,'B:兵士'),...take('blk',nB,'B:衛士'),...take('oth',nO,'B:写本')])}
 /* 開いている層の一番上（完走した層の次まで） */
 function lxMaxStage(){const L=S.lib||{};return Math.min(LX_STAGES.length-1,(L.best==null?-1:L.best)+1)}
 const LX_ICON={
