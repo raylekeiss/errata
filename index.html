@@ -1234,6 +1234,59 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   .lx-coach{width:min(460px,86vw)}
 }
 @media (max-height:520px) and (orientation:landscape){.lx-stage{top:56px}.lx-sd{height:120px}.lx-hero{width:120px}}
+
+/* スタート画面：見出しと下の帯に余白を */
+.lxs-hero{left:8.3vw;top:calc(env(safe-area-inset-top,0px) + 17vh)}
+.lxs-panel{left:8.3vw;right:8.3vw;bottom:calc(env(safe-area-inset-bottom,0px) + 11vh)}
+@media (orientation:portrait){.lxs-hero{left:7vw;top:calc(env(safe-area-inset-top,0px) + 15vh)}.lxs-panel{left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom,0px) + 6vh)}}
+@media (max-height:520px) and (orientation:landscape){.lxs-hero{top:64px}.lxs-panel{bottom:12px}}
+.lx-in.rent{background:#2e5c7a;color:#fff}
+/* 戦闘：主人公と敵を中央に寄せる */
+.lx-stage{justify-content:center;gap:max(40px,9vw);padding:0 10vw}
+.lx-ens{flex:0 1 auto;justify-content:center}
+@media (orientation:portrait){.lx-stage{gap:max(20px,6vw);padding:0 5vw}}
+/* 攻撃の演出 */
+.lx-lunge-r{animation:lxlr .36s cubic-bezier(.2,.8,.3,1)}
+@keyframes lxlr{0%{transform:none}35%{transform:translateX(calc(70*var(--u))) rotate(4deg)}100%{transform:none}}
+.lx-lunge-l{animation:lxll .36s cubic-bezier(.2,.8,.3,1)}
+@keyframes lxll{0%{transform:none}35%{transform:translateX(calc(-70*var(--u))) rotate(-4deg)}100%{transform:none}}
+.lx-recoil-r{animation:lxrr .34s ease-out}
+@keyframes lxrr{0%,25%{transform:none;filter:none}40%{transform:translateX(calc(22*var(--u)));filter:brightness(2.2)}100%{transform:none;filter:none}}
+.lx-recoil-l{animation:lxrl .34s ease-out}
+@keyframes lxrl{0%,25%{transform:none;filter:none}40%{transform:translateX(calc(-22*var(--u)));filter:brightness(1.8) sepia(1) hue-rotate(-30deg) saturate(4)}100%{transform:none;filter:none}}
+.lx-sd.lx-recoil-l img,.lx-sd.lx-lunge-r img{animation:none}
+.lx-slash{position:absolute;z-index:34;width:0;height:0;pointer-events:none}
+.lx-slash i{position:absolute;left:calc(-110*var(--u));top:-3px;width:calc(220*var(--u));height:6px;border-radius:3px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff 45%,#ffe9a8 60%,rgba(255,255,255,0));box-shadow:0 0 14px #ffd54a;transform:rotate(-28deg) scaleX(0);transform-origin:0 50%;animation:lxsl .3s ease-out forwards}
+.lx-slash i+i{top:14px;animation-delay:.05s;transform:rotate(-20deg) scaleX(0)}
+.lx-slash.l i{transform:rotate(28deg) scaleX(0);transform-origin:100% 50%;background:linear-gradient(90deg,rgba(255,80,60,0),#ffd0c8 40%,#fff 55%,rgba(255,80,60,0));box-shadow:0 0 14px #ff6a5a}
+.lx-slash.l i+i{transform:rotate(20deg) scaleX(0)}
+.lx-slash b{position:absolute;left:calc(-50*var(--u));top:calc(-50*var(--u));width:calc(100*var(--u));height:calc(100*var(--u));border-radius:50%;background:radial-gradient(rgba(255,255,255,.95),rgba(255,214,140,.5) 35%,rgba(255,214,140,0) 70%);animation:lxsb .32s ease-out forwards}
+.lx-slash.l b{background:radial-gradient(rgba(255,240,235,.95),rgba(255,106,90,.5) 35%,rgba(255,106,90,0) 70%)}
+@keyframes lxsl{0%{opacity:1}60%{opacity:1;transform:rotate(var(--r,-28deg)) scaleX(1)}100%{opacity:0;transform:rotate(var(--r,-28deg)) scaleX(1.1)}}
+.lx-slash.r i{--r:-28deg}.lx-slash.r i+i{--r:-20deg}.lx-slash.l i{--r:28deg}.lx-slash.l i+i{--r:20deg}
+@keyframes lxsb{0%{transform:scale(.2);opacity:1}100%{transform:scale(1.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){.lx-lunge-r,.lx-lunge-l,.lx-recoil-r,.lx-recoil-l{animation:none}.lx-slash{display:none}}
+/* 改変の予告のカットイン */
+.lx-kaicut{position:absolute;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;background:rgba(10,4,2,.55);animation:fadein .15s ease-out;overflow:hidden}
+.lx-kaicut.out{opacity:0;transition:opacity .26s}
+.lx-kaicut .kc-band{position:absolute;left:-10%;right:-10%;top:50%;height:calc(210*var(--u));min-height:130px;transform:translateY(-50%) skewY(-5deg);
+  background:linear-gradient(90deg,rgba(90,8,10,.0),rgba(120,14,16,.95) 18%,rgba(150,22,20,.97) 50%,rgba(120,14,16,.95) 82%,rgba(90,8,10,0));box-shadow:0 0 0 3px rgba(255,213,74,.75),0 0 40px rgba(255,90,60,.6);animation:kcband .45s cubic-bezier(.2,.9,.3,1) both}
+@keyframes kcband{from{transform:translate(-100%,-50%) skewY(-5deg)}to{transform:translateY(-50%) skewY(-5deg)}}
+.lx-kaicut .kc-ink{position:absolute;inset:0;background:repeating-linear-gradient(-5deg,rgba(255,213,74,0) 0 18px,rgba(255,213,74,.08) 18px 20px);animation:kcink 1.7s linear}
+@keyframes kcink{from{background-position:0 0}to{background-position:400px 0}}
+.lx-kaicut .kc-in{position:relative;display:flex;flex-direction:column;align-items:center;gap:calc(6*var(--u));transform:skewY(-5deg);animation:bcin .5s .12s cubic-bezier(.2,.9,.3,1.2) both}
+.lx-kaicut .kc-eye{font:800 max(12px,calc(17*var(--u))) var(--sans);letter-spacing:.5em;color:#ffd54a}
+.lx-kaicut .kc-t{font-family:var(--serif);font-size:max(30px,calc(64*var(--u)));letter-spacing:.2em;color:#fff;text-shadow:0 0 18px rgba(255,213,74,.9),0 3px 0 #3a0006}
+.lx-kaicut .kc-s{font:600 max(12px,calc(17*var(--u))) var(--sans);letter-spacing:.12em;color:#f6e0c8}
+
+/* スタート画面：余白を広げたぶん、帯の中身を少し小さく */
+.lxs-panel{padding:calc(18*var(--u)) calc(30*var(--u));gap:calc(16*var(--u)) calc(22*var(--u))}
+.lxs-deck svg{width:calc(150*var(--u));min-width:100px}
+.lxs-sub{font-size:max(11px,calc(13*var(--u)))}
+.lxs-num b{font-size:max(32px,calc(54*var(--u)))}
+.lxs-b.light{min-height:max(50px,calc(66*var(--u)));padding:0 calc(28*var(--u))}
+.lxs-b{padding:0 calc(22*var(--u))}
+.lxs-go{min-height:max(56px,calc(84*var(--u)))}
 </style>
 </head>
 <body>
@@ -3672,7 +3725,7 @@ const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
-"背景_図書館探索": "img/bg_lib.webp",
+"背景_図書館探索": "img/bg_lib2.webp",
 "背景_図書館探索_戦闘": "img/bg_lib_battle.webp",
 "家具_A4": "img/furn_A4.webp",
 "家具_A9": "img/furn_A9.webp",
@@ -5341,7 +5394,7 @@ const LX_RELIC={
 /* 薬（使い切り。3つまで持てる） */
 const LX_POT={
  'テリアカ':'HPを15回復する',
- '胡椒':'この戦闘中、威信＋2',
+ '胡椒':'この戦闘中、自分に威信＋2を付与',
  '茶':'エネルギー＋2',
  '硝石':'敵全体に12ダメージ',
  '乳香':'余白12'};
@@ -5390,10 +5443,10 @@ function lxFxText(f){const a=[];
  if(f.dmg!=null)a.push(f.hits>1?`攻撃${f.dmg}を${f.hits}回`:`攻撃${f.dmg}`);
  if(f.dmgAll!=null)a.push(`全体に攻撃${f.dmgAll}`);
  if(f.blk)a.push(`余白${f.blk}`);
- if(f.vul)a.push(`動揺${f.vul}`);if(f.weak)a.push(`衰退${f.weak}`);
+ {const d=[];if(f.vul)d.push(`動揺${f.vul}`);if(f.weak)d.push(`衰退${f.weak}`);if(d.length)a.push(`敵に${d.join('・')}を付与`)}
  if(f.stun)a.push('敵の次の行動を止める');
  if(f.draw)a.push(`${f.draw}枚引く`);
- if(f.str)a.push(`威信＋${f.str}`);
+ if(f.str)a.push(`自分に威信＋${f.str}を付与`);
  if(f.pDraw)a.push(`毎ターン${f.pDraw}枚多く引く`);
  if(f.pBlkEnd)a.push(`ターン終了時に余白${f.pBlkEnd}`);
  if(f.pEnergy)a.push(`毎ターンエネルギー＋${f.pEnergy}`);
@@ -5437,7 +5490,13 @@ function lxAskQuiz(n){return new Promise(res=>{const q=lxQFor(n);
   setTimeout(()=>{o.querySelector('.lx-qp').insertAdjacentHTML('beforeend',noteHTML(ok?'ok':'ng',ok?'正解！':'不正解……',ok?'このターン、人物の頁が1.5倍':'このターンは強化なし',`${ok?'':`正しくは<b>${esc(q.a)}</b>。`}<span class="who">シミ</span>${esc(q.x||'')}`,'頁を切る'));
    o.querySelector('#nx').onclick=()=>{o.remove();res(ok)}},450)})})}
 function lxKPool(){const L=Object.values(K).filter(k=>k&&k.who&&S.cleared[k.ch-1]);return L.length?L:Object.values(K).filter(k=>k&&k.who&&k.ch<=5)}
-function lxAskKai(boss){return new Promise(res=>{const R=S.lib.run;const pool=lxKPool();const fresh=pool.filter(k=>!R.usedK.includes(k.id));
+function lxKaiCut(boss){return new Promise(res=>{const root=$('#lx');if(!root){res();return}
+ const o=document.createElement('div');o.className='lx-kaicut';
+ o.innerHTML=`<div class="kc-band"></div><div class="kc-ink"></div><div class="kc-in"><span class="kc-eye">ERRATA ALERT</span><b class="kc-t">改変の予告</b><span class="kc-s">${esc(boss)}が、歴史を書き換えようとしている</span></div>`;
+ let done=false;const fin=()=>{if(done)return;done=true;o.classList.add('out');setTimeout(()=>{o.remove();res()},FX.reduce()?0:260)};
+ o.onclick=fin;root.appendChild(o);if(!FX.reduce()){FX.shake('#lx','big');FX.flash('#ffd54a')}setTimeout(fin,FX.reduce()?700:1700)})}
+function lxAskKai(boss){return lxKaiCut(boss).then(()=>lxAskKai0(boss))}
+function lxAskKai0(boss){return new Promise(res=>{const R=S.lib.run;const pool=lxKPool();const fresh=pool.filter(k=>!R.usedK.includes(k.id));
  const k=(fresh.length?fresh:pool)[Math.floor(Math.random()*(fresh.length?fresh:pool).length)];R.usedK.push(k.id);
  const t=esc(k.t).replace(esc(k.slot),`<span class="slot">${esc(k.slot)}</span>`);
  const o=lxOverlay(`<p class="lx-qh warn">改変の予告！　${esc(boss)}が歴史を書き換えようとしている</p>
@@ -5469,7 +5528,7 @@ function lxIntentOf(e){const D=LX_EN[e.key];const it=Object.assign({},D.ai(e,X))
 function lxStartTurn(){if(X.over)return;X.turn++;X.p.blk=0;X.qz='none';X.dealt=0;X.sel=null;
  X.p.en=LX_ENERGY+X.pw.en+(X.turn===1&&lxHas('羅針盤')?1:0);
  if(X.turn===1&&lxHas('ホプロンの盾'))X.p.blk+=10;
- if(X.pw.aoe)for(const e of lxAlive())lxHitE(e,X.pw.aoe);
+ if(X.pw.aoe){X.noLunge=true;for(const e of lxAlive())lxHitE(e,X.pw.aoe);X.noLunge=false}
  if(lxCheckWin())return;
  const n=LX_HAND+X.pw.draw+(X.turn===1&&lxHas('ロゼッタ＝ストーン')?2:0)-X.p.handMinus;X.p.handMinus=0;lxDraw(Math.max(1,n));
  for(;X.p.discNext>0&&X.hand.length;X.p.discNext--){const i=Math.floor(Math.random()*X.hand.length);X.disc.push(...X.hand.splice(i,1))}X.p.discNext=0;
@@ -5485,13 +5544,19 @@ function lxPDmg(base,t,person){let v=base+X.p.st.str;if(person&&X.qz==='ok')v*=L
 function lxPBlk(base,person){return Math.floor(base*(person&&X.qz==='ok'?LX_BONUS:1))}
 function lxFloat(el,txt,cls){const root=$('#lx');if(!root||!el)return;const r=el.getBoundingClientRect(),h=root.getBoundingClientRect();
  const d=document.createElement('div');d.className='lx-float '+(cls||'');d.textContent=txt;d.style.left=(r.left-h.left+r.width/2)+'px';d.style.top=(r.top-h.top+r.height*.35)+'px';root.appendChild(d);setTimeout(()=>d.remove(),1100)}
+/* 攻撃の演出：攻撃する側が相手へ踏み込み、受けた側に斬撃が走ってのけぞる */
+function lxSlash(el,dir){if(!el)return;const root=$('#lx');if(!root)return;const r=el.getBoundingClientRect(),rr=root.getBoundingClientRect();
+ const d=document.createElement('div');d.className='lx-slash '+(dir<0?'l':'r');d.style.left=(r.left-rr.left+r.width/2)+'px';d.style.top=(r.top-rr.top+r.height*.45)+'px';
+ d.innerHTML='<i></i><i></i><b></b>';root.appendChild(d);setTimeout(()=>d.remove(),520)}
+function lxLunge(el,cls){if(el)FX._replay(el,cls,cls==='lx-lunge-r'||cls==='lx-lunge-l'?360:340)}
 function lxHitE(e,v){const i=X.en.indexOf(e);const el=document.querySelector(`.lx-e[data-e="${i}"]`);
- const ab=Math.min(e.blk,v);e.blk-=ab;const rest=v-ab;e.hp-=rest;X.dealt+=rest;lxFloat(el,rest?String(rest):'防がれた',rest?'':'blk');if(el)FX.shake(el);
+ if(!X.noLunge){lxLunge($('#lxSd'),'lx-lunge-r')}{const b=el&&el.querySelector('.blob');lxSlash(b||el,1);lxLunge(b,'lx-recoil-r')}
+ const ab=Math.min(e.blk,v);e.blk-=ab;const rest=v-ab;e.hp-=rest;X.dealt+=rest;lxFloat(el,rest?String(rest):'防がれた',rest?'':'blk');
  if(e.hp<=0){e.hp=0;e.dead=true}
  else if(e.key==='衍字'&&!e.split&&e.hp<=e.max/2){e.split=true;e.dead=true;const h=e.hp;
   const a=lxMkEnemy('小さな衍字');a.hp=a.max=h;const b=lxMkEnemy('小さな衍字');b.hp=b.max=h;
   a.it=lxIntentOf(a);b.it=lxIntentOf(b);X.en.push(a,b);toast('衍字が分裂した！')}}
-function lxHurtP(v){const ab=Math.min(X.p.blk,v);X.p.blk-=ab;const rest=v-ab;X.p.hp-=rest;R_sync();lxFloat($('#lxSd'),rest?'-'+rest:'防いだ',rest?'me':'blk');if(rest)FX.shake('#lx')}
+function lxHurtP(v){const ab=Math.min(X.p.blk,v);X.p.blk-=ab;const rest=v-ab;X.p.hp-=rest;R_sync();const sd=$('#lxSd');lxSlash(sd,-1);lxLunge(sd,'lx-recoil-l');lxFloat(sd,rest?'-'+rest:'防いだ',rest?'me':'blk');if(rest)FX.shake('#lx')}
 function R_sync(){S.lib.run.hp=Math.max(0,X.p.hp)}
 function lxCheckWin(){if(X.over)return true;if(lxAlive().length)return false;X.over=true;X.busy=true;lxRender();
  setTimeout(()=>{const R=S.lib.run;R.hp=Math.max(1,X.p.hp);if(lxHas('修道院の薬草'))R.hp=Math.min(R.max,R.hp+6);const cb=X.onWin;X=null;save();cb()},FX.reduce()?100:900);return true}
@@ -5527,7 +5592,7 @@ async function lxEndTurn(){if(!X||X.busy||X.over)return;
   if(e.stun){e.stun=0;lxFloat(el(),'動けない','blk');await lxWait(450);continue}
   const it=e.it||{};
   {
-   FX._replay(el(),'lx-act',400);
+   if(it.d!=null||it.mir)lxLunge(el()&&el().querySelector('.blob'),'lx-lunge-l');else FX._replay(el(),'lx-act',400);
    if(it.clr&&X.p.blk){X.p.blk=0;lxFloat($('#lxSd'),'余白が燃えた','me')}
    if(it.b)e.blk+=it.b;if(it.str)e.st.str+=it.str;if(it.copy&&X.p.st.str>0)e.st.str+=X.p.st.str;
    if(it.d!=null||it.mir){let base=it.mir?Math.max(5,Math.floor(X.dealt*.5)):it.d;if(it.cut)base=Math.floor(base*it.cut);
@@ -5577,11 +5642,11 @@ function lxIntentDesc(e){const it=e.it||{};const a=[];
  if(it.kai)a.push('改変の予告（ボスの大技）');
  if(it.mir)a.push(`このターンに受けたダメージの半分を、攻撃として返してくる`);
  if(it.d!=null){let v=it.d+e.st.str;if(it.cut)v=Math.floor(v*it.cut);if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;a.push(`${Math.floor(v)}ダメージの攻撃${it.n>1?'を'+it.n+'回':''}`)}
- if(it.clr)a.push('攻撃の前に、君の余白をすべて燃やす');
- if(it.b)a.push(`余白${it.b}を張って守る`);if(it.str)a.push(`自分に威信＋${it.str}`);if(it.copy)a.push('君の威信を写し取って、自分の威信にする');
- if(it.weak)a.push(`君に衰退${it.weak}`);if(it.vul)a.push(`君に動揺${it.vul}`);
- if(it.disc)a.push(`次のターン、君の手札を${it.disc}枚捨てさせる`);if(it.shuf)a.push('山札をかき混ぜ、次のターンの手札を1枚減らす');
- if(it.steal)a.push(`君の山札の上から${it.steal}枚を、この戦闘のあいだ抜き取る`);if(it.dirty)a.push(`君の山札に汚れ頁を${it.dirty}枚混ぜる`);
+ if(it.clr)a.push('攻撃の前に、プレイヤーの余白をすべて燃やす');
+ if(it.b)a.push(`余白${it.b}を張って守る`);if(it.str)a.push(`自分に威信＋${it.str}を付与`);if(it.copy)a.push('プレイヤーの威信を写し取って、自分の威信にする');
+ if(it.weak)a.push(`プレイヤーに衰退${it.weak}を付与`);if(it.vul)a.push(`プレイヤーに動揺${it.vul}を付与`);
+ if(it.disc)a.push(`次のターン、プレイヤーの手札を${it.disc}枚捨てさせる`);if(it.shuf)a.push('山札をかき混ぜ、次のターンの手札を1枚減らす');
+ if(it.steal)a.push(`プレイヤーの山札の上から${it.steal}枚を、この戦闘のあいだ抜き取る`);if(it.dirty)a.push(`プレイヤーの山札に汚れ頁を${it.dirty}枚混ぜる`);
  if(it.cut)a.push(`改変を正したので、威力が${Math.round((1-it.cut)*10)}割減っている`);
  const words=a.join('　');const note=LX_EN[e.key].note;
  return `<p class="lx-tt"><b>${esc(e.name)}の次の行動</b></p><ul class="lx-tl">${a.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>${note?`<p class="lx-tt" style="font-size:13px">特徴：${esc(note)}</p>`:''}${lxTermsIn(words).map(lxTermHTML).join('')}`}
@@ -5750,13 +5815,18 @@ function lxGivePot(){const R=S.lib.run;if(R.pots.length>=3){R.hp=Math.min(R.max,
 function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="lx-shade2"></div></div>`);
  const o=document.createElement('div');o.className='bosscut';o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">${esc(S.lib.run.boss)}が現れた！</b><span class="bc-s">3ターンごとの「改変の予告」に気をつけよう</span></div>`;
  let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#lx').appendChild(o);setTimeout(fin,FX.reduce()?600:2000)}
+/* 戦闘報酬の候補：持っていない頁も含めた全人物から3枚（★1が60%・★2が35%・★3が5%。デッキにいる人物は出ない） */
+const LX_REW_RATE={1:.60,2:.35,3:.05};
+function lxRewardCands(R){const inDeck=new Set(R.deck);const pool=CARDS.filter(c=>!isSP(c.n)&&!inDeck.has(c.n));const out=[];
+ for(let i=0;i<3&&pool.length;i++){let r=Math.random(),rar=r<LX_REW_RATE[3]?3:r<LX_REW_RATE[3]+LX_REW_RATE[2]?2:1;
+  let L=pool.filter(c=>c.r===rar&&!out.includes(c.n));if(!L.length)L=pool.filter(c=>!out.includes(c.n));if(!L.length)break;out.push(L[Math.floor(Math.random()*L.length)].n)}
+ while(out.length<3)out.push(shuffle(Object.keys(LX_BASE))[0]);return out}
 function lxReward(elite){const R=S.lib.run;let relic=null;if(elite)relic=lxGiveRelic();
- const inDeck=new Set(R.deck);let cand=shuffle(lxOwnedPersons().map(c=>c.n).filter(n=>!inDeck.has(n))).slice(0,3);
- while(cand.length<3)cand.push(shuffle(Object.keys(LX_BASE))[0]);
+ const cand=lxRewardCands(R);
  show(`<div class="screen">${topbar('戦闘に勝った','lib')}<div class="scroll"><div class="lx-menu"><div class="pane paper">
   ${relic?`<p style="line-height:1.8;margin:0 0 12px">装備「<b>${esc(relic)}</b>」を手に入れた。${esc(LX_RELIC[relic])}</p>`:''}
-  <h3>頁を1枚、デッキに加える</h3><p class="muted" style="margin:0 0 10px">加えずに進むこともできます（デッキが少ないほど、狙った頁を引きやすくなります）。</p>
-  <div class="lx-grid">${cand.map((id,i)=>`<div class="lx-cell" data-pick="${i}">${lxCardHTML(lxDef(id))}</div>`).join('')}</div>
+  <h3>頁を1枚、デッキに加える</h3><p class="muted" style="margin:0 0 10px">まだ持っていない頁も、この探索のあいだだけ借りられます。加えずに進むこともできます（デッキが少ないほど、狙った頁を引きやすくなります）。</p>
+  <div class="lx-grid">${cand.map((id,i)=>`<div class="lx-cell" data-pick="${i}">${lxCardHTML(lxDef(id))}${CARD[id]&&!lv(id)?'<span class="lx-in rent">借りる</span>':''}</div>`).join('')}</div>
   <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" id="lxSkip">加えずに進む</button><button class="btn light" id="lxGl3">用語の説明</button></div></div></div></div></div>`);
  lxNoBack();app.querySelectorAll('[data-pick]').forEach(d=>d.onclick=()=>{R.deck.push(cand[+d.dataset.pick]);toast(`「${lxDef(cand[+d.dataset.pick]).name}」をデッキに加えた`);lxNextFloor()});
  $('#lxSkip').onclick=lxNextFloor;$('#lxGl3').onclick=lxGlossary}
