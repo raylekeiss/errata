@@ -5575,7 +5575,7 @@ const LX_BASE={
 /* キャラ専用の頁（そのキャラの最初のデッキに1枚ずつ入る。報酬にもときどき出る） */
 const LX_CCARD={
  'C:渾身':{name:'渾身の一撃',type:'atk',cost:2,fx:{dmg:12,strMul:3},m:'dmg',img:'HERO'},
- 'C:鍛錬':{name:'鍛錬',type:'pow',cost:2,fx:{pStrTurn:1},m:null,img:'HERO'},
+ 'C:鍛錬':{name:'鍛錬',type:'pow',cost:1,fx:{pStrTurn:1},m:null,img:'HERO'},
  'C:校正':{name:'校正',type:'atk',cost:1,fx:{dmg:5,qbonus:2},m:'dmg',img:'SD_シミ'},
  'C:復習':{name:'復習',type:'skl',cost:1,fx:{blk:4,qblk:2},m:'blk',img:'SD_シミ'},
  'C:布陣':{name:'布陣',type:'pow',cost:1,fx:{pPowDraw:1},m:null,img:'SD_コンラッド'},
@@ -5583,7 +5583,7 @@ const LX_CCARD={
  'C:のしかかり':{name:'のしかかり',type:'atk',cost:1,fx:{slam:true},m:null,img:'ヌル'},
  'C:鎧の重み':{name:'鎧の重み',type:'pow',cost:1,fx:{pBlkPlus:2},m:null,img:'ヌル'},
  'C:空白の砦':{name:'空白の砦',type:'pow',cost:2,fx:{pBarr:true},m:null,img:'ヌル'},
- 'C:乱打':{name:'乱打',type:'atk',cost:1,fx:{dmg:4,hits:3},m:'dmg',img:'HERO'},
+ 'C:乱打':{name:'乱打',type:'atk',cost:1,fx:{dmg:2,hits:5},m:'dmg',img:'HERO'},
  'C:号令':{name:'号令',type:'skl',cost:1,fx:{strBlk:2},m:null,img:'HERO'},
  'C:注釈癖':{name:'注釈癖',type:'pow',cost:1,fx:{pQok:1},m:null,img:'SD_シミ'},
  'C:連想':{name:'連想',type:'atk',cost:1,fx:{dmg:4,streak:3},m:'dmg',img:'SD_シミ'}};
@@ -5650,7 +5650,7 @@ const LX_RELIC={
  '活版印刷機':'クイズに正解するたびに1枚引く',
  '修道院の薬草':'戦闘に勝つたびにHPが6回復する',
  /* キャラが最初から持っている装備（ほかでは手に入らない） */
- 'カコの手帳':'戦闘の始めに威信＋1',
+ 'カコの手帳':'戦闘の始めに威信＋2',
  'シミの虫眼鏡':'クイズの選択肢が1つ減る。正解すると、誤植に「衰退1」「動揺1」「全体に4ダメージ」のどれかがランダムで起きる',
  'コンラッドの万年筆':'持続の頁を切るたびに余白4',
  'ヌルの外套':'余白がターンの始めに消えず、半分だけ残る',
@@ -5855,7 +5855,7 @@ function lxBattle(kind,keys,onWin,opt={}){const R=S.lib.run;const SG=LX_STAGES[R
   pw:{draw:0,blkEnd:0,en:0,atkBlk:0,aoe:0,jug:0,brut:0},seen:new Set(),draw:opt.order?pile.reverse():shuffle(pile),hand:[],disc:[],exh:[],turn:0,qz:'none',dealt:0,sel:null,tg:0,busy:true,onWin,over:false,tut:opt.tut||null,dm:SG&&!R.tut?SG.dmg:1};
  if(!opt.tut&&lxHas('借り物の王冠'))for(let i=0;i<2;i++)X.draw.splice(Math.floor(Math.random()*(X.draw.length+1)),0,{u:++lxUid,def:lxDef('X:汚れ')});
  if(!opt.tut&&lxHas('ダモクレスの剣'))X.p.st.str+=2;
- if(!opt.tut&&lxHas('カコの手帳'))X.p.st.str+=1;
+ if(!opt.tut&&lxHas('カコの手帳'))X.p.st.str+=2;
  lxRenderBase();lxStartTurn()}
 const lxAlive=()=>X.en.filter(e=>!e.dead);
 const lxHas=r=>S.lib.run.relics.includes(r);
