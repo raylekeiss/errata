@@ -3916,6 +3916,7 @@ const IMG={
 "家具_E5": "img/furn_E5.webp",
 "家具_A11": "img/furn_A11.webp",
 "SD_シミ": "img/sd_shimi.webp",
+"SD_コンラッド": "img/sd_conrad.webp",
 "SD_主人公_肌1": "img/sd_hero_s1.webp",
 "SD_主人公_肌2": "img/sd_hero_s2.webp",
 "SD_主人公_肌3": "img/sd_hero_s3.webp",
@@ -5577,8 +5578,8 @@ const LX_CCARD={
  'C:鍛錬':{name:'鍛錬',type:'pow',cost:2,fx:{pStrTurn:1},m:null,img:'HERO'},
  'C:校正':{name:'校正',type:'atk',cost:1,fx:{dmg:5,qbonus:2},m:'dmg',img:'SD_シミ'},
  'C:復習':{name:'復習',type:'skl',cost:1,fx:{blk:4,qblk:2},m:'blk',img:'SD_シミ'},
- 'C:布陣':{name:'布陣',type:'pow',cost:1,fx:{pPowDraw:1},m:null,img:'コンラッド'},
- 'C:総力戦':{name:'総力戦',type:'atk',cost:2,fx:{dmg:6,powbonus:4},m:'dmg',img:'コンラッド'},
+ 'C:布陣':{name:'布陣',type:'pow',cost:1,fx:{pPowDraw:1},m:null,img:'SD_コンラッド'},
+ 'C:総力戦':{name:'総力戦',type:'atk',cost:2,fx:{dmg:6,powbonus:4},m:'dmg',img:'SD_コンラッド'},
  'C:のしかかり':{name:'のしかかり',type:'atk',cost:1,fx:{slam:true},m:null,img:'ヌル'},
  'C:鎧の重み':{name:'鎧の重み',type:'pow',cost:1,fx:{pBlkPlus:2},m:null,img:'ヌル'}};
 const LX_DEFAULT_DECK=[].concat(Array(6).fill('B:兵士'),Array(5).fill('B:衛士'),Array(2).fill('B:写本'),Array(2).fill('B:覚書'));
@@ -6066,7 +6067,7 @@ function lxIntentHTML(e){const it=e.it||{};const a=[];const say=lxSayOf(it);
 function lxShield(v){return v>0?`<span class="lx-shield" data-term="余白"><svg viewBox="0 0 40 46" aria-hidden="true"><path d="M20 2l16 6v12c0 12-7 19-16 24C11 39 4 32 4 20V8z" fill="#bfe3f7" stroke="#4f8db5" stroke-width="2.5"/></svg><b>${v}</b></span>`:''}
 function lxStHTML(st,blk){const a=[];if(st.str)a.push(`<i class="s-str" data-term="威信">威信${st.str}</i>`);if(st.vul)a.push(`<i class="s-vul" data-term="動揺">動揺${st.vul}</i>`);if(st.weak)a.push(`<i class="s-weak" data-term="衰退">衰退${st.weak}</i>`);return a.join('')}
 /* 主人公のSD（箱庭と同じ外見）。絵がなければシルエット */
-function lxHeroArt(){let src=null;try{src=IMG[heroKey()]}catch(e){}const ch=lxChar();if(ch&&ch.img&&IMG[ch.img])return `<img src="${IMG[ch.img]}" alt="" class="${ch.img==='SD_シミ'?'sd':'tall'}">`;
+function lxHeroArt(){let src=null;try{src=IMG[heroKey()]}catch(e){}const ch=lxChar();if(ch&&ch.img&&IMG[ch.img])return `<img src="${IMG[ch.img]}" alt="" class="${ch.img.startsWith('SD_')?'sd':'tall'}">`;
  return src?`<img src="${src}" alt="主人公">`:'<svg viewBox="0 0 100 200" aria-hidden="true"><ellipse cx="50" cy="194" rx="34" ry="6" fill="rgba(0,0,0,.35)"/><path d="M22 190c0-50 10-80 28-82 18 2 28 32 28 82z" fill="#2b3658"/><circle cx="50" cy="78" r="30" fill="#2b3658"/></svg>'}
 function lxRenderBase(){const R=S.lib.run;
  show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="lx-shade2"></div>
@@ -6213,7 +6214,7 @@ const LX_CHARS={
   pref:['威信','重い一撃','一騎討ち','パーフェクトストライク','盾と剣','守り','籠城','脳天割り','クラッシュ','喀血','飛び膝蹴り']},
  'シミ':{img:'SD_シミ',style:'クイズに正解するほど強くなる',relic:'シミの虫眼鏡',cards:['C:校正','C:復習'],
   pref:['年表','史料批判','記録','著作','研究','作品','論駁','説得','布教','回心','教化']},
- 'コンラッド':{img:'コンラッド',style:'持続の頁を何枚も張って、じわじわ有利にする',relic:'コンラッドの万年筆',cards:['C:布陣','C:総力戦'],pref:null},
+ 'コンラッド':{img:'SD_コンラッド',style:'持続の頁を何枚も張って、じわじわ有利にする',relic:'コンラッドの万年筆',cards:['C:布陣','C:総力戦'],pref:null},
  'ヌル':{img:'ヌル',style:'余白を溜めに溜めて、一気に殴る',relic:'ヌルの外套',cards:['C:のしかかり','C:鎧の重み'],
   pref:['守り','籠城','不動','やせ我慢','献策','教化','著作','守りと補給','ジャガーノート','バリケード','盾と剣','セカンドウインド']}};
 LX_CHARS['コンラッド'].pref=[...new Set(Object.values(LX_TPL).flat().filter(t=>t.type==='pow').map(t=>t.id))];
