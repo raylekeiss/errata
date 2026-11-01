@@ -1225,6 +1225,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lx-e.tg .lx-ename::before{content:"▼ ";color:#ffd54a;font-size:.8em}
 .lx-bonus{top:calc(env(safe-area-inset-top,0px) + max(14px,calc(18*var(--u))))}
 .lx-gear{max-width:44vw}
+@media (orientation:portrait){.lx-bonus{top:calc(env(safe-area-inset-top,0px) + 52px);width:92vw}}
 @media (orientation:landscape){.lx-bonus{left:max(16px,2vw);transform:none;white-space:normal;max-width:calc(100% - 44vw - 48px);text-align:left}}
 .lx-detail{right:auto;left:clamp(10px,calc(var(--cx,50%) - min(160px,21vw)),calc(100% - min(320px,42vw) - 10px));bottom:calc(var(--hand-h) + 30px)}
 .lx-coach{left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + max(54px,calc(64*var(--u))));width:min(460px,52vw);animation:none}
@@ -1441,6 +1442,34 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 
 .lx-relic.curse,.lx-pot.curse{background:#4a2238!important;color:#f4d9e4!important;box-shadow:inset 0 0 0 1px #c9708f!important}
 .lx-ctag{align-self:flex-start;font:700 11px var(--sans);font-style:normal;padding:1px 8px;border-radius:9px;background:#8a2d4f;color:#fff}
+
+/* キャラ選択 */
+.lx-chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px}
+.lx-char{display:flex;gap:14px;align-items:stretch;padding:14px}
+.lx-char.on{box-shadow:0 0 0 3px #c9a24a}
+.lx-char-art{flex:0 0 120px;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(#2a3150,#141a2e);border-radius:4px;overflow:hidden;min-height:200px}
+.lx-char-art img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+.lx-char-tx{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.lx-char-tx h3{margin:0}.lx-char-tx h3 small{font-size:13px;color:#7a6e58;margin-left:4px}
+.lx-char-st{margin:0;font-weight:700;color:#5a3a1a}
+.lx-char-rl{margin:0;font-size:13px;line-height:1.6}
+.lx-char-cd{display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.5}.lx-char-cd span{display:block}.lx-char-cd i{display:inline-grid;place-items:center;width:20px;height:20px;margin-right:5px;border-radius:50%;background:#e6c77a;color:#2a1d05;font:800 12px var(--sans);font-style:normal}
+.lx-char-tx .btn{align-self:flex-start;margin-top:auto}
+@media (max-width:600px){.lx-chars{grid-template-columns:1fr}.lx-char-art{flex-basis:84px;min-height:160px}}
+.lxc.k-char{background:linear-gradient(#f4ecda,#e6d6b6);box-shadow:inset 0 0 0 2px #b0874a}
+.lxc-art img.ch{object-fit:cover;object-position:50% 12%}
+.lx-sd img.tall{height:118%;margin-bottom:-2%}
+/* いまのダメージ */
+.lxc-art{position:relative}
+.lxc-now{position:absolute;right:3px;bottom:3px;font:800 12px/1 var(--sans);padding:3px 6px;border-radius:9px;background:#8a1f2a;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+/* 山札・捨て札・廃棄 */
+.lx-piles{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.lx-piles button{font:600 12px var(--sans);color:#e8dcc0;background:rgba(10,14,30,.55);border:1px solid rgba(201,162,74,.5);border-radius:10px;padding:3px 9px;cursor:pointer}
+.lx-relic{cursor:pointer}
+/* デッキの内訳 */
+.lx-mix{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.lx-mix span{padding:3px 10px;border-radius:10px;color:#fff;font-size:13px}.lx-mix .a{background:#8a2e3a}.lx-mix .b{background:#2e5c7a}.lx-mix .o{background:#55507a}
+.lx-mix small{color:#6b604a}
 </style>
 </head>
 <body>
@@ -5506,25 +5535,26 @@ const LX_KAI_CUT={full:.6,who:.8};
 /* 層（難易度）。F=道のりの列数（最後がボス）、W=1列に並ぶマスの最大数、hp/dmg=敵の強さの倍率、rew=完走でもらえる栞の枚数、
    fixed=道のりを固定する層（一本道）。types=マスの出やすさ（戦闘・エリート・？・宝箱・写本室・休憩） */
 const LX_STAGES=[
- {n:'入口の書架',F:9,W:1,hp:.6,dmg:.7,rew:1,fixed:['戦闘','戦闘','？','戦闘','お店','戦闘','？','休憩','ボス']},
- {n:'閲覧室の奥',F:11,W:2,hp:.75,dmg:.82,rew:1,types:{戦闘:6,'？':2,宝箱:1,お店:1,休憩:1}},
- {n:'古写本の回廊',F:12,W:2,hp:.88,dmg:.9,rew:1,types:{戦闘:6,エリート:1,'？':2,宝箱:1,写本室:1,お店:1,休憩:1}},
- {n:'禁帯出の棚',F:14,W:3,hp:1,dmg:1,rew:2,types:{戦闘:6,エリート:1.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:1}},
- {n:'螺旋の書庫',F:15,W:3,hp:1.08,dmg:1.06,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:1}},
- {n:'封印の閉架',F:17,W:3,hp:1.15,dmg:1.12,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:1}},
- {n:'未整理の地下書庫',F:18,W:4,hp:1.22,dmg:1.18,rew:3,types:{戦闘:6,エリート:2.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:1}},
- {n:'書架の最奥',F:20,W:4,hp:1.3,dmg:1.25,rew:3,types:{戦闘:6,エリート:3,'？':2,宝箱:1,写本室:1,お店:1,休憩:1}}];
+ {n:'入口の書架',F:9,W:1,hp:.6,dmg:.7,rew:1,fixed:['戦闘','戦闘','？','戦闘','休憩','戦闘','お店','休憩','ボス']},
+ {n:'閲覧室の奥',F:11,W:2,hp:.75,dmg:.82,rew:1,types:{戦闘:6,'？':2,宝箱:1,お店:1,休憩:.5}},
+ {n:'古写本の回廊',F:12,W:2,hp:.88,dmg:.9,rew:1,types:{戦闘:6,エリート:1,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'禁帯出の棚',F:14,W:3,hp:1,dmg:1,rew:2,types:{戦闘:6,エリート:1.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'螺旋の書庫',F:15,W:3,hp:1.08,dmg:1.06,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'封印の閉架',F:17,W:3,hp:1.15,dmg:1.12,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'未整理の地下書庫',F:18,W:4,hp:1.22,dmg:1.18,rew:3,types:{戦闘:6,エリート:2.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'書架の最奥',F:20,W:4,hp:1.3,dmg:1.25,rew:3,types:{戦闘:6,エリート:3,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}}];
 const LX_NT={'戦闘':'戦闘','エリート':'エリート','？':'？','宝箱':'宝箱','写本室':'写本室','休憩':'休憩','ボス':'ボス'};
 /* 道のりを作る：列ごとにマスを並べ、隣の列へ線をつなぐ（線はなるべく交差しない） */
-function lxGenMap(si){const st=LX_STAGES[si];const F=st.F;const cols=[];
+function lxGenMap(si){const st=LX_STAGES[si];const F=st.F;const cols=[];const mid=Math.floor((F-1)/2);
  const pickT=(c)=>{const T=Object.assign({},st.types);if(c<3)delete T['エリート'];if(c<2){delete T['休憩'];delete T['写本室'];delete T['お店']}
   const ks=Object.keys(T);let s=ks.reduce((a,k)=>a+T[k],0),r=Math.random()*s;for(const k of ks){r-=T[k];if(r<=0)return k}return '戦闘'};
  for(let c=0;c<F;c++){let n;
   if(st.fixed){cols.push([{t:st.fixed[c],n:[]}]);continue}
   if(c===F-1)n=1;else if(c===0)n=Math.max(1,st.W-1);else n=Math.max(1,st.W-(Math.random()<.4?1:0));
   const col=[];for(let i=0;i<n;i++){let t;
-   if(c===F-1)t='ボス';else if(c===F-2)t='休憩';else if(c===0)t='戦闘';else t=pickT(c);
-   if((t==='休憩'||t==='お店')&&cols[c-1]&&cols[c-1].some(o=>o.t===t)&&c!==F-2)t='戦闘';
+   if(c===F-1)t='ボス';else if(c===F-2||c===mid)t='休憩';else if(c===0)t='戦闘';else t=pickT(c);
+   if(t==='休憩'&&(c===mid-1||c===F-3))t='戦闘';
+   if((t==='休憩'||t==='お店')&&cols[c-1]&&cols[c-1].some(o=>o.t===t)&&c!==F-2&&c!==mid)t='戦闘';
    col.push({t,n:[]})}
   cols.push(col)}
  for(let c=0;c<F-1;c++){const A=cols[c],B=cols[c+1],n=A.length,m=B.length;const base=i=>n===1?Math.floor((m-1)/2):Math.round(i*(m-1)/(n-1));
@@ -5541,6 +5571,16 @@ const LX_BASE={
  'B:衛士':{name:'書架の衛士',type:'skl',cost:1,fx:{blk:5},m:'blk',ic:'shield'},
  'B:写本':{name:'写本係',type:'skl',cost:1,fx:{blk:3,draw:1},m:'blk',ic:'quill'},
  'B:覚書':{name:'写字生の覚え書き',type:'atk',cost:1,fx:{dmg:4,vul:1},m:'dmg',ic:'scroll'}};
+/* キャラ専用の頁（そのキャラの最初のデッキに1枚ずつ入る。報酬にもときどき出る） */
+const LX_CCARD={
+ 'C:渾身':{name:'渾身の一撃',type:'atk',cost:2,fx:{dmg:12,strMul:3},m:'dmg',img:'HERO'},
+ 'C:鍛錬':{name:'鍛錬',type:'pow',cost:2,fx:{pStrTurn:1},m:null,img:'HERO'},
+ 'C:校正':{name:'校正',type:'atk',cost:1,fx:{dmg:5,qbonus:2},m:'dmg',img:'SD_シミ'},
+ 'C:復習':{name:'復習',type:'skl',cost:1,fx:{blk:4,qblk:2},m:'blk',img:'SD_シミ'},
+ 'C:布陣':{name:'布陣',type:'pow',cost:1,fx:{pPowDraw:1},m:null,img:'コンラッド'},
+ 'C:総力戦':{name:'総力戦',type:'atk',cost:2,fx:{dmg:6,powbonus:4},m:'dmg',img:'コンラッド'},
+ 'C:のしかかり':{name:'のしかかり',type:'atk',cost:1,fx:{slam:true},m:null,img:'ヌル'},
+ 'C:鎧の重み':{name:'鎧の重み',type:'pow',cost:1,fx:{pBlkPlus:2},m:null,img:'ヌル'}};
 const LX_DEFAULT_DECK=[].concat(Array(6).fill('B:兵士'),Array(5).fill('B:衛士'),Array(2).fill('B:写本'),Array(2).fill('B:覚書'));
 /* 人物の頁の型（属性ごと）。m=レアリティ・凸・注釈で上がる数値、half=上がり方が半分、r3=★3だけ */
 const LX_TPL={
@@ -5603,12 +5643,18 @@ const LX_RELIC={
  'ホプロンの盾':'戦闘の最初のターン、余白10',
  '活版印刷機':'クイズに正解するたびに1枚引く',
  '修道院の薬草':'戦闘に勝つたびにHPが6回復する',
+ /* キャラが最初から持っている装備（ほかでは手に入らない） */
+ 'カコの手帳':'戦闘の始めに威信＋1',
+ 'シミの虫眼鏡':'クイズの選択肢が1つ減る',
+ 'コンラッドの万年筆':'持続の頁を切るたびに余白4',
+ 'ヌルの外套':'余白がターンの始めに消えず、半分だけ残る',
  /* ここから下はデメリットつき（？とお店でだけ手に入る） */
  '借り物の王冠':'毎ターン、エネルギー＋1。ただし戦闘の始めに、山札に汚れ頁が2枚混ざる',
  'ダモクレスの剣':'戦闘の始めに威信＋2。ただしターン終了時にHPを1失う',
  'ピュロスの兜':'戦闘の最初のターン、余白20。ただし戦闘に勝つたびにHPを4失う',
  '免罪符':'戦闘に勝つたびに銀貨＋15。ただし手に入れたとき最大HPが8下がる',
  '禁書目録':'毎ターン1枚多く引く。ただしクイズに間違えるとHPを5失う'};
+const LX_RELIC_CHAR=new Set(['カコの手帳','シミの虫眼鏡','コンラッドの万年筆','ヌルの外套']);
 const LX_RELIC_CURSE=new Set(['借り物の王冠','ダモクレスの剣','ピュロスの兜','免罪符','禁書目録']);
 /* 薬（使い切り。3つまで持てる） */
 const LX_POT={
@@ -5662,7 +5708,7 @@ function lxTplOf(n){if(!LX_TPLMAP){LX_TPLMAP={};const by={};CARDS.forEach(c=>{co
 function lxDef(id,ann){
  if(id==='X:汚れ')return {id,name:'汚れ頁',type:'cur',cost:0,fx:{},unplayable:true,person:false,text:'切れない。手札に残ると2ダメージ'};
  let base,bonus=ann?3:0,person=false,attr='base',name,rar=0,lvl=0;
- if(LX_BASE[id]){base=LX_BASE[id];name=base.name}
+ if(LX_BASE[id]||LX_CCARD[id]){base=LX_BASE[id]||LX_CCARD[id];name=base.name}
  else{const c=CARD[id];if(!c)return null;person=true;attr=c.a;name=id;rar=c.r;lvl=Math.max(1,lv(id));
   base=lxTplOf(id);bonus+=(c.r===3?2:c.r===2?1:0)+(lvl-1);if(c.r===3&&lvl>=5&&(base.cost<2||base.fx.dmgAll!=null))bonus+=2}
  const fx=Object.assign({},base.fx);let cost=base.cost;
@@ -5671,8 +5717,8 @@ function lxDef(id,ann){
  if(ann&&!m){if(cost>0)cost--;else fx.draw=(fx.draw||0)+1}
  /* ★3の節目：2凸で1枚多く引く。4凸でコスト2以上の頁はコスト−1（全体攻撃は除く）、それ以外は主な数値＋2 */
  if(person&&rar===3){if(lvl>=3)fx.draw=(fx.draw||0)+1;if(lvl>=5&&cost>=2&&fx.dmgAll==null)cost--}
- const d={id,name,type:base.type,cost,fx,person,attr,rar,ann:!!ann,tpl:base.id||'',ic:base.ic};
- d.text=lxFxText(fx);d.target=(fx.dmg!=null&&!fx.rnd)||!!fx.vul||!!fx.weak||!!fx.stun||!!fx.preach||!!fx.chron||!!fx.fiend||!!fx.finisher;return d}
+ const d={id,name,type:base.type,cost,fx,person,attr,rar,ann:!!ann,tpl:base.id||'',ic:base.ic,img:base.img};
+ d.text=lxFxText(fx);d.target=(fx.dmg!=null&&!fx.rnd)||!!fx.vul||!!fx.weak||!!fx.stun||!!fx.preach||!!fx.chron||!!fx.fiend||!!fx.finisher||!!fx.slam;return d}
 function lxFxText(f){const a=[];
  if(f.selfDmg)a.push(`HPを${f.selfDmg}失う`);
  if(f.dmg!=null)a.push(f.rnd?`ランダムな敵に攻撃${f.dmg}を${f.rnd}回`:f.hits>1?`攻撃${f.dmg}を${f.hits}回`:`攻撃${f.dmg}`);
@@ -5680,6 +5726,14 @@ function lxFxText(f){const a=[];
  if(f.chron)a.push(`この戦闘で正解したクイズ1問につき攻撃${f.chron}`);
  if(f.preach)a.push(`捨て札にある思想家の頁1枚につき攻撃${f.preach}`);
  if(f.pstrike)a.push(`デッキにいる君主の頁1枚につき、さらに攻撃＋${f.pstrike}`);
+ if(f.strMul)a.push(`威信が${f.strMul}倍効く`);
+ if(f.qbonus)a.push(`この戦闘でクイズに正解した数×${f.qbonus}だけ攻撃が上がる`);
+ if(f.qblk)a.push(`この戦闘でクイズに正解した数×${f.qblk}だけ余白が増える`);
+ if(f.powbonus)a.push(`この戦闘で切った持続の頁1枚につき攻撃＋${f.powbonus}`);
+ if(f.slam)a.push('いまの余白と同じだけ攻撃');
+ if(f.pStrTurn)a.push(`ターンの始めに威信＋${f.pStrTurn}`);
+ if(f.pPowDraw)a.push(`持続の頁を切るたびに${f.pPowDraw}枚引く`);
+ if(f.pBlkPlus)a.push(`余白を得るたびに、さらに余白＋${f.pBlkPlus}`);
  if(f.bfb)a.push('この戦闘でHPを失うたびに、コストが1下がる');
  if(f.fiend)a.push(`ほかの手札をすべて廃棄し、1枚につき攻撃${f.fiend}`);
  if(f.finisher)a.push(`このターンに切った攻撃の頁1枚につき攻撃${f.finisher}`);
@@ -5717,11 +5771,19 @@ const LX_IC={
  quill:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M38 6c-10 2-18 10-22 22l-3 7 6-4c10-3 17-12 19-25z"/><path d="M16 28l-6 14"/></svg>',
  scroll:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M12 8h22a5 5 0 0 1 0 10H34v22H16a5 5 0 0 1-5-5V12a4 4 0 0 1 4-4z"/><path d="M17 18h11M17 25h11M17 32h8"/></svg>',
  blot:'<svg viewBox="0 0 48 48"><path d="M24 6c7 0 9 6 14 8s8 7 6 14 2 11-3 15-13 5-18 4-11 2-15-4 1-11-2-16 3-12 8-15S17 6 24 6z" fill="#1a1712" opacity=".85"/></svg>'};
+function lxImgOf(k){if(k==='HERO'){try{return IMG[heroKey()]}catch(e){return null}}return IMG[k]}
+function lxNowDmg(c){if(!X)return '';const d=c.def,f=d.fx;const al=lxAlive();const t=al[X.tg]||al[0];if(!t)return '';
+ const P=v=>lxPDmg(v,t,false);
+ if(f.slam)return `${P(X.p.blk)}`;if(f.finisher)return `${P(f.finisher)}×${X.atkN||0}`;if(f.fiend)return `${P(f.fiend)}×${Math.max(0,X.hand.length-1)}`;
+ if(f.chron||f.preach)return `${P(lxDynDmg(f))}`;
+ if(f.dmg!=null&&!f.rnd){const v=P(f.dmg+(lxHasExtra(f)?lxExtra(f):0));const hit=f.hits>1?`×${f.hits}`:'';return v!==f.dmg||lxHasExtra(f)?`${v}${hit}`:''}
+ if(f.dmgAll!=null){const v=P(f.dmgAll);return v!==f.dmgAll?`全体${v}`:''}
+ return ''}
 function lxCardHTML(d,o={}){
- const art=d.person?(IMG[d.id]?`<img src="${IMG[d.id]}" alt="" loading="lazy" decoding="async">`:silhouette()):`<i class="lxc-ic">${LX_IC[d.ic||'blot']}</i>`;
- const cls=d.person?ATTR_CLASS(d.attr):d.unplayable?'k-cur':'k-base';
+ const art=d.person?(IMG[d.id]?`<img src="${IMG[d.id]}" alt="" loading="lazy" decoding="async">`:silhouette()):d.img&&lxImgOf(d.img)?`<img class="ch" src="${lxImgOf(d.img)}" alt="" loading="lazy">`:`<i class="lxc-ic">${LX_IC[d.ic||'blot']}</i>`;
+ const cls=d.person?ATTR_CLASS(d.attr):d.unplayable?'k-cur':d.img?'k-char':'k-base';
  return `<div class="lxc ${cls} t-${d.type} ${o.cls||''}" ${o.attrs||''}><span class="lxc-cost ${o.cost!=null&&o.cost<d.cost?'down':''}">${d.unplayable?'－':o.cost!=null?o.cost:d.cost}</span>
-  <div class="lxc-art">${art}</div><div class="lxc-nm">${esc(d.name)}${d.ann?'<b>＋</b>':''}</div>
+  <div class="lxc-art">${art}${o.now?`<span class="lxc-now">いま ${o.now}</span>`:''}</div><div class="lxc-nm">${esc(d.name)}${d.ann?'<b>＋</b>':''}</div>
   <div class="lxc-ty">${d.person?'★'.repeat(d.rar)+'　':''}${LX_TYPE[d.type]||'状態'}</div><div class="lxc-tx ${d.text.length>34?'xl':d.text.length>22?'long':''}">${esc(d.text)}</div></div>`}
 function lxOwnedPersons(){return CARDS.filter(c=>lv(c.n)&&!isSP(c.n))}
 function lxDeckValid(deck){return deck.filter(id=>LX_BASE[id]||(CARD[id]&&lv(id)&&!isSP(id)))}
@@ -5742,7 +5804,7 @@ function lxQFor(n){const R=S.lib.run;const used=new Set(R?R.usedQ:[]);const ok=q
 function lxOverlay(inner){const o=document.createElement('div');o.className='lx-ov';o.id='lxov';o.innerHTML=`<div class="lx-qp">${inner}</div>`;$('#lx').appendChild(o);return o}
 function lxAskQuiz(n){return new Promise(res=>{const q=lxQFor(n);
  const o=lxOverlay(`<p class="lx-qh"><b>${esc(n)}</b>の頁を切る ── 正解すると、この頁の効果が1.5倍</p>
-  <div class="lx-qbox parch"><p>${esc(q.q)}</p></div><div class="grid2" id="lxq">${shuffle(X&&X.halfQ?(X.halfQ=false,[q.a,shuffle(q.d)[0]]):[q.a,...q.d]).map(v=>`<button class="slip" data-v="${esc(v)}">${esc(v)}</button>`).join('')}</div>`);
+  <div class="lx-qbox parch"><p>${esc(q.q)}</p></div><div class="grid2" id="lxq">${shuffle(X&&X.halfQ?(X.halfQ=false,[q.a,shuffle(q.d)[0]]):lxHas('シミの虫眼鏡')?[q.a,...shuffle(q.d).slice(0,Math.max(1,q.d.length-1))]:[q.a,...q.d]).map(v=>`<button class="slip" data-v="${esc(v)}">${esc(v)}</button>`).join('')}</div>`);
  o.querySelectorAll('#lxq .slip').forEach(b=>b.onclick=()=>{const ok=b.dataset.v===q.a;lockSlips('#lxq',q.a);if(!ok)b.classList.add('wrong');
   setTimeout(()=>{o.querySelector('.lx-qp').insertAdjacentHTML('beforeend',noteHTML(ok?'ok':'ng',ok?'正解！':'不正解……',ok?'この頁の効果が1.5倍':'強化なしで切る',`${ok?'':`正しくは<b>${esc(q.a)}</b>。`}<span class="who">シミ</span>${esc(q.x||'')}`,'頁を切る'));
    o.querySelector('#nx').onclick=()=>{o.remove();res(ok)}},450)})})}
@@ -5784,6 +5846,7 @@ function lxBattle(kind,keys,onWin,opt={}){const R=S.lib.run;const SG=LX_STAGES[R
   pw:{draw:0,blkEnd:0,en:0,atkBlk:0,aoe:0,jug:0,brut:0},seen:new Set(),draw:opt.order?pile.reverse():shuffle(pile),hand:[],disc:[],exh:[],turn:0,qz:'none',dealt:0,sel:null,tg:0,busy:true,onWin,over:false,tut:opt.tut||null,dm:SG&&!R.tut?SG.dmg:1};
  if(!opt.tut&&lxHas('借り物の王冠'))for(let i=0;i<2;i++)X.draw.splice(Math.floor(Math.random()*(X.draw.length+1)),0,{u:++lxUid,def:lxDef('X:汚れ')});
  if(!opt.tut&&lxHas('ダモクレスの剣'))X.p.st.str+=2;
+ if(!opt.tut&&lxHas('カコの手帳'))X.p.st.str+=1;
  lxRenderBase();lxStartTurn()}
 const lxAlive=()=>X.en.filter(e=>!e.dead);
 const lxHas=r=>S.lib.run.relics.includes(r);
@@ -5791,7 +5854,7 @@ const lxHas=r=>S.lib.run.relics.includes(r);
 function lxForbid(){if(!lxHas('禁書目録'))return;const v=Math.min(5,X.p.hp-1);if(v<=0)return;X.p.hp-=v;X.hpl=(X.hpl||0)+1;R_sync();lxFloat($('#lxSd'),'-'+v,'me');toast(`禁書目録：HPを${v}失った`)}
 function lxDraw(n){for(let i=0;i<n;i++){if(X.hand.length>=10)break;if(!X.draw.length){if(!X.disc.length)break;X.draw=shuffle(X.disc);X.disc=[]}X.hand.push(X.draw.pop())}}
 function lxIntentOf(e){const D=LX_EN[e.key];const it=Object.assign({},D.ai(e,X));if(it.d!=null&&X.dm&&X.dm!==1)it.d=Math.max(1,Math.round(it.d*X.dm));return it}
-function lxStartTurn(){if(X.over)return;X.turn++;if(!X.pw.barr)X.p.blk=0;X.atkN=0;X.qz='none';X.dealt=0;X.sel=null;X.rage=0;X.dtap=0;
+function lxStartTurn(){if(X.over)return;X.turn++;if(!X.pw.barr)X.p.blk=lxHas('ヌルの外套')?Math.floor(X.p.blk/2):0;if(X.pw.strTurn)X.p.st.str+=X.pw.strTurn;X.atkN=0;X.qz='none';X.dealt=0;X.sel=null;X.rage=0;X.dtap=0;
  X.p.en=LX_ENERGY+X.pw.en+(X.nextEn||0)+(X.turn===1&&lxHas('羅針盤')?1:0)+(lxHas('借り物の王冠')?1:0);X.nextEn=0;
  if(X.turn===1&&lxHas('ホプロンの盾'))lxGainBlk(10);
  if(X.turn===1&&lxHas('ピュロスの兜'))lxGainBlk(20);
@@ -5808,7 +5871,9 @@ function lxStartTurn(){if(X.over)return;X.turn++;if(!X.pw.barr)X.p.blk=0;X.atkN=
    if(r==='full'){X.qok=(X.qok||0)+1;kb.it.cut=LX_KAI_CUT.full;kb.st.vul+=2;X.qz='free';if(lxHas('活版印刷機'))lxDraw(1)}else{if(r==='who')kb.it.cut=LX_KAI_CUT.who;X.qz='none';lxForbid()}
    X.busy=false;lxRender()},FX.reduce()?50:650)}
  if(X.tut)lxTutEvent('turn')}
-function lxDynDmg(f){if(f.chron)return f.chron*(X.qok||0);if(f.pstrike)return f.dmg+f.pstrike*S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;if(f.finisher)return f.finisher*(X.atkN||0);if(f.fiend)return f.fiend*Math.max(0,X.hand.length-1);if(f.preach)return f.preach*X.disc.filter(c=>c.def.person&&c.def.attr==='思想家').length;return null}
+function lxExtra(f){let v=0;if(f.pstrike)v+=f.pstrike*S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;if(f.qbonus)v+=f.qbonus*(X.qok||0);if(f.powbonus)v+=f.powbonus*(X.powN||0);if(f.strMul)v+=X.p.st.str*(f.strMul-1);return v}
+const lxHasExtra=f=>!!(f.pstrike||f.qbonus||f.powbonus||f.strMul);
+function lxDynDmg(f){if(f.slam)return X.p.blk;if(f.dmg!=null&&lxHasExtra(f))return f.dmg+lxExtra(f);if(f.chron)return f.chron*(X.qok||0);if(f.pstrike)return f.dmg+f.pstrike*S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;if(f.finisher)return f.finisher*(X.atkN||0);if(f.fiend)return f.fiend*Math.max(0,X.hand.length-1);if(f.preach)return f.preach*X.disc.filter(c=>c.def.person&&c.def.attr==='思想家').length;return null}
 /* 汚れ頁が飛んでくる演出（from→to の要素へ、n枚） */
 function lxFlyDirt(from,to,n){const root=$('#lx');if(!root||!from||!to||FX.reduce())return;const rr=root.getBoundingClientRect(),a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
  for(let i=0;i<n;i++){const d=document.createElement('div');d.className='lx-fly';d.innerHTML=lxCardHTML(lxDef('X:汚れ'));
@@ -5816,7 +5881,7 @@ function lxFlyDirt(from,to,n){const root=$('#lx');if(!root||!from||!to||FX.reduc
   const dx=(b.left+b.width/2)-(a.left+a.width/2)+(i-(n-1)/2)*40,dy=(b.top+b.height/2)-(a.top+a.height/2);
   setTimeout(()=>{d.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(${(i-(n-1)/2)*12}deg) scale(.9)`;d.style.opacity='.95'},30+i*120);
   setTimeout(()=>{d.style.opacity='0'},700+i*120);setTimeout(()=>d.remove(),1050+i*120)}}
-function lxGainBlk(v){if(!X||v<=0)return;X.p.blk+=v;X.seen.add('余白');
+function lxGainBlk(v){if(!X||v<=0)return;v+=X.pw.blkPlus||0;X.p.blk+=v;X.seen.add('余白');
  if(X.pw.jug){const al=lxAlive();if(al.length){X.noLunge=true;lxHitE(al[Math.floor(Math.random()*al.length)],X.pw.jug);X.noLunge=false}}}
 /* 切れるか（エネルギー・汚れ頁・クラッシュの条件） */
 function lxCostOf(c){const d=c.def;return d.fx&&d.fx.bfb?Math.max(0,d.cost-(X?X.hpl||0:0)):d.cost}
@@ -5851,12 +5916,13 @@ async function lxPlay(u,tgi){if(!X||X.busy||X.over)return;const c=X.hand.find(h=
  let boost=false;
  if(d.person&&(X.qz==='none'||X.qz==='free')){if(X.qz==='free')boost=true;else{lxRender();boost=await lxAskQuiz(d.id);if(boost){X.qok=(X.qok||0)+1;if(lxHas('活版印刷機'))lxDraw(1)}else lxForbid()}X.qz='done'}
  if(X.over)return;
- X.p.en-=cost;X.hand=X.hand.filter(h=>h.u!==u);
+ X.p.en-=cost;X.hand=X.hand.filter(h=>h.u!==u);const pd0=X.pw.powDraw||0;
  if(boost){X.boost=true;lxFloat($('#lxSd'),'1.5倍！','blk')}
  const times=d.type==='atk'&&X.dtap>0?(X.dtap--,2):1;
  for(let k=0;k<times;k++){if(!lxAlive().length)break;if(k)await lxWait(260);await lxResolve(c,d,tgi)}
  X.boost=false;
  if(d.type==='atk'){X.atkN=(X.atkN||0)+1}
+ if(d.type==='pow'){X.powN=(X.powN||0)+1;if(pd0)lxDraw(pd0);if(lxHas('コンラッドの万年筆'))lxGainBlk(4)}
  if(d.type==='atk'&&X.rage)lxGainBlk(X.rage);
  if(d.type==='atk'&&X.pw.atkBlk)lxGainBlk(X.pw.atkBlk);
  if(d.fx.eth)X.seen.add('一度しか手札に出ない');if(d.fx.retain)X.seen.add('保留');if(d.type==='pow')X.seen.add('持続');
@@ -5867,7 +5933,8 @@ async function lxPlay(u,tgi){if(!X||X.busy||X.over)return;const c=X.hand.find(h=
 /* 頁の効果を1回ぶん発動する */
 async function lxResolve(c,d,tgi){const f=d.fx,P=d.person;const alive=lxAlive();let t=null;if(d.target){t=alive[tgi!=null?tgi:X.tg]||alive[0]}
  if(f.selfDmg){X.p.hp-=f.selfDmg;X.hpl=(X.hpl||0)+1;R_sync();lxFloat($('#lxSd'),'-'+f.selfDmg,'me')}
- if(f.dmg!=null&&f.pstrike&&t){const n=S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;lxHitE(t,lxPDmg(f.dmg+f.pstrike*n,t,P))}
+ if(f.slam&&t)lxHitE(t,lxPDmg(X.p.blk,t,P));
+ if(f.dmg!=null&&lxHasExtra(f)&&t){lxHitE(t,lxPDmg(f.dmg+lxExtra(f),t,P))}
  else if(f.dmg!=null&&f.rnd){for(let i=0;i<f.rnd;i++){const al=lxAlive();if(!al.length)break;const e=al[Math.floor(Math.random()*al.length)];lxHitE(e,lxPDmg(f.dmg,e,P));await lxWait(150)}}
  else if(f.dmg!=null&&t){for(let i=0;i<(f.hits||1);i++){if(t.dead)break;lxHitE(t,lxPDmg(f.dmg,t,P));if(i+1<(f.hits||1))await lxWait(160)}}
  if(f.dmgAll!=null)for(const e of lxAlive())lxHitE(e,lxPDmg(f.dmgAll,e,P));
@@ -5878,8 +5945,8 @@ async function lxResolve(c,d,tgi){const f=d.fx,P=d.person;const alive=lxAlive();
  if(f.wind){const keep=[],ex=[];X.hand.forEach(k=>(k.def.type==='atk'?keep:ex).push(k));X.hand=keep;ex.forEach(k=>X.exh.push(k));if(ex.length){X.seen.add('廃棄');lxGainBlk(lxPBlk(f.wind,P)*ex.length)}}
  if(f.gainEn)X.p.en+=f.gainEn;
  if(f.nextEn){X.nextEn=(X.nextEn||0)+f.nextEn}
- if(f.pBarr)X.pw.barr=true;if(f.pComb)X.pw.comb=(X.pw.comb||0)+lxPBlk(f.pComb,P);
- if(f.blk)lxGainBlk(lxPBlk(f.blk,P));
+ if(f.pBarr)X.pw.barr=true;if(f.pStrTurn)X.pw.strTurn=(X.pw.strTurn||0)+f.pStrTurn;if(f.pPowDraw)X.pw.powDraw=(X.pw.powDraw||0)+f.pPowDraw;if(f.pBlkPlus)X.pw.blkPlus=(X.pw.blkPlus||0)+f.pBlkPlus;if(f.pComb)X.pw.comb=(X.pw.comb||0)+lxPBlk(f.pComb,P);
+ if(f.blk)lxGainBlk(lxPBlk(f.blk,P));if(f.qblk&&X.qok)lxGainBlk(lxPBlk(f.qblk*X.qok,P));
  if(f.dblBlk&&X.p.blk>0)lxGainBlk(X.p.blk);
  if(t&&!t.dead){if(f.vul){t.st.vul+=f.vul;X.seen.add('動揺')}if(f.weak){t.st.weak+=f.weak;X.seen.add('衰退')}if(f.stun)t.stun=1}
  if(f.str){X.p.st.str+=f.str;X.seen.add('威信')}
@@ -5970,6 +6037,13 @@ function lxIntentDesc(e){const it=e.it||{};const a=[];
  if(it.cut)a.push(`改変を正したので、攻撃が ${lxKaiDmg(e,1)} → ${lxKaiDmg(e,it.cut)} に減っている`);
  const words=a.join('　');const note=LX_EN[e.key].note;
  return `<p class="lx-tt"><b>${esc(e.name)}の次の行動</b></p><ul class="lx-tl">${a.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>${note?`<p class="lx-tt" style="font-size:13px">特徴：${esc(note)}</p>`:''}${lxTermsIn(words).map(lxTermHTML).join('')}`}
+function lxPileView(k){if(!X)return;const nm={draw:'山札',disc:'捨て札',exh:'廃棄'}[k];let L=X[k].slice();
+ if(k==='draw')L.sort((a,b)=>(a.def.type>b.def.type?1:a.def.type<b.def.type?-1:a.def.name<b.def.name?-1:1));
+ modal(`<div class="mhead"><h3>${nm}（${L.length}枚）</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 12px">${k==='draw'?'これから引く頁です（引く順番はわかりません）。':k==='disc'?'山札がなくなると、捨て札をかき混ぜて山札にします。':'廃棄した頁は、この戦闘ではもう使えません。'}</p>
+  ${L.length?`<div class="lx-grid pick">${L.map(c=>`<div class="lx-cell">${lxCardHTML(c.def)}</div>`).join('')}</div>`:'<p>まだありません。</p>'}`)}
+/* 装備・薬の札をタップすると説明が出る（iPadではマウスを乗せられないため） */
+document.addEventListener('click',e=>{const r=e.target.closest&&e.target.closest('.lx-relic');if(!r)return;const k=r.textContent.trim();const isPot=r.classList.contains('pot');const t=isPot?LX_POT[k]:LX_RELIC[k];if(!t)return;
+ modal(`<h3>${isPot?'薬':'装備'}「${esc(k)}」</h3>${lxCurse(k)?'<p><i class="lx-ctag">デメリットあり</i></p>':''}<p style="line-height:1.8">${esc(t)}</p>${isPot?'<p class="muted">薬は戦闘中に使えます。</p>':''}<div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)});
 function lxGlossary(){modal(`<h3>用語の説明</h3><div style="line-height:1.7;font-size:15px">${Object.keys(LX_TERMS).map(lxTermHTML).join('')}<p class="lx-tt"><b>人物の頁</b>そのターン最初に切った人物の頁でクイズが出る。正解すると、その頁の効果が1.5倍</p><p class="lx-tt"><b>基本の頁</b>名もなき兵士などの図書館の備品。クイズは出ず、1.5倍にもならない</p></div><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)}
 
 /* ---------- 戦闘の表示 ---------- */
@@ -5992,7 +6066,7 @@ function lxIntentHTML(e){const it=e.it||{};const a=[];const say=lxSayOf(it);
 function lxShield(v){return v>0?`<span class="lx-shield" data-term="余白"><svg viewBox="0 0 40 46" aria-hidden="true"><path d="M20 2l16 6v12c0 12-7 19-16 24C11 39 4 32 4 20V8z" fill="#bfe3f7" stroke="#4f8db5" stroke-width="2.5"/></svg><b>${v}</b></span>`:''}
 function lxStHTML(st,blk){const a=[];if(st.str)a.push(`<i class="s-str" data-term="威信">威信${st.str}</i>`);if(st.vul)a.push(`<i class="s-vul" data-term="動揺">動揺${st.vul}</i>`);if(st.weak)a.push(`<i class="s-weak" data-term="衰退">衰退${st.weak}</i>`);return a.join('')}
 /* 主人公のSD（箱庭と同じ外見）。絵がなければシルエット */
-function lxHeroArt(){let src=null;try{src=IMG[heroKey()]}catch(e){}
+function lxHeroArt(){let src=null;try{src=IMG[heroKey()]}catch(e){}const ch=lxChar();if(ch&&ch.img&&IMG[ch.img])return `<img src="${IMG[ch.img]}" alt="" class="${ch.img==='SD_シミ'?'sd':'tall'}">`;
  return src?`<img src="${src}" alt="主人公">`:'<svg viewBox="0 0 100 200" aria-hidden="true"><ellipse cx="50" cy="194" rx="34" ry="6" fill="rgba(0,0,0,.35)"/><path d="M22 190c0-50 10-80 28-82 18 2 28 32 28 82z" fill="#2b3658"/><circle cx="50" cy="78" r="30" fill="#2b3658"/></svg>'}
 function lxRenderBase(){const R=S.lib.run;
  show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="lx-shade2"></div>
@@ -6015,7 +6089,7 @@ function lxRenderBase(){const R=S.lib.run;
   if(X.sel===u)lxPlay(u);
   else{X.sel=u;lxRender();if(c.def.cost>X.p.en)toast('エネルギーが足りない')}};}
 function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAlive();
- $('#lxMe').innerHTML=`<div class="lx-hprow">${lxShield(X.p.blk)}<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div></div><div class="lx-st">${lxStHTML(X.p.st,0)}${X.pw.draw?`<i class="s-pw" data-term="持続">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw" data-term="持続">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw" data-term="持続">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw" data-term="持続">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw" data-term="持続">毎ターン全体${X.pw.aoe}</i>`:''}${X.pw.jug?`<i class="s-pw" data-term="持続">余白でダメージ${X.pw.jug}</i>`:''}${X.pw.brut?`<i class="s-pw" data-term="持続">毎ターンHP−${X.pw.brut}・＋${X.pw.brut}枚</i>`:''}${X.rage?`<i class="s-blk">攻撃で余白${X.rage}</i>`:''}${X.dtap?`<i class="s-str">次の攻撃が2回</i>`:''}${X.halfQ?`<i class="s-pw">次のクイズは2択</i>`:''}${X.pw.barr?`<i class="s-pw" data-term="持続">余白が消えない</i>`:''}${X.pw.comb?`<i class="s-pw" data-term="持続">燃焼 ${X.pw.comb}</i>`:''}${X.nextEn?`<i class="s-pw">次のターン エネルギー＋${X.nextEn}</i>`:''}${X.qok?`<i class="s-pw">正解 ${X.qok}問</i>`:''}</div>`;
+ $('#lxMe').innerHTML=`<div class="lx-hprow">${lxShield(X.p.blk)}<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div></div><div class="lx-st">${lxStHTML(X.p.st,0)}${X.pw.draw?`<i class="s-pw" data-term="持続">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw" data-term="持続">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw" data-term="持続">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw" data-term="持続">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw" data-term="持続">毎ターン全体${X.pw.aoe}</i>`:''}${X.pw.jug?`<i class="s-pw" data-term="持続">余白でダメージ${X.pw.jug}</i>`:''}${X.pw.brut?`<i class="s-pw" data-term="持続">毎ターンHP−${X.pw.brut}・＋${X.pw.brut}枚</i>`:''}${X.rage?`<i class="s-blk">攻撃で余白${X.rage}</i>`:''}${X.dtap?`<i class="s-str">次の攻撃が2回</i>`:''}${X.halfQ?`<i class="s-pw">次のクイズは2択</i>`:''}${X.pw.barr?`<i class="s-pw" data-term="持続">余白が消えない</i>`:''}${X.pw.strTurn?`<i class="s-pw" data-term="持続">鍛錬 ${X.pw.strTurn}</i>`:''}${X.pw.powDraw?`<i class="s-pw" data-term="持続">布陣 ${X.pw.powDraw}</i>`:''}${X.pw.blkPlus?`<i class="s-pw" data-term="持続">鎧の重み ${X.pw.blkPlus}</i>`:''}${X.pw.comb?`<i class="s-pw" data-term="持続">燃焼 ${X.pw.comb}</i>`:''}${X.nextEn?`<i class="s-pw">次のターン エネルギー＋${X.nextEn}</i>`:''}${X.qok?`<i class="s-pw">正解 ${X.qok}問</i>`:''}</div>`;
  $('#lxGear').innerHTML=R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${esc(r)}</span>`).join('')+R.pots.map((p,i)=>`<button class="lx-pot ${lxCurse(p)?'curse':''}" data-p="${i}">${esc(p)}</button>`).join('');
  $('#lxGear').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>lxUsePot(+b.dataset.p));
  $('#lxBonus').innerHTML=X.qz==='free'?'<span class="ok">改変を正した！　次に切る人物の頁は、クイズなしで1.5倍</span>':X.qz==='done'?'<span>このターンのクイズは終了</span>':'<span>このターン最初に切った人物の頁でクイズ（正解するとその頁が1.5倍）</span>';
@@ -6023,9 +6097,9 @@ function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAliv
    ${lxIntentHTML(e)}<div class="blob">${blobSVG(!!LX_EN[e.key].boss)}</div><div class="lx-ename">${esc(e.name)}</div>
    <div class="lx-hprow">${lxShield(e.blk)}<div class="lx-hpbar e"><i style="width:${100*e.hp/e.max}%"></i><span>${e.hp}／${e.max}</span></div></div><div class="lx-st">${lxStHTML(e.st,0)}${e.stun?'<i class="s-weak">次の行動なし</i>':''}</div></div>`).join('');
  $('#lxEnergy').innerHTML=`<b>${X.p.en}</b><small>／${LX_ENERGY+X.pw.en+(lxHas('借り物の王冠')?1:0)}</small><span>エネルギー</span>`;
- $('#lxPiles').innerHTML=`山札 ${X.draw.length}　捨て札 ${X.disc.length}${X.exh.length?`　除外 ${X.exh.length}`:''}`;
+ $('#lxPiles').onclick=e=>{const b=e.target.closest('[data-pile]');if(b)lxPileView(b.dataset.pile)};$('#lxPiles').innerHTML=`<button data-pile="draw">山札 ${X.draw.length}</button><button data-pile="disc">捨て札 ${X.disc.length}</button>${X.exh.length?`<button data-pile="exh">廃棄 ${X.exh.length}</button>`:''}`;
  const n=X.hand.length;$('#lxHand').style.setProperty('--n',n);
- $('#lxHand').innerHTML=X.hand.map(c=>lxCardHTML(c.def,{cost:lxCostOf(c),cls:(c.nw?(c.nw=0,'new '):'')+(X.sel===c.u?'sel ':'')+(!lxCanPlay(c)?'dim ':'')+(X.tut&&X.tut.lock===c.u?'tut':''),attrs:`data-u="${c.u}"`})).join('');
+ $('#lxHand').innerHTML=X.hand.map(c=>lxCardHTML(c.def,{cost:lxCostOf(c),now:lxNowDmg(c),cls:(c.nw?(c.nw=0,'new '):'')+(X.sel===c.u?'sel ':'')+(!lxCanPlay(c)?'dim ':'')+(X.tut&&X.tut.lock===c.u?'tut':''),attrs:`data-u="${c.u}"`})).join('');
  $('#lxEndB').disabled=X.busy;$('#lxEndB').classList.toggle('tut',!!(X.tut&&X.tut.lock==='end'));
  {const s=X.sel&&X.hand.find(h=>h.u===X.sel);const dp=$('#lxDetail');
   if(s){const d=s.def;const ty=LX_TYPE[d.type]||'状態';const words=d.text+' '+ty;
@@ -6117,21 +6191,50 @@ function DeckEdit(){const persons=lxOwnedPersons().sort((a,b)=>ATTRS.indexOf(a.a
   <div class="pane paper"><h3>基本の頁（足りないときに入る）</h3><div class="lx-grid">${Object.keys(LX_BASE).map(k=>`<div class="lx-cell">${lxCardHTML(lxDef(k))}</div>`).join('')}</div></div>
  </div></div>`);
  $('#lxGl2').onclick=lxGlossary}
+/* キャラを選ぶ */
+function lxCharPick(cb){const L=lxLib();const cur=LX_CHARS[L.char]?L.char:'カコ';
+ const art=(k,ch)=>{const src=ch.img?IMG[ch.img]:(()=>{try{return IMG[heroKey()]}catch(e){return null}})();return src?`<img src="${src}" alt="">`:''};
+ show(`<div class="screen">${topbar('だれで探索する？','lib')}<div class="scroll"><div class="lx-menu"><div class="lx-chars">${Object.entries(LX_CHARS).map(([k,ch])=>`
+  <div class="pane paper lx-char ${k===cur?'on':''}" data-ch="${esc(k)}"><div class="lx-char-art">${art(k,ch)}</div><div class="lx-char-tx">
+   <h3>${esc(k)}${k==='カコ'?'<small>（あなた）</small>':''}</h3><p class="lx-char-st">${esc(ch.style)}</p>
+   <p class="lx-char-rl"><b>最初の装備</b>「${esc(ch.relic)}」${esc(LX_RELIC[ch.relic])}</p>
+   <div class="lx-char-cd"><b>専用の頁</b>${ch.cards.map(c=>{const d=lxDef(c);return `<span><i>${d.cost}</i>${esc(d.name)}（${LX_TYPE[d.type]}）：${esc(d.text)}</span>`}).join('')}</div>
+   <button class="btn ${k===cur?'red':''}" data-chgo="${esc(k)}">${esc(k)}で探索する</button></div></div>`).join('')}</div></div></div></div>`);
+ app.querySelectorAll('[data-chgo]').forEach(b=>b.onclick=()=>cb(b.dataset.chgo))}
 function lxStartRun(skipTut){const L=lxLib();
  if(!L.tut&&!skipTut){askYes('はじめての探索です。先に練習の戦闘で、遊び方を確かめますか？\n（3ターンほどで終わります）','練習する',lxTutorial,()=>{L.tut=true;save();lxStartRun(true)},'練習しないで始める');return}
  const si=Math.max(0,Math.min(lxMaxStage(),L.stage||0));
- L.runs++;L.run={silver:60,stage:si,map:lxGenMap(si),at:null,cur:null,deck:lxRandomDeck(),ann:[],hp:LX_HP,max:LX_HP,relics:[],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
+ if(!L.pickedChar){lxCharPick(c=>{L.char=c;L.pickedChar=true;lxStartRun(true)});return}L.pickedChar=false;const chn=LX_CHARS[L.char]?L.char:'カコ';
+ L.runs++;L.run={char:chn,silver:60,stage:si,map:lxGenMap(si),at:null,cur:null,deck:lxRandomDeck(LX_CHARS[chn]),ann:[],hp:LX_HP,max:LX_HP,relics:[LX_CHARS[chn].relic],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
  save();FX.pageTurn(lxMap)}
+/* キャラ。pref=最初のデッキ・報酬・お店に出やすい頁の型 */
+const LX_CHARS={
+ 'カコ':{img:null,style:'威信を上げつつ余白を張り、重い一撃で殴る',relic:'カコの手帳',cards:['C:渾身','C:鍛錬'],
+  pref:['威信','重い一撃','一騎討ち','パーフェクトストライク','盾と剣','守り','籠城','脳天割り','クラッシュ','喀血','飛び膝蹴り']},
+ 'シミ':{img:'SD_シミ',style:'クイズに正解するほど強くなる',relic:'シミの虫眼鏡',cards:['C:校正','C:復習'],
+  pref:['年表','史料批判','記録','著作','研究','作品','論駁','説得','布教','回心','教化']},
+ 'コンラッド':{img:'コンラッド',style:'持続の頁を何枚も張って、じわじわ有利にする',relic:'コンラッドの万年筆',cards:['C:布陣','C:総力戦'],pref:null},
+ 'ヌル':{img:'ヌル',style:'余白を溜めに溜めて、一気に殴る',relic:'ヌルの外套',cards:['C:のしかかり','C:鎧の重み'],
+  pref:['守り','籠城','不動','やせ我慢','献策','教化','著作','守りと補給','ジャガーノート','バリケード','盾と剣','セカンドウインド']}};
+LX_CHARS['コンラッド'].pref=[...new Set(Object.values(LX_TPL).flat().filter(t=>t.type==='pow').map(t=>t.id))];
+const lxChar=R=>LX_CHARS[(R||S.lib.run||{}).char]||null;
+const lxPref=(ch,n)=>!!ch&&ch.pref.includes(lxTplOf(n).id);
+/* まだデッキにない人物の頁から n 枚。キャラがいれば6割はそのキャラ向けの型から */
+function lxPoolPick(R,n){const inDeck=new Set(R.deck);const all=shuffle(CARDS.filter(c=>!isSP(c.n)&&!inDeck.has(c.n)).map(c=>c.n));const ch=lxChar(R);if(!ch)return all.slice(0,n);
+ const pf=all.filter(x=>lxPref(ch,x)),ot=all.filter(x=>!lxPref(ch,x));const out=[];for(let i=0;i<n;i++){const src=(Math.random()<.6&&pf.length)?pf:ot.length?ot:pf;if(!src.length)break;out.push(src.shift())}return out}
 /* デッキ：持っている人物の頁からランダムに15枚。足りないぶんは基本の頁 */
 /* デッキの割合（12枚）：攻撃5〜6枚・余白3〜4枚・残りはその他（引く・妨害・持続など）。足りない分は基本の頁で埋める */
 const LX_DECK_MIX={atk:[5,6],blk:[3,4]};
 const lxIsBlk=id=>{const d=lxDef(id);return !!d&&((d.fx.blk||0)>0||(d.fx.pBlkEnd||0)>0)};
 function lxKind(id){const d=lxDef(id);if(!d)return 'oth';if(d.type==='atk')return 'atk';if(lxIsBlk(id))return 'blk';return 'oth'}
-function lxRandomDeck(){const rnd=([a,b])=>a+Math.floor(Math.random()*(b-a+1));
+function lxRandomDeck(ch){const rnd=([a,b])=>a+Math.floor(Math.random()*(b-a+1));
  const nA=rnd(LX_DECK_MIX.atk),nB=rnd(LX_DECK_MIX.blk),nO=LX_MIN-nA-nB;
- const own=shuffle(lxOwnedPersons().map(c=>c.n));const by={atk:[],blk:[],oth:[]};own.forEach(n=>by[lxKind(n)].push(n));
+ const own=lxOwnedPersons().map(c=>({n:c.n,k:Math.random()+(lxPref(ch,c.n)?.6:0)})).sort((a,b)=>b.k-a.k).map(o=>o.n);const by={atk:[],blk:[],oth:[]};own.forEach(n=>by[lxKind(n)].push(n));
  const take=(k,n,fill)=>{const L=by[k].splice(0,n);while(L.length<n)L.push(fill);return L};
- return shuffle([...take('atk',nA,'B:兵士'),...take('blk',nB,'B:衛士'),...take('oth',nO,'B:写本')])}
+ const deck=[...take('atk',nA,'B:兵士'),...take('blk',nB,'B:衛士'),...take('oth',nO,'B:写本')];
+ /* キャラ専用の頁を1枚ずつ入れる（基本の頁があればそれと、なければ型の合わない頁と入れ替える） */
+ if(ch)ch.cards.forEach((cid,j)=>{let i=deck.findIndex(x=>LX_BASE[x]);if(i<0)i=deck.findIndex(x=>CARD[x]&&!lxPref(ch,x));if(i<0)i=deck.findIndex(x=>CARD[x]);if(i<0)i=j;deck[i]=cid});
+ return shuffle(deck)}
 /* 開いている層の一番上（完走した層の次まで） */
 function lxMaxStage(){const L=S.lib||{};return Math.min(LX_STAGES.length-1,(L.best==null?-1:L.best)+1)}
 const LX_ICON={
@@ -6145,7 +6248,7 @@ const LX_ICON={
  'ボス':'<path d="M11 21a13 12 0 0 1 26 0v6l-3 2v5h-5v-3h-3v3h-3v-3h-3v3h-5v-5l-3-2z" fill="currentColor"/><circle cx="18.5" cy="22" r="3.4" fill="#f3e9d6"/><circle cx="29.5" cy="22" r="3.4" fill="#f3e9d6"/>'};
 const LX_TDESC={'お店':'銀貨で頁・装備・薬を買える。頁を外すこともできる','戦闘':'誤植との戦闘','エリート':'強い誤植との戦闘。勝つと装備がもらえる','？':'何が起きるかは、行ってみるまでわからない','宝箱':'装備か薬が手に入る','写本室':'頁を1枚外すか、HPを払って頁を強化できる','休憩':'HPを回復するか、頁を強化できる','ボス':'この層のボス'};
 /* vert=true（縦向きの画面）なら、下から上へ進む地図にする */
-function lxMapHero(x,y){let src=null;try{src=IMG[heroKey()]}catch(e){}const H=78,W=62;
+function lxMapHero(x,y){let src=null;try{src=IMG[heroKey()]}catch(e){}const H=78,W=62;const ch=lxChar();if(ch&&ch.img&&IMG[ch.img])src=IMG[ch.img];
  return src?`<g class="pin"><ellipse cx="${x}" cy="${y+4}" rx="18" ry="5" fill="rgba(60,40,20,.35)"/><image href="${src}" x="${x-W/2}" y="${y-H+6}" width="${W}" height="${H}" preserveAspectRatio="xMidYMax meet"/></g>`:`<circle cx="${x}" cy="${y-30}" r="7" class="pin"/>`}
 function lxMapSVG(R,vert){const M=R.map,F=M.length;const CW=128,RH=104,PX=70,PY=62;const maxN=Math.max(...M.map(c=>c.length));
  const L=PX*2+(F-1)*CW,Wd=PY*2+(Math.max(maxN,3)-1)*RH;const W=vert?Wd:L,H=vert?L:Wd;
@@ -6180,7 +6283,7 @@ function lxMap(){const R=S.lib.run;if(!R)return LibMenu();if(!R.map){S.lib.run=n
    const c=R.cur?R.cur.c:R.at?R.at.c+1:0;if(ms.vert)sc.scrollTop=Math.max(0,ms.y(c)*s-bh*.65);else sc.scrollLeft=Math.max(0,ms.x(c)*s-bw*.35)}}
  $('#lxm').querySelectorAll('.nd.can').forEach(g=>g.onclick=()=>{const c=+g.dataset.c,i=+g.dataset.i;const t=R.map[c][i].t;
   askYes(`「${t}」に進みますか？\n${LX_TDESC[t]||''}`,'進む',()=>{R.cur={c,i};R.q=null;save();lxEnter()},null,'やめる')})}
-function lxShowDeck(){const R=S.lib.run;modal(`<div class="mhead"><h3>いまのデッキ（${R.deck.length}枚）</h3><button class="btn light" data-close>閉じる</button></div><div class="lx-grid pick">${R.deck.map((id,i)=>`<div class="lx-cell">${lxCardHTML(lxDef(id,R.ann.includes(i)))}</div>`).join('')}</div>`)}
+function lxShowDeck(){const R=S.lib.run;const k={atk:0,blk:0,oth:0};R.deck.forEach(id=>k[lxKind(id)]++);modal(`<div class="mhead"><h3>いまのデッキ（${R.deck.length}枚）</h3><button class="btn light" data-close>閉じる</button></div><p class="lx-mix"><span class="a">攻撃 <b>${k.atk}</b>枚</span><span class="b">余白 <b>${k.blk}</b>枚</span><span class="o">その他 <b>${k.oth}</b>枚</span><small>（デッキは少ないほど、強い頁を引きやすくなります）</small></p><div class="lx-grid pick">${R.deck.map((id,i)=>`<div class="lx-cell">${lxCardHTML(lxDef(id,R.ann.includes(i)))}</div>`).join('')}</div>`)}
 function lxNextFloor(){const R=S.lib.run;if(!R)return LibMenu();if(R.cur){R.path=R.path||[];R.path.push(R.cur);R.at=R.cur;R.cur=null}R.q=null;save();
  if(lxNode(R,R.at).t==='ボス')return lxComplete();FX.pageTurn(lxMap)}
 function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();const n=o.t;const pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -6247,8 +6350,8 @@ function lxEventQuiz(E,done){const pool=Q.filter(q=>S.cleared[q.ch-1]);const L=p
 /* お店：頁5〜7枚・装備2つ・薬2つ・頁を外すサービス。品物は入ったときに決まる（出入りしても同じ） */
 const LX_PRICE={1:45,2:60,3:80};
 function lxShop(){const R=S.lib.run;
- if(!R.shop){const n=5+Math.floor(Math.random()*3);const inDeck=new Set(R.deck);const pages=shuffle(CARDS.filter(c=>!isSP(c.n)&&!inDeck.has(c.n)).map(c=>c.n)).slice(0,n).map(id=>({id,p:Math.round(LX_PRICE[CARD[id].r]*(.9+Math.random()*.2))}));
-  const rel=[...shuffle(Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r)&&!LX_RELIC_CURSE.has(r))).slice(0,2).map(id=>({id,p:120+Math.floor(Math.random()*31)})),...shuffle([...LX_RELIC_CURSE].filter(r=>!R.relics.includes(r))).slice(0,1).map(id=>({id,p:70+Math.floor(Math.random()*21)}))];
+ if(!R.shop){const n=5+Math.floor(Math.random()*3);const pages=lxPoolPick(R,n).map(id=>({id,p:Math.round(LX_PRICE[CARD[id].r]*(.9+Math.random()*.2))}));
+  const rel=[...shuffle(Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r)&&!LX_RELIC_CURSE.has(r)&&!LX_RELIC_CHAR.has(r))).slice(0,2).map(id=>({id,p:120+Math.floor(Math.random()*31)})),...shuffle([...LX_RELIC_CURSE].filter(r=>!R.relics.includes(r))).slice(0,1).map(id=>({id,p:70+Math.floor(Math.random()*21)}))];
   const pot=[...shuffle(Object.keys(LX_POT).filter(k=>!LX_POT_CURSE.has(k))).slice(0,2).map(id=>({id,p:40+Math.floor(Math.random()*21)})),...shuffle([...LX_POT_CURSE]).slice(0,1).map(id=>({id,p:25+Math.floor(Math.random()*11)}))];
   R.shop={pages,rel,pot};save()}
  const S0=R.shop;R.rmCost=R.rmCost||60;const sv=R.silver||0;
@@ -6257,15 +6360,20 @@ function lxShop(){const R=S.lib.run;
   <div class="pane paper lx-shophead"><div><h3 style="margin:0">古書と道具の店</h3><p class="muted" style="margin:4px 0 0">「いらっしゃい。どれも書架の奥から拾ってきた掘り出し物だよ」</p></div><b class="lx-silver big">銀貨 ${sv}</b></div>
   <div class="pane paper"><h3>頁（この探索のあいだデッキに加わる）</h3><div class="lx-shopgrid">${S0.pages.map((o,i)=>item('pg',i,o,lxCardHTML(lxDef(o.id)))).join('')}</div></div>
   <div class="pane paper"><h3>装備・薬</h3><div class="lx-shoprow">${S0.rel.map((o,i)=>item('rel',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}<b>装備「${esc(o.id)}」</b><small>${esc(LX_RELIC[o.id])}</small>`)).join('')}${S0.pot.map((o,i)=>item('pot',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}<b>薬「${esc(o.id)}」</b><small>${esc(LX_POT[o.id])}</small>`)).join('')}
-   ${item('rm',0,{p:R.rmCost,sold:R.rmUsed},`<b>頁を1枚外す</b><small>デッキから頁を1枚取り除く（1つのお店で1回まで）</small>`)}</div></div>
+   ${item('rm',0,{p:R.rmCost,sold:R.rmUsed},`<b>頁を1枚外す</b><small>デッキから頁を1枚取り除く（1つのお店で1回まで）</small>`)}
+   ${item('up',0,{p:75,sold:R.upUsed},`<b>頁に注釈を書き込む</b><small>頁を1枚強化する（1つのお店で1回まで）</small>`)}
+   ${item('heal',0,{p:50,sold:R.healUsed},`<b>手当てを受ける</b><small>HPを${Math.floor(R.max*.3)}回復する（1つのお店で1回まで）。いまHP ${R.hp}／${R.max}</small>`)}</div></div>
   <div class="row" style="justify-content:center"><button class="btn" id="lxShopOut">店を出る</button></div></div></div></div>`);
- lxNoBack();$('#lxShopOut').onclick=()=>{R.shop=null;R.rmUsed=false;lxNextFloor()};
- app.querySelectorAll('.lx-shopit:not([disabled])').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=+b.dataset.i;const o=k==='rm'?{p:R.rmCost}:S0[k==='pg'?'pages':k][i];
+ lxNoBack();$('#lxShopOut').onclick=()=>{R.shop=null;R.rmUsed=false;R.upUsed=false;R.healUsed=false;lxNextFloor()};
+ app.querySelectorAll('.lx-shopit:not([disabled])').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=+b.dataset.i;const o=k==='rm'?{p:R.rmCost}:k==='up'?{p:75}:k==='heal'?{p:50}:S0[k==='pg'?'pages':k][i];
   if(o.p>(R.silver||0)){toast('銀貨が足りない');return}
   const buy=()=>{R.silver-=o.p;if(k!=='rm')o.sold=true;save();lxShop()};
   if(k==='pg')askYes(`「${lxDef(o.id).name}」を銀貨${o.p}枚で買いますか？`,'買う',()=>{R.deck.push(o.id);toast('デッキに加えた');buy()});
   else if(k==='rel')askYes(`装備「${o.id}」を銀貨${o.p}枚で買いますか？\n${LX_RELIC[o.id]}`,'買う',()=>{lxAddRelic(o.id);buy()});
   else if(k==='pot'){if(R.pots.length>=3){toast('薬はもう持ちきれない');return}askYes(`薬「${o.id}」を銀貨${o.p}枚で買いますか？\n${LX_POT[o.id]}`,'買う',()=>{R.pots.push(o.id);buy()})}
+  else if(k==='heal'){if(R.hp>=R.max){toast('HPは満タン');return}askYes(`銀貨${o.p}枚で、HPを${Math.floor(R.max*.3)}回復しますか？`,'回復する',()=>{R.hp=Math.min(R.max,R.hp+Math.floor(R.max*.3));R.healUsed=true;R.silver-=o.p;save();lxShop()})}
+  else if(k==='up'){const its=R.deck.map((id,j)=>({i:j,def:lxDef(id),after:lxDef(id,true)})).filter(x=>!R.ann.includes(x.i));if(!its.length){toast('強化できる頁がない');return}
+   lxChooseCard({title:'注釈を書き込む頁を選ぶ',note:`銀貨${o.p}枚で、この探索のあいだ頁を強化します。`,items:its,ask:`銀貨${o.p}枚で、この頁に注釈を書き込みますか？`,yes:'書き込む',pick:it=>{R.ann.push(it.i);R.upUsed=true;R.silver-=o.p;save();toast('注釈を書き込んだ');lxShop()}})}
   else lxChooseCard({title:'外す頁を選ぶ',note:`銀貨${o.p}枚で、この探索のあいだデッキから外します。`,items:R.deck.map((id,j)=>({i:j,def:lxDef(id,R.ann.includes(j))})),ask:`銀貨${o.p}枚で、この頁を外しますか？`,yes:'外す',
    pick:it=>{const j=it.i;R.deck.splice(j,1);R.ann=R.ann.filter(x=>x!==j).map(x=>x>j?x-1:x);R.silver-=o.p;R.rmUsed=true;R.rmCost+=25;save();toast(`「${it.def.name}」を外した`);lxShop()}})})}
 /* 写本室：頁を1枚外す／HPを払って頁を強化する／立ち去る */
@@ -6279,14 +6387,14 @@ function lxScribe(){const R=S.lib.run;const cost=6;
  $('#lxUp').onclick=()=>lxChooseCard({title:'強化する頁を選ぶ',note:`HPを${cost}払います。強化はこの探索のあいだだけ。`,
   items:R.deck.map((id,i)=>({i,def:lxDef(id),after:lxDef(id,true)})).filter(o=>!R.ann.includes(o.i)),ask:`HPを${cost}払って、この頁を強化しますか？`,yes:'強化する',
   pick:it=>{R.ann.push(it.i);R.hp-=cost;toast('注釈を書き込んだ');lxNextFloor()}})}
-function lxGiveRelic(curse){const R=S.lib.run;const L=Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r)&&LX_RELIC_CURSE.has(r)===!!curse);if(!L.length)return null;return lxAddRelic(L[Math.floor(Math.random()*L.length)])}
+function lxGiveRelic(curse){const R=S.lib.run;const L=Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r)&&!LX_RELIC_CHAR.has(r)&&LX_RELIC_CURSE.has(r)===!!curse);if(!L.length)return null;return lxAddRelic(L[Math.floor(Math.random()*L.length)])}
 function lxGivePot(curse){const R=S.lib.run;if(R.pots.length>=3){R.hp=Math.min(R.max,R.hp+10);save();return null}const L=Object.keys(LX_POT).filter(k=>LX_POT_CURSE.has(k)===!!curse);const p=L[Math.floor(Math.random()*L.length)];R.pots.push(p);save();return p}
 function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="lx-shade2"></div></div>`);
  const o=document.createElement('div');o.className='bosscut';o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">${esc(S.lib.run.boss)}が現れた！</b><span class="bc-s">3ターンごとの「改変の予告」に気をつけよう</span></div>`;
  let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#lx').appendChild(o);setTimeout(fin,FX.reduce()?600:2000)}
 /* 戦闘報酬の候補：持っていない頁も含めた全人物から、レアリティに関係なく均等に3枚（デッキにいる人物は出ない） */
-function lxRewardCands(R){const inDeck=new Set(R.deck);const pool=shuffle(CARDS.filter(c=>!isSP(c.n)&&!inDeck.has(c.n)).map(c=>c.n)).slice(0,3);
- while(pool.length<3)pool.push(shuffle(Object.keys(LX_BASE))[0]);return pool}
+function lxRewardCands(R){const pool=lxPoolPick(R,3);
+ while(pool.length<3)pool.push(shuffle(Object.keys(LX_BASE))[0]);const ch=lxChar(R);if(ch&&Math.random()<.2)pool[2]=ch.cards[Math.floor(Math.random()*ch.cards.length)];return pool}
 /* 戦闘で出てきた効果から1つ説明する（同じものばかりにならないよう、まだ見せていないものを優先） */
 const LX_TIPS_EXTRA=[['クイズ','クイズの1.5倍は、そのターン最初に切った人物の頁だけにかかる。攻撃力や余白の大きい頁を最初に切ると得'],
  ['予告','敵の頭上の予告をタップすると、次に何をしてくるかを詳しく読める'],['分かれ道','HPが少ないときは休憩や宝箱を、余裕があるときはエリートを選ぶと装備が集まる'],
