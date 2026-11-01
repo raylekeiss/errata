@@ -5541,21 +5541,24 @@ const LX_STAGES=[
  {n:'古写本の回廊',F:12,W:2,hp:.88,dmg:.9,rew:1,types:{戦闘:6,エリート:1,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
  {n:'禁帯出の棚',F:14,W:3,hp:1,dmg:1,rew:2,types:{戦闘:6,エリート:1.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
  {n:'螺旋の書庫',F:15,W:3,hp:1.08,dmg:1.06,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
- {n:'封印の閉架',F:17,W:3,hp:1.15,dmg:1.12,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
- {n:'未整理の地下書庫',F:18,W:4,hp:1.22,dmg:1.18,rew:3,types:{戦闘:6,エリート:2.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
- {n:'書架の最奥',F:20,W:4,hp:1.3,dmg:1.25,rew:3,types:{戦闘:6,エリート:3,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}}];
+ {n:'封印の閉架',F:17,W:3,hp:1.15,dmg:1.12,shops:2,rew:2,types:{戦闘:6,エリート:2,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'未整理の地下書庫',F:18,W:4,hp:1.22,dmg:1.18,shops:2,rew:3,types:{戦闘:6,エリート:2.5,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}},
+ {n:'書架の最奥',F:20,W:4,hp:1.3,dmg:1.25,shops:2,rew:3,types:{戦闘:6,エリート:3,'？':2,宝箱:1,写本室:1,お店:1,休憩:.5}}];
 const LX_NT={'戦闘':'戦闘','エリート':'エリート','？':'？','宝箱':'宝箱','写本室':'写本室','休憩':'休憩','ボス':'ボス'};
 /* 道のりを作る：列ごとにマスを並べ、隣の列へ線をつなぐ（線はなるべく交差しない） */
 function lxGenMap(si){const st=LX_STAGES[si];const F=st.F;const cols=[];const mid=Math.floor((F-1)/2);
+ /* shops:2 の層は、お店だけの列を2つ置く（休憩の列の間に1つずつ）。どの道を通っても2回寄れる */
+ const shopC=st.shops?[Math.round(mid/2),Math.round((mid+F-2)/2)]:[];
  const pickT=(c)=>{const T=Object.assign({},st.types);if(c<3)delete T['エリート'];if(c<2){delete T['休憩'];delete T['写本室'];delete T['お店']}
   const ks=Object.keys(T);let s=ks.reduce((a,k)=>a+T[k],0),r=Math.random()*s;for(const k of ks){r-=T[k];if(r<=0)return k}return '戦闘'};
  for(let c=0;c<F;c++){let n;
   if(st.fixed){cols.push([{t:st.fixed[c],n:[]}]);continue}
   if(c===F-1)n=1;else if(c===0)n=Math.max(1,st.W-1);else n=Math.max(1,st.W-(Math.random()<.4?1:0));
   const col=[];for(let i=0;i<n;i++){let t;
-   if(c===F-1)t='ボス';else if(c===F-2||c===mid)t='休憩';else if(c===0)t='戦闘';else t=pickT(c);
+   if(c===F-1)t='ボス';else if(c===F-2||c===mid)t='休憩';else if(shopC.includes(c))t='お店';else if(c===0)t='戦闘';else t=pickT(c);
+   if(t==='お店'&&!shopC.includes(c)&&shopC.length&&(shopC.includes(c+1)||shopC.includes(c-1)))t='戦闘';
    if(t==='休憩'&&(c===mid-1||c===F-3))t='戦闘';
-   if((t==='休憩'||t==='お店')&&cols[c-1]&&cols[c-1].some(o=>o.t===t)&&c!==F-2&&c!==mid)t='戦闘';
+   if((t==='休憩'||t==='お店')&&cols[c-1]&&cols[c-1].some(o=>o.t===t)&&c!==F-2&&c!==mid&&!shopC.includes(c))t='戦闘';
    col.push({t,n:[]})}
   cols.push(col)}
  for(let c=0;c<F-1;c++){const A=cols[c],B=cols[c+1],n=A.length,m=B.length;const base=i=>n===1?Math.floor((m-1)/2):Math.round(i*(m-1)/(n-1));
