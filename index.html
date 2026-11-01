@@ -1489,7 +1489,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lkb-cap::after{transform:scaleX(-1)}
 .lkb-mark{margin:.3cqw 0 0;font-size:.95cqw;letter-spacing:.6em;color:#9a8457;padding-left:.6em}
 /* 右ページ */
-.lkb-t{margin:.2cqw 0 0;font-size:3.8cqw;font-weight:800;letter-spacing:.12em;line-height:1.2;text-align:center}
+.lkb .lkb-t{margin:2cqw 0 0;font-size:3.8cqw;font-weight:800;letter-spacing:.12em;line-height:1.2;text-align:center}
 .lkb-orn{width:84%;display:flex;align-items:center;justify-content:center;gap:1cqw;margin:.3cqw 0 .5cqw;color:#a8873a;font-size:1.1cqw}
 .lkb-orn::before,.lkb-orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#a8873a)}
 .lkb-orn::after{transform:scaleX(-1)}
@@ -4885,7 +4885,7 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
  /* 開いた本の上に、左ページ＝職員証の写真、右ページ＝選ぶところ */
  modal(`<div class="lkb" style="background-image:url(${IMG['UI_本']||''})">
   <div class="lkb-l"><div class="lkb-card"><i class="lkb-rose"></i><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt=""></div>
-   <p class="lkb-cap">${esc(o.caption||'新人司書')}</p><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
+   <p class="lkb-cap">${esc(o.caption||S.name||'新人司書')}</p><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
   <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
    <p class="lkb-d">あなたの姿を選んでください。<br>あとから箱庭の「キャラ」でいつでも変えられます。</p>
    ${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('髪の色')}${sw('color',LOOK_COLORS)}
