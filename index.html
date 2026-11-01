@@ -1225,6 +1225,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lx-e.tg .lx-ename::before{content:"▼ ";color:#ffd54a;font-size:.8em}
 .lx-bonus{top:calc(env(safe-area-inset-top,0px) + max(14px,calc(18*var(--u))))}
 .lx-gear{max-width:44vw}
+@media (orientation:landscape){.lx-bonus{left:max(16px,2vw);transform:none;white-space:normal;max-width:calc(100% - 44vw - 48px);text-align:left}}
 .lx-detail{right:auto;left:clamp(10px,calc(var(--cx,50%) - min(160px,21vw)),calc(100% - min(320px,42vw) - 10px));bottom:calc(var(--hand-h) + 30px)}
 .lx-coach{left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + max(54px,calc(64*var(--u))));width:min(460px,52vw);animation:none}
 @media (orientation:portrait){
@@ -6021,7 +6022,7 @@ function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAliv
  $('#lxEn').innerHTML=X.en.map((e,i)=>e.dead?'':`<div class="lx-e ${LX_EN[e.key].boss?'boss':''} ${LX_EN[e.key].elite?'elite':''} ${alive[X.tg]===e?'tg':''}" data-e="${i}">
    ${lxIntentHTML(e)}<div class="blob">${blobSVG(!!LX_EN[e.key].boss)}</div><div class="lx-ename">${esc(e.name)}</div>
    <div class="lx-hprow">${lxShield(e.blk)}<div class="lx-hpbar e"><i style="width:${100*e.hp/e.max}%"></i><span>${e.hp}／${e.max}</span></div></div><div class="lx-st">${lxStHTML(e.st,0)}${e.stun?'<i class="s-weak">次の行動なし</i>':''}</div></div>`).join('');
- $('#lxEnergy').innerHTML=`<b>${X.p.en}</b><small>／${LX_ENERGY+X.pw.en}</small><span>エネルギー</span>`;
+ $('#lxEnergy').innerHTML=`<b>${X.p.en}</b><small>／${LX_ENERGY+X.pw.en+(lxHas('借り物の王冠')?1:0)}</small><span>エネルギー</span>`;
  $('#lxPiles').innerHTML=`山札 ${X.draw.length}　捨て札 ${X.disc.length}${X.exh.length?`　除外 ${X.exh.length}`:''}`;
  const n=X.hand.length;$('#lxHand').style.setProperty('--n',n);
  $('#lxHand').innerHTML=X.hand.map(c=>lxCardHTML(c.def,{cost:lxCostOf(c),cls:(c.nw?(c.nw=0,'new '):'')+(X.sel===c.u?'sel ':'')+(!lxCanPlay(c)?'dim ':'')+(X.tut&&X.tut.lock===c.u?'tut':''),attrs:`data-u="${c.u}"`})).join('');
