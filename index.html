@@ -5582,7 +5582,11 @@ const LX_CCARD={
  'C:総力戦':{name:'総力戦',type:'atk',cost:2,fx:{dmg:6,powbonus:4},m:'dmg',img:'SD_コンラッド'},
  'C:のしかかり':{name:'のしかかり',type:'atk',cost:1,fx:{slam:true},m:null,img:'ヌル'},
  'C:鎧の重み':{name:'鎧の重み',type:'pow',cost:1,fx:{pBlkPlus:2},m:null,img:'ヌル'},
- 'C:空白の砦':{name:'空白の砦',type:'pow',cost:2,fx:{pBarr:true},m:null,img:'ヌル'}};
+ 'C:空白の砦':{name:'空白の砦',type:'pow',cost:2,fx:{pBarr:true},m:null,img:'ヌル'},
+ 'C:乱打':{name:'乱打',type:'atk',cost:1,fx:{dmg:4,hits:3},m:'dmg',img:'HERO'},
+ 'C:号令':{name:'号令',type:'skl',cost:1,fx:{strBlk:2},m:null,img:'HERO'},
+ 'C:注釈癖':{name:'注釈癖',type:'pow',cost:1,fx:{pQok:1},m:null,img:'SD_シミ'},
+ 'C:連想':{name:'連想',type:'atk',cost:1,fx:{dmg:4,streak:3},m:'dmg',img:'SD_シミ'}};
 const LX_DEFAULT_DECK=[].concat(Array(6).fill('B:兵士'),Array(5).fill('B:衛士'),Array(2).fill('B:写本'),Array(2).fill('B:覚書'));
 /* 人物の頁の型（属性ごと）。m=レアリティ・凸・注釈で上がる数値、half=上がり方が半分、r3=★3だけ */
 const LX_TPL={
@@ -5647,7 +5651,7 @@ const LX_RELIC={
  '修道院の薬草':'戦闘に勝つたびにHPが6回復する',
  /* キャラが最初から持っている装備（ほかでは手に入らない） */
  'カコの手帳':'戦闘の始めに威信＋1',
- 'シミの虫眼鏡':'クイズの選択肢が1つ減る',
+ 'シミの虫眼鏡':'クイズの選択肢が1つ減る。正解すると、誤植に「衰退1」「動揺1」「全体に4ダメージ」のどれかがランダムで起きる',
  'コンラッドの万年筆':'持続の頁を切るたびに余白4',
  'ヌルの外套':'余白がターンの始めに消えず、半分だけ残る',
  /* ここから下はデメリットつき（？とお店でだけ手に入る） */
@@ -5733,6 +5737,9 @@ function lxFxText(f){const a=[];
  if(f.qblk)a.push(`この戦闘でクイズに正解した数×${f.qblk}だけ余白が増える`);
  if(f.powbonus)a.push(`この戦闘で切った持続の頁1枚につき攻撃＋${f.powbonus}`);
  if(f.slam)a.push('いまの余白と同じだけ攻撃');
+ if(f.strBlk)a.push(`自分の威信×${f.strBlk}だけ余白を得る`);
+ if(f.pQok)a.push(`クイズに正解するたびに${f.pQok}枚引き、エネルギー＋${f.pQok}`);
+ if(f.streak)a.push(`クイズの連続正解数×${f.streak}だけ攻撃が上がる（間違えると0に戻る）`);
  if(f.pStrTurn)a.push(`ターンの始めに威信＋${f.pStrTurn}`);
  if(f.pPowDraw)a.push(`持続の頁を切るたびに${f.pPowDraw}枚引く`);
  if(f.pBlkPlus)a.push(`余白を得るたびに、さらに余白＋${f.pBlkPlus}`);
@@ -5853,7 +5860,14 @@ function lxBattle(kind,keys,onWin,opt={}){const R=S.lib.run;const SG=LX_STAGES[R
 const lxAlive=()=>X.en.filter(e=>!e.dead);
 const lxHas=r=>S.lib.run.relics.includes(r);
 /* 禁書目録：クイズに間違えるとHPを5失う（これで倒れはしない） */
-function lxForbid(){if(!lxHas('禁書目録'))return;const v=Math.min(5,X.p.hp-1);if(v<=0)return;X.p.hp-=v;X.hpl=(X.hpl||0)+1;R_sync();lxFloat($('#lxSd'),'-'+v,'me');toast(`禁書目録：HPを${v}失った`)}
+/* クイズに正解したとき（キャラの装備・注釈癖・連続正解） */
+function lxQuizOk(){const R=S.lib.run;if(R)R.qstreak=(R.qstreak||0)+1;
+ if(X.pw.qok){lxDraw(X.pw.qok);X.p.en+=X.pw.qok}
+ if(lxHas('シミの虫眼鏡')){const al=lxAlive();if(al.length){const k=Math.floor(Math.random()*3);
+  if(k===2){for(const e of al)lxHitE(e,4);toast('虫眼鏡：誤植全体に4ダメージ')}
+  else{const e=al[Math.floor(Math.random()*al.length)];if(k===0){e.st.weak+=1;X.seen.add('衰退');toast('虫眼鏡：誤植に衰退1を付与')}else{e.st.vul+=1;X.seen.add('動揺');toast('虫眼鏡：誤植に動揺1を付与')}}}}
+ lxRender()}
+function lxForbid(){const R0=S.lib.run;if(R0)R0.qstreak=0;if(!lxHas('禁書目録'))return;const v=Math.min(5,X.p.hp-1);if(v<=0)return;X.p.hp-=v;X.hpl=(X.hpl||0)+1;R_sync();lxFloat($('#lxSd'),'-'+v,'me');toast(`禁書目録：HPを${v}失った`)}
 function lxDraw(n){for(let i=0;i<n;i++){if(X.hand.length>=10)break;if(!X.draw.length){if(!X.disc.length)break;X.draw=shuffle(X.disc);X.disc=[]}X.hand.push(X.draw.pop())}}
 function lxIntentOf(e){const D=LX_EN[e.key];const it=Object.assign({},D.ai(e,X));if(it.d!=null&&X.dm&&X.dm!==1)it.d=Math.max(1,Math.round(it.d*X.dm));return it}
 function lxStartTurn(){if(X.over)return;X.turn++;if(!X.pw.barr)X.p.blk=lxHas('ヌルの外套')?Math.floor(X.p.blk/2):0;if(X.pw.strTurn)X.p.st.str+=X.pw.strTurn;X.atkN=0;X.qz='none';X.dealt=0;X.sel=null;X.rage=0;X.dtap=0;
@@ -5870,11 +5884,11 @@ function lxStartTurn(){if(X.over)return;X.turn++;if(!X.pw.barr)X.p.blk=lxHas('�
  const kb=lxAlive().find(e=>e.it&&e.it.kai);X.busy=!!kb;
  lxRender();
  if(kb){setTimeout(async()=>{const r=await lxAskKai(kb);
-   if(r==='full'){X.qok=(X.qok||0)+1;kb.it.cut=LX_KAI_CUT.full;kb.st.vul+=2;X.qz='free';if(lxHas('活版印刷機'))lxDraw(1)}else{if(r==='who')kb.it.cut=LX_KAI_CUT.who;X.qz='none';lxForbid()}
+   if(r==='full'){X.qok=(X.qok||0)+1;kb.it.cut=LX_KAI_CUT.full;kb.st.vul+=2;X.qz='free';if(lxHas('活版印刷機'))lxDraw(1);lxQuizOk()}else{if(r==='who')kb.it.cut=LX_KAI_CUT.who;X.qz='none';lxForbid()}
    X.busy=false;lxRender()},FX.reduce()?50:650)}
  if(X.tut)lxTutEvent('turn')}
-function lxExtra(f){let v=0;if(f.pstrike)v+=f.pstrike*S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;if(f.qbonus)v+=f.qbonus*(X.qok||0);if(f.powbonus)v+=f.powbonus*(X.powN||0);if(f.strMul)v+=X.p.st.str*(f.strMul-1);return v}
-const lxHasExtra=f=>!!(f.pstrike||f.qbonus||f.powbonus||f.strMul);
+function lxExtra(f){let v=0;if(f.pstrike)v+=f.pstrike*S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;if(f.qbonus)v+=f.qbonus*(X.qok||0);if(f.powbonus)v+=f.powbonus*(X.powN||0);if(f.strMul)v+=X.p.st.str*(f.strMul-1);if(f.streak)v+=f.streak*((S.lib.run&&S.lib.run.qstreak)||0);return v}
+const lxHasExtra=f=>!!(f.pstrike||f.qbonus||f.powbonus||f.strMul||f.streak);
 function lxDynDmg(f){if(f.slam)return X.p.blk;if(f.dmg!=null&&lxHasExtra(f))return f.dmg+lxExtra(f);if(f.chron)return f.chron*(X.qok||0);if(f.pstrike)return f.dmg+f.pstrike*S.lib.run.deck.filter(id=>CARD[id]&&CARD[id].a==='君主').length;if(f.finisher)return f.finisher*(X.atkN||0);if(f.fiend)return f.fiend*Math.max(0,X.hand.length-1);if(f.preach)return f.preach*X.disc.filter(c=>c.def.person&&c.def.attr==='思想家').length;return null}
 /* 汚れ頁が飛んでくる演出（from→to の要素へ、n枚） */
 function lxFlyDirt(from,to,n){const root=$('#lx');if(!root||!from||!to||FX.reduce())return;const rr=root.getBoundingClientRect(),a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
@@ -5916,7 +5930,7 @@ async function lxPlay(u,tgi){if(!X||X.busy||X.over)return;const c=X.hand.find(h=
  X.busy=true;X.sel=null;
  /* クイズ：そのターン最初の人物の頁だけ。正解（または改変を正したごほうび）なら、この頁の効果が1.5倍 */
  let boost=false;
- if(d.person&&(X.qz==='none'||X.qz==='free')){if(X.qz==='free')boost=true;else{lxRender();boost=await lxAskQuiz(d.id);if(boost){X.qok=(X.qok||0)+1;if(lxHas('活版印刷機'))lxDraw(1)}else lxForbid()}X.qz='done'}
+ if(d.person&&(X.qz==='none'||X.qz==='free')){if(X.qz==='free')boost=true;else{lxRender();boost=await lxAskQuiz(d.id);if(boost){X.qok=(X.qok||0)+1;if(lxHas('活版印刷機'))lxDraw(1);lxQuizOk()}else lxForbid()}X.qz='done'}
  if(X.over)return;
  X.p.en-=cost;X.hand=X.hand.filter(h=>h.u!==u);const pd0=X.pw.powDraw||0;
  if(boost){X.boost=true;lxFloat($('#lxSd'),'1.5倍！','blk')}
@@ -5952,6 +5966,8 @@ async function lxResolve(c,d,tgi){const f=d.fx,P=d.person;const alive=lxAlive();
  if(f.dblBlk&&X.p.blk>0)lxGainBlk(X.p.blk);
  if(t&&!t.dead){if(f.vul){t.st.vul+=f.vul;X.seen.add('動揺')}if(f.weak){t.st.weak+=f.weak;X.seen.add('衰退')}if(f.stun)t.stun=1}
  if(f.str){X.p.st.str+=f.str;X.seen.add('威信')}
+ if(f.strBlk){const v=Math.max(0,X.p.st.str)*f.strBlk;if(v>0)lxGainBlk(lxPBlk(v,P));else lxFloat($('#lxSd'),'威信がない','blk')}
+ if(f.pQok)X.pw.qok=(X.pw.qok||0)+f.pQok;
  if(f.rage)X.rage+=lxPBlk(f.rage,P);
  if(f.dtap)X.dtap+=f.dtap;
  if(f.wound){const nw=[];for(let i=0;i<f.wound;i++){const w={u:++lxUid,def:lxDef('X:汚れ'),nw:1};nw.push(w);if(X.hand.length<10)X.hand.push(w);else X.disc.push(w)}X.seen.add('汚れ頁');lxFlyDirt($('#lxSd'),$('#lxHand'),f.wound);toast(`手札に汚れ頁が${f.wound}枚入った`)}
@@ -6091,7 +6107,7 @@ function lxRenderBase(){const R=S.lib.run;
   if(X.sel===u)lxPlay(u);
   else{X.sel=u;lxRender();if(c.def.cost>X.p.en)toast('エネルギーが足りない')}};}
 function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAlive();
- $('#lxMe').innerHTML=`<div class="lx-hprow">${lxShield(X.p.blk)}<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div></div><div class="lx-st">${lxStHTML(X.p.st,0)}${X.pw.draw?`<i class="s-pw" data-term="持続">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw" data-term="持続">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw" data-term="持続">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw" data-term="持続">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw" data-term="持続">毎ターン全体${X.pw.aoe}</i>`:''}${X.pw.jug?`<i class="s-pw" data-term="持続">余白でダメージ${X.pw.jug}</i>`:''}${X.pw.brut?`<i class="s-pw" data-term="持続">毎ターンHP−${X.pw.brut}・＋${X.pw.brut}枚</i>`:''}${X.rage?`<i class="s-blk">攻撃で余白${X.rage}</i>`:''}${X.dtap?`<i class="s-str">次の攻撃が2回</i>`:''}${X.halfQ?`<i class="s-pw">次のクイズは2択</i>`:''}${X.pw.barr?`<i class="s-pw" data-term="持続">余白が消えない</i>`:''}${X.pw.strTurn?`<i class="s-pw" data-term="持続">鍛錬 ${X.pw.strTurn}</i>`:''}${X.pw.powDraw?`<i class="s-pw" data-term="持続">布陣 ${X.pw.powDraw}</i>`:''}${X.pw.blkPlus?`<i class="s-pw" data-term="持続">鎧の重み ${X.pw.blkPlus}</i>`:''}${X.pw.comb?`<i class="s-pw" data-term="持続">燃焼 ${X.pw.comb}</i>`:''}${X.nextEn?`<i class="s-pw">次のターン エネルギー＋${X.nextEn}</i>`:''}${X.qok?`<i class="s-pw">正解 ${X.qok}問</i>`:''}</div>`;
+ $('#lxMe').innerHTML=`<div class="lx-hprow">${lxShield(X.p.blk)}<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div></div><div class="lx-st">${lxStHTML(X.p.st,0)}${X.pw.draw?`<i class="s-pw" data-term="持続">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw" data-term="持続">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw" data-term="持続">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw" data-term="持続">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw" data-term="持続">毎ターン全体${X.pw.aoe}</i>`:''}${X.pw.jug?`<i class="s-pw" data-term="持続">余白でダメージ${X.pw.jug}</i>`:''}${X.pw.brut?`<i class="s-pw" data-term="持続">毎ターンHP−${X.pw.brut}・＋${X.pw.brut}枚</i>`:''}${X.rage?`<i class="s-blk">攻撃で余白${X.rage}</i>`:''}${X.dtap?`<i class="s-str">次の攻撃が2回</i>`:''}${X.halfQ?`<i class="s-pw">次のクイズは2択</i>`:''}${X.pw.barr?`<i class="s-pw" data-term="持続">余白が消えない</i>`:''}${X.pw.strTurn?`<i class="s-pw" data-term="持続">鍛錬 ${X.pw.strTurn}</i>`:''}${X.pw.powDraw?`<i class="s-pw" data-term="持続">布陣 ${X.pw.powDraw}</i>`:''}${X.pw.blkPlus?`<i class="s-pw" data-term="持続">鎧の重み ${X.pw.blkPlus}</i>`:''}${X.pw.comb?`<i class="s-pw" data-term="持続">燃焼 ${X.pw.comb}</i>`:''}${X.nextEn?`<i class="s-pw">次のターン エネルギー＋${X.nextEn}</i>`:''}${X.qok?`<i class="s-pw">正解 ${X.qok}問</i>`:''}${S.lib.run&&S.lib.run.qstreak?`<i class="s-pw">連続正解 ${S.lib.run.qstreak}</i>`:''}${X.pw.qok?`<i class="s-pw" data-term="持続">注釈癖 ${X.pw.qok}</i>`:''}</div>`;
  $('#lxGear').innerHTML=R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${esc(r)}</span>`).join('')+R.pots.map((p,i)=>`<button class="lx-pot ${lxCurse(p)?'curse':''}" data-p="${i}">${esc(p)}</button>`).join('');
  $('#lxGear').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>lxUsePot(+b.dataset.p));
  $('#lxBonus').innerHTML=X.qz==='free'?'<span class="ok">改変を正した！　次に切る人物の頁は、クイズなしで1.5倍</span>':X.qz==='done'?'<span>このターンのクイズは終了</span>':'<span>このターン最初に切った人物の頁でクイズ（正解するとその頁が1.5倍）</span>';
@@ -6207,13 +6223,13 @@ function lxStartRun(skipTut){const L=lxLib();
  if(!L.tut&&!skipTut){askYes('はじめての探索です。先に練習の戦闘で、遊び方を確かめますか？\n（3ターンほどで終わります）','練習する',lxTutorial,()=>{L.tut=true;save();lxStartRun(true)},'練習しないで始める');return}
  const si=Math.max(0,Math.min(lxMaxStage(),L.stage||0));
  if(!L.pickedChar){lxCharPick(c=>{L.char=c;L.pickedChar=true;lxStartRun(true)});return}L.pickedChar=false;const chn=LX_CHARS[L.char]?L.char:'カコ';
- L.runs++;L.run={char:chn,silver:60,stage:si,map:lxGenMap(si),at:null,cur:null,deck:lxRandomDeck(LX_CHARS[chn]),ann:[],hp:LX_HP,max:LX_HP,relics:[LX_CHARS[chn].relic],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
+ L.runs++;L.run={qstreak:0,char:chn,silver:60,stage:si,map:lxGenMap(si),at:null,cur:null,deck:lxRandomDeck(LX_CHARS[chn]),ann:[],hp:LX_HP,max:LX_HP,relics:[LX_CHARS[chn].relic],pots:[],boss:LX_BOSS[Math.floor(Math.random()*LX_BOSS.length)],usedQ:[],usedK:[],q:null};
  save();FX.pageTurn(lxMap)}
 /* キャラ。pref=最初のデッキ・報酬・お店に出やすい頁の型 */
 const LX_CHARS={
- 'カコ':{img:null,style:'威信を上げつつ余白を張り、重い一撃で殴る',relic:'カコの手帳',cards:['C:渾身','C:鍛錬'],
+ 'カコ':{img:null,style:'威信を上げつつ余白を張り、重い一撃で殴る',relic:'カコの手帳',cards:['C:渾身','C:鍛錬','C:乱打','C:号令'],
   pref:['威信','重い一撃','一騎討ち','パーフェクトストライク','盾と剣','守り','籠城','脳天割り','クラッシュ','喀血','飛び膝蹴り']},
- 'シミ':{img:'SD_シミ',style:'クイズに正解するほど強くなる',relic:'シミの虫眼鏡',cards:['C:校正','C:復習'],
+ 'シミ':{img:'SD_シミ',style:'クイズに正解するほど強くなる',relic:'シミの虫眼鏡',cards:['C:校正','C:復習','C:注釈癖','C:連想'],
   pref:['年表','史料批判','記録','著作','研究','作品','論駁','説得','布教','回心','教化']},
  'コンラッド':{img:'SD_コンラッド',style:'持続の頁を何枚も張って、じわじわ有利にする',relic:'コンラッドの万年筆',cards:['C:布陣','C:総力戦'],pref:null},
  'ヌル':{img:'ヌル',style:'余白を溜めに溜めて、一気に殴る',relic:'ヌルの外套',cards:['C:のしかかり','C:鎧の重み','C:空白の砦'],
