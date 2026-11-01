@@ -1470,6 +1470,48 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lx-mix{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
 .lx-mix span{padding:3px 10px;border-radius:10px;color:#fff;font-size:13px}.lx-mix .a{background:#8a2e3a}.lx-mix .b{background:#2e5c7a}.lx-mix .o{background:#55507a}
 .lx-mix small{color:#6b604a}
+
+/* キャラメイク：開いた本の上に載せる（本の絵 1672×941。枠は左 12.7〜47.0%、右 53.0〜87.3%、上 7.6%〜下 82.7%） */
+#modal.lookbook{background:rgba(8,10,20,.55)}
+#modal.lookbook>.box{background:none;box-shadow:none;border:0;padding:0;width:auto;max-width:none;max-height:none;overflow:visible}
+.lkb{position:relative;width:min(98vw,calc(96vh*1672/941),1300px);aspect-ratio:1672/941;background:center/100% 100% no-repeat;container-type:inline-size;font-family:var(--serif);color:#1c2540;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
+.lkb-l,.lkb-r{position:absolute;top:9.2%;bottom:19.6%;display:flex;flex-direction:column;align-items:center}
+.lkb-l{left:15.2%;right:55.5%;justify-content:center}
+.lkb-r{left:55.5%;right:15%;justify-content:flex-start}
+/* 左ページ：写真の台紙 */
+.lkb-card{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:3.2cqw 2.2cqw 1.6cqw;box-sizing:border-box;border:1px solid rgba(168,135,58,.75);outline:1px solid rgba(168,135,58,.45);outline-offset:-.55cqw}
+.lkb-card .look-pv{flex:1;width:86%;min-height:0;aspect-ratio:auto;max-width:none;margin:0;padding:1.4cqw 1cqw .8cqw;background:radial-gradient(ellipse 60% 6% at 50% 93%,rgba(90,70,40,.22),transparent 70%),linear-gradient(#f4ecdc,#ece1cb);border:1px solid rgba(168,135,58,.5);border-radius:0;box-shadow:inset 0 0 2cqw rgba(140,110,60,.18)}
+.lkb-card .look-pv img{height:100%;width:100%;object-fit:contain;object-position:50% 100%}
+.lkb-rose{position:absolute;top:.9cqw;left:50%;width:2.4cqw;height:2.4cqw;transform:translateX(-50%);background:radial-gradient(circle,#b48d3e 0 18%,transparent 19%),conic-gradient(from 0deg,#b48d3e 0 6%,transparent 6% 19%,#b48d3e 19% 31%,transparent 31% 44%,#b48d3e 44% 56%,transparent 56% 69%,#b48d3e 69% 81%,transparent 81% 94%,#b48d3e 94%);-webkit-mask:radial-gradient(circle,#000 0 48%,transparent 50%);mask:radial-gradient(circle,#000 0 48%,transparent 50%);opacity:.85}
+.lkb-rose.sm{position:static;transform:none;width:1.6cqw;height:1.6cqw;margin:.3cqw 0 0}
+.lkb-cap{margin:1.1cqw 0 0;font-size:1.55cqw;font-weight:700;letter-spacing:.15em;display:flex;align-items:center;gap:1cqw}
+.lkb-cap::before,.lkb-cap::after{content:"";width:5cqw;height:1px;background:linear-gradient(90deg,transparent,#a8873a)}
+.lkb-cap::after{transform:scaleX(-1)}
+.lkb-mark{margin:.3cqw 0 0;font-size:.95cqw;letter-spacing:.6em;color:#9a8457;padding-left:.6em}
+/* 右ページ */
+.lkb-t{margin:.2cqw 0 0;font-size:3.8cqw;font-weight:800;letter-spacing:.12em;line-height:1.2;text-align:center}
+.lkb-orn{width:84%;display:flex;align-items:center;justify-content:center;gap:1cqw;margin:.3cqw 0 .5cqw;color:#a8873a;font-size:1.1cqw}
+.lkb-orn::before,.lkb-orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#a8873a)}
+.lkb-orn::after{transform:scaleX(-1)}
+.lkb-d{margin:0 0 .2cqw;font-size:1.15cqw;line-height:1.7;text-align:center;color:#3a3f52}
+.lkb-r .look-lb{align-self:stretch;display:flex;align-items:center;gap:.7cqw;margin:.7cqw 0 .55cqw;font-size:1.35cqw;line-height:1.3;font-weight:700;color:#1c2540}
+.lkb-r .look-lb i{font-style:normal;color:#a8873a;font-size:1.1cqw}
+.lkb-r .look-lb::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#a8873a,rgba(168,135,58,.25))}
+.lkb-r .look-sw{align-self:stretch;display:flex;gap:2.4cqw;margin:0;padding-left:5cqw}
+.lkb-r .look-dot{position:relative;width:4cqw;height:4cqw;border:1px solid rgba(80,50,20,.25);box-shadow:inset 0 -.3cqw .5cqw rgba(0,0,0,.12)}
+.lkb-r .look-dot.on{outline:.25cqw solid #b8913f;outline-offset:.35cqw}
+.lkb-r .look-dot.on::after{content:"";position:absolute;left:50%;top:44%;width:1.1cqw;height:.55cqw;border:solid #fff;border-width:0 0 .28cqw .28cqw;transform:translate(-50%,-50%) rotate(-45deg);filter:drop-shadow(0 0 .15cqw rgba(0,0,0,.5))}
+.lkb-r .look-sw[data-g=skin] .look-dot.on::after{border-color:#6b4a2a;filter:none}
+.lkb-r .look-sw.tx{padding-left:0;gap:1.3cqw}
+.lkb-r .look-tx{position:relative;flex:1;padding:.85cqw .3cqw .85cqw 1.3cqw;font:700 1.3cqw/1.3 var(--serif);letter-spacing:.06em;white-space:nowrap;color:#1c2540;background:rgba(255,255,255,.55);border:1px solid #b9b2a2;border-radius:.3cqw}
+.lkb-r .look-tx.on{background:#fffaf0;border:.2cqw solid #b8913f}
+.lkb-r .look-tx.on::before{content:"";position:absolute;left:.35cqw;top:-.3cqw;width:.9cqw;height:1.9cqw;background:#8a1f2a;clip-path:polygon(0 0,100% 0,100% 100%,50% 75%,0 100%)}
+.lkb-go{align-self:stretch;display:flex;justify-content:flex-end;align-items:center;gap:1.4cqw;margin-top:auto;padding-top:1cqw}
+.lkb-ok{position:relative;width:60%;padding:.85cqw 0;font:800 2.1cqw/1.3 var(--serif);letter-spacing:.35em;padding-left:.35em;color:#fff6e4;background:linear-gradient(#8e2333,#6c1522);border:.22cqw solid #c9a24a;outline:1px solid rgba(201,162,74,.6);outline-offset:-.6cqw;border-radius:.4cqw;box-shadow:0 .4cqw 1cqw rgba(60,10,15,.35);cursor:pointer}
+.lkb-ok:active{transform:translateY(1px)}
+.lkb-no{padding:.85cqw 1.6cqw;font:700 1.3cqw/1.3 var(--serif);color:#4a4f60;background:rgba(255,255,255,.5);border:1px solid #b9b2a2;border-radius:.3cqw;cursor:pointer}
+/* 縦向きの狭い画面：本は横長のままなので、少し文字を大きく */
+@media (orientation:portrait){.lkb{width:99vw}}
 </style>
 </head>
 <body>
@@ -3909,6 +3951,7 @@ const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
 "背景_図書館探索": "img/bg_lib2.webp",
+"UI_本": "img/ui_book.webp",
 "背景_図書館探索_戦闘": "img/bg_lib_battle.webp",
 "家具_A4": "img/furn_A4.webp",
 "家具_A9": "img/furn_A9.webp",
@@ -4838,11 +4881,17 @@ function heroKey(lk){lk=Object.assign(lookOf(),lk||{});const b='SD_主人公_肌
  for(const k of [lk.hair&&lk.color?b+'_'+lk.hair+'_'+lk.color:null,lk.color?b+'_'+lk.color:null,b])if(k&&IMG[k])return k;return b}
 function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color:cur.color,hair:cur.hair};
  const sw=(grp,L)=>`<div class="look-sw" data-g="${grp}">${L.map(x=>`<button class="look-dot${sel[grp]===x.k?' on':''}" data-v="${x.k}" style="--c:${x.c}" aria-label="${grp==='skin'?'肌':'髪'}の色${L.indexOf(x)+1}"></button>`).join('')}</div>`;
- modal(`<h3>${o.title||'職員証の写真'}</h3><p class="muted">あなたの姿を選んでください。あとから箱庭の「キャラ」でいつでも変えられます。</p>
-  <div class="look-wrap"><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt=""></div>
-  <div class="look-ctl"><div class="look-lb">肌</div>${sw('skin',LOOK_SKINS)}<div class="look-lb">髪の色</div>${sw('color',LOOK_COLORS)}
-  ${LOOK_HAIRS.length?`<div class="look-lb">後ろ髪</div><div class="look-sw" data-g="hair">${LOOK_HAIRS.map(x=>`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}</div></div>
-  <div class="row">${o.cancel?'<button class="btn light" data-close>やめる</button>':''}<button class="btn" id="lookok">決定</button></div>`,o.onCancel);
+ const lb=t=>`<div class="look-lb"><i>✦</i>${t}</div>`;
+ /* 開いた本の上に、左ページ＝職員証の写真、右ページ＝選ぶところ */
+ modal(`<div class="lkb" style="background-image:url(${IMG['UI_本']||''})">
+  <div class="lkb-l"><div class="lkb-card"><i class="lkb-rose"></i><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt=""></div>
+   <p class="lkb-cap">${esc(o.caption||'新人司書')}</p><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
+  <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
+   <p class="lkb-d">あなたの姿を選んでください。<br>あとから箱庭の「キャラ」でいつでも変えられます。</p>
+   ${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('髪の色')}${sw('color',LOOK_COLORS)}
+   ${LOOK_HAIRS.length?`${lb('後ろ髪')}<div class="look-sw tx" data-g="hair">${LOOK_HAIRS.map(x=>`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}
+   <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button></div></div></div>`,o.onCancel);
+ const m=$('#modal');if(m){m.classList.add('lookbook');m.addEventListener('click',e=>{if(e.target===m&&o.cancel)closeModal()})}
  document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=g==='skin'?+b.dataset.v:b.dataset.v;
   b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#lookpv').src=IMG[heroKey(sel)]||''});
  $('#lookok').onclick=()=>{S.look=Object.assign({},S.look||{},sel);save();closeModal(true);cb&&cb()}}
