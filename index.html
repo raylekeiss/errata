@@ -6412,7 +6412,7 @@ function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" st
  let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#lx').appendChild(o);setTimeout(fin,FX.reduce()?600:2000)}
 /* 戦闘報酬の候補：持っていない頁も含めた全人物から、レアリティに関係なく均等に3枚（デッキにいる人物は出ない） */
 function lxRewardCands(R){const pool=lxPoolPick(R,3);
- while(pool.length<3)pool.push(shuffle(Object.keys(LX_BASE))[0]);const ch=lxChar(R);if(ch&&Math.random()<.2)pool[2]=ch.cards[Math.floor(Math.random()*ch.cards.length)];return pool}
+ while(pool.length<3)pool.push(shuffle(Object.keys(LX_BASE))[0]);return pool}
 /* 戦闘で出てきた効果から1つ説明する（同じものばかりにならないよう、まだ見せていないものを優先） */
 const LX_TIPS_EXTRA=[['クイズ','クイズの1.5倍は、そのターン最初に切った人物の頁だけにかかる。攻撃力や余白の大きい頁を最初に切ると得'],
  ['予告','敵の頭上の予告をタップすると、次に何をしてくるかを詳しく読める'],['分かれ道','HPが少ないときは休憩や宝箱を、余裕があるときはエリートを選ぶと装備が集まる'],
