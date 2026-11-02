@@ -5920,12 +5920,13 @@ let X=null;
 function lxMkEnemy(key,mult=1){const D=LX_EN[key];const hp=Math.round((D.hp[0]+Math.floor(Math.random()*(D.hp[1]-D.hp[0]+1)))*mult);
  return {key,name:key,hp,max:hp,blk:0,st:{str:0,weak:0,vul:0},stun:0,it:null,li:-1,ai:null,dead:false}}
 let lxUid=0;
+function lxSeedShuffle(a,seed){if(seed==null)return shuffle(a);const r=lxRng(seed);a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function lxBattle(kind,keys,onWin,opt={}){const R=S.lib.run;const SG=LX_STAGES[R.stage]||null;const mult=(keys.length>1&&kind==='normal'?.75:1)*(SG&&!R.tut?SG.hp:1);
  let pile=(opt.order||R.deck).map((id,i)=>({u:++lxUid,def:lxDef(id,!opt.order&&R.ann.includes(i))})).filter(c=>c.def);
  if(opt.tut)pile.forEach(c=>{if(c.def.person)c.def.cost=Math.min(1,c.def.cost)});
  X={kind,en:keys.map(k=>lxMkEnemy(k,mult)),p:{hp:R.hp,max:R.max,blk:0,en:0,st:{str:0,weak:0,vul:0},discNext:0,handMinus:0},
-  pw:{draw:0,blkEnd:0,en:0,atkBlk:0,aoe:0,jug:0,brut:0},seen:new Set(),draw:opt.order?pile.reverse():shuffle(pile),hand:[],disc:[],exh:[],turn:0,qz:'none',dealt:0,sel:null,tg:0,busy:true,onWin,over:false,tut:opt.tut||null,dm:SG&&!R.tut?SG.dmg:1};
- if(!opt.tut&&lxHas('借り物の王冠'))for(let i=0;i<2;i++)X.draw.splice(Math.floor(Math.random()*(X.draw.length+1)),0,{u:++lxUid,def:lxDef('X:汚れ')});
+  pw:{draw:0,blkEnd:0,en:0,atkBlk:0,aoe:0,jug:0,brut:0},seen:new Set(),draw:opt.order?pile.reverse():lxSeedShuffle(pile,opt.seed),hand:[],disc:[],exh:[],turn:0,qz:'none',dealt:0,sel:null,tg:0,busy:true,onWin,over:false,tut:opt.tut||null,dm:SG&&!R.tut?SG.dmg:1};
+ if(!opt.tut&&lxHas('借り物の王冠')){const rr=opt.seed!=null?lxRng(opt.seed^0x5bd1e995):Math.random;for(let i=0;i<2;i++)X.draw.splice(Math.floor(rr()*(X.draw.length+1)),0,{u:++lxUid,def:lxDef('X:汚れ')})}
  if(!opt.tut&&lxHas('ダモクレスの剣'))X.p.st.str+=2;
  if(!opt.tut&&lxHas('カコの手帳'))X.p.st.str+=2;
  lxRenderBase();lxStartTurn()}
@@ -5991,9 +5992,9 @@ function lxHitE(e,v){const i=X.en.indexOf(e);const el=document.querySelector(`.l
   const a=lxMkEnemy('小さな衍字');a.hp=a.max=h;const b=lxMkEnemy('小さな衍字');b.hp=b.max=h;
   a.it=lxIntentOf(a);b.it=lxIntentOf(b);X.en.push(a,b);toast('衍字が分裂した！')}}
 function lxHurtP(v){const ab=Math.min(X.p.blk,v);X.p.blk-=ab;const rest=v-ab;X.p.hp-=rest;if(rest>0)X.hpl=(X.hpl||0)+1;R_sync();const sd=$('#lxSd');lxSlash(sd,-1);lxLunge(sd,'lx-recoil-l');lxFloat(sd,rest?'-'+rest:'防いだ',rest?'me':'blk');if(rest)FX.shake('#lx')}
-function R_sync(){S.lib.run.hp=Math.max(0,X.p.hp)}
+function R_sync(){S.lib.run.hp=Math.max(0,X.p.hp);save()}
 function lxCheckWin(){if(X.over)return true;if(lxAlive().length)return false;X.over=true;X.busy=true;lxRender();
- setTimeout(()=>{const R=S.lib.run;R.tips=[...X.seen];R.hp=Math.max(1,X.p.hp);if(lxHas('修道院の薬草'))R.hp=Math.min(R.max,R.hp+6);if(lxHas('ピュロスの兜'))R.hp=Math.max(1,R.hp-4);if(lxHas('免罪符'))R.silver=(R.silver||0)+15;const cb=X.onWin;X=null;save();cb()},FX.reduce()?100:900);return true}
+ setTimeout(()=>{const R=S.lib.run;R.tips=[...X.seen];R.hp=Math.max(1,X.p.hp);if(lxHas('修道院の薬草'))R.hp=Math.min(R.max,R.hp+6);if(lxHas('ピュロスの兜'))R.hp=Math.max(1,R.hp-4);if(lxHas('免罪符'))R.silver=(R.silver||0)+15;if(R.bt&&X.kind!=='boss')R.bt.won=true;const cb=X.onWin;X=null;save();cb()},FX.reduce()?100:900);return true}
 async function lxPlay(u,tgi){if(!X||X.busy||X.over)return;const c=X.hand.find(h=>h.u===u);if(!c)return;const d=c.def;
  if(d.unplayable){toast('汚れ頁は切れない');return}
  const cost=lxCostOf(c);if(cost>X.p.en){toast('エネルギーが足りない');return}
@@ -6083,7 +6084,7 @@ function lxLose(){if(S.lib.run&&S.lib.run.tut){X.over=true;X=null;S.lib.run=S.li
  X.over=true;X.busy=true;const R=S.lib.run;S.lib.run=null;X=null;saveNow();
  setTimeout(()=>modal(`<h3>探索は失敗に終わった</h3><p style="line-height:1.8">誤植に押し返されてしまった。<br>デッキを組み直して、もう一度挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu),400)}
 function lxUsePot(i){if(!X||X.busy||X.over)return;const R=S.lib.run;const k=R.pots[i];if(!k)return;
- askYes(`${k}を使いますか？\n${LX_POT[k]}`,'使う',()=>{R.pots.splice(i,1);
+ askYes(`${k}を使いますか？\n${LX_POT[k]}`,'使う',()=>{R.pots.splice(i,1);save();
   if(k==='テリアカ'){X.p.hp=Math.min(X.p.max,X.p.hp+15);R_sync()}
   if(k==='胡椒')X.p.st.str+=2;if(k==='茶')X.p.en+=2;if(k==='乳香')lxGainBlk(12);
   if(k==='硝石')for(const e of lxAlive())lxHitE(e,12);
@@ -6376,10 +6377,14 @@ function lxMap(){const R=S.lib.run;if(!R)return LibMenu();if(!R.map){S.lib.run=n
 function lxShowDeck(){const R=S.lib.run;const k={atk:0,blk:0,oth:0};R.deck.forEach(id=>k[lxKind(id)]++);modal(`<div class="mhead"><h3>いまのデッキ（${R.deck.length}枚）</h3><button class="btn light" data-close>閉じる</button></div><p class="lx-mix"><span class="a">攻撃 <b>${k.atk}</b>枚</span><span class="b">余白 <b>${k.blk}</b>枚</span><span class="o">その他 <b>${k.oth}</b>枚</span><small>（デッキは少ないほど、強い頁を引きやすくなります）</small></p><div class="lx-grid pick">${R.deck.map((id,i)=>`<div class="lx-cell">${lxCardHTML(lxDef(id,R.ann.includes(i)))}</div>`).join('')}</div>`)}
 function lxNextFloor(){const R=S.lib.run;if(!R)return LibMenu();if(R.cur){R.path=R.path||[];R.path.push(R.cur);R.at=R.cur;R.cur=null}R.q=null;save();
  if(lxNode(R,R.at).t==='ボス')return lxComplete();FX.pageTurn(lxMap)}
+/* 戦闘マスは入った時点で敵とシャッフルの種を記録する（再読み込みしても同じ敵・同じ最初の手札） */
+const lxRng=s=>()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296};
+function lxBt(R,pool){if(!R.bt||R.bt.c!==R.cur.c||R.bt.i!==R.cur.i){R.bt={c:R.cur.c,i:R.cur.i,keys:pool[Math.floor(Math.random()*pool.length)],seed:Math.floor(Math.random()*4294967296)};save()}return R.bt}
 function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();const n=o.t;const pick=a=>a[Math.floor(Math.random()*a.length)];
- if(n==='戦闘'){const keys=pick(R.cur.c<2?LX_EASY:LX_HARD);crumbleCut(()=>lxBattle('normal',keys,()=>lxReward(false)))}
- else if(n==='エリート'){toast('強い誤植が待ち構えている！');crumbleCut(()=>lxBattle('elite',pick(LX_ELITE),()=>lxReward(true)))}
- else if(n==='ボス'){bossCutLx(()=>lxBattle('boss',[R.boss],()=>{lxComplete()}))}
+ if(R.bt&&R.bt.won&&R.bt.c===R.cur.c&&R.bt.i===R.cur.i){toast('この戦闘はもう勝っています');return lxNextFloor()}
+ if(n==='戦闘'){const b=lxBt(R,R.cur.c<2?LX_EASY:LX_HARD);crumbleCut(()=>lxBattle('normal',b.keys,()=>lxReward(false),{seed:b.seed}))}
+ else if(n==='エリート'){const b=lxBt(R,LX_ELITE);toast('強い誤植が待ち構えている！');crumbleCut(()=>lxBattle('elite',b.keys,()=>lxReward(true),{seed:b.seed}))}
+ else if(n==='ボス'){const b=lxBt(R,[[R.boss]]);bossCutLx(()=>lxBattle('boss',b.keys,()=>{lxComplete()},{seed:b.seed}))}
  else if(n==='休憩')lxRest();
  else if(n==='宝箱'){const roll=Math.random();const r=roll<.25?lxGiveRelic():null;if(!r&&roll<.7)lxReward(false,true);else if(r)modal(`<h3>宝箱を開けた</h3><p style="line-height:1.8">装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor);
   else{const p=lxGivePot();modal(`<h3>宝箱を開けた</h3><p style="line-height:1.8">${p?`薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれない。中にあった焼き菓子を食べて、HPが10回復した。'}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor)}}
@@ -6387,7 +6392,7 @@ function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();cons
  else if(n==='お店')lxShop();
  else{/* ？マス：中身は入ったときに決まる（途中でやめても同じ中身）。戦闘は15%、あとはイベント */
   if(!R.q){R.q=Math.random()<.15?'fight':LX_EVENTS[Math.floor(Math.random()*LX_EVENTS.length)].id;save()}
-  if(R.q==='fight'){toast('本の山から誤植が飛び出してきた！');crumbleCut(()=>lxBattle('normal',pick(R.cur.c<3?LX_EASY:LX_HARD),()=>lxReward(false)))}
+  if(R.q==='fight'){const b=lxBt(R,R.cur.c<3?LX_EASY:LX_HARD);toast('本の山から誤植が飛び出してきた！');crumbleCut(()=>lxBattle('normal',b.keys,()=>lxReward(false),{seed:b.seed}))}
   else lxEvent(R.q)}}
 /* ？マスのイベント。ch=選択肢（l=ボタン、go=結果の処理。結果の文を返す） */
 function lxHurtRun(v){const R=S.lib.run;R.hp=Math.max(1,R.hp-v);save()}
