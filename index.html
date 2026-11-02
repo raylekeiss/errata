@@ -1512,6 +1512,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lkb-no{padding:.85cqw 1.6cqw;font:700 1.3cqw/1.3 var(--serif);color:#4a4f60;background:rgba(255,255,255,.5);border:1px solid #b9b2a2;border-radius:.3cqw;cursor:pointer}
 /* 縦向きの狭い画面：本は横長のままなので、少し文字を大きく */
 @media (orientation:portrait){.lkb{width:99vw}}
+
+.lkb-cap input{width:9em;max-width:100%;font:inherit;letter-spacing:.06em;color:inherit;text-align:center;background:transparent;border:0;border-bottom:1px dashed rgba(168,135,58,.7);padding:0 0 .15em;outline:none;border-radius:0}
+.lkb-cap input:focus{border-bottom:1px solid #a8873a;background:rgba(255,250,235,.7)}
+.lkb-cap{cursor:text;position:relative}
+.lkb-pen{font-style:normal;font-size:.8em;color:#a8873a;margin-left:.2cqw;pointer-events:none}
+.lkb-cap::before,.lkb-cap::after{flex:0 0 3cqw}
 </style>
 </head>
 <body>
@@ -4885,16 +4891,17 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
  /* 開いた本の上に、左ページ＝職員証の写真、右ページ＝選ぶところ */
  modal(`<div class="lkb" style="background-image:url(${IMG['UI_本']||''})">
   <div class="lkb-l"><div class="lkb-card"><i class="lkb-rose"></i><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt=""></div>
-   <p class="lkb-cap">${esc(o.caption||S.name||'新人司書')}</p><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
+   <label class="lkb-cap" title="タップして名前を変える"><input id="lknm" maxlength="8" value="${esc(S.name||'')}" placeholder="名前" aria-label="名前（8文字まで）"><i class="lkb-pen" aria-hidden="true">✎</i></label><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
   <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
-   <p class="lkb-d">あなたの姿を選んでください。<br>あとから箱庭の「キャラ」でいつでも変えられます。</p>
+   <p class="lkb-d">あなたの姿を選んでください。名前は写真の下で直せます。<br>あとから箱庭の「キャラ」でいつでも変えられます。</p>
    ${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('髪の色')}${sw('color',LOOK_COLORS)}
    ${LOOK_HAIRS.length?`${lb('後ろ髪')}<div class="look-sw tx" data-g="hair">${LOOK_HAIRS.map(x=>`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}
    <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button></div></div></div>`,o.onCancel);
  const m=$('#modal');if(m){m.classList.add('lookbook');m.addEventListener('click',e=>{if(e.target===m&&o.cancel)closeModal()})}
  document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=g==='skin'?+b.dataset.v:b.dataset.v;
   b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#lookpv').src=IMG[heroKey(sel)]||''});
- $('#lookok').onclick=()=>{S.look=Object.assign({},S.look||{},sel);save();closeModal(true);cb&&cb()}}
+ $('#lookok').onclick=()=>{const nm=($('#lknm')||{}).value;const v=(nm||'').trim();if(nm!=null&&!v){toast('名前を入れてください');$('#lknm').focus();return}
+  if(v)S.name=v;S.look=Object.assign({},S.look||{},sel);save();closeModal(true);cb&&cb()}}
 function pickTutorial(){return 'ハンムラビ'}
 
 /* ---------- modal ---------- */
@@ -5489,7 +5496,7 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
 
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
- modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">箱庭にいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿を変える</button></div>
+ modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">箱庭にいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿・名前を変える</button></div>
  <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>`);
  document.querySelectorAll('.nw-crow').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
   if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1)}
