@@ -6377,9 +6377,11 @@ function lxMap(){const R=S.lib.run;if(!R)return LibMenu();if(!R.map){S.lib.run=n
 function lxShowDeck(){const R=S.lib.run;const k={atk:0,blk:0,oth:0};R.deck.forEach(id=>k[lxKind(id)]++);modal(`<div class="mhead"><h3>いまのデッキ（${R.deck.length}枚）</h3><button class="btn light" data-close>閉じる</button></div><p class="lx-mix"><span class="a">攻撃 <b>${k.atk}</b>枚</span><span class="b">余白 <b>${k.blk}</b>枚</span><span class="o">その他 <b>${k.oth}</b>枚</span><small>（デッキは少ないほど、強い頁を引きやすくなります）</small></p><div class="lx-grid pick">${R.deck.map((id,i)=>`<div class="lx-cell">${lxCardHTML(lxDef(id,R.ann.includes(i)))}</div>`).join('')}</div>`)}
 function lxNextFloor(){const R=S.lib.run;if(!R)return LibMenu();if(R.cur){R.path=R.path||[];R.path.push(R.cur);R.at=R.cur;R.cur=null}R.q=null;save();
  if(lxNode(R,R.at).t==='ボス')return lxComplete();FX.pageTurn(lxMap)}
-/* 戦闘マスは入った時点で敵とシャッフルの種を記録する（再読み込みしても同じ敵・同じ最初の手札） */
+/* 戦闘マスは入った時点で敵・シャッフルの種・HP・薬を記録する（再読み込みしても同じ敵・同じ最初の手札・同じHPから） */
 const lxRng=s=>()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296};
-function lxBt(R,pool){if(!R.bt||R.bt.c!==R.cur.c||R.bt.i!==R.cur.i){R.bt={c:R.cur.c,i:R.cur.i,keys:pool[Math.floor(Math.random()*pool.length)],seed:Math.floor(Math.random()*4294967296)};save()}return R.bt}
+function lxBt(R,pool){if(!R.bt||R.bt.c!==R.cur.c||R.bt.i!==R.cur.i){R.bt={c:R.cur.c,i:R.cur.i,keys:pool[Math.floor(Math.random()*pool.length)],seed:Math.floor(Math.random()*4294967296),hp:R.hp,pots:(R.pots||[]).slice()}}
+ else{if(R.bt.hp!=null)R.hp=R.bt.hp;if(R.bt.pots)R.pots=R.bt.pots.slice()}/* やり直しはマスに入ったときのHP・薬から */
+ save();return R.bt}
 function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();const n=o.t;const pick=a=>a[Math.floor(Math.random()*a.length)];
  if(R.bt&&R.bt.won&&R.bt.c===R.cur.c&&R.bt.i===R.cur.i){toast('この戦闘はもう勝っています');return lxNextFloor()}
  if(n==='戦闘'){const b=lxBt(R,R.cur.c<2?LX_EASY:LX_HARD);crumbleCut(()=>lxBattle('normal',b.keys,()=>lxReward(false),{seed:b.seed}))}
