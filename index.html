@@ -5752,7 +5752,7 @@ const lxCurse=k=>LX_RELIC_CURSE.has(k)||LX_POT_CURSE.has(k);
 function lxAddRelic(r){const R=S.lib.run;R.relics.push(r);if(r==='免罪符'){R.max=Math.max(10,R.max-8);R.hp=Math.min(R.hp,R.max)}save();return r}
 /* 敵。ai(e,X)が次の行動（予告）を返す。d=攻撃、n=回数、b=余白、str=威信、weak/vul=プレイヤーに衰退/動揺、
    disc=次のターン手札を捨てさせる、shuf=山札をかき混ぜ次の手札−1、steal=山札の上から抜き取る、dirty=汚れ頁を混ぜる、
-   copy=プレイヤーの威信を写す、mir=このターン受けたダメージの半分を返す、clr=余白を消す、kai=改変の予告 */
+   copy=プレイヤーの威信を写す、mir=このターン受けたダメージの半分＋5を返す、clr=余白を消す、kai=改変の予告 */
 const lxPick=(e,arr)=>{let i;do{i=Math.floor(Math.random()*arr.length)}while(arr.length>1&&i===e.li);e.li=i;return arr[i]};
 const lxAlt=(e,arr)=>{e.ai=(e.ai==null?-1:e.ai)+1;return arr[e.ai%arr.length]};
 const LX_EN={
@@ -6066,7 +6066,7 @@ async function lxEndTurn(){if(!X||X.busy||X.over)return;
    if(it.d!=null||it.mir)lxLunge(el()&&el().querySelector('.blob'),'lx-lunge-l');else FX._replay(el(),'lx-act',400);
    if(it.clr&&X.p.blk){X.p.blk=0;lxFloat($('#lxSd'),'余白が燃えた','me')}
    if(it.b)e.blk+=it.b;if(it.str)e.st.str+=it.str;if(it.copy&&X.p.st.str>0)e.st.str+=X.p.st.str;
-   if(it.d!=null||it.mir){let base=it.mir?Math.max(5,Math.floor(X.dealt*.5)):it.d;if(it.cut)base=Math.floor(base*it.cut);
+   if(it.d!=null||it.mir){let base=it.mir?Math.floor(X.dealt*.5)+5:it.d;if(it.cut)base=Math.floor(base*it.cut);
     for(let i=0;i<(it.n||1);i++){let v=base+e.st.str;if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;lxHurtP(Math.max(0,Math.floor(v)));lxRender();if(X.p.hp<=0)return lxLose();if(i+1<(it.n||1))await lxWait(220)}}
    if(it.weak){X.p.st.weak+=it.weak;X.seen.add('衰退')}if(it.vul){X.p.st.vul+=it.vul;X.seen.add('動揺')}if(it.dirty)X.seen.add('汚れ頁');if(it.kai)X.seen.add('改変');if(it.str)X.seen.add('威信');
    if(it.disc)X.p.discNext+=it.disc;
@@ -6117,7 +6117,7 @@ function lxTip(el,html){lxTipClose();const d=document.createElement('div');d.cla
 /* 敵の予告をことばで */
 function lxIntentDesc(e){const it=e.it||{};const a=[];
  if(it.kai)a.push('改変の予告（ボスの大技）');
- if(it.mir)a.push(`このターンに受けたダメージの半分を、攻撃として返してくる`);
+ if(it.mir)a.push(`このターンに受けたダメージの半分＋5を、攻撃として返してくる`);
  if(it.d!=null){let v=it.d+e.st.str;if(it.cut)v=Math.floor(v*it.cut);if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;a.push(`${Math.floor(v)}ダメージの攻撃${it.n>1?'を'+it.n+'回':''}`)}
  if(it.clr)a.push('攻撃の前に、プレイヤーの余白をすべて燃やす');
  if(it.b)a.push(`余白${it.b}を張って守る`);if(it.str)a.push(`自分に威信＋${it.str}を付与`);if(it.copy)a.push('プレイヤーの威信を写し取って、自分の威信にする');
@@ -6144,7 +6144,7 @@ const LX_SAY=[['kai','歴史ごと書き換えてやる！'],['clr','その余�
 function lxSayOf(it){const x=LX_SAY.find(([k])=>it[k]);return x?x[1]:''}
 function lxIntentHTML(e){const it=e.it||{};const a=[];const say=lxSayOf(it);
  if(it.kai)a.push('<b class="kai">改変</b>');
- if(it.mir)a.push(`<span class="atk">裏写り（このターンに受けたダメージの半分）</span>`);
+ if(it.mir)a.push(`<span class="atk">裏写り（このターンに受けたダメージの半分＋5）</span>`);
  if(it.d!=null){let v=it.d+e.st.str;if(it.cut)v=Math.floor(v*it.cut);if(e.st.weak>0)v*=.75;if(X.p.st.vul>0)v*=1.5;v=Math.floor(v);a.push(`<span class="atk">攻撃 ${v}${it.n>1?'×'+it.n:''}</span>`)}
  if(it.clr)a.push('<span class="dbf">余白を燃やす</span>');
  if(it.b)a.push(`<span class="def">守り ${it.b}</span>`);if(it.str)a.push(`<span class="buf">威信＋${it.str}</span>`);if(it.copy)a.push('<span class="buf">威信をまねる</span>');
