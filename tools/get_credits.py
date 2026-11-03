@@ -46,7 +46,16 @@ def get(url, params):
             time.sleep(max(wait, 10 * (attempt + 1)))
             continue
         r.raise_for_status()
-        return r.json()
+        d = r.json()
+        # 制限にかかると、200のままエラー文だけを返すことがある
+        err = d.get("error") if isinstance(d, dict) else None
+        if err:
+            if err.get("code") in ("ratelimited", "maxlag", "readonly", "internal_api_error_DBQueryError") \
+                    or "rate" in str(err.get("code", "")):
+                time.sleep(max(int(r.headers.get("Retry-After", 0) or 0), 15 * (attempt + 1)))
+                continue
+            raise RuntimeError(f"Wikimedia のエラー：{err.get('code')} {err.get('info', '')}")
+        return d
     raise RuntimeError("Wikimedia が混んでいて取得できませんでした")
 
 
@@ -55,7 +64,10 @@ def p18_file(enwiki_title):
     d = get("https://www.wikidata.org/w/api.php",
             {"action": "wbgetentities", "sites": "enwiki", "titles": enwiki_title,
              "props": "claims", "redirects": "yes"})
-    for qid, ent in d.get("entities", {}).items():
+    ents = d.get("entities")
+    if ents is None:
+        raise RuntimeError("Wikidata から想定外の応答がありました")
+    for qid, ent in ents.items():
         if qid.startswith("Q"):
             for c in ent.get("claims", {}).get("P18", []):
                 v = c.get("mainsnak", {}).get("datavalue", {}).get("value")
@@ -116,7 +128,8 @@ def main():
                 fn = pageimage_file(title)
                 how = "Wikipedia記事の画像"
             if not fn:
-                print(f"[{i}/{len(todo)}] {name}：画像が見つからない（手で確認してください）")
+                why = "英語版の記事名がWikidataで見つからない" if not qid else f"記事はあるが代表画像がない（{qid}）"
+                print(f"[{i}/{len(todo)}] {name}：画像が見つからない…{why}（{title}）")
                 continue
             meta = file_meta(fn)
             if not meta:
