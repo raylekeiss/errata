@@ -4664,7 +4664,7 @@ function inkBlot(seed){let s=seed*9301+49297;const r=()=>{s=(s*9301+49297)%23328
 const STAR_EMB='<path d="M24 6l4 14 14 4-14 4-4 14-4-14-14-4 14-4z" fill="currentColor"/>';
 let PART=0;
 function partOf(ch){return PARTS.findIndex(p=>p.chs.includes(ch))}
-function StoryMenu(){const nx=nextChapter();if(nx!==null&&PART===0&&partOf(nx)>0)PART=partOf(nx);const P=PARTS[PART];
+function StoryMenu(keep){const nx=nextChapter();if(!keep&&nx!==null&&partOf(nx)>=0)PART=partOf(nx);const P=PARTS[PART];
  const rows=[];for(const i of P.chs){const exists=i<STORY.length;const done=i===0?S.prologue:!!S.cleared[i-1];
   const unlocked=exists&&(i===0||(i===1?S.prologue:!!S.cleared[i-2]));const title=i===0?'史書庫へようこそ':CHT[i];
   const cls=!unlocked?'locked':(i===nx?'next':'');
@@ -4682,7 +4682,7 @@ function StoryMenu(){const nx=nextChapter();if(nx!==null&&PART===0&&partOf(nx)>0
   </div>
   <div class="scr-title">ストーリー</div>
   <div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div></div>`);
- document.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{PART=+b.dataset.part;StoryMenu()});
+ document.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{PART=+b.dataset.part;StoryMenu(true)});
  document.querySelectorAll('.toc-row').forEach(b=>b.onclick=()=>{const ch=+b.dataset.ch;
   if(b.dataset.ex!=='1'){FX.shake(b);toast('この章は、まだ誤植に食われていて読めないみたい（準備中）');return}
   if(b.dataset.ok!=='1'){FX.shake(b);toast('前の章を修復すると、読めるようになります');return}
