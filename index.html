@@ -1674,6 +1674,15 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lx-ico.mid{display:block;width:64px;height:64px;margin:0 auto 6px;vertical-align:0}
 .lx-char-rl .lx-ico.mid{float:left;width:48px;height:48px;margin:0 10px 0 0}
 .lx-ico.big{display:block;width:120px;height:120px;margin:0 auto 8px;vertical-align:0;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));animation:fx-pop .35s ease-out}
+
+/* 戦闘中の装備・薬（アイコンのみ） */
+.lx-gi{position:relative;width:46px;height:46px;padding:3px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(60,48,30,.85),rgba(20,16,10,.85));box-shadow:inset 0 0 0 1.5px rgba(201,162,74,.75),0 3px 8px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center}
+.lx-gi.pot{border-radius:10px;box-shadow:inset 0 0 0 1.5px rgba(120,190,140,.8),0 3px 8px rgba(0,0,0,.4)}
+.lx-gi.curse{box-shadow:inset 0 0 0 1.5px #c9708f,0 3px 8px rgba(0,0,0,.4);background:radial-gradient(circle at 40% 35%,#5a2a44,#2a1020)}
+.lx-gi .lx-ico{width:38px;height:38px;margin:0;vertical-align:0}
+.lx-gi span{font-size:9px;line-height:1.1;color:#e6c77a}
+.lx-gi:active{transform:scale(.9)}
+.lx-gsep{width:1px;align-self:stretch;margin:4px 2px;background:rgba(201,162,74,.4)}
 </style>
 </head>
 <body>
@@ -4173,6 +4182,9 @@ const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
+"アイテム_羅針盤": "img/item/rashinban.webp",
+"アイテム_乳香": "img/item/nyuko.webp",
+"アイテム_硝石": "img/item/shoseki.webp",
 "アイテム_カコの手帳": "img/item/kako_techo.webp",
 "アイテム_ドクニンジンの杯": "img/item/dokuninjin.webp",
 "アイテム_修道院の薬草": "img/item/yakuso.webp",
@@ -6491,8 +6503,11 @@ function lxLose(){if(S.lib.run&&S.lib.run.tut){X.over=true;X=null;S.lib.run=S.li
   setTimeout(()=>modal(`<h3>練習はここまで</h3><p style="line-height:1.8">誤植に押し返されてしまった。練習なので、何度でも挑戦できます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu),400);return}
  X.over=true;X.busy=true;const R=S.lib.run;S.lib.run=null;X=null;saveNow();
  setTimeout(()=>modal(`<h3>探索は失敗に終わった</h3><p style="line-height:1.8">誤植に押し返されてしまった。<br>デッキを組み直して、もう一度挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu),400)}
+function lxItemInfo(k,isPot,useBtn){const t=isPot?LX_POT[k]:LX_RELIC[k];if(!t)return;
+ modal(`${lxIco(k,'big')}<h3 style="text-align:center">${isPot?'薬':'装備'}「${esc(k)}」</h3>${lxCurse(k)?'<p style="text-align:center"><i class="lx-ctag">デメリットあり</i></p>':''}<p style="line-height:1.8;text-align:center">${esc(t)}</p><div class="row" style="justify-content:center">${useBtn?'<button class="btn red" id="lxUse">使う</button><button class="btn light" data-close>やめる</button>':'<button class="btn" data-close>閉じる</button>'}</div>`);
+ if(useBtn)$('#lxUse').onclick=()=>{closeModal();useBtn()}}
 function lxUsePot(i){if(!X||X.busy||X.over)return;const R=S.lib.run;const k=R.pots[i];if(!k)return;
- askYes(`${k}を使いますか？\n${LX_POT[k]}`,'使う',()=>{R.pots.splice(i,1);save();
+ lxItemInfo(k,true,()=>{R.pots.splice(i,1);save();
   if(k==='テリアカ'){X.p.hp=Math.min(X.p.max,X.p.hp+15);R_sync()}
   if(k==='胡椒')X.p.st.str+=2;if(k==='茶')X.p.en+=2;if(k==='乳香')lxGainBlk(12);
   if(k==='硝石')for(const e of lxAlive())lxHitE(e,12);
@@ -6589,7 +6604,8 @@ function lxRenderBase(){const R=S.lib.run;
   else{X.sel=u;lxRender();if(c.def.cost>X.p.en)toast('エネルギーが足りない')}};}
 function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAlive();
  $('#lxMe').innerHTML=`<div class="lx-hprow">${lxShield(X.p.blk)}<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div></div><div class="lx-st">${lxStHTML(X.p.st,0)}${X.pw.draw?`<i class="s-pw" data-term="持続">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw" data-term="持続">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw" data-term="持続">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw" data-term="持続">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw" data-term="持続">毎ターン全体${X.pw.aoe}</i>`:''}${X.pw.jug?`<i class="s-pw" data-term="持続">余白でダメージ${X.pw.jug}</i>`:''}${X.pw.brut?`<i class="s-pw" data-term="持続">毎ターンHP−${X.pw.brut}・＋${X.pw.brut}枚</i>`:''}${X.rage?`<i class="s-blk">攻撃で余白${X.rage}</i>`:''}${X.dtap?`<i class="s-str">次の攻撃が2回</i>`:''}${X.halfQ?`<i class="s-pw">次のクイズは2択</i>`:''}${X.pw.barr?`<i class="s-pw" data-term="持続">余白が消えない</i>`:''}${X.pw.strTurn?`<i class="s-pw" data-term="持続">鍛錬 ${X.pw.strTurn}</i>`:''}${X.pw.powDraw?`<i class="s-pw" data-term="持続">布陣 ${X.pw.powDraw}</i>`:''}${X.pw.blkPlus?`<i class="s-pw" data-term="持続">鎧の重み ${X.pw.blkPlus}</i>`:''}${X.pw.comb?`<i class="s-pw" data-term="持続">燃焼 ${X.pw.comb}</i>`:''}${X.nextEn?`<i class="s-pw">次のターン エネルギー＋${X.nextEn}</i>`:''}${X.qok?`<i class="s-pw">正解 ${X.qok}問</i>`:''}${S.lib.run&&S.lib.run.qstreak?`<i class="s-pw">連続正解 ${S.lib.run.qstreak}</i>`:''}${X.pw.qok?`<i class="s-pw" data-term="持続">注釈癖 ${X.pw.qok}</i>`:''}</div>`;
- $('#lxGear').innerHTML=R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${lxIco(r)}${esc(r)}</span>`).join('')+R.pots.map((p,i)=>`<button class="lx-pot ${lxCurse(p)?'curse':''}" data-p="${i}">${lxIco(p)}${esc(p)}</button>`).join('');
+ $('#lxGear').innerHTML=R.relics.map(r=>`<button class="lx-gi ${lxCurse(r)?'curse':''}" data-r="${esc(r)}" aria-label="${esc(r)}">${lxIco(r)||`<span>${esc(r)}</span>`}</button>`).join('')+(R.pots.length?'<i class="lx-gsep"></i>':'')+R.pots.map((p,i)=>`<button class="lx-gi pot ${lxCurse(p)?'curse':''}" data-p="${i}" aria-label="${esc(p)}">${lxIco(p)||`<span>${esc(p)}</span>`}</button>`).join('');
+ $('#lxGear').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>lxItemInfo(b.dataset.r,false));
  $('#lxGear').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>lxUsePot(+b.dataset.p));
  $('#lxBonus').innerHTML=X.qz==='free'?'<span class="ok">改変を正した！　次に切る人物の頁は、クイズなしで1.5倍</span>':X.qz==='done'?'<span>このターンのクイズは終了</span>':'<span>このターン最初に切った人物の頁でクイズ（正解するとその頁が1.5倍）</span>';
  $('#lxEn').innerHTML=X.en.map((e,i)=>e.dead?'':`<div class="lx-e ${LX_EN[e.key].boss?'boss':''} ${LX_EN[e.key].elite?'elite':''} ${alive[X.tg]===e?'tg':''}" data-e="${i}">
