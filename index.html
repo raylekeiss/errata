@@ -1710,18 +1710,18 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .shp-rug-in{position:absolute;left:5.5%;right:4.5%;top:7%;bottom:6%;overflow:auto;display:flex;flex-direction:column;justify-content:space-around;gap:1.5vh}
 .shp-rug.v .shp-rug-in{left:7%;right:6%;top:5%;bottom:5%;overflow:auto}
 .sh-row{flex:none;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:1.6vw}
-.sh-row.gear{flex-direction:column;align-items:center;flex-wrap:nowrap;gap:1.2vh}
-.sh-grp{display:flex;flex-wrap:wrap;justify-content:center;gap:1.6vw}
-.sh-grp.svc{padding-top:1.2vh;border-top:1px dashed rgba(232,207,134,.45);gap:3vw}
+
+
+
 
 .sh-it{flex:none;position:relative;display:flex;flex-direction:column;align-items:center;transition:transform .15s}
 .sh-it:active{transform:scale(.95)}
 .sh-it .sh-obj{display:block;width:100%;filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}
-.sh-it.pg{width:min(calc((100% - (var(--n) - 1)*1.6vw)/var(--n)),24vh,170px)}
-.sh-it.pg .lxc{width:100%;font-size:11px}.sh-it.pg .lxc-tx{font-size:10px}
-.shp-rug.v .sh-it.pg{width:min(calc((100% - 3*2vw)/4),150px)}
-.sh-it.ic{width:min(11.5vw,16vh,130px)}
-.shp-rug.v .sh-it.ic{width:min(12vw,96px)}
+
+
+
+
+
 .shp-rug.v .sh-tag{width:58px}.shp-rug.v .sh-tag b{font-size:14px}
 .sh-it.pg .sh-tag{top:auto;bottom:-10px;left:-16px;transform:rotate(-6deg)}.shp-rug.v .sh-row{gap:1.4vw}
 .sh-it.ic .lx-ico{display:block;width:100%;height:auto;aspect-ratio:1;margin:0;vertical-align:0}
@@ -1768,6 +1768,28 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 @keyframes rwd-deal{from{transform:translateY(60px) scale(.7);opacity:0}}
 .rwd-btns{justify-content:center;margin-top:4px}
 @media (orientation:portrait){.rwd-card{width:min(29vw,200px)}}
+
+/* 段組み：上段に頁、下段に残りの頁＋装備と薬（小さく）＋サービス */
+.shp-rug-in{--g:1.8vw;justify-content:center;gap:3.2vh}
+.sh-row.pages,.sh-pg2{gap:var(--g)}
+.sh-it.pg{--cw:min(calc((80vw - (var(--k) - 1)*var(--g))/var(--k)),calc((84vh - 150px)/2/1.46),190px);width:var(--cw)}
+.shp-rug.v .sh-it.pg{--cw:min(calc((80vw - 3*var(--g))/4),calc((88vh - 330px)/2/1.46),180px)}
+.sh-it.pg .lxc{width:100%;font-size:max(11px,min(1.25vw,14px))}
+.sh-it.pg .lxc-tx{font-size:max(10px,min(1.12vw,13px));line-height:1.45}
+.sh-row.lower{flex-wrap:nowrap;align-items:center;gap:calc(var(--g)*1.6)}
+.sh-pg2{display:flex}
+.sh-gear{display:flex;flex-direction:column;gap:1.4vh;padding:0 calc(var(--g)*.6)}
+.sh-gl{display:flex;gap:calc(var(--g)*1.2)}
+.sh-svc{display:flex;flex-direction:column;gap:2.6vh;padding-top:8px;padding-left:calc(var(--g)*1.4);border-left:1px dashed rgba(232,207,134,.45)}
+.sh-it.ic{width:min(6.6vw,10vh,84px)}
+.sh-it.ic .sh-tag{width:58px;left:-18px;top:-10px}.sh-it.ic .sh-tag b{font-size:14px}
+.sh-svc .sh-it.ic{width:min(5.6vw,8.5vh,70px)}
+.shp-rug.v .sh-row.lower{flex-wrap:wrap;justify-content:center;row-gap:3.4vh}
+.shp-rug.v .sh-svc{flex-direction:row;gap:5vw;padding-left:0;border-left:0;padding-top:12px;border-top:1px dashed rgba(232,207,134,.45);width:100%;justify-content:center}
+.shp-rug.v .sh-gear{padding-top:6px}
+.shp-rug.v .sh-it.ic{width:min(10vw,76px)}
+.shp-rug.v .sh-svc .sh-it.ic{width:min(8.5vw,66px)}
+.shp-rug.v .sh-pg2{width:100%;justify-content:center}
 </style>
 </head>
 <body>
@@ -6992,18 +7014,18 @@ function lxShopRug(){const R=S.lib.run;const S0=R.shop;R.rmCost=R.rmCost||60;con
  const tag=o=>o.sold?'':`<span class="sh-tag ${o.p>sv?'poor':''}" style="background-image:url(${IMG['店_値札']})"><b>${o.p}</b></span>`;
  const it=(k,i,o,cls,obj,nm)=>`<button class="sh-it ${cls} ${o.sold?'sold':''} ${!o.sold&&o.p>sv?'poor':''}" data-k="${k}" data-i="${i}" ${o.sold?'disabled':''}>
    <span class="sh-obj">${obj}</span>${nm?`<span class="sh-nm">${esc(nm)}</span>`:''}${tag(o)}${o.sold?`<img class="sh-sold" src="${IMG['店_売切']}" alt="売り切れ">`:''}</button>`;
- const pages=S0.pages.map((o,i)=>it('pg',i,o,'pg',lxCardHTML(lxDef(o.id)),'')).join('');
- const gear=S0.rel.map((o,i)=>it('rel',i,o,'ic'+(lxCurse(o.id)?' curse':''),lxIco(o.id),o.id)).join('')+S0.pot.map((o,i)=>it('pot',i,o,'ic pot'+(lxCurse(o.id)?' curse':''),lxIco(o.id),o.id)).join('');
+ const rv=innerHeight>innerWidth*1.05;const K=rv?4:5;const pg=(a,b)=>S0.pages.slice(a,b).map((o,j)=>it('pg',a+j,o,'pg',lxCardHTML(lxDef(o.id)),'')).join('');
+ const rels=S0.rel.map((o,i)=>it('rel',i,o,'ic'+(lxCurse(o.id)?' curse':''),lxIco(o.id),o.id)).join(''),pots=S0.pot.map((o,i)=>it('pot',i,o,'ic pot'+(lxCurse(o.id)?' curse':''),lxIco(o.id),o.id)).join('');
  const svc=it('rm',0,{p:R.rmCost,sold:R.rmUsed},'ic svc',`<img class="lx-ico" src="${IMG['店_外す']}" alt="">`,'頁を外す')
   +it('up',0,{p:75,sold:R.upUsed},'ic svc',`<img class="lx-ico" src="${IMG['店_注釈']}" alt="">`,'注釈を書く')
   +it('heal',0,{p:50,sold:R.healUsed},'ic svc',lxIco('修道院の薬草'),'手当て');
  show(`<div class="shp rug" id="shp"><div class="shp-floor" style="background-image:url(${IMG['店_床']})"></div>
   <div class="shp-rug"><div class="shp-rug-in">
-   <div class="sh-row pages" style="--n:${S0.pages.length}">${pages}</div>
-   <div class="sh-row gear"><div class="sh-grp">${gear}</div><div class="sh-grp svc">${svc}</div></div>
+   <div class="sh-row pages" style="--k:${K}">${pg(0,K)}</div>
+   <div class="sh-row lower" style="--k:${K}">${S0.pages.length>K?`<div class="sh-pg2">${pg(K)}</div>`:''}<div class="sh-gear"><div class="sh-gl">${rels}</div><div class="sh-gl">${pots}</div></div><div class="sh-svc">${svc}</div></div>
   </div></div>
   <div class="shp-head"><button class="gc-back" id="shpBack">店主のところへ</button><span class="shp-hp">HP ${R.hp}／${R.max}　デッキ ${R.deck.length}枚</span><div class="shp-silver">${lxSilverHTML(sv)}</div></div></div>`);
- const rug=$('.shp-rug');const rv=innerHeight>innerWidth*1.05;rug.style.backgroundImage=`url(${IMG[rv?'店_絨毯縦':'店_絨毯']})`;rug.classList.toggle('v',rv);
+ const rug=$('.shp-rug');rug.style.backgroundImage=`url(${IMG[rv?'店_絨毯縦':'店_絨毯']})`;rug.classList.toggle('v',rv);
  $('#shpBack').onclick=()=>{R.shopIn=false;save();FX.pageTurn(lxShopFront)};
  app.querySelectorAll('.sh-it:not([disabled])').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=+b.dataset.i;const o=k==='rm'?{p:R.rmCost}:k==='up'?{p:75}:k==='heal'?{p:50}:S0[k==='pg'?'pages':k][i];
   const buy=()=>{R.silver-=o.p;if(k!=='rm')o.sold=true;save();lxShopRug()};
