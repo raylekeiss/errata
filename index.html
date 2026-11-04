@@ -1707,28 +1707,29 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .shp-head{position:absolute;z-index:3;left:clamp(90px,10vw,140px);right:clamp(12px,2vw,28px);top:calc(env(safe-area-inset-top,0px) + 10px);display:flex;align-items:center;gap:14px}
 .shp-hp{flex:1;font-family:var(--sans);font-size:13px;color:#e9dfc6;text-shadow:0 1px 3px #000}
 .shp-rug{position:absolute;left:2.5%;right:1.5%;top:calc(env(safe-area-inset-top,0px) + 66px);bottom:2%;background:center/100% 100% no-repeat;filter:drop-shadow(0 14px 22px rgba(0,0,0,.6))}
-.shp-rug-in{position:absolute;left:13%;right:13%;top:16%;bottom:15%;display:flex;flex-direction:column;justify-content:space-around;gap:1.5vh}
+.shp-rug-in{position:absolute;left:12.5%;right:12.5%;top:15%;bottom:13%;overflow:auto;display:flex;flex-direction:column;justify-content:space-around;gap:1.5vh}
 .shp-rug.v .shp-rug-in{left:15%;right:15%;top:9%;bottom:9%;overflow:auto}
-.sh-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:1.2vw}
-.sh-row.gear{gap:2.4vw;align-items:flex-start}
-.sh-grp{display:flex;flex-wrap:wrap;justify-content:center;gap:1vw}
-.sh-grp.svc{padding-left:2.4vw;border-left:1px dashed rgba(232,207,134,.45)}
-.shp-rug.v .sh-grp.svc{padding-left:0;border-left:0;padding-top:1.4vh;border-top:1px dashed rgba(232,207,134,.45)}
+.sh-row{flex:none;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:1.2vw}
+.sh-row.gear{flex-direction:column;align-items:center;flex-wrap:nowrap;gap:1.2vh}
+.sh-grp{display:flex;flex-wrap:wrap;justify-content:center;gap:1.6vw}
+.sh-grp.svc{padding-top:1.2vh;border-top:1px dashed rgba(232,207,134,.45);gap:3vw}
+
 .sh-it{flex:none;position:relative;display:flex;flex-direction:column;align-items:center;transition:transform .15s}
 .sh-it:active{transform:scale(.95)}
-.sh-it .sh-obj{display:block;filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}
-.sh-it.pg{width:min(11.5vw,18vh,140px)}
+.sh-it .sh-obj{display:block;width:100%;filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}
+.sh-it.pg{width:min(calc((100% - (var(--n) - 1)*1.2vw)/var(--n)),21vh,150px)}
 .sh-it.pg .lxc{width:100%;font-size:11px}.sh-it.pg .lxc-tx{font-size:10px}
-.shp-rug.v .sh-it.pg{width:min(15vw,112px)}
-.sh-it.ic{width:min(8vw,11vh,92px)}
-.shp-rug.v .sh-it.ic{width:min(10.5vw,76px)}
-.shp-rug.v .sh-tag{width:32px;height:52px}.shp-rug.v .sh-tag b{font-size:12px}.shp-rug.v .sh-row{gap:1.4vw}
+.shp-rug.v .sh-it.pg{width:min(calc((100% - 3*1.4vw)/4),128px)}
+.sh-it.ic{width:min(10vw,15vh,118px)}
+.shp-rug.v .sh-it.ic{width:min(12.5vw,92px)}
+.shp-rug.v .sh-tag{width:58px}.shp-rug.v .sh-tag b{font-size:14px}
+.sh-it.pg .sh-tag{top:20%;left:-16px}.shp-rug.v .sh-row{gap:1.4vw}
 .sh-it.ic .lx-ico{display:block;width:100%;height:auto;aspect-ratio:1;margin:0;vertical-align:0}
 .sh-it.curse .sh-obj{filter:drop-shadow(0 0 6px rgba(201,112,143,.9)) drop-shadow(0 6px 6px rgba(0,0,0,.55))}
 .sh-nm{margin-top:2px;font-family:var(--sans);font-size:max(10px,min(1.2vw,12px));line-height:1.25;color:#f3e6c4;text-shadow:0 1px 2px #000,0 0 4px #000;text-align:center;white-space:nowrap}
-.sh-tag{position:relative;display:block;width:38px;height:62px;margin-top:-6px;background:center/contain no-repeat;transform:rotate(-6deg);transform-origin:50% 0;font-family:var(--serif);color:#3a2a14}
-.sh-it:nth-child(even) .sh-tag{transform:rotate(5deg)}
-.sh-tag b{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:14px;font-weight:700}
+.sh-tag{position:absolute;z-index:2;left:-14px;top:-8px;width:68px;aspect-ratio:240/103;background:center/contain no-repeat;transform:rotate(-9deg);transform-origin:18% 30%;font-family:var(--serif);color:#3a2a14;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5));pointer-events:none}
+.sh-it:nth-child(even) .sh-tag{transform:rotate(-4deg)}
+.sh-tag b{position:absolute;left:22%;right:4%;top:30%;bottom:6%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;line-height:1}
 .sh-tag.poor b{color:#a83a2a}
 .sh-it.poor .sh-obj{opacity:.75}
 .sh-it.sold .sh-obj,.sh-it.sold .sh-nm{opacity:.35}
@@ -1741,8 +1742,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .rwd-bg{position:absolute;inset:0;background:center/cover no-repeat}
 .rwd-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,transparent 30%,rgba(8,6,12,.55))}
 .rwd-in{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 20px}
-.rwd-ribbon{flex:none;width:min(560px,80vw);aspect-ratio:1200/290;background:center/contain no-repeat;display:flex;align-items:center;justify-content:center;animation:rwd-drop .5s cubic-bezier(.3,1.5,.5,1) both}
-.rwd-ribbon span{margin-top:-1.5%;font-family:var(--serif);font-weight:700;font-size:clamp(20px,3.4vw,32px);letter-spacing:.4em;padding-left:.4em;color:#fbecc4;text-shadow:0 2px 0 #5a1010,0 0 10px rgba(0,0,0,.5)}
+.rwd-ribbon{flex:none;width:min(600px,84vw);aspect-ratio:1200/284;background:center/contain no-repeat;display:flex;align-items:center;justify-content:center;animation:rwd-drop .5s cubic-bezier(.3,1.5,.5,1) both}
+.rwd-ribbon span{margin-top:-3%;font-family:var(--serif);font-weight:700;font-size:clamp(22px,4vw,38px);letter-spacing:.4em;padding-left:.4em;color:#fbecc4;text-shadow:0 2px 0 #5a1010,0 0 10px rgba(0,0,0,.5)}
 @keyframes rwd-drop{from{transform:translateY(-40px) scale(.9);opacity:0}}
 .rwd-got{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 26px;margin:2px 0 8px}
 .rwd-g{display:flex;align-items:center;gap:10px;padding:6px 18px 6px 8px;border-radius:40px;background:rgba(14,10,8,.62);box-shadow:inset 0 0 0 1px rgba(201,162,74,.55);color:#f3e6c4;font-family:var(--serif);animation:fx-pop .35s ease-out .25s both}
@@ -4275,9 +4276,9 @@ const IMG={
 "店_売切": "img/lib/sold.webp",
 "店_外す": "img/lib/svc_rm.webp",
 "店_注釈": "img/lib/svc_up.webp",
-"店_値札": "img/lib/tag.webp",
+"店_値札": "img/lib/tag_h.webp",
 "報酬_背景": "img/lib/reward_bg.webp",
-"報酬_帯": "img/lib/ribbon.webp",
+"報酬_帯": "img/lib/ribbon.webp?v=2",
 "報酬_宝箱": "img/lib/chest.webp",
 "報酬_銀貨山": "img/lib/coins.webp",
 "アイテム_羅針盤": "img/item/rashinban.webp",
@@ -6998,7 +6999,7 @@ function lxShopRug(){const R=S.lib.run;const S0=R.shop;R.rmCost=R.rmCost||60;con
   +it('heal',0,{p:50,sold:R.healUsed},'ic svc',lxIco('修道院の薬草'),'手当て');
  show(`<div class="shp rug" id="shp"><div class="shp-floor" style="background-image:url(${IMG['店_床']})"></div>
   <div class="shp-rug"><div class="shp-rug-in">
-   <div class="sh-row pages">${pages}</div>
+   <div class="sh-row pages" style="--n:${S0.pages.length}">${pages}</div>
    <div class="sh-row gear"><div class="sh-grp">${gear}</div><div class="sh-grp svc">${svc}</div></div>
   </div></div>
   <div class="shp-head"><button class="gc-back" id="shpBack">店主のところへ</button><span class="shp-hp">HP ${R.hp}／${R.max}　デッキ ${R.deck.length}枚</span><div class="shp-silver">${lxSilverHTML(sv)}</div></div></div>`);
