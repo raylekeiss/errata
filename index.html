@@ -822,7 +822,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .vn-cast{position:absolute;left:0;right:0;bottom:0;height:96%;z-index:1;pointer-events:none;transition:opacity .25s}
 .vn-cast.off{opacity:0}
 .vn-cast .cm{position:absolute;bottom:0;height:100%;transform:translateX(-50%);transition:left .45s cubic-bezier(.3,.8,.3,1),opacity .3s}
-.vn-cast .cm img{height:100%;width:auto;display:block;filter:brightness(.5) saturate(.75) drop-shadow(0 0 24px rgba(5,10,30,.6));transition:filter .3s}
+.vn-cast .cm img{height:100%;width:auto;display:block;position:relative;filter:brightness(.5) saturate(.75) drop-shadow(0 0 24px rgba(5,10,30,.6));transition:filter .3s}
 .vn-cast .cm.talk{z-index:3}
 .vn-cast .cm.talk img{filter:brightness(1) drop-shadow(0 0 24px rgba(5,10,30,.6))}
 .vn-cast .cm.solo img{filter:brightness(1) drop-shadow(0 0 24px rgba(5,10,30,.6))}
@@ -4833,6 +4833,9 @@ function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;{const tb=$('#tb'
   else FX.run(f)},30));
  const ps=pageSize();PL.pages=txt.split('【改行】').map(x=>x.trim()).filter(Boolean).flatMap(x=>paginate(x,ps));if(!PL.pages.length)PL.pages=[''];PL.pg=0;typePage()}
 /* ---------- 立ち絵の並び（話している人を明るく、ほかは少し暗く） ---------- */
+/* 背丈の差：コンラッド（187cm）の頭の高さを基準に、低い人ほど立ち絵を下げる（立ち絵の高さに対する%）。
+   シミ175cm（羽飾りなし）・フィデリス180cm。1cm＝約0.94%（頭の大きさから換算） */
+const CAST_DY={'シミ':7.8,'フィデリス':6.0};
 const CAST_WIN=7; /* この行数のあいだ話さなかった人は下がる */
 function castMax(){const s=$('#story');if(!s)return 2;return s.clientWidth/s.clientHeight>=1.2?3:2}
 function soloFig(html,cls){setFig(html,cls);PL.solo=true;const c=$('#cast');if(c)c.classList.add('off')}
@@ -4853,7 +4856,7 @@ function castRender(talker){const box=$('#cast');if(!box)return;const L=PL.cast;
  [...box.children].forEach(el=>{if(!L.some(x=>x.k===el.dataset.k)){el.classList.add('out');setTimeout(()=>el.remove(),320)}});
  order.forEach((m,i)=>{let el=[...box.children].find(x=>x.dataset.k===m.k&&!x.classList.contains('out'));
   if(!el){el=document.createElement('div');el.className='cm in';el.dataset.k=m.k;
-   el.innerHTML=`<div class="hop">${IMG[m.k]?`<img src="${IMG[m.k]}" alt="${esc(m.k)}">`:`<div class="ph-char">${esc(m.k)}</div>`}</div>`;
+   el.innerHTML=`<div class="hop">${IMG[m.k]?`<img src="${IMG[m.k]}" alt="${esc(m.k)}"${CAST_DY[m.k]?` style="top:${CAST_DY[m.k]}%"`:''}>`:`<div class="ph-char">${esc(m.k)}</div>`}</div>`;
    el.style.left=pos[i]+'%';box.appendChild(el);setTimeout(()=>el.classList.remove('in'),400)}
   el.style.left=pos[i]+'%';
   const was=el.classList.contains('talk');el.classList.toggle('talk',m.k===talker);el.classList.toggle('solo',L.length===1&&!talker);
