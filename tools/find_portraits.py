@@ -30,15 +30,9 @@ UA = {"User-Agent": "ErrataCreditCollector/1.1 (school quiz game; contact via Gi
 
 # 人物名 : (ゲームの肖像, [コモンズで検索する言葉])
 PEOPLE = {
-    "ホルテンシウス": ("img/722fe983de18.webp", ["Quintus Hortensius", "Hortensius bust", "Hortensius Hortalus"]),
-    "冒頓単于": ("img/442aedf24fd4.webp", ["Modu Chanyu", "冒顿单于", "冒頓單于", "Modun statue"]),
-    "張儀": ("img/bb1772ceb92c.webp", ["張儀", "张仪", "Zhang Yi Warring States"]),
-    "李元昊": ("img/9b85d2715098.webp", ["李元昊", "Western Xia tombs", "西夏王陵", "Western Xia Imperial Tombs"]),
-    "荀子": ("img/d81d9197002f.webp", ["荀子", "Xunzi"]),
-    "荘子": ("img/4f82e77aeabb.webp", ["莊子", "庄子", "Zhuangzi", "Zhuang Zhou"]),
-    "陳勝": ("img/2585a35543f1.webp", ["陳勝", "陈胜", "Chen Sheng", "陈胜吴广"]),
-    "カーリダーサ": ("img/b81cbf6e27bd.webp", ["Kalidasa statue", "Kalidas statue", "Kalidasa"]),
-    "モンテ＝コルヴィノ": ("img/e05730724f42.webp", ["Montecorvino", "Giovanni da Montecorvino", "John of Montecorvino"]),
+    "ホルテンシウス": ("img/722fe983de18.webp", [
+        "Hortensius", "Hortalus", "Quintus Hortensius Hortalus", "Ortensio Ortalo",
+        "Hortensius marble bust", "Roman orator bust", "Cicero bust", "Roman republican portrait bust"]),
 }
 
 S = requests.Session()
@@ -83,7 +77,7 @@ def fetch_image(url):
     raise RuntimeError("画像を取得できませんでした")
 
 
-def search_files(q, limit=25):
+def search_files(q, limit=50):
     d = get({"action": "query", "list": "search", "srsearch": q, "srnamespace": 6, "srlimit": limit})
     return [h["title"] for h in d.get("query", {}).get("search", [])]
 
@@ -162,7 +156,7 @@ def main():
     if os.path.exists(OUT):
         with open(OUT, encoding="utf-8") as f:
             results = json.load(f)
-    todo = [n for n in PEOPLE if n not in results or not results[n].get("top")]
+    todo = [n for n in PEOPLE if n not in results or not results[n].get("top") or results[n]["top"][0]["score"] < 0.9]
     print(f"探す人数：{len(todo)}人")
     for i, name in enumerate(todo, 1):
         path, queries = PEOPLE[name]
