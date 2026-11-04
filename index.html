@@ -1803,6 +1803,17 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   left:clamp(calc(100cqw - var(--h) * var(--ia)),calc(50cqw - var(--fx) * var(--h) * var(--ia)),0px);
   top:clamp(calc(100cqh - var(--h)),calc(var(--cy) * 100cqh - var(--fy) * var(--h)),0px)}
 }
+
+/* お店の出迎え：背景と店主を時間差で左右からスライドさせて奥行きを出す */
+.shp:not(.rug) .shp-bg{inset:-3%;animation:shp-bg-in 1.1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes shp-bg-in{from{transform:translateX(7%) scale(1.06);filter:brightness(.4)}to{transform:none;filter:none}}
+.shp:not(.rug) .shp-shade{animation:shp-fade .9s ease-out both}
+@keyframes shp-fade{from{opacity:0}}
+.shp-keeper{animation:shp-keeper-in .9s cubic-bezier(.2,.8,.25,1) .3s both}
+@keyframes shp-keeper-in{from{transform:translateX(-18vw);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
+.shp-say{animation:shp-say-in .4s ease-out .95s both}
+@keyframes shp-say-in{from{transform:translateY(16px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.shp-bg,.shp-shade,.shp-keeper,.shp-say{animation:none!important}}
 </style>
 </head>
 <body>
