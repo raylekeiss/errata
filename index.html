@@ -1518,6 +1518,155 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lkb-cap{cursor:text;position:relative}
 .lkb-pen{font-style:normal;font-size:.8em;color:#a8873a;margin-left:.2cqw;pointer-events:none}
 .lkb-cap::before,.lkb-cap::after{flex:0 0 3cqw}
+
+/* ===== 受け取りボックス ===== */
+.boxbtn{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:calc(54*var(--u));min-height:44px;padding:calc(4*var(--u)) calc(8*var(--u));
+ background:linear-gradient(180deg,#141c38,#0b1128);color:#f1e3bf;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(201,162,74,.75),0 6px 16px rgba(0,0,0,.45)}
+.boxbtn svg{width:max(20px,calc(26*var(--u)));height:auto}
+.boxbtn span{font-size:max(10px,calc(11*var(--u)));letter-spacing:.1em;opacity:.9}
+.boxbtn i{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#c4302b;color:#fff;font-style:normal;font-size:12px;font-weight:700;line-height:20px;text-align:center;box-shadow:0 0 0 2px #0b1128}
+.boxbtn.has svg{animation:bx-wig 2.4s ease-in-out infinite}
+@keyframes bx-wig{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(-9deg)}88%{transform:rotate(8deg)}92%{transform:rotate(-5deg)}96%{transform:rotate(3deg)}}
+.bx-left{margin:-4px 0 10px;font-size:14px;color:#5a4630}
+.bx-left b{color:#c4302b;font-size:16px}
+.bx-list{display:flex;flex-direction:column;gap:8px;max-height:56vh;overflow:auto;padding:4px 2px}
+.bx-it{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 14px 10px 12px;background:#fbf6ea;border:1px solid #d9cba8;border-left:5px solid var(--ec);border-radius:3px;min-height:58px;transition:transform .12s}
+.bx-it:active{transform:scale(.97)}
+.bx-it .rb{width:22px;flex:none}
+.bx-t{flex:1;display:flex;flex-direction:column;gap:2px}
+.bx-t b{font-family:var(--serif);font-size:17px}
+.bx-t small{font-size:12px;color:#7a6a52}
+.bx-get{flex:none;font-size:13px;padding:6px 12px;border-radius:2px;background:#c4302b;color:#fff;letter-spacing:.08em}
+.bx-it.got{animation:bx-got .42s ease-in forwards;pointer-events:none}
+@keyframes bx-got{0%{transform:scale(1)}30%{transform:scale(1.04);background:#fff3c4}100%{transform:translateX(40%) scale(.9);opacity:0}}
+.bx-plus{position:absolute;right:90px;top:50%;font-family:var(--serif);font-weight:700;font-size:22px;color:#c4302b;animation:bx-plus .42s ease-out forwards}
+@keyframes bx-plus{from{transform:translateY(-50%);opacity:1}to{transform:translateY(-160%);opacity:0}}
+.bx-empty{text-align:center;line-height:1.9;color:#5a4630;margin:10px 0}
+/* ===== 制限時間 ===== */
+.qz-timer{position:absolute;z-index:4;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 92*var(--u));width:min(calc(560*var(--u)),70vw);height:14px;border-radius:7px;background:rgba(10,16,40,.65);box-shadow:inset 0 0 0 1px rgba(201,162,74,.7)}
+.qz-timer i{position:absolute;left:2px;top:2px;bottom:2px;right:2px;border-radius:5px;background:linear-gradient(90deg,#c9a24a,#e8cf86);transform-origin:left;animation:qz-bar linear forwards}
+.qz-timer b{position:absolute;right:-44px;top:50%;transform:translateY(-50%);font-family:var(--serif);font-size:22px;color:#f1e3bf;min-width:36px;text-align:left}
+.qz-timer.hurry i{background:linear-gradient(90deg,#c4302b,#e2675f)}
+.qz-timer.hurry b{color:#ff8f86;animation:qz-beat 1s ease-in-out infinite}
+.qz-timer.stop i{animation-play-state:paused}
+@keyframes qz-bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes qz-beat{50%{transform:translateY(-50%) scale(1.25)}}
+/* ===== 星 ===== */
+.stars{display:inline-flex;gap:2px}
+.stars svg{width:16px;height:16px}
+.stars svg path{fill:none;stroke:#e9dfc6;stroke-width:1.6;stroke-linejoin:round}
+.stars.t1 svg.on path{fill:#b87333;stroke:#7a4a1e}
+.stars.t2 svg.on path{fill:#cfd6de;stroke:#7f8a96}
+.stars.t3 svg.on path{fill:#f2c94c;stroke:#a87a12}
+.stars.t0 svg.on path{fill:#e9dfc6}
+.stars.big svg{width:38px;height:38px}
+.stars.big svg path{stroke:#8a7a5a}
+.stars.pop svg.on{animation:st-pop .5s cubic-bezier(.3,1.6,.5,1) both}
+.stars.pop svg:nth-child(2).on{animation-delay:.18s}.stars.pop svg:nth-child(3).on{animation-delay:.36s}
+@keyframes st-pop{from{transform:scale(0) rotate(-40deg)}to{transform:scale(1)}}
+.tier{font-style:normal}.tier.t1{color:#9a5b22}.tier.t2{color:#6c7884}.tier.t3{color:#b58a10}
+.sq-res{text-align:center}.sq-res h3{margin:4px 0 10px}
+.sq-score{font-family:var(--serif);font-size:20px;margin:10px 0 4px}.sq-score b{font-size:30px;color:#c4302b}
+.sq-tier{margin:0 0 10px}.sq-tier small{color:#7a6a52}
+.sq-msg{background:#fbf3d9;border:1px solid #e0cd96;border-radius:3px;padding:8px 12px;margin:0 auto 12px;max-width:440px}.sq-msg p{margin:4px 0}
+.sq-res .wl{text-align:left}
+/* ===== 部を選ぶ ===== */
+.spv{position:fixed;inset:0;overflow:hidden;background:#070c1f;font-family:var(--serif)}
+.sp-fill{position:absolute;inset:-20px;background:#0b1230 center/cover no-repeat;filter:blur(6px) brightness(.4)}
+.sp-row{position:absolute;inset:calc(env(safe-area-inset-top,0px) + 110*var(--u)) 4% 5%;display:flex;gap:3%;align-items:stretch;justify-content:center}
+.sp-vol{position:relative;flex:1;max-width:300px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:22% 7% 8%;text-align:center;color:#f1e3bf;
+ background:linear-gradient(90deg,rgba(0,0,0,.35),transparent 12%,transparent 88%,rgba(0,0,0,.3)),linear-gradient(180deg,color-mix(in srgb,var(--pc) 70%,#1a1020),color-mix(in srgb,var(--pc) 40%,#0b0710));
+ border-radius:4px 8px 8px 4px;box-shadow:0 18px 40px rgba(0,0,0,.55),inset 0 0 0 2px rgba(241,227,191,.25),inset 10px 0 0 rgba(0,0,0,.25);transition:transform .2s}
+.sp-vol:active{transform:translateY(-6px)}
+.sp-band{position:absolute;left:0;right:0;top:9%;height:4px;background:#c9a24a;box-shadow:0 10px 0 #c9a24a}
+.sp-n{font-size:max(14px,calc(18*var(--u)));letter-spacing:.3em;opacity:.85}
+.sp-t{margin:12px 0 10px;font-size:max(17px,calc(24*var(--u)));font-weight:600;letter-spacing:.06em;line-height:1.5;word-break:keep-all}
+.sp-sub{font-size:max(11px,calc(13*var(--u)));letter-spacing:.04em;word-break:keep-all;opacity:.8;line-height:1.6}
+.sp-prog{margin-top:auto;font-family:var(--sans);font-size:13px;width:90%}
+.sp-prog b{font-size:18px}
+.sp-prog .pbar{display:block;height:5px;margin-top:6px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden}
+.sp-prog .pbar i{display:block;height:100%;background:#e8cf86}
+.sp-vol.locked,.sp-vol.soon{filter:grayscale(.75) brightness(.6)}
+.sp-now{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--sans);font-size:12px;background:#c4302b;color:#fff;padding:4px 12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.sp-vol.now{box-shadow:0 0 0 3px #e8cf86,0 18px 40px rgba(0,0,0,.55)}
+@media (orientation:portrait) and (max-width:600px){.sp-row{flex-direction:column;inset:calc(env(safe-area-inset-top,0px) + 120px) 8% 4%;gap:14px}.sp-vol{max-width:none;padding:14px}.sp-band{top:8px}.sp-t{margin:4px 0}}
+/* ===== 図書館の地図 ===== */
+.mp{position:fixed;inset:0;overflow:hidden;background:#24180f}
+.mp::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(env(safe-area-inset-top,0px) + 96px);z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(20,13,8,.92) 40%,rgba(20,13,8,0))}
+.mp-sc{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.mp-in{position:relative;width:min(760px,100%);margin:0 auto}
+.mp-floor{position:absolute;inset:0;background:
+ radial-gradient(ellipse 34% 60px at 50% 50%,rgba(255,220,150,.06),transparent),
+ repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 1px,transparent 1px 46px),
+ repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 180px),
+ linear-gradient(90deg,#3a271a,#4a3220 30%,#4d3522 50%,#4a3220 70%,#3a271a)}
+.mp-floor::after{content:"";position:absolute;left:22%;right:22%;top:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(122,46,58,.28) 8%,rgba(122,46,58,.28) 92%,transparent);
+ box-shadow:inset 0 0 0 0 transparent}
+.mp-shelf{position:absolute;background:#2a1b10;border:3px solid #5a3a22;border-radius:2px;box-shadow:0 8px 14px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.4);padding:3px;overflow:hidden}
+.mp-shelf i{position:absolute;left:4px;display:block;border-radius:1px;box-shadow:inset 0 -1px 0 rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.12)}
+.mp-cover{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 100px);transform:translateX(-50%);width:min(560px,86%);text-align:center;padding:16px 22px 18px;background:#f3ead6;border-radius:2px;
+ box-shadow:0 14px 30px rgba(0,0,0,.5),inset 0 0 0 1px #c9a24a,inset 0 0 0 5px #f3ead6,inset 0 0 0 6px #c9a24a;font-family:var(--serif);color:#2a2320}
+@media (orientation:portrait){.mp-cover{top:calc(env(safe-area-inset-top,0px) + 150px)}}
+.mp-cover .n{font-size:13px;letter-spacing:.3em;color:#8a6d3a}
+.mp-cover h2{margin:4px 0 2px;font-size:22px;letter-spacing:.14em}
+.mp-cover .sub{margin:0 0 8px;font-size:12px;letter-spacing:.15em;color:#8a6d3a}
+.mp-cover .story{margin:0;text-align:left;font-size:13px;line-height:1.85;color:#3a3026}
+.mp-path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.mp-path path{fill:none;stroke-linecap:round}
+.mp-path .all{stroke:rgba(243,234,214,.35);stroke-width:5;stroke-dasharray:2 12}
+.mp-path .done{stroke:#e8cf86;stroke-width:5;stroke-dasharray:2 12;filter:drop-shadow(0 0 4px rgba(232,207,134,.6))}
+.mp-plaque{position:absolute;left:50%;transform:translateX(-50%);width:min(420px,72%);text-align:center;font-family:var(--serif);color:#f1e3bf;padding:10px 14px;
+ background:linear-gradient(180deg,#2b3658,#1c2540);border:1px solid #c9a24a;border-radius:3px;box-shadow:0 10px 20px rgba(0,0,0,.45);z-index:1}
+.mp-plaque .n{display:block;font-size:12px;letter-spacing:.3em;color:#c9a24a}
+.mp-plaque .t{display:block;font-size:19px;font-weight:600;letter-spacing:.1em;margin:2px 0}
+.mp-plaque .s{display:block;font-size:11px;letter-spacing:.15em;opacity:.75}
+.mp-plaque.soon{background:linear-gradient(180deg,#3b3530,#24201c);border-style:dashed;color:#cfc4ae}
+.mp-plaque.soon .t{font-size:14px;font-weight:400}
+.mp-node{position:absolute;transform:translate(-50%,-50%);width:84px;height:84px;z-index:2;display:flex;align-items:center;justify-content:center}
+.mp-ic{flex:none;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 40% 35%,#fff8e6,#e7d6ad);
+ box-shadow:0 0 0 3px #8a6d3a,0 0 0 5px #f3ead6,0 8px 16px rgba(0,0,0,.5);transition:transform .15s}
+.mp-ic svg{width:38px;height:38px}
+.mp-node:active .mp-ic{transform:scale(.92)}
+.mp-node.qz .mp-ic{border-radius:10px;transform:rotate(45deg);width:56px;height:56px;background:radial-gradient(circle at 40% 35%,#f6e2dc,#d9b2a4);box-shadow:0 0 0 3px #8a2a25,0 0 0 5px #f3ead6,0 8px 16px rgba(0,0,0,.5)}
+.mp-node.qz .mp-ic svg{transform:rotate(-45deg);width:32px;height:32px}
+.mp-node.qz:active .mp-ic{transform:rotate(45deg) scale(.92)}
+.mp-node.last .mp-ic{width:78px;height:78px;box-shadow:0 0 0 3px #c9a24a,0 0 0 6px #2b3658,0 0 0 8px #c9a24a,0 10px 20px rgba(0,0,0,.55)}
+.mp-node.pro .mp-ic{background:radial-gradient(circle at 40% 35%,#3a4a78,#1c2540);box-shadow:0 0 0 3px #c9a24a,0 8px 16px rgba(0,0,0,.5)}
+.mp-node.pass .mp-ic{background:radial-gradient(circle at 40% 35%,#fffbe9,#efdcab)}
+.mp-node.locked .mp-ic{background:#5b5048;box-shadow:0 0 0 3px #3a322b,0 6px 12px rgba(0,0,0,.5);color:#a39684}
+.mp-node.locked .mp-ic svg{width:24px;height:24px}
+.mp-node.locked.qz .mp-ic svg{width:22px;height:22px}
+.mp-node.now .mp-ic{animation:mp-glow 1.8s ease-in-out infinite}
+.mp-node.qz.now .mp-ic{animation:mp-glowq 1.8s ease-in-out infinite}
+@keyframes mp-glow{50%{box-shadow:0 0 0 3px #8a6d3a,0 0 0 5px #f3ead6,0 0 0 12px rgba(232,207,134,.45),0 8px 16px rgba(0,0,0,.5)}}
+@keyframes mp-glowq{50%{box-shadow:0 0 0 3px #8a2a25,0 0 0 5px #f3ead6,0 0 0 12px rgba(232,207,134,.45),0 8px 16px rgba(0,0,0,.5)}}
+.mp-node.fresh .mp-ic{animation:mp-fresh .9s cubic-bezier(.3,1.6,.5,1) both,mp-glow 1.8s ease-in-out .9s infinite}
+.mp-node.qz.fresh .mp-ic{animation:mp-freshq .9s cubic-bezier(.3,1.6,.5,1) both,mp-glowq 1.8s ease-in-out .9s infinite}
+@keyframes mp-fresh{from{transform:scale(.3);filter:brightness(2)}}
+@keyframes mp-freshq{from{transform:rotate(45deg) scale(.3);filter:brightness(2)}to{transform:rotate(45deg)}}
+.mp-node.sel .mp-ic{outline:3px solid #e8cf86;outline-offset:6px}
+.mp-lab{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;white-space:nowrap;font-family:var(--serif);color:#f1e3bf;text-shadow:0 1px 3px #000,0 0 6px #000;line-height:1.3}
+.mp-node.last .mp-lab{top:calc(100% + 6px)}
+.mp-lab b{font-size:14px;letter-spacing:.08em}
+.mp-lab small{font-size:11px;opacity:.85}
+.mp-lab .stars{margin-top:2px;filter:drop-shadow(0 1px 2px #000)}
+.mp-node.locked .mp-lab{opacity:.5}
+.mp-here{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--sans);font-size:11px;background:#c4302b;color:#fff;padding:3px 9px;border-radius:10px;box-shadow:0 3px 8px rgba(0,0,0,.4);animation:mp-bob 1.4s ease-in-out infinite}
+@keyframes mp-bob{50%{transform:translate(-50%,-4px)}}
+.mp-seal{position:absolute;right:-16px;top:-6px;font-family:var(--serif);font-size:10px;color:#c4302b;border:1.5px solid #c4302b;border-radius:3px;padding:1px 3px;background:rgba(243,234,214,.92);transform:rotate(12deg);letter-spacing:.05em}
+.mp-pop{position:absolute;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);width:min(440px,92%);padding:16px 20px 18px;background:#f3ead6;border-radius:3px;
+ box-shadow:0 18px 40px rgba(0,0,0,.6),inset 0 0 0 1px #c9a24a;font-family:var(--serif);color:#2a2320;text-align:center;animation:fx-pop .2s ease-out}
+.mp-pop h3{margin:0 0 6px;font-size:18px;letter-spacing:.08em}
+.mp-pop p{margin:4px 0;line-height:1.7}
+.mp-pop .pl{font-size:16px;color:#8a6d3a;letter-spacing:.15em}
+.mp-pop .meta{font-family:var(--sans);font-size:13px;color:#5a4630}
+.mp-pop .rule{font-family:var(--sans);font-size:12px;color:#7a6a52}
+.mp-pop .rw{font-family:var(--sans);font-size:13px;color:#8a2a25}
+.mp-pop .pop-stars{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0}
+.mp-pop .pop-stars .stars.big svg{width:30px;height:30px}
+.mp-pop .tier{font-size:15px}
+.mp-pop .btn{margin-top:10px;min-width:60%}
+.mp-pop .x{position:absolute;right:6px;top:4px;width:36px;height:36px;font-size:22px;color:#8a6d3a}
 </style>
 </head>
 <body>
@@ -4505,7 +4654,7 @@ function emblem(e){const s='<svg viewBox="0 0 40 40" class="emb" aria-hidden="tr
  if(e===1)return s+'<g fill="currentColor"><path d="M20 3c4 5 4.6 10.5 1.6 17.5h-3.2C15.4 13.5 16 8 20 3z"/><path d="M18.4 20.5C13 21 8.5 18.5 8.6 13.6c2.4 3.4 5.4 4.6 8.4 4.4z"/><path d="M21.6 20.5C27 21 31.5 18.5 31.4 13.6c-2.4 3.4-5.4 4.6-8.4 4.4z"/><rect x="12.5" y="21.5" width="15" height="3" rx="1"/><path d="M17.6 25.5h4.8L20 37z"/><path d="M15.5 25.5c-3 .6-5 3-4.6 6 1.4-2 3-3 5.4-3.2z"/><path d="M24.5 25.5c3 .6 5 3 4.6 6-1.4-2-3-3-5.4-3.2z"/></g></svg>';
  return s+'<g fill="currentColor">'+Array.from({length:8},(_,i)=>`<ellipse cx="20" cy="10.5" rx="4.2" ry="7.5" transform="rotate(${i*45} 20 20)" opacity=".9"/>`).join('')+'<circle cx="20" cy="20" r="5.5" fill="#f3ead6"/><circle cx="20" cy="20" r="3" /></g></svg>'}
 function ribbon(e){const c=ERAS[e].c;return `<svg class="rb" viewBox="0 0 30 44" aria-hidden="true"><path d="M3 0h24v42l-12-9-12 9z" fill="${c}"/><path d="M3 0h24v42l-12-9-12 9z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/><g transform="translate(5 6) scale(.5)" color="#fbf3df">${emblem(e).replace('<svg viewBox="0 0 40 40" class="emb" aria-hidden="true">','').replace('</svg>','')}</g></svg>`}
-function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
+function coinsHTML(only){const L=only&&only.length?only:[0,1,2];const bx=!(only&&only.length);return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${bx?boxBtnHTML():''}${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
 function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
@@ -4588,7 +4737,7 @@ function homeBubble(){const o=oshiName();
  const all=ctx.concat(SHIMI_IDLE);
  homeLine=homeLine<0&&ctx.length?0:homeLine<0?ctx.length+Math.floor(Math.random()*SHIMI_IDLE.length):(homeLine+1)%all.length;
  return `<span class="who">シミ</span>${esc(all[homeLine])}`}
-function Home(){const nx=nextChapter();const o=oshiName();
+function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=stCurrent();
  const oshiHTML=(o==='シミ'||CHARA[o])?(IMG[o]?`<img src="${IMG[o]}" alt="${esc(o)}">`:`<div class="ph-char">${esc(o)}</div>`):cardHTML(o);
  const btn=(cls,go,ic,label,extra='')=>`<button class="tome ${cls}" data-go="${go}">${ICON[ic]}<span>${label}</span>${extra}${cls?'':FLO}</button>`;
  show(`<div class="home" id="home">
@@ -4603,7 +4752,7 @@ function Home(){const nx=nextChapter();const o=oshiName();
   <button class="oshi-chg" id="oshiChg">人物を変更する</button>
   <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}${FLO.replace('class="flo"','class="ink"')}</div>
   <nav class="shelf" aria-label="メニュー">
-   ${btn('lead','story','story','ストーリー',`<span class="nx">${nx===null?'続きは準備中':(nx===0?'序章':CHNAME[nx])+'へ'}</span><span class="ribbon"></span>`)}
+   ${btn('lead','story','story','ストーリー',`<span class="nx">${cst?stName(cst).replace(/　誤植の群れ.*$/,'　誤植の群れ')+'へ':'続きは準備中'}</span><span class="ribbon"></span>`)}
    ${btn('','quiz','drill','ドリル')}
    ${btn('','gacha','gacha','頁を<wbr>めくる')}
    ${btn('','lib','lib','図書館<wbr>探索')}
@@ -4614,7 +4763,8 @@ function Home(){const nx=nextChapter();const o=oshiName();
  const talk=()=>{$('#bubble').innerHTML=homeBubble()+FLO.replace('class="flo"','class="ink"')};
  $('#bubble').onclick=talk;$('#oshi').onclick=talk;$('#oshiChg').onclick=chooseOshi;$('#burger').onclick=openDrawer;
  if(S.tour){S.tour=false;save();setTimeout(()=>{if($('#oshi')&&!$('#modal'))homeTour()},450)}}
-const TOUR=[['[data-go="story"]','ストーリー','光っている本を追いかけて、章ごとに誤植を直していくよ。続きの章は、前の章を修復すると読めるようになるんだ。'],
+const TOUR=[['[data-go="story"]','ストーリー','部を選ぶと、史書庫の地図が開くよ。節ごとに読み進めて、ときどき出てくる「誤植の群れ」は20秒以内に答えて退治しよう。'],
+ ['.h-coins .boxbtn','受け取りボックス','もらった栞は、いったんここに届くよ。タップして受け取ってね。'],
  ['[data-go="quiz"]','ドリル','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「試験範囲で選ぶ」に切りかえると、範囲の問題だけを解けるよ。'],
  ['[data-go="gacha"]','頁をめくる','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
  ['[data-go="lib"]','図書館探索','手に入れた頁でデッキを組んで、書架の奥の誤植と戦うんだ。頁の種類が多いほど戦い方が広がるよ。最後まで進むと栞が1枚もらえる。'],
@@ -4664,29 +4814,185 @@ function inkBlot(seed){let s=seed*9301+49297;const r=()=>{s=(s*9301+49297)%23328
 const STAR_EMB='<path d="M24 6l4 14 14 4-14 4-4 14-4-14-14-4 14-4z" fill="currentColor"/>';
 let PART=0;
 function partOf(ch){return PARTS.findIndex(p=>p.chs.includes(ch))}
-function StoryMenu(keep){const nx=nextChapter();if(!keep&&nx!==null&&partOf(nx)>=0)PART=partOf(nx);const P=PARTS[PART];
- const rows=[];for(const i of P.chs){const exists=i<STORY.length;const done=i===0?S.prologue:!!S.cleared[i-1];
-  const unlocked=exists&&(i===0||(i===1?S.prologue:!!S.cleared[i-2]));const title=i===0?'史書庫へようこそ':CHT[i];
-  const cls=!unlocked?'locked':(i===nx?'next':'');
-  rows.push(`<button class="toc-row ${cls}" data-ch="${i}" data-ok="${unlocked?1:0}" data-ex="${exists?1:0}"><span class="n">${i===0?'序章':'第'+i+'章'}</span><span class="t">${esc(title)}</span><span class="ld"></span>
-   <span class="em"><svg viewBox="0 0 48 48">${i===0?STAR_EMB:embOf(i)}</svg></span>${done?'<span class="seal">修復済</span>':''}${i===nx&&unlocked?'<span class="ribbon"></span>':''}${!unlocked?inkBlot(i+3):''}</button>`)}
- const inPart=P.chs.filter(i=>i<STORY.length);const fixed=inPart.filter(i=>i===0?S.prologue:!!S.cleared[i-1]).length;const total=Math.max(1,inPart.length);
- show(`<div class="sm" id="smenu"><div class="sm-fill" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
-  <div class="sm-stage" ${IMG['背景_目次']?`style="background-image:url(${IMG['背景_目次']})"`:''}>
-   <div class="sm-page sm-left"><div class="sm-parts">${PARTS.map((p,k)=>`<button data-part="${k}" class="${k===PART?'on':''}">${p.n}</button>`).join('')}</div>
-    <h2 class="vol">${esc(P.t).replace(/\n/g,'<br>')}</h2><p class="sub">${esc(P.sub)}</p>
-    <svg class="orn" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M0 5h88M112 5h88" stroke="#b8923f" stroke-width="1"/><path d="M100 0l4 5-4 5-4-5z" fill="#b8923f"/></svg>
-    <p class="story">${esc(P.story)}</p>
-    <div class="prog">修復<b>${fixed}</b>／${inPart.length}<span class="pbar"><i style="width:${100*fixed/total}%"></i></span></div></div>
-   <div class="sm-page sm-right"><h3>目次</h3><div class="toc">${rows.join('')}</div></div>
-  </div>
-  <div class="scr-title">ストーリー</div>
-  <div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div></div>`);
- document.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{PART=+b.dataset.part;StoryMenu(true)});
- document.querySelectorAll('.toc-row').forEach(b=>b.onclick=()=>{const ch=+b.dataset.ch;
-  if(b.dataset.ex!=='1'){FX.shake(b);toast('この章は、まだ誤植に食われていて読めないみたい（準備中）');return}
-  if(b.dataset.ok!=='1'){FX.shake(b);toast('前の章を修復すると、読めるようになります');return}
-  FX._replay(b,'fx-glow',500);if(ch===0){startPrologue({turn:true});return}FX.pageTurn(()=>playChapter(ch))})}
+/* ---------- 受け取りボックス（栞はいったんここに届き、タップで受け取る） ---------- */
+const BOXSVG='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 12h24v15H4z" fill="#6b3a24"/><path d="M4 12h24v4H4z" fill="#8a4d2f"/><path d="M2 8h28v5H2z" fill="#a0603a"/><path d="M14 8h4v19h-4z" fill="#c9a24a"/><path d="M16 8c-3-6-9-5-8-1 1 3 6 2 8 1zm0 0c3-6 9-5 8-1-1 3-6 2-8 1z" fill="#c4302b"/></svg>';
+function boxN(){return (S.box||[]).length}
+function boxId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function boxAdd(src,e,n){if(!n)return;S.box=S.box||[];S.box.push({id:boxId(),src,e,n});save();refreshCoins()}
+/* ドリルは1回分を1件にまとめる（正解するたびに数が増える。途中で閉じても消えない） */
+function boxAddTo(key,src,e,n){if(!n)return;S.box=S.box||[];let b=S.box.find(x=>x.k===key&&x.e===e);if(!b){b={id:boxId(),k:key,src,e,n:0};S.box.push(b)}b.n+=n;save()}
+function boxHas(e){return (S.box||[]).some(b=>b.e===e)}
+function boxBtnHTML(){const n=boxN();return `<button class="boxbtn${n?' has':''}" aria-label="受け取りボックス（${n}件）">${BOXSVG}<span>受取</span>${n?`<i>${n>99?'99+':n}</i>`:''}</button>`}
+function openBox(){const L=S.box||[];
+ const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・ドリル・図書館探索でもらった栞は、ここに届きます。</p>';
+ modal(`<h3>受け取りボックス</h3><p class="bx-left" id="bxLeft">${L.length?`タップして受け取ろう　残り<b>${L.length}</b>件`:''}</p>
+  <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${ERAS[b.e].c}">${ribbon(b.e)}<span class="bx-t"><b>${ERAS[b.e].k}の栞 ×${b.n}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
+  <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" data-close>閉じる</button></div>`,()=>refreshCoins());
+ document.querySelectorAll('#modal [data-bx]').forEach(el=>el.onclick=()=>{if(el.classList.contains('got'))return;const i=(S.box||[]).findIndex(b=>b.id===el.dataset.bx);if(i<0){el.remove();return}
+  const b=S.box[i];S.box.splice(i,1);S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n);save();
+  el.classList.add('got');const f=document.createElement('span');f.className='bx-plus';f.textContent='+'+b.n;el.appendChild(f);
+  refreshCoins();const n=boxN();const lf=$('#bxLeft');if(lf)lf.innerHTML=n?`タップして受け取ろう　残り<b>${n}</b>件`:'ぜんぶ受け取った！';
+  setTimeout(()=>{el.remove();const ls=$('#bxList');if(ls&&!ls.children.length)ls.innerHTML=empty},420);if(!n)saveNow()})}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.boxbtn');if(!b)return;e.stopPropagation();openBox()},true);
+
+/* ---------- ストーリーのステージ ----------
+   章を「節」に分け、何節かごとに問題だけのステージ「誤植の群れ」をはさむ。
+   節の区切りは自動（場面の切りかえ・おさらいの直後・地の文の前から、長さがそろうように選ぶ）。
+   自分で区切りたい章は、ストーリーのデータに "sec":[0, 24, 47, ...]（各節の始まりの行番号）を書くとそちらが優先される */
+const SEC_T=22; // 1節の目安（台詞と地の文の行数）
+function secCuts(ch){const st=STORY[ch];const ev=st.ev,n=ev.length;if(Array.isArray(st.sec)&&st.sec.length)return st.sec.filter(x=>x>0&&x<n).concat([n]).reduce((a,x)=>{if(x>a[a.length-1])a.push(x);return a},[0]);
+ const pre=[0];ev.forEach(e=>pre.push(pre[pre.length-1]+((e.t==='l'||e.t==='d')?1:0)));
+ const blk=new Set();ev.forEach((e,c)=>{if(e.t==='choice'){let m=Math.max(...e.to);for(let x=c;x<=Math.min(n-1,m+2);x++)if(ev[x].t==='jump')m=Math.max(m,ev[x].to);for(let x=c+1;x<=m;x++)blk.add(x)}});
+ const cb=[];ev.forEach((e,j)=>{if(e.t==='bg'&&e.cut)cb.push(j)});if(cb.length)for(let x=cb[0];x<=cb[cb.length-1]+1;x++)blk.add(x);
+ const cand=new Map([[0,0],[n,0]]);
+ for(let j=1;j<n;j++){if(blk.has(j))continue;const p=ev[j-1],e=ev[j];
+  if((p.t==='act'&&(p.a==='quiz'||p.a==='break'))||(e.t==='bg'&&!e.cut))cand.set(j,0);
+  else if(e.t==='d'&&(p.t==='l'||p.t==='d'||(p.t==='act'&&p.a==='battle')))cand.set(j,40)}
+ const C=[...cand.keys()].sort((a,b)=>a-b);const best=new Map([[0,[0,null]]]);
+ for(let k=1;k<C.length;k++){let b=[Infinity,null];for(let i=0;i<k;i++){const W=pre[C[k]]-pre[C[i]];let cost=(W-SEC_T)**2+(C[k]!==n?cand.get(C[k]):0);if(W<10)cost+=1e9;const v=best.get(C[i])[0]+cost;if(v<b[0])b=[v,C[i]]}best.set(C[k],b)}
+ const cuts=[];let x=n;while(x){cuts.push(x);x=best.get(x)[1]}cuts.push(0);return cuts.reverse()}
+var STG=null;
+function stages(){if(STG)return STG;const L=[{id:'p0',k:'pro',ch:0}];
+ for(let ch=1;ch<Math.min(STORY.length,NCH+1);ch++){const c=secCuts(ch);const s=c.length-1;const q=s===1?1:Math.ceil((s-1)/2);
+  const after=new Set();for(let i=0;i<q;i++)after.add(s===1?1:Math.max(1,Math.min(s-1,Math.round((i+1)*(s-1)/q))));
+  let qn=0,from=0;
+  for(let k=0;k<s;k++){L.push({id:`s${ch}-${k}`,k:'sec',ch,n:k,a:c[k],b:c[k+1],last:k===s-1});
+   if(after.has(k+1)){L.push({id:`q${ch}-${qn}`,k:'qz',ch,n:qn,a:from,b:c[k+1]});qn++;from=c[k+1]}}}
+ L.forEach((x,i)=>x.i=i);return STG=L}
+const QZ_NAMES=['一','二','三','四','五','六','七','八'];
+function stName(st){return st.k==='pro'?'序章':st.k==='sec'?`第${st.ch}章　${st.n+1}節`:`第${st.ch}章　誤植の群れ　其の${QZ_NAMES[st.n]||st.n+1}`}
+function stPlace(st){if(st.k==='pro')return '史書庫へようこそ';if(st.k==='qz')return '誤植の群れ';const ev=STORY[st.ch].ev;
+ for(let j=st.a;j<st.b;j++){const e=ev[j];if(e.t==='bg'&&!e.cut&&BGL[e.v]&&!/^背景_書庫/.test(e.v))return BGL[e.v][0]}
+ let v=null;for(let j=st.a;j>=0;j--)if(ev[j].t==='bg'&&!ev[j].cut){v=ev[j].v;break}
+ return v&&BGL[v]&&!/^背景_書庫/.test(v)?BGL[v][0]:'史書庫'}
+function stRec(st){S.stg=S.stg||{};return S.stg[st.id]||null}
+function stPassed(st){if(st.k==='pro')return !!S.prologue;const r=stRec(st);if(r&&r.c>0)return true;if(S.cleared[st.ch-1])return true;
+ if(st.k==='qz')return stages().some(s=>s.k==='sec'&&s.ch===st.ch&&s.a>=st.b&&stPassed(s));return false}
+function stUnlocked(st){return st.i===0||stPassed(stages()[st.i-1])}
+function stCurrent(){return stages().find(s=>!stPassed(s)&&stUnlocked(s))||null}
+/* 星（正解率）とメダル（クリア回数：1回目 銅・3回目 銀・5回目 金） */
+function stStars(ok,n){return ok>=n?3:ok>=Math.ceil(n*.8)?2:ok>=Math.ceil(n*.5)?1:0}
+function stTier(c){return c>=5?3:c>=3?2:c>=1?1:0}
+const TIER_N=['','銅','銀','金'];
+const STAR_P='M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.8 6.2 20.1l1.4-6.4L2.7 9.3l6.5-.7z';
+function starsHTML(b,tier,cls=''){return `<span class="stars ${cls} t${tier}">${[1,2,3].map(k=>`<svg viewBox="0 0 24 24" class="${k<=b?'on':''}"><path d="${STAR_P}"/></svg>`).join('')}</span>`}
+/* 以前の記録（章の途中まで読んだ・章をクリアした）を節のクリアに引き継ぐ */
+function stMigrate(){if(S.stg)return;S.stg={};for(const st of stages())if(st.k==='sec'){const p=Math.max((S.mid&&S.mid[st.ch])||0,(S.prog&&S.prog.ch===st.ch)?S.prog.i:0);if(S.cleared[st.ch-1]||p>=st.b)S.stg[st.id]={c:1}}save()}
+
+/* ---------- 部を選ぶ ---------- */
+function StoryMenu(){STG=null;stMigrate();const L=stages();const cur=stCurrent();const curP=cur?(cur.k==='pro'?0:partOf(cur.ch)):-1;
+ const inP=p=>L.filter(s=>s.k==='pro'?p===0:partOf(s.ch)===p);
+ show(`<div class="spv" id="sparts"><div class="sp-fill" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
+  <div class="scr-title">ストーリー</div><div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div>
+  <div class="sp-row">${PARTS.map((P,p)=>{const ls=inP(p);const ready=ls.length>0;const open=ready&&stUnlocked(ls[0]);const done=ls.filter(stPassed).length;
+   return `<button class="sp-vol ${ready?'':'soon'} ${open?'':'locked'} ${p===curP?'now':''}" data-pv="${p}" style="--pc:${ERAS[p].c}">
+    <span class="sp-band"></span><span class="sp-n">${P.n}</span><span class="sp-t">${esc(P.t).replace(/\n/g,'<br>')}</span><span class="sp-sub">${esc(P.sub)}</span>
+    <span class="sp-prog">${ready?`修復 <b>${done}</b>／${ls.length}<span class="pbar"><i style="width:${100*done/ls.length}%"></i></span>`:'準備中'}</span>
+    ${p===curP?'<span class="sp-now">つづきはここから</span>':''}</button>`}).join('')}</div></div>`);
+ document.querySelectorAll('[data-pv]').forEach(b=>b.onclick=()=>{const p=+b.dataset.pv;
+  if(b.classList.contains('soon')){FX.shake(b);toast('この部の物語は準備中です。ドリルと頁めくりは、もう遊べます');return}
+  if(b.classList.contains('locked')){FX.shake(b);toast('前の部のステージを修復すると、読めるようになります');return}
+  FX._replay(b,'fx-glow',500);PART=p;FX.pageTurn(()=>StoryMap(p))})}
+
+/* ---------- 図書館の地図（俯瞰）。下へスクロールしながらステージを選ぶ ---------- */
+const MAP_IC={
+ sec:'<svg viewBox="0 0 32 32"><path d="M4 8c4-2 8-2 12 1v17c-4-3-8-3-12-1z" fill="#f6eedb" stroke="#5a4630" stroke-width="1.4"/><path d="M28 8c-4-2-8-2-12 1v17c4-3 8-3 12-1z" fill="#efe3c6" stroke="#5a4630" stroke-width="1.4"/><path d="M7 12h6M7 15h6M19 12h6M19 15h6" stroke="#9b8462" stroke-width="1.2"/></svg>',
+ last:'<svg viewBox="0 0 32 32"><path d="M4 8c4-2 8-2 12 1v17c-4-3-8-3-12-1z" fill="#f6eedb" stroke="#5a4630" stroke-width="1.4"/><path d="M28 8c-4-2-8-2-12 1v17c4-3 8-3 12-1z" fill="#efe3c6" stroke="#5a4630" stroke-width="1.4"/><path d="M16 3l1.6 3.4 3.7.4-2.8 2.5.8 3.6L16 11l-3.3 1.9.8-3.6-2.8-2.5 3.7-.4z" fill="#c9a24a" stroke="#7a5a1e" stroke-width=".8"/></svg>',
+ qz:'<svg viewBox="0 0 32 32"><ellipse cx="16" cy="18" rx="7" ry="9" fill="#2a2320"/><path d="M16 9v-4M12 10l-3-3M20 10l3-3M9 16H4M23 16h5M9 21l-4 3M23 21l4 3" stroke="#2a2320" stroke-width="1.6" stroke-linecap="round"/><circle cx="13.5" cy="15" r="1.4" fill="#f3ead6"/><circle cx="18.5" cy="15" r="1.4" fill="#f3ead6"/></svg>',
+ pro:'<svg viewBox="0 0 32 32"><path d="M6 28V12a10 10 0 0 1 20 0v16z" fill="#3a2a1c" stroke="#c9a24a" stroke-width="1.4"/><path d="M16 4v24" stroke="#c9a24a" stroke-width="1"/><circle cx="13" cy="18" r="1" fill="#c9a24a"/><circle cx="19" cy="18" r="1" fill="#c9a24a"/></svg>',
+ lock:'<svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="11" width="14" height="10" rx="1.5" fill="currentColor"/></svg>'};
+let MAP_NEW=null; // 直前に開いたステージ（演出用）
+function mapShelf(x,y,w,h,seed){let r=seed*9301+49297;const R=()=>{r=(r*9301+49297)%233280;return r/233280};
+ const cols=['#7a2e3a','#2e5c7a','#5b4a86','#3e7a4f','#a8873a','#6b3a24','#8a6d3a','#4a5a78'];let g='';let yy=0;
+ while(yy<h-4){const hh=4+R()*5;g+=`<i style="top:${yy}px;height:${hh.toFixed(1)}px;background:${cols[Math.floor(R()*cols.length)]};width:${(78+R()*20).toFixed(0)}%"></i>`;yy+=hh+1}
+ return `<div class="mp-shelf" style="left:${x}%;top:${y}px;width:${w}%;height:${h}px">${g}</div>`}
+function StoryMap(p){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PARTS[p];const all=stages();
+ const L=all.filter(s=>s.k==='pro'?p===0:partOf(s.ch)===p);const cur=stCurrent();
+ const STEP=118,TOP=innerHeight>innerWidth?430:350;let y=TOP;const items=[];let lastCh=-1;let k=0;
+ for(const st of L){if(st.k!=='pro'&&st.ch!==lastCh){lastCh=st.ch;y+=st===L[0]?0:30;items.push({h:1,ch:st.ch,y});y+=152}
+  const x=50+27*Math.sin(k*1.1+.4);items.push({st,x,y});y+=STEP;k++}
+ const missing=P.chs.filter(c=>c>0&&!(c<STORY.length));if(missing.length){y+=20;items.push({soon:1,chs:missing,y});y+=120}
+ const H=y+80;
+ const nodes=items.filter(o=>o.st);
+ let d='';nodes.forEach((o,i)=>{if(!i){d=`M${o.x} ${o.y}`;return}const a=nodes[i-1];const my=(a.y+o.y)/2;d+=` C${a.x} ${my} ${o.x} ${my} ${o.x} ${o.y}`});
+ const passIdx=nodes.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);
+ let dDone='';if(passIdx>=0){const nn=nodes.slice(0,Math.min(nodes.length,passIdx+2));nn.forEach((o,i)=>{if(!i){dDone=`M${o.x} ${o.y}`;return}const a=nn[i-1];const my=(a.y+o.y)/2;dDone+=` C${a.x} ${my} ${o.x} ${my} ${o.x} ${o.y}`})}
+ let deco='';for(let yy=TOP-60,s=1;yy<H-120;yy+=150,s++){deco+=mapShelf(1.5,yy,13,120,s)+mapShelf(85.5,yy+40,13,120,s+50)}
+ const node=o=>{const st=o.st;const pass=stPassed(st),open=stUnlocked(st),now=cur&&cur.id===st.id;const r=stRec(st)||{};
+  const ic=st.k==='pro'?MAP_IC.pro:st.k==='qz'?MAP_IC.qz:(st.last?MAP_IC.last:MAP_IC.sec);
+  const lab=st.k==='pro'?'序章':st.k==='sec'?`${st.n+1}節`:'誤植の群れ';
+  const sub=st.k==='qz'?starsHTML(r.b||0,stTier(r.c||0)):`<small>${esc(stPlace(st))}</small>`;
+  return `<button class="mp-node ${st.k} ${st.last?'last':''} ${pass?'pass':''} ${open?'':'locked'} ${now?'now':''} ${MAP_NEW===st.id?'fresh':''}" data-si="${st.i}" style="left:${o.x}%;top:${o.y}px">
+   <span class="mp-ic">${open?ic:MAP_IC.lock}</span>${now?'<span class="mp-here">ここから</span>':''}${pass&&st.k!=='qz'?'<span class="mp-seal">修復済</span>':''}
+   <span class="mp-lab"><b>${lab}</b>${sub}</span></button>`};
+ const head=o=>`<div class="mp-plaque" style="top:${o.y}px"><span class="n">${CHNAME[o.ch]}</span><span class="t">${esc(STORY[o.ch].title)}</span><span class="s">${esc(CHT[o.ch])}</span></div>`;
+ const soon=o=>`<div class="mp-plaque soon" style="top:${o.y}px"><span class="n">${o.chs.length>1?`${CHNAME[o.chs[0]]}〜${CHNAME[o.chs[o.chs.length-1]]}`:CHNAME[o.chs[0]]}</span><span class="t">この先の書架は、まだ誤植に食われていて進めない</span><span class="s">準備中</span></div>`;
+ show(`<div class="mp" id="smap"><div class="mp-sc" id="mpSc"><div class="mp-in" style="height:${H}px">
+   <div class="mp-floor"></div>${deco}
+   <div class="mp-cover"><span class="n">${P.n}</span><h2>${esc(P.t).replace(/\n/g,'<br>')}</h2><p class="sub">${esc(P.sub)}</p><p class="story">${esc(P.story)}</p></div>
+   <svg class="mp-path" viewBox="0 0 100 ${H}" preserveAspectRatio="none"><path d="${d}" class="all" vector-effect="non-scaling-stroke"/>${dDone?`<path d="${dDone}" class="done" vector-effect="non-scaling-stroke"/>`:''}</svg>
+   ${items.map(o=>o.h?head(o):o.soon?soon(o):node(o)).join('')}
+  </div></div>
+  <div class="scr-title">${P.n}</div>
+  <div class="gc-top"><button class="gc-back" id="mpBack">部を選ぶ</button>${coinsHTML()}</div>
+  <div class="mp-pop" id="mpPop" hidden></div></div>`);
+ $('#mpBack').onclick=()=>FX.pageTurn(StoryMenu);
+ document.querySelectorAll('.mp-node').forEach(b=>b.onclick=e=>{e.stopPropagation();const st=stages()[+b.dataset.si];
+  if(!stUnlocked(st)){FX.shake(b);toast('ひとつ前のステージを修復すると、進めるようになります');return}mapPop(st)});
+ $('#mpSc').addEventListener('click',e=>{if(!e.target.closest('.mp-pop'))mapPopClose()});
+ const sc=$('#mpSc');const focus=document.querySelector(MAP_NEW?`.mp-node.fresh`:'.mp-node.now')||document.querySelector('.mp-node.pass:last-of-type');
+ if(focus&&sc)sc.scrollTop=Math.max(0,focus.offsetTop-sc.clientHeight*.45);MAP_NEW=null}
+function mapPopClose(){const p=$('#mpPop');if(p)p.hidden=true;document.querySelectorAll('.mp-node.sel').forEach(x=>x.classList.remove('sel'))}
+function mapPop(st){const p=$('#mpPop');if(!p)return;document.querySelectorAll('.mp-node.sel').forEach(x=>x.classList.remove('sel'));const nb=document.querySelector(`.mp-node[data-si="${st.i}"]`);if(nb)nb.classList.add('sel');
+ const r=stRec(st)||{};const pass=stPassed(st);let body='',btn='';
+ if(st.k==='pro'){body=`<p>史書庫にやってきた日のお話。${S.prologue?'もう一度読み返せます。':''}</p>`;btn=S.prologue?'読み返す':'読む'}
+ else if(st.k==='sec'){const ev=STORY[st.ch].ev;let nl=0,nb=0,nq=0;for(let j=st.a;j<st.b;j++){const e=ev[j];if(e.t==='l'||e.t==='d')nl++;if(e.t==='act'&&e.a==='battle')nb++;if(e.t==='act'&&e.a==='quiz')nq++}
+  const res=S.pst&&S.pst.id===st.id&&S.prog&&S.prog.ch===st.ch&&S.prog.i>st.a&&S.prog.i<st.b;
+  body=`<p class="pl">${esc(stPlace(st))}</p><p class="meta">${nl}行${nb?`・改変バトル ${nb}`:''}${nq?`・おさらい ${nq}`:''}${st.last?'・章の結末':''}</p>${pass?'':`<p class="rw">はじめて読み終えると　${ERAS[eraOfCh(st.ch)].k}の栞3枚</p>`}`;
+  btn=res?'続きから読む':pass?'読み返す':'読む'}
+ else{const c=r.c||0,t=stTier(c);const nxt=c<1?'':c<3?`あと${3-c}回クリアで銀`:c<5?`あと${5-c}回クリアで金`:'';
+  body=`<p class="meta">10問・1問20秒以内に答えよう</p>
+   <div class="pop-stars">${starsHTML(r.b||0,t,'big')}<span class="tier t${t}">${c?`評価 ${TIER_N[t]}`:'未クリア'}</span></div>
+   <p class="rule">★1：5問正解でクリア　★2：8問　★3：全問正解<br>クリアするたびに星の色が上がる（1回目 銅・3回目 銀・5回目 金）</p>
+   <p class="rw">${c?`クリア ${c}回　${nxt}`:`はじめてクリアすると　${ERAS[eraOfCh(st.ch)].k}の栞3枚`}${r.g?'':`<br>はじめて金になると　${ERAS[eraOfCh(st.ch)].k}の栞10枚`}</p>`;
+  btn=c?'もう一度挑戦する':'挑戦する'}
+ p.innerHTML=`<button class="x" id="mpX" aria-label="閉じる">×</button><h3>${esc(stName(st))}</h3>${body}<button class="btn ${st.k==='qz'?'red':''}" id="mpGo">${btn}</button>`;p.hidden=false;
+ $('#mpX').onclick=mapPopClose;$('#mpGo').onclick=()=>{mapPopClose();playStage(st)}}
+function playStage(st){if(st.k==='pro'){S.pst=null;startPrologue({turn:true});return}
+ if(st.k==='qz'){FX.pageTurn(()=>stageQuiz(st));return}
+ const resume=S.pst&&S.pst.id===st.id&&S.prog&&S.prog.ch===st.ch&&S.prog.i>=st.a&&S.prog.i<st.b;
+ S.pst={id:st.id,ch:st.ch,a:st.a,b:st.b};if(!resume)S.prog={ch:st.ch,i:st.a};save();FX.pageTurn(()=>playChapter(st.ch))}
+/* 節を読み終えたとき */
+function finishStage(){const P=S.pst;const ch=PL?PL.ch:P.ch;S.prog=null;S.pst=null;PL=null;if(S.mid)delete S.mid[ch];STG=null;
+ const st=stages().find(s=>s.id===P.id);S.stg=S.stg||{};const r=S.stg[P.id]||(S.stg[P.id]={c:0});const first=!r.c;r.c++;const e=eraOfCh(ch);
+ const name=st?stName(st):CHNAME[ch];if(first)boxAdd(`${name}　はじめて読了`,e,3);saveNow();
+ const nx=st?stages()[st.i+1]:null;if(first&&nx&&(nx.k==='pro'||partOf(nx.ch)===partOf(ch)))MAP_NEW=nx.id;
+ FX.pageTurn(()=>{StoryMap(partOf(ch));modal(`<h3>${esc(name)}　修復完了</h3><p style="text-align:center;line-height:1.9">${first?`${ERAS[e].k}の栞3枚が、受け取りボックスに届いた。`:'もう一度、読み終えました。'}${first&&nx?`<br>${esc(stName(nx))}に進めるようになった。`:''}</p><div class="row" style="justify-content:center"><button class="btn" data-close>地図にもどる</button></div>`)})}
+/* 誤植の群れ（問題だけのステージ） */
+function stagePool(st){const ev=STORY[st.ch].ev;const key=id=>id.replace(/-\d+$/,'');const pf=new Set();
+ for(let j=st.a;j<st.b;j++){const e=ev[j];if(e.t==='act'&&e.a==='quiz')e.v.forEach(id=>pf.add(key(id)))}
+ const inCh=Q.filter(q=>q.ch===st.ch);let pool=inCh.filter(q=>pf.has(key(q.id)));
+ if(pool.length<10)pool=pool.concat(shuffle(inCh.filter(q=>!pool.includes(q))).slice(0,10-pool.length));
+ const s=q=>S.qs[q.id]||0;return shuffle(pool.filter(q=>s(q)!==1)).concat(shuffle(pool.filter(q=>s(q)===1))).slice(0,10)}
+function stageQuiz(st){const list=stagePool(st);if(!list.length){toast('この章の問題は準備中です');StoryMap(partOf(st.ch));return}
+ startQuiz({list,label:`第${st.ch}章　誤植の群れ`,src:stName(st),timer:20,fin:z=>stageQuizEnd(st,z),quit:()=>FX.pageTurn(()=>StoryMap(partOf(st.ch)))})}
+function stageQuizEnd(st,z){const n=z.list.length,ok=z.res.filter(x=>x===true).length;const sc=stStars(ok,n);const e=eraOfCh(st.ch);
+ S.stg=S.stg||{};const r=S.stg[st.id]||(S.stg[st.id]={c:0});const t0=stTier(r.c||0);const first=!r.c&&sc>0;const msgs=[];
+ if(sc>0){r.c=(r.c||0)+1;r.b=Math.max(r.b||0,sc)}const t1=stTier(r.c||0);
+ if(first){boxAdd(`${stName(st)}　はじめてクリア`,e,3);msgs.push(`はじめてクリア！　${ERAS[e].k}の栞3枚`)}
+ if(t1>t0&&!first)msgs.push(`星の色が<b class="tier t${t1}">${TIER_N[t1]}</b>になった`);
+ if(t1===3&&!r.g){r.g=1;boxAdd(`${stName(st)}　金の評価`,e,10);msgs.push(`はじめての金！　${ERAS[e].k}の栞10枚`)}
+ saveNow();const nx=stages()[st.i+1];if(first&&nx&&partOf(nx.ch)===partOf(st.ch))MAP_NEW=nx.id;
+ const w=z.wrong;const c=r.c||0;const nxt=c<1?'':c<3?`あと${3-c}回クリアで銀`:c<5?`あと${5-c}回クリアで金`:'';
+ show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
+  <div class="gc-top">${coinsHTML()}</div>
+  <div class="dr-res parch sq-res"><p class="sub">${esc(stName(st))}</p><h3>${sc?'誤植の群れを退治した！':'誤植に逃げられた……'}</h3>
+   ${starsHTML(sc,sc?t1:0,'big pop')}<p class="sq-score">正解 <b>${ok}</b>／${n}問</p>
+   ${sc?`<p class="sq-tier">評価 <b class="tier t${t1}">${TIER_N[t1]}</b>　クリア ${c}回${nxt?`　<small>${nxt}</small>`:''}</p>`:'<p class="sq-tier">5問正解でクリアです。もう一度挑戦しよう</p>'}
+   ${msgs.length?`<div class="sq-msg">${msgs.map(m=>`<p>${m}</p>`).join('')}<p class="sub">栞は受け取りボックスに届いています</p></div>`:''}
+   ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}</div>`:''}
+   <div class="rowb"><button class="btn red" id="sqAgain">もう一度挑戦する</button><button class="btn light" id="sqMap">地図にもどる</button></div></div></div>`);
+ $('#sqAgain').onclick=()=>FX.pageTurn(()=>stageQuiz(st));$('#sqMap').onclick=()=>FX.pageTurn(()=>StoryMap(partOf(st.ch)))}
 
 /* ---------- settings (kept apart from the save data) ---------- */
 const CFG_KEY='errata_cfg';
@@ -4734,7 +5040,7 @@ function playChapter(ch){preloadCh(ch);const resume=S.prog&&S.prog.ch===ch?S.pro
   <div class="vn-box" id="tb" aria-live="polite"><span class="vn-name" id="np" hidden></span><p class="vn-text" id="say"></p><span class="vn-next" id="nxt"></span></div>
  </div>`);
  $('#story').addEventListener('click',e=>{if(e.target.closest('.vn-tools,.vn-choices'))return;advance()});
- $('#quitS').onclick=()=>{stopType();S.prog={ch:PL.ch,i:Math.max(0,PL.i-1)};saveNow();PL=null;FX.pageTurn(ch===0&&!S.prologue?Title:Home)};
+ $('#quitS').onclick=()=>{stopType();S.prog={ch:PL.ch,i:Math.max(0,PL.i-1)};saveNow();const toMap=S.pst&&S.pst.ch===ch;PL=null;FX.pageTurn(ch===0&&!S.prologue?Title:toMap?()=>StoryMap(partOf(ch)):Home)};
  {const fb=$('#fsS');if(fb)fb.onclick=toggleFS}
  const sk=$('#skipP');if(sk)sk.onclick=skipPrologue;
  setItem(PL.item);step()}
@@ -4745,6 +5051,7 @@ function skipPrologue(){stopType();if(!S.name){askName(()=>skipPrologue());retur
 function finishPrologue(){S.prologue=true;S.prog=null;PL=null;S.tour=true;if(S.sh[0]<5)S.sh[0]=5;autoParty();saveNow();toast('序章を読み終えました');Home()}
 function sp(t){return t.replace(/○○/g,S.name||'カコ')}
 function step(){const ev=PL.ev;PL.pages=null;
+ if(S.pst&&S.pst.ch===PL.ch&&PL.ch>0&&PL.i>=S.pst.b){finishStage();return}
  if(PL.i>=ev.length){ if(PL.ch===0){finishPrologue()}else{if(S.mid)delete S.mid[PL.ch];S.prog=null;PL=null;save();Home()} return}
  const e=ev[PL.i++];S.prog={ch:PL.ch,i:PL.i-1};save();
  if(e.t==='jump'){PL.i=e.to;return step()}
@@ -4918,7 +5225,7 @@ function runAct(e){
  if(e.a==='quiz'||e.a==='tquiz'){const list=e.v.map(id=>Q.find(q=>q.id===id)).filter(Boolean);
    if(!list.length)return step();
    quizCut(e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',e.a==='tquiz',()=>startQuiz({list,label:e.a==='tquiz'?'はじめての勉強':CHNAME[PL.ch]+'　おさらい',tut:e.a==='tquiz',done:()=>{if(e.a==='tquiz'&&S.sh[0]<5){S.sh[0]=5;save()}resumeStory()}}));return}
- if(e.a==='break'){S.mid=S.mid||{};S.mid[PL.ch]=PL.i;S.prog=null;const ch=PL.ch;PL=null;saveNow();
+ if(e.a==='break'){if(S.pst&&S.pst.ch===PL.ch)return step();S.mid=S.mid||{};S.mid[PL.ch]=PL.i;S.prog=null;const ch=PL.ch;PL=null;saveNow();
    modal(`<h3>${CHNAME[ch]}　前編おわり</h3><p style="line-height:1.8;text-align:center">ここまでの記録は保存されました。<br>続きは、ストーリーから${CHNAME[ch]}を選ぶと後編から読めます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>ホームへ</button></div>`,()=>Home());return}
  if(e.a==='battle'){crumbleCut(()=>Battle(K[e.v],{done:()=>resumeStory()}));return}
  if(e.a==='reward'){const first=!S.cleared[e.v-1];S.cleared[e.v-1]=true;let msg='';
@@ -5076,7 +5383,7 @@ const DR_LINES=['どの章から解くのかね。間違えた問題は、何度
 const DR_VOL_LINE='試験範囲ごとに、まとめて解けるぞ。範囲の問題から10問ずつ出る。';
 /* ドリル画面の人物はコンラッド。ストーリーで初めて登場する台詞を過ぎるまでは、灰色でセリフなし */
 const KON_FIRST=(()=>{for(let c=1;c<STORY.length;c++){const i=STORY[c].ev.findIndex(e=>e.s==='コンラッド'||e.img==='コンラッド');if(i>=0)return {c,i}}return null})();
-function konradMet(){if(!KON_FIRST)return true;const {c,i}=KON_FIRST;if(S.cleared&&S.cleared[c-1])return true;const at=(S.prog&&S.prog.ch===c)?S.prog.i:((S.mid&&S.mid[c])||0);return at>i}
+function konradMet(){if(!KON_FIRST)return true;const {c,i}=KON_FIRST;if(S.cleared&&S.cleared[c-1])return true;if(S.stg&&stages().some(s=>s.k==='sec'&&s.ch===c&&s.b>i&&stRec(s)&&stRec(s).c>0))return true;const at=(S.prog&&S.prog.ch===c)?S.prog.i:((S.mid&&S.mid[c])||0);return at>i}
 function vtitle(s){const c=[...s].map(x=>x==='ー'?'丨':x==='＝'?'‖':x);const cols=c.length<=8?[c]:[c.slice(0,Math.ceil(c.length/2)),c.slice(Math.ceil(c.length/2))];
  return cols.map(col=>`<span class="col">${col.map(x=>`<b>${esc(x)}</b>`).join('')}</span>`).join('')}
 function poolOf(key){return typeof key==='number'?Q.filter(q=>q.ch===key):Q.filter(q=>q.v===key)}
@@ -5099,8 +5406,12 @@ function QuizMenu(){
     <span class="lbl">${vtitle(name)}</span><span class="beads">${[0,1,2,3,4].map(i=>`<i class="${i<on?'on':''}"></i>`).join('')}</span><span class="cnt">${st.done}／${st.n}</span></button>`}).join('')}</div></div>`);
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=b.dataset.mode;QuizMenu()});
  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;FX.pageTurn(()=>startQuiz(key))})}
-function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done}}
- else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[]};toast(pick.msg)}quizQ()}
+function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done,fin:o.fin,quit:o.quit,timer:o.timer||0,src:o.src||o.label}}
+ else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'ドリル　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();quizQ()}
+/* 誤植の群れの制限時間 */
+function qzStop(){if(QZ){clearTimeout(QZ.tm);clearInterval(QZ.ti);QZ.tm=QZ.ti=null}}
+function qzStart(onUp){const T=QZ.timer;let left=T;const el=$('#qzT');if(!el)return;el.querySelector('b').textContent=left;
+ QZ.ti=setInterval(()=>{left--;const b=$('#qzT b');if(b)b.textContent=Math.max(0,left);if(left<=5&&el)el.classList.add('hurry')},1000);QZ.tm=setTimeout(()=>{qzStop();if($('#qo'))onUp()},T*1000)}
 /* ドリルの出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
 function drillPick(key){const pool=poolOf(key);const st=q=>S.qs[q.id]||0;
  const fresh=shuffle(pool.filter(q=>st(q)===0)),wrong=shuffle(pool.filter(q=>st(q)===2)),done=shuffle(pool.filter(q=>st(q)===1));
@@ -5108,29 +5419,32 @@ function drillPick(key){const pool=poolOf(key);const st=q=>S.qs[q.id]||0;
  const mode=fresh.length?'fresh':wrong.length?'wrong':'random';
  const msg=mode==='fresh'?`まだ解いていない問題から出すよ（残り${fresh.length}問）`:mode==='wrong'?`一周したね。間違えた問題を復習しよう（残り${wrong.length}問）`:'全部正解済み！　ランダムに出すよ';
  return {list,mode,msg}}
-function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${QZ.key}章<br>${esc(CHT[QZ.key])}`:esc(QZ.label);
+function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${QZ.key}章<br>${esc(CHT[QZ.key])}`:QZ.timer?esc(QZ.label).replace('　','<br>'):esc(QZ.label);
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}</small>`:''}</div>
   <div class="dr-tabs"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
   ${QZ.tut?'':'<button class="gc-back tl" id="qQuit">やめる</button>'}<div class="gc-top">${coinsHTML(qEras())}</div>
   <div class="dr-gain">この回の獲得　${gainText(QZ.gainE)}</div>
+  ${QZ.timer?`<div class="qz-timer" id="qzT"><i style="animation-duration:${QZ.timer}s"></i><b>${QZ.timer}</b></div>`:''}
   <div class="dr-paper parch"><p>${esc(q.q)}</p></div>
   <div class="dr-opts" id="qo">${shuffle([q.a,...q.d]).map(o=>`<button class="slip" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
   <div class="dr-note" id="qr"></div></div>`);
- const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes('ドリルを中断しますか？（ここまでの栞はもらえます）','中断する',back,null,'ドリルを続ける')};
- document.querySelectorAll('#qo .slip').forEach(b=>b.onclick=()=>{document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
-  const st=S.qs[q.id]||0;const ok=b.dataset.v===q.a;let g=0;
-  const qe=eraOfCh(q.ch);if(ok){g=st===0?3:st===2?5:1;S.qs[q.id]=1;S.sh[qe]=Math.min(16383,S.sh[qe]+g);QZ.gain+=g;QZ.gainE[qe]+=g}else{b.classList.add('wrong');S.qs[q.id]=2;QZ.wrong.push(q)}
+ QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'ドリル'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',back,null,'続ける')};
+ const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
+  const st=S.qs[q.id]||0;const ok=!!b&&b.dataset.v===q.a;let g=0;
+  const qe=eraOfCh(q.ch);if(ok){g=st===0?3:st===2?5:1;S.qs[q.id]=1;if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g);QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');S.qs[q.id]=2;QZ.wrong.push(q)}
   QZ.res[QZ.i]=ok;save();refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';tabs[QZ.i].textContent=ok?'✦':'✕';
-  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':'おしい……',ok?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,`<span class="who">シミ</span>${esc(q.x)}`,QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'));
-  $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
-    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
-   else FX.pageTurn(quizEnd)}})}
+  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,`<span class="who">シミ</span>${esc(q.x)}`,QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'));
+  if(QZ.timer)setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest'})},30);
+  $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
+    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞は受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
+   else FX.pageTurn(quizEnd)}};
+ document.querySelectorAll('#qo .slip').forEach(b=>b.onclick=()=>answer(b));if(QZ.timer)qzStart(()=>answer(null))}
 function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;saveNow()}const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="gc-top">${coinsHTML(qEras())}</div>
-  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3><p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
+  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞は受け取りボックス（右上）に届いています</p>':''}<p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
   ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}<p class="sub">次に正解すると、栞が5枚もらえます。</p></div>`:'<p>全問正解！</p>'}
   <div class="rowb"><button class="btn red" id="again">もう一度解く</button><button class="btn light" id="toShelf">ほかの棚を選ぶ</button><button class="btn light" data-go="home">ホームへ</button></div></div></div>`);
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
@@ -5189,7 +5503,7 @@ function gachaPool(e){return CARDS.filter(c=>!isSP(c.n)&&(e===undefined||eraOfCa
 function draw1(e,minR){const pool=gachaPool(e);let r=Math.random()*100;let rar=r<5?3:r<40?2:1;if(minR&&rar<minR)rar=minR;
  let c=pool.filter(x=>x.r===rar);for(const alt of [2,3,1]){if(c.length)break;if(alt<(minR||0))continue;c=pool.filter(x=>x.r===alt)}
  return c[Math.floor(Math.random()*c.length)].n}
-function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(`${ERAS[e].k}の栞が足りません。${ERAS[e].part}のドリルで集めてこよう`);return}
+function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(boxHas(e)?`受け取りボックスに${ERAS[e].k}の栞が届いています。受け取ってからめくろう`:`${ERAS[e].k}の栞が足りません。${ERAS[e].part}のドリルで集めてこよう`);return}
  S.sh[e]-=cost;const res=[];for(let i=0;i<n;i++)res.push(tut?pickTutorial():draw1(e));if(tut)S.tutorial=true;
  if(n===10&&!res.some(x=>CARD[x].r>=2))res[9]=draw1(e,2);
  const tags=res.map(x=>{const before=lv(x);const r=giveCard(x);return before===0?'NEW':before<5?(lv(x)-1)+'凸':'史料片'});
@@ -6596,9 +6910,9 @@ function lxRest(){const R=S.lib.run;const heal=Math.floor(R.max*.3);
   items:R.deck.map((id,i)=>({i,def:lxDef(id),after:lxDef(id,true)})).filter(o=>!R.ann.includes(o.i)),ask:'この頁に注釈を書き込みますか？',yes:'注釈を書き込む',
   pick:it=>{R.ann.push(it.i);toast('注釈を書き込んだ');lxNextFloor()}})}
 function lxComplete(){const L=S.lib;const R=L.run;const si=R?R.stage||0:0;const SG=LX_STAGES[si];const g=[0,0,0];for(let k=0;k<SG.rew;k++)g[Math.floor(Math.random()*3)]++;
- g.forEach((v,i)=>S.sh[i]+=v);L.clears=(L.clears||0)+1;L.sc=L.sc||{};L.sc[si]=(L.sc[si]||0)+1;const first=L.best==null||si>L.best;if(first)L.best=si;L.run=null;saveNow();
+ g.forEach((v,i)=>{if(v)boxAdd(`図書館探索　第${si+1}層を完走`,i,v)});L.clears=(L.clears||0)+1;L.sc=L.sc||{};L.sc[si]=(L.sc[si]||0)+1;const first=L.best==null||si>L.best;if(first)L.best=si;L.run=null;saveNow();
  const opened=first&&si+1<LX_STAGES.length?`<br><b>第${si+2}層「${esc(LX_STAGES[si+1].n)}」</b>に進めるようになった。`:'';
- FX.flash('#ffe6a8');modal(`<h3>第${si+1}層を完走した！</h3><p style="line-height:1.8;text-align:center">${esc(SG.n)}の誤植を退治した。<br>お礼に<b>${gainText(g)}</b>をもらった。${opened}</p>${lxTipHTML(R&&R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
+ FX.flash('#ffe6a8');modal(`<h3>第${si+1}層を完走した！</h3><p style="line-height:1.8;text-align:center">${esc(SG.n)}の誤植を退治した。<br>お礼の<b>${gainText(g)}</b>が、受け取りボックスに届いた。${opened}</p>${lxTipHTML(R&&R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
 
 Title();
 cloudInit();
