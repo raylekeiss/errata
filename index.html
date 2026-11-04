@@ -1686,6 +1686,87 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lx-gi:not(.pot){background:none;box-shadow:none;border-radius:0;padding:0}
 .lx-gi:not(.pot) .lx-ico{width:44px;height:44px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
 .lx-gi.curse:not(.pot) .lx-ico{filter:drop-shadow(0 0 4px rgba(201,112,143,.9)) drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+
+/* ===== お店 ===== */
+.shp{position:fixed;inset:0;overflow:hidden;background:#140d08;font-family:var(--serif)}
+.shp-bg{position:absolute;inset:0;background:center/cover no-repeat}
+.shp-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,6,4,.25),transparent 40%),linear-gradient(0deg,rgba(10,6,4,.55),transparent 45%)}
+.shp-keeper{position:absolute;left:2%;bottom:0;height:min(88vh,92vw);max-width:58vw;object-fit:contain;object-position:left bottom;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6));animation:shp-in .5s ease-out both}
+@keyframes shp-in{from{transform:translateX(-30px);opacity:0}}
+.shp-say{position:absolute;right:4%;bottom:6%;width:min(520px,52vw);padding:18px 22px 16px;border-radius:3px;animation:fx-pop .3s ease-out .2s both}
+.shp-say .who{display:inline-block;font-size:13px;letter-spacing:.2em;color:#8a6d3a;margin-bottom:4px}
+.shp-say p{margin:0 0 14px;font-size:18px;line-height:1.8;color:#2a2320}
+.shp-say .row{justify-content:flex-end}
+@media (orientation:portrait){.shp-keeper{height:62vh;max-width:90vw;left:-4%}.shp-say{left:5%;right:5%;width:auto;bottom:3%}}
+.shp-silver{position:absolute;right:clamp(12px,2vw,28px);top:calc(env(safe-area-inset-top,0px) + 12px);z-index:3}
+.shp-head .shp-silver{position:static}
+.sv-coin{display:inline-flex;align-items:center;gap:6px;padding:4px 14px 4px 6px;border-radius:24px;background:rgba(10,8,6,.72);box-shadow:inset 0 0 0 1px rgba(220,220,235,.5);color:#eceef4;font-family:var(--serif)}
+.sv-coin img{width:34px;height:34px;object-fit:contain}
+.sv-coin b{font-size:22px;font-weight:600}.sv-coin small{font-family:var(--sans);font-size:11px;opacity:.75}
+.shp-floor{position:absolute;inset:0;background:left top/cover no-repeat}
+.shp-head{position:absolute;z-index:3;left:clamp(90px,10vw,140px);right:clamp(12px,2vw,28px);top:calc(env(safe-area-inset-top,0px) + 10px);display:flex;align-items:center;gap:14px}
+.shp-hp{flex:1;font-family:var(--sans);font-size:13px;color:#e9dfc6;text-shadow:0 1px 3px #000}
+.shp-rug{position:absolute;left:2.5%;right:1.5%;top:calc(env(safe-area-inset-top,0px) + 66px);bottom:2%;background:center/100% 100% no-repeat;filter:drop-shadow(0 14px 22px rgba(0,0,0,.6))}
+.shp-rug-in{position:absolute;left:13%;right:13%;top:16%;bottom:15%;display:flex;flex-direction:column;justify-content:space-around;gap:1.5vh}
+.shp-rug.v .shp-rug-in{left:15%;right:15%;top:9%;bottom:9%;overflow:auto}
+.sh-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:1.2vw}
+.sh-row.gear{gap:2.4vw;align-items:flex-start}
+.sh-grp{display:flex;flex-wrap:wrap;justify-content:center;gap:1vw}
+.sh-grp.svc{padding-left:2.4vw;border-left:1px dashed rgba(232,207,134,.45)}
+.shp-rug.v .sh-grp.svc{padding-left:0;border-left:0;padding-top:1.4vh;border-top:1px dashed rgba(232,207,134,.45)}
+.sh-it{flex:none;position:relative;display:flex;flex-direction:column;align-items:center;transition:transform .15s}
+.sh-it:active{transform:scale(.95)}
+.sh-it .sh-obj{display:block;filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}
+.sh-it.pg{width:min(11.5vw,18vh,140px)}
+.sh-it.pg .lxc{width:100%;font-size:11px}.sh-it.pg .lxc-tx{font-size:10px}
+.shp-rug.v .sh-it.pg{width:min(15vw,112px)}
+.sh-it.ic{width:min(8vw,11vh,92px)}
+.shp-rug.v .sh-it.ic{width:min(10.5vw,76px)}
+.shp-rug.v .sh-tag{width:32px;height:52px}.shp-rug.v .sh-tag b{font-size:12px}.shp-rug.v .sh-row{gap:1.4vw}
+.sh-it.ic .lx-ico{display:block;width:100%;height:auto;aspect-ratio:1;margin:0;vertical-align:0}
+.sh-it.curse .sh-obj{filter:drop-shadow(0 0 6px rgba(201,112,143,.9)) drop-shadow(0 6px 6px rgba(0,0,0,.55))}
+.sh-nm{margin-top:2px;font-family:var(--sans);font-size:max(10px,min(1.2vw,12px));line-height:1.25;color:#f3e6c4;text-shadow:0 1px 2px #000,0 0 4px #000;text-align:center;white-space:nowrap}
+.sh-tag{position:relative;display:block;width:38px;height:62px;margin-top:-6px;background:center/contain no-repeat;transform:rotate(-6deg);transform-origin:50% 0;font-family:var(--serif);color:#3a2a14}
+.sh-it:nth-child(even) .sh-tag{transform:rotate(5deg)}
+.sh-tag b{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:14px;font-weight:700}
+.sh-tag.poor b{color:#a83a2a}
+.sh-it.poor .sh-obj{opacity:.75}
+.sh-it.sold .sh-obj,.sh-it.sold .sh-nm{opacity:.35}
+.sh-sold{position:absolute;left:50%;top:30%;width:78%;max-width:84px;transform:translate(-50%,-50%) rotate(-14deg);pointer-events:none}
+.sh-big{width:min(240px,60vw);margin:0 auto 10px}.sh-big .lxc{width:100%}
+.sh-askp{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 12px;font-family:var(--sans);font-size:13px;color:#5a4630}
+.btn[disabled]{opacity:.45;pointer-events:none}
+/* ===== 戦闘後の報酬 ===== */
+.rwd{position:fixed;inset:0;overflow:hidden;background:#100c14}
+.rwd-bg{position:absolute;inset:0;background:center/cover no-repeat}
+.rwd-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,transparent 30%,rgba(8,6,12,.55))}
+.rwd-in{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 20px}
+.rwd-ribbon{flex:none;width:min(560px,80vw);aspect-ratio:1200/290;background:center/contain no-repeat;display:flex;align-items:center;justify-content:center;animation:rwd-drop .5s cubic-bezier(.3,1.5,.5,1) both}
+.rwd-ribbon span{margin-top:-1.5%;font-family:var(--serif);font-weight:700;font-size:clamp(20px,3.4vw,32px);letter-spacing:.4em;padding-left:.4em;color:#fbecc4;text-shadow:0 2px 0 #5a1010,0 0 10px rgba(0,0,0,.5)}
+@keyframes rwd-drop{from{transform:translateY(-40px) scale(.9);opacity:0}}
+.rwd-got{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 26px;margin:2px 0 8px}
+.rwd-g{display:flex;align-items:center;gap:10px;padding:6px 18px 6px 8px;border-radius:40px;background:rgba(14,10,8,.62);box-shadow:inset 0 0 0 1px rgba(201,162,74,.55);color:#f3e6c4;font-family:var(--serif);animation:fx-pop .35s ease-out .25s both}
+.rwd-g b{font-size:22px;color:#fff}.rwd-g small{display:block;font-family:var(--sans);font-size:11px;opacity:.8;max-width:300px;line-height:1.4}
+.rwd-coins{width:64px;height:64px;object-fit:contain}
+.rwd-chest{width:84px;height:84px;object-fit:contain}
+.rwd-g.relic{cursor:pointer;border-radius:16px}
+.rwd-glow{position:relative;width:64px;height:64px;flex:none;display:flex;align-items:center;justify-content:center}
+.rwd-glow::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(255,226,150,.85),rgba(255,200,90,.25) 45%,transparent 70%);animation:rwd-pulse 2s ease-in-out infinite}
+.rwd-glow::after{content:"";position:absolute;inset:-18px;background:repeating-conic-gradient(rgba(255,230,160,.35) 0 6deg,transparent 6deg 30deg);border-radius:50%;-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:rwd-spin 9s linear infinite}
+.rwd-glow .lx-ico{position:relative;z-index:1;width:56px;height:56px;margin:0;vertical-align:0}
+@keyframes rwd-pulse{50%{transform:scale(1.12);opacity:.75}}
+@keyframes rwd-spin{to{transform:rotate(360deg)}}
+.rwd-in .lx-tips{max-width:620px}
+.rwd-h{margin:10px 0 2px;font-family:var(--serif);font-size:20px;letter-spacing:.12em;color:#f3e6c4;text-shadow:0 2px 6px #000}
+.rwd-note{margin:0 0 6px;max-width:600px;text-align:center;font-size:12px;line-height:1.6;color:#d8ccb0;text-shadow:0 1px 3px #000}
+.rwd-fan{display:flex;justify-content:center;align-items:flex-end;gap:clamp(10px,2.4vw,30px);padding:18px 0 10px}
+.rwd-card{position:relative;width:min(23vw,30vh,190px);cursor:pointer;transform:rotate(calc(var(--i)*5deg)) translateY(calc(var(--i)*var(--i)*10px));transition:transform .2s;animation:rwd-deal .45s cubic-bezier(.3,1.3,.5,1) both}
+.rwd-card:nth-child(2){animation-delay:.08s}.rwd-card:nth-child(3){animation-delay:.16s}
+.rwd-card .lxc{width:100%;box-shadow:0 14px 24px rgba(0,0,0,.6)}
+.rwd-card:hover,.rwd-card:active{transform:rotate(0) translateY(-12px) scale(1.04);z-index:2}
+@keyframes rwd-deal{from{transform:translateY(60px) scale(.7);opacity:0}}
+.rwd-btns{justify-content:center;margin-top:4px}
+@media (orientation:portrait){.rwd-card{width:min(29vw,200px)}}
 </style>
 </head>
 <body>
@@ -4185,6 +4266,20 @@ const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
+"店_背景": "img/lib/shop_bg.webp",
+"店_店主": "img/lib/shopkeeper.webp",
+"店_床": "img/lib/shop_floor.webp",
+"店_絨毯": "img/lib/rug.webp",
+"店_絨毯縦": "img/lib/rug_v.webp",
+"店_銀貨": "img/lib/coin.webp",
+"店_売切": "img/lib/sold.webp",
+"店_外す": "img/lib/svc_rm.webp",
+"店_注釈": "img/lib/svc_up.webp",
+"店_値札": "img/lib/tag.webp",
+"報酬_背景": "img/lib/reward_bg.webp",
+"報酬_帯": "img/lib/ribbon.webp",
+"報酬_宝箱": "img/lib/chest.webp",
+"報酬_銀貨山": "img/lib/coins.webp",
 "アイテム_羅針盤": "img/item/rashinban.webp",
 "アイテム_乳香": "img/item/nyuko.webp",
 "アイテム_硝石": "img/item/shoseki.webp",
@@ -6873,33 +6968,59 @@ function lxEventQuiz(E,done){const pool=Q.filter(q=>S.cleared[q.ch-1]);const L=p
   else done(`残念、正しくは「<b>${esc(q.a)}</b>」。<br><span class="who">シミ</span>${esc(q.x||'')}`)})}
 /* お店：頁5〜7枚・装備2つ・薬2つ・頁を外すサービス。品物は入ったときに決まる（出入りしても同じ） */
 const LX_PRICE={1:45,2:60,3:80};
+/* ---------- お店：出迎え → 絨毯の上の品物 ---------- */
+const LX_SHOP_LINES=['いらっしゃい。どれも書架の奥から拾ってきた掘り出し物だよ。','おや、また会ったね。今日の品ぞろえも悪くないよ。','銀貨は持ってきたかい？　見るだけならタダだよ。','この絨毯の上のものなら、どれでも売ってあげよう。','誤植退治はたいへんだろう。少し休んでいきなさい。'];
+function lxShopLeave(){const R=S.lib.run;R.shop=null;R.shopIn=false;R.rmUsed=false;R.upUsed=false;R.healUsed=false;lxNextFloor()}
 function lxShop(){const R=S.lib.run;
  if(!R.shop){const n=5+Math.floor(Math.random()*3);const pages=lxPoolPick(R,n).map(id=>({id,p:Math.round(LX_PRICE[CARD[id].r]*(.9+Math.random()*.2))}));
   const rel=[...shuffle(Object.keys(LX_RELIC).filter(r=>!R.relics.includes(r)&&!LX_RELIC_CURSE.has(r)&&!LX_RELIC_CHAR.has(r))).slice(0,2).map(id=>({id,p:120+Math.floor(Math.random()*31)})),...shuffle([...LX_RELIC_CURSE].filter(r=>!R.relics.includes(r))).slice(0,1).map(id=>({id,p:70+Math.floor(Math.random()*21)}))];
   const pot=[...shuffle(Object.keys(LX_POT).filter(k=>!LX_POT_CURSE.has(k))).slice(0,2).map(id=>({id,p:40+Math.floor(Math.random()*21)})),...shuffle([...LX_POT_CURSE]).slice(0,1).map(id=>({id,p:25+Math.floor(Math.random()*11)}))];
-  R.shop={pages,rel,pot};save()}
- const S0=R.shop;R.rmCost=R.rmCost||60;const sv=R.silver||0;
- const item=(k,i,o,body)=>`<button class="lx-shopit ${o.sold?'sold':''} ${!o.sold&&o.p>sv?'poor':''}" data-k="${k}" data-i="${i}" ${o.sold?'disabled':''}>${body}<span class="lx-price">${o.sold?'売り切れ':`銀貨 ${o.p}`}</span></button>`;
- show(`<div class="screen">${topbar('お店','lib')}<div class="scroll"><div class="lx-menu">
-  <div class="pane paper lx-shophead"><div><h3 style="margin:0">古書と道具の店</h3><p class="muted" style="margin:4px 0 0">「いらっしゃい。どれも書架の奥から拾ってきた掘り出し物だよ」</p></div><b class="lx-silver big">銀貨 ${sv}</b></div>
-  <div class="pane paper"><h3>頁（この探索のあいだデッキに加わる）</h3><div class="lx-shopgrid">${S0.pages.map((o,i)=>item('pg',i,o,lxCardHTML(lxDef(o.id)))).join('')}</div></div>
-  <div class="pane paper"><h3>装備・薬</h3><div class="lx-shoprow">${S0.rel.map((o,i)=>item('rel',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}${lxIco(o.id,'mid')}<b>装備「${esc(o.id)}」</b><small>${esc(LX_RELIC[o.id])}</small>`)).join('')}${S0.pot.map((o,i)=>item('pot',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}${lxIco(o.id,'mid')}<b>薬「${esc(o.id)}」</b><small>${esc(LX_POT[o.id])}</small>`)).join('')}
-   ${item('rm',0,{p:R.rmCost,sold:R.rmUsed},`<b>頁を1枚外す</b><small>デッキから頁を1枚取り除く（1つのお店で1回まで）</small>`)}
-   ${item('up',0,{p:75,sold:R.upUsed},`<b>頁に注釈を書き込む</b><small>頁を1枚強化する（1つのお店で1回まで）</small>`)}
-   ${item('heal',0,{p:50,sold:R.healUsed},`<b>手当てを受ける</b><small>HPを${Math.floor(R.max*.3)}回復する（1つのお店で1回まで）。いまHP ${R.hp}／${R.max}</small>`)}</div></div>
-  <div class="row" style="justify-content:center"><button class="btn" id="lxShopOut">店を出る</button></div></div></div></div>`);
- lxNoBack();$('#lxShopOut').onclick=()=>{R.shop=null;R.rmUsed=false;R.upUsed=false;R.healUsed=false;lxNextFloor()};
- app.querySelectorAll('.lx-shopit:not([disabled])').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=+b.dataset.i;const o=k==='rm'?{p:R.rmCost}:k==='up'?{p:75}:k==='heal'?{p:50}:S0[k==='pg'?'pages':k][i];
+  R.shop={pages,rel,pot};R.shopIn=false;save()}
+ if(!R.shopIn){lxShopFront();return}
+ lxShopRug()}
+function lxShopFront(){const R=S.lib.run;const line=LX_SHOP_LINES[Math.floor(Math.random()*LX_SHOP_LINES.length)];
+ show(`<div class="shp" id="shp"><div class="shp-bg" style="background-image:url(${IMG['店_背景']})"></div><div class="shp-shade"></div>
+  <img class="shp-keeper" src="${IMG['店_店主']}" alt="古書商" draggable="false">
+  <div class="shp-say parch"><span class="who">古書商</span><p>${esc(line)}</p>
+   <div class="row"><button class="btn red" id="shpIn">品物を見る</button><button class="btn light" id="shpOut">店を出る</button></div></div>
+  <div class="shp-silver">${lxSilverHTML(R.silver||0)}</div></div>`);
+ $('#shpIn').onclick=()=>{R.shopIn=true;save();FX.pageTurn(lxShopRug)};
+ $('#shpOut').onclick=lxShopLeave}
+function lxSilverHTML(n){return `<span class="sv-coin"><img src="${IMG['店_銀貨']}" alt=""><b>${n}</b><small>銀貨</small></span>`}
+function lxShopRug(){const R=S.lib.run;const S0=R.shop;R.rmCost=R.rmCost||60;const sv=R.silver||0;const heal=Math.floor(R.max*.3);
+ const tag=o=>o.sold?'':`<span class="sh-tag ${o.p>sv?'poor':''}" style="background-image:url(${IMG['店_値札']})"><b>${o.p}</b></span>`;
+ const it=(k,i,o,cls,obj,nm)=>`<button class="sh-it ${cls} ${o.sold?'sold':''} ${!o.sold&&o.p>sv?'poor':''}" data-k="${k}" data-i="${i}" ${o.sold?'disabled':''}>
+   <span class="sh-obj">${obj}</span>${nm?`<span class="sh-nm">${esc(nm)}</span>`:''}${tag(o)}${o.sold?`<img class="sh-sold" src="${IMG['店_売切']}" alt="売り切れ">`:''}</button>`;
+ const pages=S0.pages.map((o,i)=>it('pg',i,o,'pg',lxCardHTML(lxDef(o.id)),'')).join('');
+ const gear=S0.rel.map((o,i)=>it('rel',i,o,'ic'+(lxCurse(o.id)?' curse':''),lxIco(o.id),o.id)).join('')+S0.pot.map((o,i)=>it('pot',i,o,'ic pot'+(lxCurse(o.id)?' curse':''),lxIco(o.id),o.id)).join('');
+ const svc=it('rm',0,{p:R.rmCost,sold:R.rmUsed},'ic svc',`<img class="lx-ico" src="${IMG['店_外す']}" alt="">`,'頁を外す')
+  +it('up',0,{p:75,sold:R.upUsed},'ic svc',`<img class="lx-ico" src="${IMG['店_注釈']}" alt="">`,'注釈を書く')
+  +it('heal',0,{p:50,sold:R.healUsed},'ic svc',lxIco('修道院の薬草'),'手当て');
+ show(`<div class="shp rug" id="shp"><div class="shp-floor" style="background-image:url(${IMG['店_床']})"></div>
+  <div class="shp-rug"><div class="shp-rug-in">
+   <div class="sh-row pages">${pages}</div>
+   <div class="sh-row gear"><div class="sh-grp">${gear}</div><div class="sh-grp svc">${svc}</div></div>
+  </div></div>
+  <div class="shp-head"><button class="gc-back" id="shpBack">店主のところへ</button><span class="shp-hp">HP ${R.hp}／${R.max}　デッキ ${R.deck.length}枚</span><div class="shp-silver">${lxSilverHTML(sv)}</div></div></div>`);
+ const rug=$('.shp-rug');const rv=innerHeight>innerWidth*1.05;rug.style.backgroundImage=`url(${IMG[rv?'店_絨毯縦':'店_絨毯']})`;rug.classList.toggle('v',rv);
+ $('#shpBack').onclick=()=>{R.shopIn=false;save();FX.pageTurn(lxShopFront)};
+ app.querySelectorAll('.sh-it:not([disabled])').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=+b.dataset.i;const o=k==='rm'?{p:R.rmCost}:k==='up'?{p:75}:k==='heal'?{p:50}:S0[k==='pg'?'pages':k][i];
+  const buy=()=>{R.silver-=o.p;if(k!=='rm')o.sold=true;save();lxShopRug()};
+  if(k==='pg'){lxShopAsk(k,o,()=>{R.deck.push(o.id);toast('デッキに加えた');buy()});return}
+  if(k==='rel'){lxShopAsk(k,o,()=>{lxAddRelic(o.id);buy()});return}
+  if(k==='pot'){lxShopAsk(k,o,()=>{if(R.pots.length>=3){toast('薬はもう持ちきれない');return}R.pots.push(o.id);buy()});return}
   if(o.p>(R.silver||0)){toast('銀貨が足りない');return}
-  const buy=()=>{R.silver-=o.p;if(k!=='rm')o.sold=true;save();lxShop()};
-  if(k==='pg')askYes(`「${lxDef(o.id).name}」を銀貨${o.p}枚で買いますか？`,'買う',()=>{R.deck.push(o.id);toast('デッキに加えた');buy()});
-  else if(k==='rel')askYes(`装備「${o.id}」を銀貨${o.p}枚で買いますか？\n${LX_RELIC[o.id]}`,'買う',()=>{lxAddRelic(o.id);buy()});
-  else if(k==='pot'){if(R.pots.length>=3){toast('薬はもう持ちきれない');return}askYes(`薬「${o.id}」を銀貨${o.p}枚で買いますか？\n${LX_POT[o.id]}`,'買う',()=>{R.pots.push(o.id);buy()})}
-  else if(k==='heal'){if(R.hp>=R.max){toast('HPは満タン');return}askYes(`銀貨${o.p}枚で、HPを${Math.floor(R.max*.3)}回復しますか？`,'回復する',()=>{R.hp=Math.min(R.max,R.hp+Math.floor(R.max*.3));R.healUsed=true;R.silver-=o.p;save();lxShop()})}
+  if(k==='heal'){if(R.hp>=R.max){toast('HPは満タン');return}askYes(`銀貨${o.p}枚で、HPを${heal}回復しますか？\nいまHP ${R.hp}／${R.max}`,'回復する',()=>{R.hp=Math.min(R.max,R.hp+heal);R.healUsed=true;R.silver-=o.p;save();lxShopRug()})}
   else if(k==='up'){const its=R.deck.map((id,j)=>({i:j,def:lxDef(id),after:lxDef(id,true)})).filter(x=>!R.ann.includes(x.i));if(!its.length){toast('強化できる頁がない');return}
-   lxChooseCard({title:'注釈を書き込む頁を選ぶ',note:`銀貨${o.p}枚で、この探索のあいだ頁を強化します。`,items:its,ask:`銀貨${o.p}枚で、この頁に注釈を書き込みますか？`,yes:'書き込む',pick:it=>{R.ann.push(it.i);R.upUsed=true;R.silver-=o.p;save();toast('注釈を書き込んだ');lxShop()}})}
+   lxChooseCard({title:'注釈を書き込む頁を選ぶ',note:`銀貨${o.p}枚で、この探索のあいだ頁を強化します。`,items:its,ask:`銀貨${o.p}枚で、この頁に注釈を書き込みますか？`,yes:'書き込む',pick:it=>{R.ann.push(it.i);R.upUsed=true;R.silver-=o.p;save();toast('注釈を書き込んだ');lxShopRug()}})}
   else lxChooseCard({title:'外す頁を選ぶ',note:`銀貨${o.p}枚で、この探索のあいだデッキから外します。`,items:R.deck.map((id,j)=>({i:j,def:lxDef(id,R.ann.includes(j))})),ask:`銀貨${o.p}枚で、この頁を外しますか？`,yes:'外す',
-   pick:it=>{const j=it.i;R.deck.splice(j,1);R.ann=R.ann.filter(x=>x!==j).map(x=>x>j?x-1:x);R.silver-=o.p;R.rmUsed=true;R.rmCost+=25;save();toast(`「${it.def.name}」を外した`);lxShop()}})})}
+   pick:it=>{const j=it.i;R.deck.splice(j,1);R.ann=R.ann.filter(x=>x!==j).map(x=>x>j?x-1:x);R.silver-=o.p;R.rmUsed=true;R.rmCost+=25;save();toast(`「${it.def.name}」を外した`);lxShopRug()}})})}
+/* 品物をタップ → 大きく見せて、そのまま買える */
+function lxShopAsk(k,o,onBuy){const R=S.lib.run;const poor=o.p>(R.silver||0);
+ const body=k==='pg'?`<div class="sh-big">${lxCardHTML(lxDef(o.id))}</div>`:`${lxIco(o.id,'big')}<h3 style="text-align:center">${k==='pot'?'薬':'装備'}「${esc(o.id)}」</h3>${lxCurse(o.id)?'<p style="text-align:center"><i class="lx-ctag">デメリットあり</i></p>':''}<p style="line-height:1.8;text-align:center">${esc(k==='pot'?LX_POT[o.id]:LX_RELIC[o.id])}</p>`;
+ modal(`${body}<p class="sh-askp">${lxSilverHTML(o.p)}<span>${poor?`銀貨が${o.p-(R.silver||0)}枚足りない`:`買うと残り ${(R.silver||0)-o.p}枚`}</span></p>
+  <div class="row" style="justify-content:center"><button class="btn red" id="shBuy" ${poor?'disabled':''}>買う</button><button class="btn light" data-close>やめる</button></div>`);
+ if(!poor)$('#shBuy').onclick=()=>{closeModal();onBuy()}}
 /* 写本室：頁を1枚外す／HPを払って頁を強化する／立ち去る */
 function lxScribe(){const R=S.lib.run;const cost=6;
  show(`<div class="screen">${topbar('写本室','lib')}<div class="scroll"><div class="lx-menu"><div class="pane paper"><h3>写本室</h3>
@@ -6928,13 +7049,22 @@ function lxTipHTML(seen){const L=S.lib;L.tipN=L.tipN||{};const pool=(seen||[]).f
  all.sort((a,b)=>(L.tipN[a[0]]||0)-(L.tipN[b[0]]||0)||Math.random()-.5);const [k,t]=all[0];L.tipN[k]=(L.tipN[k]||0)+1;
  return `<div class="lx-tips"><span>TIPS</span><p><b>${esc(k)}</b>${esc(t)}</p></div>`}
 function lxReward(elite,chest){const R=S.lib.run;let relic=null;if(elite)relic=lxGiveRelic();const coin=chest?0:elite?28+Math.floor(Math.random()*13):12+Math.floor(Math.random()*9);R.silver=(R.silver||0)+coin;save();
- const cand=lxRewardCands(R);
- show(`<div class="screen">${topbar(chest?'宝箱を開けた':'戦闘に勝った','lib')}<div class="scroll"><div class="lx-menu"><div class="pane paper">
-  ${relic?`<p style="line-height:1.8;margin:0 0 12px">${lxIco(relic,'big')}装備「<b>${esc(relic)}</b>」を手に入れた。${esc(LX_RELIC[relic])}</p>`:''}
-  ${chest?'<p style="line-height:1.8;margin:0 0 12px">宝箱の中には、古い頁が3枚入っていた。</p>':`<p class="lx-coin">銀貨を <b>${coin}枚</b> 手に入れた（いま ${R.silver}枚）</p>${lxTipHTML(R.tips)}`}<h3>頁を1枚、デッキに加える</h3><p class="muted" style="margin:0 0 10px">まだ持っていない頁も、この探索のあいだだけ借りられます。加えずに進むこともできます（デッキが少ないほど、狙った頁を引きやすくなります）。</p>
-  <div class="lx-grid">${cand.map((id,i)=>`<div class="lx-cell" data-pick="${i}">${lxCardHTML(lxDef(id))}${CARD[id]&&!lv(id)?'<span class="lx-in rent">借りる</span>':''}</div>`).join('')}</div>
-  <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" id="lxSkip">加えずに進む</button><button class="btn light" id="lxGl3">用語の説明</button></div></div></div></div></div>`);
- lxNoBack();app.querySelectorAll('[data-pick]').forEach(d=>d.onclick=()=>{R.deck.push(cand[+d.dataset.pick]);toast(`「${lxDef(cand[+d.dataset.pick]).name}」をデッキに加えた`);lxNextFloor()});
+ const cand=lxRewardCands(R);const title=chest?'宝箱を開けた':elite?'強敵を退けた':'勝利';
+ show(`<div class="rwd" id="rwd"><div class="rwd-bg" style="background-image:url(${IMG['報酬_背景']})"></div>
+  <div class="rwd-in">
+   <div class="rwd-ribbon" style="background-image:url(${IMG['報酬_帯']})"><span>${title}</span></div>
+   <div class="rwd-got">
+    ${chest?`<div class="rwd-g"><img class="rwd-chest" src="${IMG['報酬_宝箱']}" alt=""><span>古い頁が3枚入っていた</span></div>`:`<div class="rwd-g"><img class="rwd-coins" src="${IMG['報酬_銀貨山']}" alt=""><span>銀貨 <b>＋${coin}</b><small>いま ${R.silver}枚</small></span></div>`}
+    ${relic?`<div class="rwd-g relic" data-rk="${esc(relic)}"><span class="rwd-glow">${lxIco(relic)}</span><span>装備「<b>${esc(relic)}</b>」<small>${esc(LX_RELIC[relic])}</small></span></div>`:''}
+   </div>
+   ${chest?'':lxTipHTML(R.tips)}
+   <h3 class="rwd-h">頁を1枚、デッキに加える</h3>
+   <p class="rwd-note">まだ持っていない頁も、この探索のあいだだけ借りられます。加えずに進むこともできます（デッキが少ないほど、狙った頁を引きやすくなります）。</p>
+   <div class="rwd-fan">${cand.map((id,i)=>`<div class="rwd-card" data-pick="${i}" style="--i:${i-(cand.length-1)/2}">${lxCardHTML(lxDef(id))}${CARD[id]&&!lv(id)?'<span class="lx-in rent">借りる</span>':''}</div>`).join('')}</div>
+   <div class="row rwd-btns"><button class="btn light" id="lxSkip">加えずに進む</button><button class="btn light" id="lxGl3">用語の説明</button></div>
+  </div></div>`);
+ app.querySelectorAll('[data-pick]').forEach(d=>d.onclick=()=>{R.deck.push(cand[+d.dataset.pick]);toast(`「${lxDef(cand[+d.dataset.pick]).name}」をデッキに加えた`);lxNextFloor()});
+ {const g=app.querySelector('[data-rk]');if(g)g.onclick=()=>lxItemInfo(g.dataset.rk,false)}
  $('#lxSkip').onclick=lxNextFloor;$('#lxGl3').onclick=lxGlossary}
 /* 報酬・休憩の画面では「戻る」を出さない（戻ると同じマスをやり直せてしまうため） */
 function lxNoBack(){const b=app.querySelector('.bar .back');if(b)b.style.visibility='hidden'}
