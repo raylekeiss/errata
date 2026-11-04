@@ -875,7 +875,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .coin span{font-family:var(--sans);font-size:max(10px,calc(12*var(--u)));letter-spacing:.05em;opacity:.9;white-space:nowrap}
 .coin b{font-family:var(--serif);font-size:max(15px,calc(24*var(--u)));font-weight:600;line-height:1.1;text-align:right;font-variant-numeric:tabular-nums}
 .rb{display:block;height:auto}
-.h-coins{position:absolute;right:calc(clamp(16px,3vw,40px) + 60px);top:calc(env(safe-area-inset-top,0px) + clamp(12px,2.4vh,28px));z-index:3}
+.h-coins{display:flex;gap:calc(8*var(--u));align-items:stretch;position:absolute;right:calc(clamp(16px,3vw,40px) + 60px);top:calc(env(safe-area-inset-top,0px) + clamp(12px,2.4vh,28px));z-index:3}
 .dr .coin,.gc .coin{min-width:calc(88*var(--u))}
 @media (orientation:portrait){.h-coins{right:clamp(16px,3vw,40px);top:calc(env(safe-area-inset-top,0px) + 74px)}}
 .shiori3{font-family:var(--sans);font-size:13px;color:var(--paper);white-space:nowrap}.shiori3 b{font-family:var(--serif);font-size:17px;color:#fff;margin:0 .4em 0 .2em}
@@ -1667,6 +1667,13 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .mp-pop .tier{font-size:15px}
 .mp-pop .btn{margin-top:10px;min-width:60%}
 .mp-pop .x{position:absolute;right:6px;top:4px;width:36px;height:36px;font-size:22px;color:#8a6d3a}
+
+/* 装備・薬のアイコン */
+.lx-ico{width:22px;height:22px;object-fit:contain;vertical-align:-6px;margin:-4px 5px -4px -3px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+.lx-pot .lx-ico{width:28px;height:28px;vertical-align:-9px}
+.lx-ico.mid{display:block;width:64px;height:64px;margin:0 auto 6px;vertical-align:0}
+.lx-char-rl .lx-ico.mid{float:left;width:48px;height:48px;margin:0 10px 0 0}
+.lx-ico.big{display:block;width:120px;height:120px;margin:0 auto 8px;vertical-align:0;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));animation:fx-pop .35s ease-out}
 </style>
 </head>
 <body>
@@ -4166,6 +4173,26 @@ const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
+"アイテム_カコの手帳": "img/item/kako_techo.webp",
+"アイテム_ドクニンジンの杯": "img/item/dokuninjin.webp",
+"アイテム_修道院の薬草": "img/item/yakuso.webp",
+"アイテム_禁書目録": "img/item/kinsho.webp",
+"アイテム_ダモクレスの剣": "img/item/damocles.webp",
+"アイテム_活版印刷機": "img/item/kappan.webp",
+"アイテム_ロゼッタ＝ストーン": "img/item/rosetta.webp",
+"アイテム_不老不死の薬": "img/item/furofushi.webp",
+"アイテム_借り物の王冠": "img/item/okan.webp",
+"アイテム_免罪符": "img/item/menzaifu.webp",
+"アイテム_胡椒": "img/item/kosho.webp",
+"アイテム_ピュロスの兜": "img/item/pyrrhus.webp",
+"アイテム_錬金術の霊薬": "img/item/renkin.webp",
+"アイテム_コンラッドの万年筆": "img/item/mannenhitsu.webp",
+"アイテム_ホプロンの盾": "img/item/hoplon.webp",
+"アイテム_ギリシアの火": "img/item/greekfire.webp",
+"アイテム_ヌルの外套": "img/item/gaito.webp",
+"アイテム_シミの虫眼鏡": "img/item/mushimegane.webp",
+"アイテム_テリアカ": "img/item/theriaca.webp",
+"アイテム_茶": "img/item/cha.webp",
 "背景_図書館探索": "img/bg_lib2.webp",
 "UI_本": "img/ui_book.webp",
 "背景_図書館探索_戦闘": "img/bg_lib_battle.webp",
@@ -4654,7 +4681,7 @@ function emblem(e){const s='<svg viewBox="0 0 40 40" class="emb" aria-hidden="tr
  if(e===1)return s+'<g fill="currentColor"><path d="M20 3c4 5 4.6 10.5 1.6 17.5h-3.2C15.4 13.5 16 8 20 3z"/><path d="M18.4 20.5C13 21 8.5 18.5 8.6 13.6c2.4 3.4 5.4 4.6 8.4 4.4z"/><path d="M21.6 20.5C27 21 31.5 18.5 31.4 13.6c-2.4 3.4-5.4 4.6-8.4 4.4z"/><rect x="12.5" y="21.5" width="15" height="3" rx="1"/><path d="M17.6 25.5h4.8L20 37z"/><path d="M15.5 25.5c-3 .6-5 3-4.6 6 1.4-2 3-3 5.4-3.2z"/><path d="M24.5 25.5c3 .6 5 3 4.6 6-1.4-2-3-3-5.4-3.2z"/></g></svg>';
  return s+'<g fill="currentColor">'+Array.from({length:8},(_,i)=>`<ellipse cx="20" cy="10.5" rx="4.2" ry="7.5" transform="rotate(${i*45} 20 20)" opacity=".9"/>`).join('')+'<circle cx="20" cy="20" r="5.5" fill="#f3ead6"/><circle cx="20" cy="20" r="3" /></g></svg>'}
 function ribbon(e){const c=ERAS[e].c;return `<svg class="rb" viewBox="0 0 30 44" aria-hidden="true"><path d="M3 0h24v42l-12-9-12 9z" fill="${c}"/><path d="M3 0h24v42l-12-9-12 9z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/><g transform="translate(5 6) scale(.5)" color="#fbf3df">${emblem(e).replace('<svg viewBox="0 0 40 40" class="emb" aria-hidden="true">','').replace('</svg>','')}</g></svg>`}
-function coinsHTML(only){const L=only&&only.length?only:[0,1,2];const bx=!(only&&only.length);return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${bx?boxBtnHTML():''}${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
+function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
 function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
@@ -4747,7 +4774,7 @@ function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=
   <header class="h-logo"><div class="lg-wrap"><img class="lg-img" src="${IMG_BASE}img/logo.webp" alt="エラータ ERRATA" draggable="false"></div>
    <p class="lg-sub">― 世界史探究 ―</p></header>
   <button class="burger" id="burger" aria-label="メニュー"><span></span></button>
-  <div class="h-coins">${coinsHTML()}</div>
+  <div class="h-coins">${boxBtnHTML()}${coinsHTML()}</div>
   <div class="oshi ${(o==='シミ'||CHARA[o])?'':'cardmode'}" id="oshi" role="button" aria-label="ひとこと">${oshiHTML}</div>
   <button class="oshi-chg" id="oshiChg">人物を変更する</button>
   <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}${FLO.replace('class="flo"','class="ink"')}</div>
@@ -4827,7 +4854,7 @@ function openBox(){const L=S.box||[];
  const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・ドリル・図書館探索でもらった栞は、ここに届きます。</p>';
  modal(`<h3>受け取りボックス</h3><p class="bx-left" id="bxLeft">${L.length?`タップして受け取ろう　残り<b>${L.length}</b>件`:''}</p>
   <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${ERAS[b.e].c}">${ribbon(b.e)}<span class="bx-t"><b>${ERAS[b.e].k}の栞 ×${b.n}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
-  <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" data-close>閉じる</button></div>`,()=>refreshCoins());
+  <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn');if(b)b.outerHTML=boxBtnHTML()});
  document.querySelectorAll('#modal [data-bx]').forEach(el=>el.onclick=()=>{if(el.classList.contains('got'))return;const i=(S.box||[]).findIndex(b=>b.id===el.dataset.bx);if(i<0){el.remove();return}
   const b=S.box[i];S.box.splice(i,1);S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n);save();
   el.classList.add('got');const f=document.createElement('span');f.className='bx-plus';f.textContent='+'+b.n;el.appendChild(f);
@@ -4967,7 +4994,7 @@ function finishStage(){const P=S.pst;const ch=PL?PL.ch:P.ch;S.prog=null;S.pst=nu
  const st=stages().find(s=>s.id===P.id);S.stg=S.stg||{};const r=S.stg[P.id]||(S.stg[P.id]={c:0});const first=!r.c;r.c++;const e=eraOfCh(ch);
  const name=st?stName(st):CHNAME[ch];if(first)boxAdd(`${name}　はじめて読了`,e,3);saveNow();
  const nx=st?stages()[st.i+1]:null;if(first&&nx&&(nx.k==='pro'||partOf(nx.ch)===partOf(ch)))MAP_NEW=nx.id;
- FX.pageTurn(()=>{StoryMap(partOf(ch));modal(`<h3>${esc(name)}　修復完了</h3><p style="text-align:center;line-height:1.9">${first?`${ERAS[e].k}の栞3枚が、受け取りボックスに届いた。`:'もう一度、読み終えました。'}${first&&nx?`<br>${esc(stName(nx))}に進めるようになった。`:''}</p><div class="row" style="justify-content:center"><button class="btn" data-close>地図にもどる</button></div>`)})}
+ FX.pageTurn(()=>{StoryMap(partOf(ch));modal(`<h3>${esc(name)}　修復完了</h3><p style="text-align:center;line-height:1.9">${first?`${ERAS[e].k}の栞3枚が、ホームの受け取りボックスに届いた。`:'もう一度、読み終えました。'}${first&&nx?`<br>${esc(stName(nx))}に進めるようになった。`:''}</p><div class="row" style="justify-content:center"><button class="btn" data-close>地図にもどる</button></div>`)})}
 /* 誤植の群れ（問題だけのステージ） */
 function stagePool(st){const ev=STORY[st.ch].ev;const key=id=>id.replace(/-\d+$/,'');const pf=new Set();
  for(let j=st.a;j<st.b;j++){const e=ev[j];if(e.t==='act'&&e.a==='quiz')e.v.forEach(id=>pf.add(key(id)))}
@@ -4989,7 +5016,7 @@ function stageQuizEnd(st,z){const n=z.list.length,ok=z.res.filter(x=>x===true).l
   <div class="dr-res parch sq-res"><p class="sub">${esc(stName(st))}</p><h3>${sc?'誤植の群れを退治した！':'誤植に逃げられた……'}</h3>
    ${starsHTML(sc,sc?t1:0,'big pop')}<p class="sq-score">正解 <b>${ok}</b>／${n}問</p>
    ${sc?`<p class="sq-tier">評価 <b class="tier t${t1}">${TIER_N[t1]}</b>　クリア ${c}回${nxt?`　<small>${nxt}</small>`:''}</p>`:'<p class="sq-tier">5問正解でクリアです。もう一度挑戦しよう</p>'}
-   ${msgs.length?`<div class="sq-msg">${msgs.map(m=>`<p>${m}</p>`).join('')}<p class="sub">栞は受け取りボックスに届いています</p></div>`:''}
+   ${msgs.length?`<div class="sq-msg">${msgs.map(m=>`<p>${m}</p>`).join('')}<p class="sub">栞はホームの受け取りボックスに届いています</p></div>`:''}
    ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}</div>`:''}
    <div class="rowb"><button class="btn red" id="sqAgain">もう一度挑戦する</button><button class="btn light" id="sqMap">地図にもどる</button></div></div></div>`);
  $('#sqAgain').onclick=()=>FX.pageTurn(()=>stageQuiz(st));$('#sqMap').onclick=()=>FX.pageTurn(()=>StoryMap(partOf(st.ch)))}
@@ -5438,13 +5465,13 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,`<span class="who">シミ</span>${esc(q.x)}`,QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'));
   if(QZ.timer)setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest'})},30);
   $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
-    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞は受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
+    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞はホームの受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
    else FX.pageTurn(quizEnd)}};
  document.querySelectorAll('#qo .slip').forEach(b=>b.onclick=()=>answer(b));if(QZ.timer)qzStart(()=>answer(null))}
 function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;saveNow()}const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="gc-top">${coinsHTML(qEras())}</div>
-  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞は受け取りボックス（右上）に届いています</p>':''}<p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
+  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞はホームの受け取りボックスに届いています</p>':''}<p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
   ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}<p class="sub">次に正解すると、栞が5枚もらえます。</p></div>`:'<p>全問正解！</p>'}
   <div class="rowb"><button class="btn red" id="again">もう一度解く</button><button class="btn light" id="toShelf">ほかの棚を選ぶ</button><button class="btn light" data-go="home">ホームへ</button></div></div></div>`);
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
@@ -5503,7 +5530,7 @@ function gachaPool(e){return CARDS.filter(c=>!isSP(c.n)&&(e===undefined||eraOfCa
 function draw1(e,minR){const pool=gachaPool(e);let r=Math.random()*100;let rar=r<5?3:r<40?2:1;if(minR&&rar<minR)rar=minR;
  let c=pool.filter(x=>x.r===rar);for(const alt of [2,3,1]){if(c.length)break;if(alt<(minR||0))continue;c=pool.filter(x=>x.r===alt)}
  return c[Math.floor(Math.random()*c.length)].n}
-function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(boxHas(e)?`受け取りボックスに${ERAS[e].k}の栞が届いています。受け取ってからめくろう`:`${ERAS[e].k}の栞が足りません。${ERAS[e].part}のドリルで集めてこよう`);return}
+function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(boxHas(e)?`ホームの受け取りボックスに${ERAS[e].k}の栞が届いています。受け取ってからめくろう`:`${ERAS[e].k}の栞が足りません。${ERAS[e].part}のドリルで集めてこよう`);return}
  S.sh[e]-=cost;const res=[];for(let i=0;i<n;i++)res.push(tut?pickTutorial():draw1(e));if(tut)S.tutorial=true;
  if(n===10&&!res.some(x=>CARD[x].r>=2))res[9]=draw1(e,2);
  const tags=res.map(x=>{const before=lv(x);const r=giveCard(x);return before===0?'NEW':before<5?(lv(x)-1)+'凸':'史料片'});
@@ -6126,6 +6153,7 @@ const LX_POT={
  'ギリシアの火':'敵全体に20ダメージ。ただし自分もHPを6失う',
  '錬金術の霊薬':'エネルギー＋3。ただし手札に汚れ頁が2枚加わる',
  'ドクニンジンの杯':'敵全体に動揺3。ただし自分にも動揺2'};
+const lxIco=(k,c='')=>IMG['アイテム_'+k]?`<img class="lx-ico ${c}" src="${IMG['アイテム_'+k]}" alt="" draggable="false">`:'';
 const LX_POT_CURSE=new Set(['不老不死の薬','ギリシアの火','錬金術の霊薬','ドクニンジンの杯']);
 const lxCurse=k=>LX_RELIC_CURSE.has(k)||LX_POT_CURSE.has(k);
 /* 装備を手に入れる（免罪符は最大HPが下がる） */
@@ -6514,7 +6542,7 @@ function lxPileView(k){if(!X)return;const nm={draw:'山札',disc:'捨て札',exh
   ${L.length?`<div class="lx-grid pick">${L.map(c=>`<div class="lx-cell">${lxCardHTML(c.def)}</div>`).join('')}</div>`:'<p>まだありません。</p>'}`)}
 /* 装備・薬の札をタップすると説明が出る（iPadではマウスを乗せられないため） */
 document.addEventListener('click',e=>{const r=e.target.closest&&e.target.closest('.lx-relic');if(!r)return;const k=r.textContent.trim();const isPot=r.classList.contains('pot');const t=isPot?LX_POT[k]:LX_RELIC[k];if(!t)return;
- modal(`<h3>${isPot?'薬':'装備'}「${esc(k)}」</h3>${lxCurse(k)?'<p><i class="lx-ctag">デメリットあり</i></p>':''}<p style="line-height:1.8">${esc(t)}</p>${isPot?'<p class="muted">薬は戦闘中に使えます。</p>':''}<div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)});
+ modal(`${lxIco(k,'big')}<h3 style="text-align:center">${isPot?'薬':'装備'}「${esc(k)}」</h3>${lxCurse(k)?'<p><i class="lx-ctag">デメリットあり</i></p>':''}<p style="line-height:1.8">${esc(t)}</p>${isPot?'<p class="muted">薬は戦闘中に使えます。</p>':''}<div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)});
 function lxGlossary(){modal(`<h3>用語の説明</h3><div style="line-height:1.7;font-size:15px">${Object.keys(LX_TERMS).map(lxTermHTML).join('')}<p class="lx-tt"><b>人物の頁</b>そのターン最初に切った人物の頁でクイズが出る。正解すると、その頁の効果が1.5倍</p><p class="lx-tt"><b>基本の頁</b>名もなき兵士などの図書館の備品。クイズは出ず、1.5倍にもならない</p></div><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)}
 
 /* ---------- 戦闘の表示 ---------- */
@@ -6561,7 +6589,7 @@ function lxRenderBase(){const R=S.lib.run;
   else{X.sel=u;lxRender();if(c.def.cost>X.p.en)toast('エネルギーが足りない')}};}
 function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAlive();
  $('#lxMe').innerHTML=`<div class="lx-hprow">${lxShield(X.p.blk)}<div class="lx-hpbar"><i style="width:${100*Math.max(0,X.p.hp)/X.p.max}%"></i><span>HP ${Math.max(0,X.p.hp)}／${X.p.max}</span></div></div><div class="lx-st">${lxStHTML(X.p.st,0)}${X.pw.draw?`<i class="s-pw" data-term="持続">毎ターン＋${X.pw.draw}枚</i>`:''}${X.pw.en?`<i class="s-pw" data-term="持続">毎ターンエネルギー＋${X.pw.en}</i>`:''}${X.pw.blkEnd?`<i class="s-pw" data-term="持続">終了時に余白${X.pw.blkEnd}</i>`:''}${X.pw.atkBlk?`<i class="s-pw" data-term="持続">攻撃で余白${X.pw.atkBlk}</i>`:''}${X.pw.aoe?`<i class="s-pw" data-term="持続">毎ターン全体${X.pw.aoe}</i>`:''}${X.pw.jug?`<i class="s-pw" data-term="持続">余白でダメージ${X.pw.jug}</i>`:''}${X.pw.brut?`<i class="s-pw" data-term="持続">毎ターンHP−${X.pw.brut}・＋${X.pw.brut}枚</i>`:''}${X.rage?`<i class="s-blk">攻撃で余白${X.rage}</i>`:''}${X.dtap?`<i class="s-str">次の攻撃が2回</i>`:''}${X.halfQ?`<i class="s-pw">次のクイズは2択</i>`:''}${X.pw.barr?`<i class="s-pw" data-term="持続">余白が消えない</i>`:''}${X.pw.strTurn?`<i class="s-pw" data-term="持続">鍛錬 ${X.pw.strTurn}</i>`:''}${X.pw.powDraw?`<i class="s-pw" data-term="持続">布陣 ${X.pw.powDraw}</i>`:''}${X.pw.blkPlus?`<i class="s-pw" data-term="持続">鎧の重み ${X.pw.blkPlus}</i>`:''}${X.pw.comb?`<i class="s-pw" data-term="持続">燃焼 ${X.pw.comb}</i>`:''}${X.nextEn?`<i class="s-pw">次のターン エネルギー＋${X.nextEn}</i>`:''}${X.qok?`<i class="s-pw">正解 ${X.qok}問</i>`:''}${S.lib.run&&S.lib.run.qstreak?`<i class="s-pw">連続正解 ${S.lib.run.qstreak}</i>`:''}${X.pw.qok?`<i class="s-pw" data-term="持続">注釈癖 ${X.pw.qok}</i>`:''}</div>`;
- $('#lxGear').innerHTML=R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${esc(r)}</span>`).join('')+R.pots.map((p,i)=>`<button class="lx-pot ${lxCurse(p)?'curse':''}" data-p="${i}">${esc(p)}</button>`).join('');
+ $('#lxGear').innerHTML=R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${lxIco(r)}${esc(r)}</span>`).join('')+R.pots.map((p,i)=>`<button class="lx-pot ${lxCurse(p)?'curse':''}" data-p="${i}">${lxIco(p)}${esc(p)}</button>`).join('');
  $('#lxGear').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>lxUsePot(+b.dataset.p));
  $('#lxBonus').innerHTML=X.qz==='free'?'<span class="ok">改変を正した！　次に切る人物の頁は、クイズなしで1.5倍</span>':X.qz==='done'?'<span>このターンのクイズは終了</span>':'<span>このターン最初に切った人物の頁でクイズ（正解するとその頁が1.5倍）</span>';
  $('#lxEn').innerHTML=X.en.map((e,i)=>e.dead?'':`<div class="lx-e ${LX_EN[e.key].boss?'boss':''} ${LX_EN[e.key].elite?'elite':''} ${alive[X.tg]===e?'tg':''}" data-e="${i}">
@@ -6668,7 +6696,7 @@ function lxCharPick(cb){const L=lxLib();const cur=LX_CHARS[L.char]?L.char:'カ�
  show(`<div class="screen">${topbar('だれで探索する？','lib')}<div class="scroll"><div class="lx-menu"><div class="lx-chars">${Object.entries(LX_CHARS).map(([k,ch])=>`
   <div class="pane paper lx-char ${k===cur?'on':''}" data-ch="${esc(k)}"><div class="lx-char-art">${art(k,ch)}</div><div class="lx-char-tx">
    <h3>${esc(k)}${k==='カコ'?'<small>（あなた）</small>':''}</h3><p class="lx-char-st">${esc(ch.style)}</p>
-   <p class="lx-char-rl"><b>最初の装備</b>「${esc(ch.relic)}」${esc(LX_RELIC[ch.relic])}</p>
+   <p class="lx-char-rl">${lxIco(ch.relic,'mid')}<b>最初の装備</b>「${esc(ch.relic)}」${esc(LX_RELIC[ch.relic])}</p>
    <div class="lx-char-cd"><b>専用の頁</b>${ch.cards.map(c=>{const d=lxDef(c);return `<span><i>${d.cost}</i>${esc(d.name)}（${LX_TYPE[d.type]}）：${esc(d.text)}</span>`}).join('')}</div>
    <button class="btn ${k===cur?'red':''}" data-chgo="${esc(k)}">${esc(k)}で探索する</button></div></div>`).join('')}</div></div></div></div>`);
  app.querySelectorAll('[data-chgo]').forEach(b=>b.onclick=()=>cb(b.dataset.chgo))}
@@ -6742,7 +6770,7 @@ function lxMap(){const R=S.lib.run;if(!R)return LibMenu();if(!R.map){S.lib.run=n
    <div class="lxm-st"><span>HP <b>${R.hp}</b>／${R.max}</span><span>デッキ <b>${R.deck.length}</b>枚</span><span class="lx-silver">銀貨 <b>${R.silver||0}</b></span><button class="lxs-b dark" id="lxSee">デッキを見る</button></div></div>
   <div class="lxm-book ${ms.vert?'vert':''}"><div class="lxm-page"><div class="lxm-scroll" id="lxmScroll">${ms.svg}</div>
    <p class="lxm-foot"><b>${esc(SG.n)}</b>　STAGE ${R.stage+1}</p></div></div>
-  <div class="lxm-bar"><div class="lxm-gear">${R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${esc(r)}</span>`).join('')}${R.pots.map(p=>`<span class="lx-relic pot ${lxCurse(p)?'curse':''}">${esc(p)}</span>`).join('')}</div>
+  <div class="lxm-bar"><div class="lxm-gear">${R.relics.map(r=>`<span class="lx-relic ${lxCurse(r)?'curse':''}" title="${esc(LX_RELIC[r])}">${lxIco(r)}${esc(r)}</span>`).join('')}${R.pots.map(p=>`<span class="lx-relic pot ${lxCurse(p)?'curse':''}">${lxIco(p)}${esc(p)}</span>`).join('')}</div>
    <p class="lxm-msg">${R.cur?`「${esc(curT)}」の途中です。`:ch.length>1?'光っているマスから、次に進む場所を選ぼう。':'光っているマスをタップして進もう。'}　ボス：<b>${esc(R.boss)}</b></p>
    ${R.cur?'<button class="lxs-go sm" id="lxResume">つづきから<i>›</i></button>':''}</div></div>`);
  $('#lxSee').onclick=lxShowDeck;
@@ -6768,8 +6796,8 @@ function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();cons
  else if(n==='エリート'){const b=lxBt(R,LX_ELITE);toast('強い誤植が待ち構えている！');crumbleCut(()=>lxBattle('elite',b.keys,()=>lxReward(true),{seed:b.seed}))}
  else if(n==='ボス'){const b=lxBt(R,[[R.boss]]);bossCutLx(()=>lxBattle('boss',b.keys,()=>{lxComplete()},{seed:b.seed}))}
  else if(n==='休憩')lxRest();
- else if(n==='宝箱'){const roll=Math.random();const r=roll<.25?lxGiveRelic():null;if(!r&&roll<.7)lxReward(false,true);else if(r)modal(`<h3>宝箱を開けた</h3><p style="line-height:1.8">装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor);
-  else{const p=lxGivePot();modal(`<h3>宝箱を開けた</h3><p style="line-height:1.8">${p?`薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれない。中にあった焼き菓子を食べて、HPが10回復した。'}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor)}}
+ else if(n==='宝箱'){const roll=Math.random();const r=roll<.25?lxGiveRelic():null;if(!r&&roll<.7)lxReward(false,true);else if(r)modal(`<h3>宝箱を開けた</h3><p style="line-height:1.8">${lxIco(r,'big')}装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor);
+  else{const p=lxGivePot();modal(`<h3>宝箱を開けた</h3><p style="line-height:1.8">${p?`${lxIco(p,'big')}薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれない。中にあった焼き菓子を食べて、HPが10回復した。'}</p><div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,lxNextFloor)}}
  else if(n==='写本室')lxScribe();
  else if(n==='お店')lxShop();
  else{/* ？マス：中身は入ったときに決まる（途中でやめても同じ中身）。戦闘は15%、あとはイベント */
@@ -6780,7 +6808,7 @@ function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();cons
 function lxHurtRun(v){const R=S.lib.run;R.hp=Math.max(1,R.hp-v);save()}
 function lxHealRun(v){const R=S.lib.run;const a=Math.min(v,R.max-R.hp);R.hp+=a;save();return a}
 function lxAnnRandom(){const R=S.lib.run;const L=R.deck.map((_,i)=>i).filter(i=>!R.ann.includes(i));if(!L.length)return null;const i=L[Math.floor(Math.random()*L.length)];R.ann.push(i);save();return lxDef(R.deck[i]).name}
-const potMsg=p=>p?`薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれないので、その場で飲んだ。HPが10回復した。';
+const potMsg=p=>p?`${lxIco(p,'big')}薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`:'薬はもう持ちきれないので、その場で飲んだ。HPが10回復した。';
 const LX_EVENTS=[
  {id:'shelf',t:'崩れかけた本の山',d:'見上げるほど積まれた本の山が、ぐらりと揺れた。今にも崩れてきそうだ。',ch:[
   {l:'急いで支える',go:()=>{lxHurtRun(6);return '何とか支えきったけれど、上から落ちてきた本が頭に当たった。HPが6減った。<br>……崩れかけた山の奥に、小瓶が転がっていた。<br>'+potMsg(lxGivePot())}},
@@ -6792,7 +6820,7 @@ const LX_EVENTS=[
   {l:'ていねいに消す（HP−4）',go:()=>{lxHurtRun(4);const n=lxAnnRandom();return 'インクと格闘して、なんとか消し終えた。HPが4減った。<br>'+(n?`消しながら読んだ内容を、「<b>${esc(n)}</b>」の頁に書き足した（この探索のあいだ強化）。`:'')}},
   {l:'見なかったことにする',go:()=>'そっと頁を閉じた。'}]},
  {id:'lost',t:'司書の忘れ物',d:'閲覧机の上に、見慣れない道具が置き忘れてある。',ch:[
-  {l:'少しだけ借りる',go:()=>{const r=lxGiveRelic();return r?`装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'……と思ったら、ただの空き箱だった。'}},
+  {l:'少しだけ借りる',go:()=>{const r=lxGiveRelic();return r?`${lxIco(r,'big')}装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'……と思ったら、ただの空き箱だった。'}},
   {l:'受付に届ける',go:()=>`持ち主の司書に、お礼のお茶をごちそうになった。HPが${lxHealRun(12)}回復した。`}]},
  {id:'quizbook',t:'解きかけの問題集',d:'誰かが解きかけた問題集が、開いたまま置いてある。1問だけ答えを書き込んでみようか。',ch:[
   {l:'解いてみる',quiz:true},
@@ -6804,13 +6832,13 @@ const LX_EVENTS=[
   {l:'拾っておく',go:()=>{const R=S.lib.run;const v=20+Math.floor(Math.random()*16);R.silver=(R.silver||0)+v;save();return `銀貨を${v}枚拾った。`}},
   {l:'落とし物として届ける',go:()=>`受付の司書にほめられて、少し元気が出た。HPが${lxHealRun(8)}回復した。`}]},
  {id:'dealer',t:'あやしい古書商',d:'フードをかぶった古書商が「いい物があるよ。銀貨40枚でどうだい」とささやいてきた。',ch:[
-  {l:'銀貨40枚で買う',go:()=>{const R=S.lib.run;if((R.silver||0)<40)return '銀貨が足りなかった。古書商は肩をすくめて去っていった。';R.silver-=40;const r=lxGiveRelic();save();return r?`装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'……中身は空っぽだった。'}},
+  {l:'銀貨40枚で買う',go:()=>{const R=S.lib.run;if((R.silver||0)<40)return '銀貨が足りなかった。古書商は肩をすくめて去っていった。';R.silver-=40;const r=lxGiveRelic();save();return r?`${lxIco(r,'big')}装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'……中身は空っぽだった。'}},
   {l:'断る',go:()=>'古書商は闇の中へ消えていった。'}]},
  {id:'cursed',t:'鎖でつながれた宝物',d:'台座の上に、鎖でつながれた宝物がある。強い力を感じるが、どこか不吉だ。',ch:[
-  {l:'鎖をほどいて持っていく',go:()=>{const r=lxGiveRelic(true);return r?`装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'鎖の先には、もう何もなかった。'}},
+  {l:'鎖をほどいて持っていく',go:()=>{const r=lxGiveRelic(true);return r?`${lxIco(r,'big')}装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:'鎖の先には、もう何もなかった。'}},
   {l:'そっとしておく',go:()=>'見なかったことにした。'}]},
  {id:'alchemy',t:'錬金術師の机',d:'怪しげな薬瓶が並んだ机がある。「試してみるかね？ 効き目は保証するよ。副作用もね」',ch:[
-  {l:'1本もらう',go:()=>{const R=S.lib.run;if(R.pots.length>=3)return '薬はもう持ちきれない。錬金術師は残念そうに瓶を棚に戻した。';const p=lxGivePot(true);return `薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`}},
+  {l:'1本もらう',go:()=>{const R=S.lib.run;if(R.pots.length>=3)return '薬はもう持ちきれない。錬金術師は残念そうに瓶を棚に戻した。';const p=lxGivePot(true);return `${lxIco(p,'big')}薬「<b>${esc(p)}</b>」を手に入れた。<br>${esc(LX_POT[p])}（戦闘中に使えます）`}},
   {l:'断る',go:()=>'「賢明だね」と錬金術師は笑った。'}]},
  {id:'ink',t:'インクだまり',d:'通路いっぱいに、真っ黒なインクが広がっている。',ch:[
   {l:'飛び越える',go:()=>{if(Math.random()<.6)return 'ひらりと飛び越えた。';lxHurtRun(8);return '着地に失敗して、インクの中に転んだ。HPが8減った。'}},
@@ -6822,7 +6850,7 @@ function lxEvent(id){const E=LX_EVENTS.find(e=>e.id===id)||LX_EVENTS[0];
 function lxEventQuiz(E,done){const pool=Q.filter(q=>S.cleared[q.ch-1]);const L=pool.length?pool:Q.filter(q=>q.ch<=5);const q=L[Math.floor(Math.random()*L.length)];
  modal(`<h3>${esc(E.t)}</h3><p style="line-height:1.8;font-size:17px">${esc(q.q)}</p><div class="grid2 lx-evq">${shuffle([q.a,...q.d]).map(v=>`<button class="slip" data-v="${esc(v)}">${esc(v)}</button>`).join('')}</div>`);
  document.querySelectorAll('.lx-evq .slip').forEach(b=>b.onclick=()=>{const ok=b.dataset.v===q.a;closeModal(true);
-  if(ok){const r=Math.random()<.5?lxGiveRelic():null;const n=r?null:lxAnnRandom();done(`正解！ 余白に「よくできました」の花まるが現れた。<br>${r?`装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:n?`「<b>${esc(n)}</b>」の頁が強化された（この探索のあいだ）。`:''}<br><span class="who">シミ</span>${esc(q.x||'')}`)}
+  if(ok){const r=Math.random()<.5?lxGiveRelic():null;const n=r?null:lxAnnRandom();done(`正解！ 余白に「よくできました」の花まるが現れた。<br>${r?`${lxIco(r,'big')}装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:n?`「<b>${esc(n)}</b>」の頁が強化された（この探索のあいだ）。`:''}<br><span class="who">シミ</span>${esc(q.x||'')}`)}
   else done(`残念、正しくは「<b>${esc(q.a)}</b>」。<br><span class="who">シミ</span>${esc(q.x||'')}`)})}
 /* お店：頁5〜7枚・装備2つ・薬2つ・頁を外すサービス。品物は入ったときに決まる（出入りしても同じ） */
 const LX_PRICE={1:45,2:60,3:80};
@@ -6836,7 +6864,7 @@ function lxShop(){const R=S.lib.run;
  show(`<div class="screen">${topbar('お店','lib')}<div class="scroll"><div class="lx-menu">
   <div class="pane paper lx-shophead"><div><h3 style="margin:0">古書と道具の店</h3><p class="muted" style="margin:4px 0 0">「いらっしゃい。どれも書架の奥から拾ってきた掘り出し物だよ」</p></div><b class="lx-silver big">銀貨 ${sv}</b></div>
   <div class="pane paper"><h3>頁（この探索のあいだデッキに加わる）</h3><div class="lx-shopgrid">${S0.pages.map((o,i)=>item('pg',i,o,lxCardHTML(lxDef(o.id)))).join('')}</div></div>
-  <div class="pane paper"><h3>装備・薬</h3><div class="lx-shoprow">${S0.rel.map((o,i)=>item('rel',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}<b>装備「${esc(o.id)}」</b><small>${esc(LX_RELIC[o.id])}</small>`)).join('')}${S0.pot.map((o,i)=>item('pot',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}<b>薬「${esc(o.id)}」</b><small>${esc(LX_POT[o.id])}</small>`)).join('')}
+  <div class="pane paper"><h3>装備・薬</h3><div class="lx-shoprow">${S0.rel.map((o,i)=>item('rel',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}${lxIco(o.id,'mid')}<b>装備「${esc(o.id)}」</b><small>${esc(LX_RELIC[o.id])}</small>`)).join('')}${S0.pot.map((o,i)=>item('pot',i,o,`${lxCurse(o.id)?'<i class="lx-ctag">デメリットあり</i>':''}${lxIco(o.id,'mid')}<b>薬「${esc(o.id)}」</b><small>${esc(LX_POT[o.id])}</small>`)).join('')}
    ${item('rm',0,{p:R.rmCost,sold:R.rmUsed},`<b>頁を1枚外す</b><small>デッキから頁を1枚取り除く（1つのお店で1回まで）</small>`)}
    ${item('up',0,{p:75,sold:R.upUsed},`<b>頁に注釈を書き込む</b><small>頁を1枚強化する（1つのお店で1回まで）</small>`)}
    ${item('heal',0,{p:50,sold:R.healUsed},`<b>手当てを受ける</b><small>HPを${Math.floor(R.max*.3)}回復する（1つのお店で1回まで）。いまHP ${R.hp}／${R.max}</small>`)}</div></div>
@@ -6883,7 +6911,7 @@ function lxTipHTML(seen){const L=S.lib;L.tipN=L.tipN||{};const pool=(seen||[]).f
 function lxReward(elite,chest){const R=S.lib.run;let relic=null;if(elite)relic=lxGiveRelic();const coin=chest?0:elite?28+Math.floor(Math.random()*13):12+Math.floor(Math.random()*9);R.silver=(R.silver||0)+coin;save();
  const cand=lxRewardCands(R);
  show(`<div class="screen">${topbar(chest?'宝箱を開けた':'戦闘に勝った','lib')}<div class="scroll"><div class="lx-menu"><div class="pane paper">
-  ${relic?`<p style="line-height:1.8;margin:0 0 12px">装備「<b>${esc(relic)}</b>」を手に入れた。${esc(LX_RELIC[relic])}</p>`:''}
+  ${relic?`<p style="line-height:1.8;margin:0 0 12px">${lxIco(relic,'big')}装備「<b>${esc(relic)}</b>」を手に入れた。${esc(LX_RELIC[relic])}</p>`:''}
   ${chest?'<p style="line-height:1.8;margin:0 0 12px">宝箱の中には、古い頁が3枚入っていた。</p>':`<p class="lx-coin">銀貨を <b>${coin}枚</b> 手に入れた（いま ${R.silver}枚）</p>${lxTipHTML(R.tips)}`}<h3>頁を1枚、デッキに加える</h3><p class="muted" style="margin:0 0 10px">まだ持っていない頁も、この探索のあいだだけ借りられます。加えずに進むこともできます（デッキが少ないほど、狙った頁を引きやすくなります）。</p>
   <div class="lx-grid">${cand.map((id,i)=>`<div class="lx-cell" data-pick="${i}">${lxCardHTML(lxDef(id))}${CARD[id]&&!lv(id)?'<span class="lx-in rent">借りる</span>':''}</div>`).join('')}</div>
   <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" id="lxSkip">加えずに進む</button><button class="btn light" id="lxGl3">用語の説明</button></div></div></div></div></div>`);
@@ -6912,7 +6940,7 @@ function lxRest(){const R=S.lib.run;const heal=Math.floor(R.max*.3);
 function lxComplete(){const L=S.lib;const R=L.run;const si=R?R.stage||0:0;const SG=LX_STAGES[si];const g=[0,0,0];for(let k=0;k<SG.rew;k++)g[Math.floor(Math.random()*3)]++;
  g.forEach((v,i)=>{if(v)boxAdd(`図書館探索　第${si+1}層を完走`,i,v)});L.clears=(L.clears||0)+1;L.sc=L.sc||{};L.sc[si]=(L.sc[si]||0)+1;const first=L.best==null||si>L.best;if(first)L.best=si;L.run=null;saveNow();
  const opened=first&&si+1<LX_STAGES.length?`<br><b>第${si+2}層「${esc(LX_STAGES[si+1].n)}」</b>に進めるようになった。`:'';
- FX.flash('#ffe6a8');modal(`<h3>第${si+1}層を完走した！</h3><p style="line-height:1.8;text-align:center">${esc(SG.n)}の誤植を退治した。<br>お礼の<b>${gainText(g)}</b>が、受け取りボックスに届いた。${opened}</p>${lxTipHTML(R&&R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
+ FX.flash('#ffe6a8');modal(`<h3>第${si+1}層を完走した！</h3><p style="line-height:1.8;text-align:center">${esc(SG.n)}の誤植を退治した。<br>お礼の<b>${gainText(g)}</b>が、ホームの受け取りボックスに届いた。${opened}</p>${lxTipHTML(R&&R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
 
 Title();
 cloudInit();
