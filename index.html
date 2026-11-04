@@ -4834,8 +4834,8 @@ function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;{const tb=$('#tb'
  const ps=pageSize();PL.pages=txt.split('【改行】').map(x=>x.trim()).filter(Boolean).flatMap(x=>paginate(x,ps));if(!PL.pages.length)PL.pages=[''];PL.pg=0;typePage()}
 /* ---------- 立ち絵の並び（話している人を明るく、ほかは少し暗く） ---------- */
 /* 背丈の差：コンラッド（187cm）の頭の高さを基準に、低い人ほど立ち絵を下げる（立ち絵の高さに対する%）。
-   シミ175cm（羽飾りなし）・フィデリス180cm。1cm＝約0.94%（頭の大きさから換算） */
-const CAST_DY={'シミ':7.8,'フィデリス':6.0};
+   シミ175cm（羽飾りなし）・フィデリス180cm・ヌル160cm。1cm＝約0.94%（頭の大きさから換算） */
+const CAST_DY={'シミ':7.8,'フィデリス':6.0,'ヌル':24.8};
 const CAST_WIN=7; /* この行数のあいだ話さなかった人は下がる */
 function castMax(){const s=$('#story');if(!s)return 2;return s.clientWidth/s.clientHeight>=1.2?3:2}
 function soloFig(html,cls){setFig(html,cls);PL.solo=true;const c=$('#cast');if(c)c.classList.add('off')}
