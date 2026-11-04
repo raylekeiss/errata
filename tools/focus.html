@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>肖像の顔位置</title>
+<style>
+:root{--bg:#1c2540;--pa:#f3ead6;--ink:#2a2320;--red:#c4302b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--pa);font-family:"Hiragino Sans","Noto Sans JP",sans-serif}
+header{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 16px;background:#141b30;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+header h1{font-size:17px;margin:0 8px 0 0}header input{flex:1;min-width:140px;padding:8px 10px;font-size:15px;border-radius:4px;border:0}
+button{font:inherit;border:0;border-radius:4px;padding:8px 14px;cursor:pointer;background:var(--pa);color:var(--ink);min-height:40px}button.red{background:var(--red);color:#fff}
+.note{font-size:12px;opacity:.8;padding:6px 16px;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:12px 16px 40px}
+.it{cursor:pointer;font-size:12px}.it.ch b::after{content:" ●";color:#f2c94c}.it.none{opacity:.6}
+.fr{position:relative;width:100%;aspect-ratio:1.665;overflow:hidden;border-radius:4px;background:#151b30;container-type:size}
+.fr.c{aspect-ratio:.89}
+.fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fr img.fc{inset:auto;object-fit:fill;max-width:none;--hb:max(calc(100cqw / var(--ia)),100cqh);--h:clamp(var(--hb),calc(var(--t) / var(--s) * 100cqh),calc(var(--hb) * var(--zm)));
+ height:var(--h);width:calc(var(--h) * var(--ia));left:clamp(calc(100cqw - var(--h) * var(--ia)),calc(50cqw - var(--fx) * var(--h) * var(--ia)),0px);top:clamp(calc(100cqh - var(--h)),calc(var(--cy) * 100cqh - var(--fy) * var(--h)),0px)}
+.fr{--t:.42;--cy:.46;--zm:2.4}.fr.c{--t:.3;--cy:.42;--zm:2}
+.ed{position:fixed;inset:0;z-index:9;background:rgba(10,14,28,.92);display:flex;gap:20px;padding:16px;align-items:flex-start;justify-content:center;overflow:auto}
+.ed .src{position:relative;max-width:min(60vw,560px);flex:none}.ed .src img{display:block;max-width:100%;max-height:82vh;cursor:crosshair}
+.ed .dot{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border:3px solid #f33;border-radius:50%;pointer-events:none;box-shadow:0 0 0 2px #fff}
+.ed .box{position:absolute;border:2px dashed #f2c94c;pointer-events:none}
+.ed .side{width:260px;display:flex;flex-direction:column;gap:12px}.ed h2{margin:0;font-size:18px}
+.ed .pv{display:flex;gap:10px}.ed .pv .fr{width:150px}.ed .pv .fr.c{width:110px}
+.ed label{font-size:13px}.ed input[type=range]{width:100%}
+pre{white-space:pre-wrap;word-break:break-all;background:#0c1122;padding:10px;border-radius:4px;max-height:50vh;overflow:auto;font-size:11px}
+</style></head><body>
+<header><h1>肖像の顔位置</h1><input id="q" placeholder="人物名で絞りこむ"><button id="onlyNone">未設定だけ</button><button class="red" id="exp">書き出す</button></header>
+<p class="note">肖像をタップ → 眉間をタップ → 黄色の枠が顔の大きさになるようにスライダーを合わせる。直した分はこの端末のゲームにすぐ反映されます（同じブラウザで開いたとき）。全員の端末に反映するには「書き出す」の一覧を index.html の FOCUS に貼るか、Claudeに渡してください。硬貨・書道などは「顔なし」にすると、今まで通りの表示になります。</p>
+<div class="grid" id="g"></div>
+<script>
+const KEY='errata_focus';let FOCUS={},IMG={},NAMES=[],LOCAL={},ONLY=false;
+try{LOCAL=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+fetch('../index.html').then(r=>r.text()).then(t=>{
+ const d=JSON.parse(t.match(/<script[^>]*id="errata-data"[^>]*>([\s\S]*?)<\/script>/)[1]);
+ const ib=t.slice(t.indexOf('const IMG={'));const ie=ib.slice(0,ib.indexOf('};'));for(const m of ie.matchAll(/"([^"]+)": "([^"]+)"/g))IMG[m[1]]='../'+m[2];
+ const fb=t.slice(t.indexOf('const FOCUS={')+12);FOCUS=Function('return '+fb.slice(0,fb.indexOf('};')+1))();
+ NAMES=d.cards.map(c=>c.n).filter(n=>IMG[n]);draw()});
+const cur=n=>n in LOCAL?LOCAL[n]:FOCUS[n];
+const imgTag=(n,f)=>f?`<img src="${IMG[n]}" class="fc" style="--fx:${f[0]/100};--fy:${f[1]/100};--s:${f[2]};--ia:${f[3]}">`:`<img src="${IMG[n]}">`;
+function draw(){const q=document.getElementById('q').value.trim();
+ document.getElementById('g').innerHTML=NAMES.filter(n=>(!q||n.includes(q))&&(!ONLY||!cur(n))).map(n=>{const f=cur(n);return `<div class="it ${n in LOCAL?'ch':''} ${f?'':'none'}" data-n="${esc(n)}"><div class="fr">${imgTag(n,f)}</div><b>${esc(n)}</b>${f?'':'（顔なし）'}</div>`}).join('');
+ document.querySelectorAll('.it').forEach(e=>e.onclick=()=>edit(e.dataset.n))}
+document.getElementById('q').oninput=draw;
+document.getElementById('onlyNone').onclick=e=>{ONLY=!ONLY;e.target.textContent=ONLY?'すべて表示':'未設定だけ';draw()};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(LOCAL))}catch(e){}}
+function edit(n){let f=(cur(n)||[50,25,.15,0]).slice();const ed=document.createElement('div');ed.className='ed';
+ ed.innerHTML=`<div class="src"><img id="si" src="${IMG[n]}"><i class="box" id="bx"></i><i class="dot" id="dt"></i></div>
+ <div class="side"><h2>${esc(n)}</h2><label>顔の大きさ（画像の高さに対して）<input type="range" id="sz" min="0.02" max="0.6" step="0.005"></label>
+ <div class="pv"><div class="fr" id="p1"></div><div class="fr c" id="p2"></div></div>
+ <button class="red" id="ok">これで決定</button><button id="no">顔なしにする</button>${n in LOCAL?'<button id="rs">直す前に戻す</button>':''}<button id="cl">閉じる</button></div>`;
+ document.body.appendChild(ed);const si=ed.querySelector('#si');
+ const upd=()=>{if(!f[3]&&si.naturalWidth)f[3]=+(si.naturalWidth/si.naturalHeight).toFixed(3);const W=si.clientWidth,H=si.clientHeight;
+  const dt=ed.querySelector('#dt');dt.style.left=f[0]/100*W+'px';dt.style.top=f[1]/100*H+'px';
+  const bx=ed.querySelector('#bx'),h=f[2]*H;bx.style.width=h*.8+'px';bx.style.height=h+'px';bx.style.left=f[0]/100*W-h*.4+'px';bx.style.top=f[1]/100*H-h*.42+'px';
+  ed.querySelector('#sz').value=f[2];ed.querySelector('#p1').innerHTML=imgTag(n,f);ed.querySelector('#p2').innerHTML=imgTag(n,f)};
+ si.onload=upd;if(si.complete)upd();
+ si.onclick=e=>{const r=si.getBoundingClientRect();f[0]=Math.round((e.clientX-r.left)/r.width*100);f[1]=Math.round((e.clientY-r.top)/r.height*100);upd()};
+ ed.querySelector('#sz').oninput=e=>{f[2]=+e.target.value;upd()};
+ const close=()=>{ed.remove();draw()};
+ ed.querySelector('#ok').onclick=()=>{LOCAL[n]=f;save();close()};
+ ed.querySelector('#no').onclick=()=>{LOCAL[n]=null;save();close()};
+ const rs=ed.querySelector('#rs');if(rs)rs.onclick=()=>{delete LOCAL[n];save();close()};
+ ed.querySelector('#cl').onclick=close}
+document.getElementById('exp').onclick=()=>{const all={...FOCUS};for(const k in LOCAL){if(LOCAL[k])all[k]=LOCAL[k];else delete all[k]}
+ const txt='const FOCUS={\n'+Object.entries(all).map(([k,v])=>`"${k}":[${v.join(',')}]`).join(',\n')+'};';
+ const ed=document.createElement('div');ed.className='ed';ed.innerHTML=`<div class="side" style="width:min(700px,94vw)"><h2>書き出し（直した人：${Object.keys(LOCAL).length}人）</h2><pre>${esc(txt)}</pre><button class="red" id="cp">コピーする</button><button id="cl">閉じる</button></div>`;
+ document.body.appendChild(ed);ed.querySelector('#cp').onclick=()=>{navigator.clipboard.writeText(txt).then(()=>ed.querySelector('#cp').textContent='コピーしました')};ed.querySelector('#cl').onclick=()=>ed.remove()};
+</script></body></html>
