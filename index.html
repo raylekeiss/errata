@@ -1824,6 +1824,36 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 @keyframes cmin2{from{opacity:0}to{opacity:1}}
 .vn-cast .cm{transition:left .6s cubic-bezier(.3,.8,.3,1),opacity .45s}
 @media (orientation:portrait){.vn-cast .cm .hop{max-width:46vw}}
+
+/* ===== 横スクロールの地図 ===== */
+.mp.h{background:#0c0f1c}
+.mp.h::before{height:calc(env(safe-area-inset-top,0px) + 70px)}
+.mp.h .mp-sc{overflow-x:auto;overflow-y:hidden;overscroll-behavior:contain;cursor:grab}
+.mp.h .mp-in{margin:0}
+.mp-bg{position:absolute;inset:0;background:left top/100% 100% no-repeat}
+.mp-bg.flip{transform:scaleX(-1)}
+.mp-dim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,10,20,.35),transparent 30%),linear-gradient(180deg,rgba(8,10,20,.45),transparent 22%)}
+.mp.h .mp-path{position:absolute;left:0;top:0;width:auto;height:auto}
+.mp.h .mp-path path{stroke-width:5;stroke-dasharray:3 13}
+.mp.h .mp-path .all{stroke:rgba(243,234,214,.5)}
+.mp.h .mp-node{z-index:2}
+.mp-plaque.h{position:absolute;z-index:4;left:clamp(12px,2vw,24px);top:calc(env(safe-area-inset-top,0px) + 12px);transform:none;width:auto;max-width:min(420px,60vw);text-align:left;padding:8px 16px 10px}
+.mp-plaque.h .t{font-size:18px}
+.mp-plaque.h .fl{display:flex;gap:5px;margin-top:6px}
+.mp-plaque.h .fl i{width:16px;height:4px;border-radius:2px;background:rgba(241,227,191,.3)}
+.mp-plaque.h .fl i.on{background:#e8cf86}
+.mp-door{position:absolute;z-index:2;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:#f1e3bf;font-family:var(--serif)}
+.mp-door .dr{width:68px;height:92px;border-radius:34px 34px 4px 4px;display:flex;align-items:center;justify-content:center;font-size:40px;line-height:1;
+ background:linear-gradient(180deg,#5a3a22,#2a1b10);box-shadow:inset 0 0 0 3px #c9a24a,0 0 0 2px #2a1b10,0 0 24px rgba(232,207,134,.45),0 10px 20px rgba(0,0,0,.6)}
+.mp-door .dr svg{width:26px;height:26px;color:#a39684}
+.mp-door .dl{display:flex;flex-direction:column;align-items:center;font-size:14px;letter-spacing:.08em;text-shadow:0 1px 3px #000,0 0 6px #000;white-space:nowrap}
+.mp-door .dl small{font-family:var(--sans);font-size:11px;opacity:.85}
+.mp-door.r:not(.locked):not(.soon) .dr{animation:mp-door 2s ease-in-out infinite}
+@keyframes mp-door{50%{box-shadow:inset 0 0 0 3px #c9a24a,0 0 0 2px #2a1b10,0 0 40px rgba(232,207,134,.85),0 10px 20px rgba(0,0,0,.6)}}
+.mp-door.locked .dr,.mp-door.soon .dr{background:#3a322b;box-shadow:inset 0 0 0 3px #5b5048,0 10px 20px rgba(0,0,0,.6)}
+.mp-door.locked .dl,.mp-door.soon .dl{opacity:.7}
+.mp-door.start .dr{width:56px;height:76px;opacity:.55}
+.mp-door:active .dr{transform:scale(.94)}
 </style>
 </head>
 <body>
@@ -4323,6 +4353,7 @@ const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
+"地図_背景": "img/lib/map_bg.webp",
 "店_背景": "img/lib/shop_bg.webp",
 "店_店主": "img/lib/shopkeeper.webp",
 "店_床": "img/lib/shop_floor.webp",
@@ -5360,46 +5391,66 @@ const MAP_IC={
  pro:'<svg viewBox="0 0 32 32"><path d="M6 28V12a10 10 0 0 1 20 0v16z" fill="#3a2a1c" stroke="#c9a24a" stroke-width="1.4"/><path d="M16 4v24" stroke="#c9a24a" stroke-width="1"/><circle cx="13" cy="18" r="1" fill="#c9a24a"/><circle cx="19" cy="18" r="1" fill="#c9a24a"/></svg>',
  lock:'<svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="11" width="14" height="10" rx="1.5" fill="currentColor"/></svg>'};
 let MAP_NEW=null; // 直前に開いたステージ（演出用）
-function mapShelf(x,y,w,h,seed){let r=seed*9301+49297;const R=()=>{r=(r*9301+49297)%233280;return r/233280};
- const cols=['#7a2e3a','#2e5c7a','#5b4a86','#3e7a4f','#a8873a','#6b3a24','#8a6d3a','#4a5a78'];let g='';let yy=0;
- while(yy<h-4){const hh=4+R()*5;g+=`<i style="top:${yy}px;height:${hh.toFixed(1)}px;background:${cols[Math.floor(R()*cols.length)]};width:${(78+R()*20).toFixed(0)}%"></i>`;yy+=hh+1}
- return `<div class="mp-shelf" style="left:${x}%;top:${y}px;width:${w}%;height:${h}px">${g}</div>`}
-function StoryMap(p){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PARTS[p];const all=stages();
- const L=all.filter(s=>s.k==='pro'?p===0:partOf(s.ch)===p);const cur=stCurrent();
- const STEP=118,TOP=innerHeight>innerWidth?430:350;let y=TOP;const items=[];let lastCh=-1;let k=0;
- for(const st of L){if(st.k!=='pro'&&st.ch!==lastCh){lastCh=st.ch;y+=st===L[0]?0:30;items.push({h:1,ch:st.ch,y});y+=152}
-  const x=50+27*Math.sin(k*1.1+.4);items.push({st,x,y});y+=STEP;k++}
- const missing=P.chs.filter(c=>c>0&&!(c<STORY.length));if(missing.length){y+=20;items.push({soon:1,chs:missing,y});y+=120}
- const H=y+80;
- const nodes=items.filter(o=>o.st);
- let d='';nodes.forEach((o,i)=>{if(!i){d=`M${o.x} ${o.y}`;return}const a=nodes[i-1];const my=(a.y+o.y)/2;d+=` C${a.x} ${my} ${o.x} ${my} ${o.x} ${o.y}`});
- const passIdx=nodes.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);
- let dDone='';if(passIdx>=0){const nn=nodes.slice(0,Math.min(nodes.length,passIdx+2));nn.forEach((o,i)=>{if(!i){dDone=`M${o.x} ${o.y}`;return}const a=nn[i-1];const my=(a.y+o.y)/2;dDone+=` C${a.x} ${my} ${o.x} ${my} ${o.x} ${o.y}`})}
- let deco='';for(let yy=TOP-60,s=1;yy<H-120;yy+=150,s++){deco+=mapShelf(1.5,yy,13,120,s)+mapShelf(85.5,yy+40,13,120,s+50)}
+/* 横スクロールの地図。1章＝1フロア（序章は第1章のフロアに入る）。右端の扉で次のフロアへ */
+const MAP_AR=4.05; // 背景画像の横÷縦
+let MAP_FL={};
+function mapFloors(p){const P=PARTS[p];return P.chs.filter(c=>c>0&&c<STORY.length)}
+function mapFloorOf(st){return st.k==='pro'?1:st.ch}
+function mapRand(seed){let r=seed*9301+49297;return()=>{r=(r*9301+49297)%233280;return r/233280}}
+function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PARTS[p];const all=stages();const cur=stCurrent();
+ const F=mapFloors(p);if(!F.length){StoryMenu();return}
+ let ch=fl!=null?fl:MAP_FL[p];
+ if(fl==null){const tgt=MAP_NEW?all.find(s=>s.id===MAP_NEW):cur;if(tgt&&(tgt.k==='pro'?p===0:partOf(tgt.ch)===p))ch=mapFloorOf(tgt)}
+ if(!F.includes(ch))ch=F[0];MAP_FL[p]=ch;const fi=F.indexOf(ch);
+ const L=all.filter(s=>s.k==='pro'?(p===0&&ch===1):s.ch===ch);
+ const H=Math.max(320,innerHeight),W=Math.round(H*MAP_AR);
+ const R=mapRand(ch*7+3);const n=L.length;const x0=W*.08,x1=W*.9;
+ let yb=.64;const pts=L.map((st,i)=>{yb=Math.min(.76,Math.max(.52,yb+(R()-.5)*.16));const x=n>1?x0+(x1-x0)*i/(n-1)+(R()-.5)*W*.012:W/2;return{st,x:Math.round(x),y:Math.round(H*yb)}});
+ const ends=[{x:80,y:Math.round(H*.66)},{x:W-80,y:Math.round(H*.66)}];
+ const curve=a=>a.map((o,i)=>{if(!i)return`M${o.x} ${o.y}`;const b=a[i-1],mx=(b.x+o.x)/2;return` C${mx} ${b.y} ${mx} ${o.y} ${o.x} ${o.y}`}).join('');
+ const dAll=curve([ends[0],...pts,ends[1]]);
+ const passIdx=pts.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);const dDone=passIdx>=0?curve([ends[0],...pts.slice(0,Math.min(pts.length,passIdx+2))]):'';
  const node=o=>{const st=o.st;const pass=stPassed(st),open=stUnlocked(st),now=cur&&cur.id===st.id;const r=stRec(st)||{};
   const ic=st.k==='pro'?MAP_IC.pro:st.k==='qz'?MAP_IC.qz:(st.last?MAP_IC.last:MAP_IC.sec);
   const lab=st.k==='pro'?'序章':st.k==='sec'?`${st.n+1}節`:'誤植の群れ';
   const sub=st.k==='qz'?starsHTML(r.b||0,stTier(r.c||0)):`<small>${esc(stPlace(st))}</small>`;
-  return `<button class="mp-node ${st.k} ${st.last?'last':''} ${pass?'pass':''} ${open?'':'locked'} ${now?'now':''} ${MAP_NEW===st.id?'fresh':''}" data-si="${st.i}" style="left:${o.x}%;top:${o.y}px">
+  return `<button class="mp-node ${st.k} ${st.last?'last':''} ${pass?'pass':''} ${open?'':'locked'} ${now?'now':''} ${MAP_NEW===st.id?'fresh':''}" data-si="${st.i}" style="left:${o.x}px;top:${o.y}px">
    <span class="mp-ic">${open?ic:MAP_IC.lock}</span>${now?'<span class="mp-here">ここから</span>':''}${pass&&st.k!=='qz'?'<span class="mp-seal">修復済</span>':''}
    <span class="mp-lab"><b>${lab}</b>${sub}</span></button>`};
- const head=o=>`<div class="mp-plaque" style="top:${o.y}px"><span class="n">${CHNAME[o.ch]}</span><span class="t">${esc(STORY[o.ch].title)}</span><span class="s">${esc(CHT[o.ch])}</span></div>`;
- const soon=o=>`<div class="mp-plaque soon" style="top:${o.y}px"><span class="n">${o.chs.length>1?`${CHNAME[o.chs[0]]}〜${CHNAME[o.chs[o.chs.length-1]]}`:CHNAME[o.chs[0]]}</span><span class="t">この先の書架は、まだ誤植に食われていて進めない</span><span class="s">準備中</span></div>`;
- show(`<div class="mp" id="smap"><div class="mp-sc" id="mpSc"><div class="mp-in" style="height:${H}px">
-   <div class="mp-floor"></div>${deco}
-   <div class="mp-cover"><span class="n">${P.n}</span><h2>${esc(P.t).replace(/\n/g,'<br>')}</h2><p class="sub">${esc(P.sub)}</p><p class="story">${esc(P.story)}</p></div>
-   <svg class="mp-path" viewBox="0 0 100 ${H}" preserveAspectRatio="none"><path d="${d}" class="all" vector-effect="non-scaling-stroke"/>${dDone?`<path d="${dDone}" class="done" vector-effect="non-scaling-stroke"/>`:''}</svg>
-   ${items.map(o=>o.h?head(o):o.soon?soon(o):node(o)).join('')}
+ /* 両端の扉 */
+ const prevCh=fi>0?F[fi-1]:null,nextCh=fi<F.length-1?F[fi+1]:null;
+ const lastSt=L[L.length-1];const nextOpen=lastSt&&stPassed(lastSt);
+ const missing=P.chs.filter(c=>c>0&&!(c<STORY.length));
+ let right;
+ if(nextCh!=null)right=`<button class="mp-door r ${nextOpen?'':'locked'}" id="mpNext" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${nextOpen?'›':MAP_IC.lock}</span><span class="dl">次のフロアへ<small>${CHNAME[nextCh]}</small></span></button>`;
+ else if(missing.length)right=`<div class="mp-door r soon" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${MAP_IC.lock}</span><span class="dl">この先は準備中<small>${CHNAME[missing[0]]}〜</small></span></div>`;
+ else right=p<PARTS.length-1?`<button class="mp-door r" id="mpPart" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">›</span><span class="dl">部を選ぶ<small>${PARTS[p+1].n}へ</small></span></button>`:'';
+ const left=prevCh!=null?`<button class="mp-door l" id="mpPrev" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr">‹</span><span class="dl">前のフロアへ<small>${CHNAME[prevCh]}</small></span></button>`:`<div class="mp-door l start" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr"></span></div>`;
+ show(`<div class="mp h" id="smap"><div class="mp-sc" id="mpSc"><div class="mp-in" style="width:${W}px;height:${H}px">
+   <div class="mp-bg ${fi%2?'flip':''}" style="background-image:url(${IMG['地図_背景']})"></div><div class="mp-dim"></div>
+   <svg class="mp-path" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><path d="${dAll}" class="all"/>${dDone?`<path d="${dDone}" class="done"/>`:''}</svg>
+   ${left}${pts.map(node).join('')}${right}
   </div></div>
-  <div class="scr-title">${P.n}</div>
+  <div class="mp-plaque h"><span class="n">${P.n}　${CHNAME[ch]}</span><span class="t">${esc(STORY[ch].title)}</span><span class="s">${esc(CHT[ch])}</span>
+   <span class="fl">${F.map(c=>`<i class="${c===ch?'on':''}"></i>`).join('')}</span></div>
   <div class="gc-top"><button class="gc-back" id="mpBack">部を選ぶ</button>${coinsHTML()}</div>
   <div class="mp-pop" id="mpPop" hidden></div></div>`);
  $('#mpBack').onclick=()=>FX.pageTurn(StoryMenu);
+ const go=c=>FX.pageTurn(()=>StoryMap(p,c));
+ {const b=$('#mpPrev');if(b)b.onclick=e=>{e.stopPropagation();go(prevCh)}}
+ {const b=$('#mpNext');if(b)b.onclick=e=>{e.stopPropagation();if(!nextOpen){FX.shake(b);toast('このフロアの最後のステージを修復すると、次のフロアへ進めます');return}go(nextCh)}}
+ {const b=$('#mpPart');if(b)b.onclick=e=>{e.stopPropagation();FX.pageTurn(StoryMenu)}}
  document.querySelectorAll('.mp-node').forEach(b=>b.onclick=e=>{e.stopPropagation();const st=stages()[+b.dataset.si];
   if(!stUnlocked(st)){FX.shake(b);toast('ひとつ前のステージを修復すると、進めるようになります');return}mapPop(st)});
- $('#mpSc').addEventListener('click',e=>{if(!e.target.closest('.mp-pop'))mapPopClose()});
- const sc=$('#mpSc');const focus=document.querySelector(MAP_NEW?`.mp-node.fresh`:'.mp-node.now')||document.querySelector('.mp-node.pass:last-of-type');
- if(focus&&sc)sc.scrollTop=Math.max(0,focus.offsetTop-sc.clientHeight*.45);MAP_NEW=null}
+ const sc=$('#mpSc');sc.addEventListener('click',e=>{if(!e.target.closest('.mp-pop'))mapPopClose()});
+ sc.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){sc.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+ /* マウスでもドラッグで動かせるように */
+ {let dx=null,sl=0,moved=false;sc.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;dx=e.clientX;sl=sc.scrollLeft;moved=false});
+  addEventListener('pointermove',e=>{if(dx==null)return;if(Math.abs(e.clientX-dx)>4)moved=true;sc.scrollLeft=sl-(e.clientX-dx)});
+  addEventListener('pointerup',()=>{dx=null});sc.addEventListener('click',e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true)}
+ const focus=document.querySelector(MAP_NEW?'.mp-node.fresh':'.mp-node.now');
+ if(focus)sc.scrollLeft=Math.max(0,focus.offsetLeft-sc.clientWidth*.45);else if(fl!=null&&fl<(MAP_FL._from||0))sc.scrollLeft=W;
+ MAP_FL._from=ch;MAP_NEW=null}
 function mapPopClose(){const p=$('#mpPop');if(p)p.hidden=true;document.querySelectorAll('.mp-node.sel').forEach(x=>x.classList.remove('sel'))}
 function mapPop(st){const p=$('#mpPop');if(!p)return;document.querySelectorAll('.mp-node.sel').forEach(x=>x.classList.remove('sel'));const nb=document.querySelector(`.mp-node[data-si="${st.i}"]`);if(nb)nb.classList.add('sel');
  const r=stRec(st)||{};const pass=stPassed(st);let body='',btn='';
