@@ -1814,6 +1814,16 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .shp-say{animation:shp-say-in .4s ease-out .95s both}
 @keyframes shp-say-in{from{transform:translateY(16px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.shp-bg,.shp-shade,.shp-keeper,.shp-say{animation:none!important}}
+
+/* 話す人：跳ねさせず、少し前に出て明るくなる（transitionだけでなめらかに） */
+.vn-cast .cm .hop{transition:transform .35s cubic-bezier(.3,.8,.3,1);transform-origin:50% 100%}
+.vn-cast .cm.talk .hop{transform:scale(1.035)}
+.vn-cast .cm:not(.talk):not(.solo) .hop{transform:scale(.985)}
+.vn-cast .cm img{transition:filter .4s ease}
+.vn-cast .cm.in{animation:cmin2 .5s ease-out both}
+@keyframes cmin2{from{opacity:0}to{opacity:1}}
+.vn-cast .cm{transition:left .6s cubic-bezier(.3,.8,.3,1),opacity .45s}
+@media (orientation:portrait){.vn-cast .cm .hop{max-width:46vw}}
 </style>
 </head>
 <body>
@@ -5591,8 +5601,8 @@ function renderLine(e){const np=$('#np'),say=$('#say');PL.ln++;{const tb=$('#tb'
 /* 背丈の差：コンラッド（187cm）の頭の高さを基準に、低い人ほど立ち絵を下げる（立ち絵の高さに対する%）。
    シミ175cm（羽飾りなし）・フィデリス180cm・ヌル160cm。1cm＝約0.94%（頭の大きさから換算） */
 const CAST_DY={'シミ':7.8,'フィデリス':6.0,'ヌル':24.8};
-const CAST_WIN=7; /* この行数のあいだ話さなかった人は下がる */
-function castMax(){const s=$('#story');if(!s)return 2;return s.clientWidth/s.clientHeight>=1.2?3:2}
+const CAST_WIN=Infinity; /* 話さなくても下がらない（場面が変わるか「立ち去る」などの地の文で下がる）。下げたいときは数字にする */
+function castMax(){return 3} /* 縦画面でも3人まで並べる（入れかわりで出入りが続かないように） */
 function soloFig(html,cls){setFig(html,cls);PL.solo=true;const c=$('#cast');if(c)c.classList.add('off')}
 function endSolo(){if(!PL.solo)return;PL.solo=false;setFig('');const f=$('#fig');if(f)f.dataset.who='';const c=$('#cast');if(c)c.classList.remove('off')}
 function castClear(){if(!PL)return;PL.cast=[];endSolo();const c=$('#cast');if(c)c.innerHTML=''}
@@ -5606,7 +5616,7 @@ function castExits(t){if(!PL.cast.length)return;
  const sents=t.split('。');PL.cast=PL.cast.filter(m=>!sents.some(s=>(s.includes(m.k)||Object.keys(CAST_ALIAS).some(a=>CAST_ALIAS[a]===m.k&&s.includes(a)))&&/消え|姿を消|引っ込|立ち去|去ってい|姿はもうない/.test(s)))}
 function castMentioned(t){const m=PL.cast.find(x=>t.includes(x.k)||Object.keys(CAST_ALIAS).some(a=>CAST_ALIAS[a]===x.k&&t.includes(a)));return m?`#cast .cm[data-k="${m.k}"]`:null}
 function castRender(talker){const box=$('#cast');if(!box)return;const L=PL.cast;
- const pos={1:[50],2:[31,69],3:[20,50,80]}[L.length]||[];
+ const nar=($('#story')||{}).clientWidth/(($('#story')||{}).clientHeight||1)<1.2;const pos={1:[50],2:nar?[30,70]:[31,69],3:nar?[18,50,82]:[20,50,80]}[L.length]||[];
  const order=L.slice().sort((a,b)=>a.first-b.first);
  [...box.children].forEach(el=>{if(!L.some(x=>x.k===el.dataset.k)){el.classList.add('out');setTimeout(()=>el.remove(),320)}});
  order.forEach((m,i)=>{let el=[...box.children].find(x=>x.dataset.k===m.k&&!x.classList.contains('out'));
@@ -5615,7 +5625,7 @@ function castRender(talker){const box=$('#cast');if(!box)return;const L=PL.cast;
    el.style.left=pos[i]+'%';box.appendChild(el);setTimeout(()=>el.classList.remove('in'),400)}
   el.style.left=pos[i]+'%';
   const was=el.classList.contains('talk');el.classList.toggle('talk',m.k===talker);el.classList.toggle('solo',L.length===1&&!talker);
-  if(m.k===talker&&!was&&L.length>1)FX._replay(el,'hopping',340)})}
+  })}
 /* 立ち絵の表情：指定された人だけ差分にし、ほかは通常に戻す */
 function castFaces(who,ex){const box=$('#cast');if(!box)return;[...box.children].forEach(el=>{const k=el.dataset.k,img=el.querySelector('img');if(!img||!IMG[k])return;const src=(k===who&&ex&&IMG[k+'_'+ex])||IMG[k];if(img.getAttribute('src')!==src)img.setAttribute('src',src)})}
 function isLibBg(k){return !k||/^背景_書庫/.test(k)}
