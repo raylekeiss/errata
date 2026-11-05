@@ -1860,6 +1860,24 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .mp-sign::after{content:"";position:absolute;left:50%;top:100%;width:3px;height:26px;margin-left:-1.5px;background:#5a3a22}
 .mp-sign .n{font-size:11px;letter-spacing:.25em;color:#c9a24a}
 .mp-sign .t{font-size:14px;font-weight:600;letter-spacing:.06em;white-space:nowrap}
+
+/* 横地図のステージ：画像アイコン */
+.mp.h .mp-node{width:96px;height:96px}
+.mp.h .mp-node:not(.pro) .mp-ic{position:relative;width:88px;height:88px;border-radius:0;background:none!important;box-shadow:none!important;transform:none!important;animation:none;outline:0}
+.mp.h .mp-node:not(.pro) .mp-ic img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 8px rgba(0,0,0,.6));transition:filter .3s,transform .15s}
+.mp.h .mp-node.last .mp-ic{width:108px;height:108px}
+.mp.h .mp-node.last{width:116px;height:116px}
+.mp.h .mp-node:active .mp-ic img{transform:scale(.92)}
+.mp.h .mp-node.locked .mp-ic img{filter:saturate(.55) brightness(.55) drop-shadow(0 6px 6px rgba(0,0,0,.6))}
+.mp.h .mp-node.pass:not(.now) .mp-ic img{filter:brightness(.8) saturate(.75) drop-shadow(0 8px 8px rgba(0,0,0,.6))}
+.mp.h .mp-node.now .mp-ic img{animation:mp-glowimg 1.8s ease-in-out infinite}
+@keyframes mp-glowimg{0%,100%{filter:drop-shadow(0 0 4px rgba(255,220,140,.5)) drop-shadow(0 8px 8px rgba(0,0,0,.6))}50%{filter:drop-shadow(0 0 18px rgba(255,220,140,.95)) drop-shadow(0 8px 8px rgba(0,0,0,.6))}}
+.mp.h .mp-node.fresh .mp-ic img{animation:mp-fresh .9s cubic-bezier(.3,1.6,.5,1) both,mp-glowimg 1.8s ease-in-out .9s infinite}
+.mp-lock{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:30px;height:30px;color:#cfc4ae;filter:drop-shadow(0 2px 3px #000)}
+.mp-lock svg{width:100%;height:100%}
+.mp.h .mp-lab{top:calc(100% - 6px)}
+.mp.h .mp-seal{right:-6px;top:4px}
+.mp.h .mp-here{bottom:calc(100% - 4px)}
 </style>
 </head>
 <body>
@@ -4360,6 +4378,9 @@ const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
 "地図_背景": "img/lib/map_bg.webp?v=2",
+"地図_節": "img/lib/st_sec.webp",
+"地図_群れ": "img/lib/st_qz.webp",
+"地図_結末": "img/lib/st_last.webp",
 "店_背景": "img/lib/shop_bg.webp",
 "店_店主": "img/lib/shopkeeper.webp",
 "店_床": "img/lib/shop_floor.webp",
@@ -5426,11 +5447,11 @@ function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PA
  const passIdx=pts.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);const upto=passIdx>=0?pts[Math.min(pts.length-1,passIdx+1)].x:-1;const dDone=passIdx>=0?curve(PP.filter(o=>o.x<=upto)):'';
  const sign=o=>`<div class="mp-sign" style="left:${o.x}px;top:${o.y}px"><span class="n">${CHNAME[o.sign]}</span><span class="t">${esc(STORY[o.sign].title)}</span></div>`;
  const node=o=>{const st=o.st;const pass=stPassed(st),open=stUnlocked(st),now=cur&&cur.id===st.id;const r=stRec(st)||{};
-  const ic=st.k==='pro'?MAP_IC.pro:st.k==='qz'?MAP_IC.qz:(st.last?MAP_IC.last:MAP_IC.sec);
+  const ik=st.k==='qz'?'地図_群れ':st.last?'地図_結末':'地図_節';const ic=st.k==='pro'?MAP_IC.pro:`<img src="${IMG[ik]}" alt="" draggable="false">`;
   const lab=st.k==='pro'?'序章':st.k==='sec'?`${st.n+1}節`:'誤植の群れ';
   const sub=st.k==='qz'?starsHTML(r.b||0,stTier(r.c||0)):`<small>${esc(stPlace(st))}</small>`;
   return `<button class="mp-node ${st.k} ${st.last?'last':''} ${pass?'pass':''} ${open?'':'locked'} ${now?'now':''} ${MAP_NEW===st.id?'fresh':''}" data-si="${st.i}" style="left:${o.x}px;top:${o.y}px">
-   <span class="mp-ic">${open?ic:MAP_IC.lock}</span>${now?'<span class="mp-here">ここから</span>':''}${pass&&st.k!=='qz'?'<span class="mp-seal">修復済</span>':''}
+   <span class="mp-ic">${ic}${open?'':`<i class="mp-lock">${MAP_IC.lock}</i>`}</span>${now?'<span class="mp-here">ここから</span>':''}${pass&&st.k!=='qz'?'<span class="mp-seal">修復済</span>':''}
    <span class="mp-lab"><b>${lab}</b>${sub}</span></button>`};
  /* 両端の扉 */
  const prevCh=fi>0?F[fi-1]:null,nextCh=fi<F.length-1?F[fi+1]:null;
