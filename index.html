@@ -1878,6 +1878,17 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .mp.h .mp-lab{top:calc(100% - 6px)}
 .mp.h .mp-seal{right:-6px;top:4px}
 .mp.h .mp-here{bottom:calc(100% - 4px)}
+
+/* 扉：画像 */
+.mp-door .dr{width:86px;height:auto;border-radius:0;background:none!important;box-shadow:none!important;position:relative;display:block;animation:none!important}
+.mp-door .dr img{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 10px rgba(0,0,0,.6));transition:filter .3s,transform .15s}
+.mp-door.r .dr{width:104px}
+.mp-door.r:not(.locked):not(.soon) .dr img{animation:mp-glowimg 2.2s ease-in-out infinite}
+.mp-door.locked .dr img,.mp-door.soon .dr img{filter:saturate(.5) brightness(.5) drop-shadow(0 10px 10px rgba(0,0,0,.6))}
+.mp-door.start .dr{width:76px;opacity:1}.mp-door.start .dr img{filter:brightness(.6) drop-shadow(0 10px 10px rgba(0,0,0,.6))}
+.mp-door .mp-lock{top:52%;width:34px;height:34px}
+.mp-door:active .dr img{transform:scale(.95)}
+.mp-door{transform:translate(-50%,-62%)}
 </style>
 </head>
 <body>
@@ -4381,6 +4392,8 @@ const IMG={
 "地図_節": "img/lib/st_sec.webp",
 "地図_群れ": "img/lib/st_qz.webp",
 "地図_結末": "img/lib/st_last.webp",
+"地図_来た扉": "img/lib/door_in.webp",
+"地図_行く扉": "img/lib/door_out.webp",
 "店_背景": "img/lib/shop_bg.webp",
 "店_店主": "img/lib/shopkeeper.webp",
 "店_床": "img/lib/shop_floor.webp",
@@ -5458,10 +5471,10 @@ function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PA
  const lastSt=L[L.length-1];const nextOpen=lastSt&&stPassed(lastSt);
  const missing=P.chs.filter(c=>c>0&&!(c<STORY.length));
  let right;const nextNm=nextCh!=null?G[fi+1].map(c=>CHNAME[c]).join('・'):'';
- if(nextCh!=null)right=`<button class="mp-door r ${nextOpen?'':'locked'}" id="mpNext" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${nextOpen?'›':MAP_IC.lock}</span><span class="dl">次のフロアへ<small>${nextNm}</small></span></button>`;
- else if(missing.length)right=`<div class="mp-door r soon" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${MAP_IC.lock}</span><span class="dl">この先は準備中<small>${CHNAME[missing[0]]}〜</small></span></div>`;
- else right=p<PARTS.length-1?`<button class="mp-door r" id="mpPart" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">›</span><span class="dl">部を選ぶ<small>${PARTS[p+1].n}へ</small></span></button>`:'';
- const left=prevCh!=null?`<button class="mp-door l" id="mpPrev" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr">‹</span><span class="dl">前のフロアへ<small>${G[fi-1].map(c=>CHNAME[c]).join('・')}</small></span></button>`:`<div class="mp-door l start" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr"></span></div>`;
+ if(nextCh!=null)right=`<button class="mp-door r ${nextOpen?'':'locked'}" id="mpNext" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr"><img src="${IMG['地図_行く扉']}" alt="">${nextOpen?'':`<i class="mp-lock">${MAP_IC.lock}</i>`}</span><span class="dl">次のフロアへ<small>${nextNm}</small></span></button>`;
+ else if(missing.length)right=`<div class="mp-door r soon" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr"><img src="${IMG['地図_行く扉']}" alt=""><i class="mp-lock">${MAP_IC.lock}</i></span><span class="dl">この先は準備中<small>${CHNAME[missing[0]]}〜</small></span></div>`;
+ else right=p<PARTS.length-1?`<button class="mp-door r" id="mpPart" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr"><img src="${IMG['地図_行く扉']}" alt=""></span><span class="dl">部を選ぶ<small>${PARTS[p+1].n}へ</small></span></button>`:'';
+ const left=prevCh!=null?`<button class="mp-door l" id="mpPrev" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr"><img src="${IMG['地図_来た扉']}" alt=""></span><span class="dl">前のフロアへ<small>${G[fi-1].map(c=>CHNAME[c]).join('・')}</small></span></button>`:`<div class="mp-door l start" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr"><img src="${IMG['地図_来た扉']}" alt=""></span></div>`;
  show(`<div class="mp h" id="smap"><div class="mp-sc" id="mpSc"><div class="mp-in" style="width:${W}px;height:${H}px">
    <div class="mp-bg ${fi%2?'flip':''}" style="background-image:url(${IMG['地図_背景']})"></div><div class="mp-dim"></div>
    <svg class="mp-path" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><path d="${dAll}" class="all"/>${dDone?`<path d="${dDone}" class="done"/>`:''}</svg>
