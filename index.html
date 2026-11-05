@@ -1791,18 +1791,14 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .shp-rug.v .sh-svc .sh-it.ic{width:min(8.5vw,66px)}
 .shp-rug.v .sh-pg2{width:100%;justify-content:center}
 
-/* 肖像を顔（眉間）中心に寄せる。--t＝枠の高さに対して顔をどのくらいの大きさで見せたいか */
-@supports (container-type:size){
- .card .art,.lxc-art{container-type:size}
- .card .art{--t:.3;--cy:.42;--zm:2}
- .lxc-art{--t:.42;--cy:.46;--zm:2.4}
- .card .art img.fc,.lxc-art img.fc{inset:auto;object-fit:fill;max-width:none;
-  --hb:max(calc(100cqw / var(--ia)),100cqh);
-  --h:clamp(var(--hb),calc(var(--t) / var(--s) * 100cqh),calc(var(--hb) * var(--zm)));
-  height:var(--h);width:calc(var(--h) * var(--ia));
-  left:clamp(calc(100cqw - var(--h) * var(--ia)),calc(50cqw - var(--fx) * var(--h) * var(--ia)),0px);
-  top:clamp(calc(100cqh - var(--h)),calc(var(--cy) * 100cqh - var(--fy) * var(--h)),0px)}
-}
+/* 肖像を顔（眉間）中心に寄せる（コンテナ単位を使わない方式。iPadのSafariでも枠からはみ出さない）
+   --ba＝枠の横÷縦、--t＝枠の高さに対して顔をどのくらいの大きさで見せたいか、--zm＝最大の拡大率 */
+.card .art{--ba:.9;--t:.3;--zm:2}
+.lxc-art{--ba:1.66;--t:.42;--zm:2.4}
+.card .art img.fc,.lxc-art img.fc{inset:0;width:100%;height:100%;object-fit:cover;max-width:none;
+ object-position:calc(var(--fx)*100%) calc(var(--fy)*100%);transform-origin:calc(var(--fx)*100%) calc(var(--fy)*100%);
+ --z:clamp(1,calc(var(--t) / (var(--s) * max(1, var(--ba) / var(--ia)))),var(--zm));
+ transform:translate(calc(clamp((1 - var(--z)) * (100 - var(--fx) * 100),50 - var(--fx) * 100,(var(--z) - 1) * var(--fx) * 100) * 1%),calc(clamp((1 - var(--z)) * (100 - var(--fy) * 100),42 - var(--fy) * 100,(var(--z) - 1) * var(--fy) * 100) * 1%)) scale(var(--z))}
 
 /* お店の出迎え：背景と店主を時間差で左右からスライドさせて奥行きを出す */
 .shp:not(.rug) .shp-bg{inset:-3%;animation:shp-bg-in 1.1s cubic-bezier(.2,.7,.2,1) both}
