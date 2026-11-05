@@ -1854,6 +1854,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .mp-door.locked .dl,.mp-door.soon .dl{opacity:.7}
 .mp-door.start .dr{width:56px;height:76px;opacity:.55}
 .mp-door:active .dr{transform:scale(.94)}
+
+.mp-sign{position:absolute;z-index:1;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;padding:8px 14px 9px;min-width:130px;
+ background:linear-gradient(180deg,#2b3658,#1c2540);border:1px solid #c9a24a;border-radius:3px;box-shadow:0 10px 20px rgba(0,0,0,.5);font-family:var(--serif);color:#f1e3bf;text-align:center}
+.mp-sign::after{content:"";position:absolute;left:50%;top:100%;width:3px;height:26px;margin-left:-1.5px;background:#5a3a22}
+.mp-sign .n{font-size:11px;letter-spacing:.25em;color:#c9a24a}
+.mp-sign .t{font-size:14px;font-weight:600;letter-spacing:.06em;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -5394,22 +5400,30 @@ let MAP_NEW=null; // 直前に開いたステージ（演出用）
 /* 横スクロールの地図。1章＝1フロア（序章は第1章のフロアに入る）。右端の扉で次のフロアへ */
 const MAP_AR=4.05; // 背景画像の横÷縦
 let MAP_FL={};
-function mapFloors(p){const P=PARTS[p];return P.chs.filter(c=>c>0&&c<STORY.length)}
+/* フロア分け：部の頭から2章ずつ（第1部なら 1・2／3・4／5） */
+function mapFloors(p){const ok=PARTS[p].chs.filter(c=>c>0&&c<STORY.length);const G=[];for(let i=0;i<ok.length;i+=2)G.push(ok.slice(i,i+2));return G}
 function mapFloorOf(st){return st.k==='pro'?1:st.ch}
 function mapRand(seed){let r=seed*9301+49297;return()=>{r=(r*9301+49297)%233280;return r/233280}}
 function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PARTS[p];const all=stages();const cur=stCurrent();
- const F=mapFloors(p);if(!F.length){StoryMenu();return}
+ const G=mapFloors(p);if(!G.length){StoryMenu();return}const F=G.map(g=>g[0]);
  let ch=fl!=null?fl:MAP_FL[p];
- if(fl==null){const tgt=MAP_NEW?all.find(s=>s.id===MAP_NEW):cur;if(tgt&&(tgt.k==='pro'?p===0:partOf(tgt.ch)===p))ch=mapFloorOf(tgt)}
- if(!F.includes(ch))ch=F[0];MAP_FL[p]=ch;const fi=F.indexOf(ch);
- const L=all.filter(s=>s.k==='pro'?(p===0&&ch===1):s.ch===ch);
+ if(fl==null){const tgt=MAP_NEW?all.find(s=>s.id===MAP_NEW):cur;if(tgt&&(tgt.k==='pro'?p===0:partOf(tgt.ch)===p)){const c=mapFloorOf(tgt);ch=(G.find(g=>g.includes(c))||G[0])[0]}}
+ if(!F.includes(ch))ch=F[0];MAP_FL[p]=ch;const fi=F.indexOf(ch);const CH=G[fi];
+ const L=all.filter(s=>s.k==='pro'?(p===0&&CH.includes(1)):CH.includes(s.ch));
  const H=Math.max(320,innerHeight),W=Math.round(H*MAP_AR);
- const R=mapRand(ch*7+3);const n=L.length;const x0=W*.08,x1=W*.9;
- let yb=.64;const pts=L.map((st,i)=>{yb=Math.min(.76,Math.max(.52,yb+(R()-.5)*.16));const x=n>1?x0+(x1-x0)*i/(n-1)+(R()-.5)*W*.012:W/2;return{st,x:Math.round(x),y:Math.round(H*yb)}});
+ const R=mapRand(ch*7+3);
+ /* 章の境目には看板の分だけ間をあける */
+ const slots=[];L.forEach((st,i)=>{if(i&&st.k!=='pro'&&L[i-1].k!=='pro'&&st.ch!==L[i-1].ch)slots.push({sign:st.ch});slots.push({st})});
+ const n=slots.length;const x0=W*.08,x1=W*.9;const ph=R()*6;
+ const pts=slots.map((o,i)=>{const t=i*.78+ph;const y=.58+.2*Math.sin(t)+.05*Math.sin(t*2.3+1)+(R()-.5)*.04;
+  const x=n>1?x0+(x1-x0)*i/(n-1)+(R()-.5)*W*.01:W/2;return{...o,x:Math.round(x),y:Math.round(H*Math.min(.8,Math.max(.36,y)))}});
+ const signs=pts.filter(o=>o.sign);pts.splice(0,pts.length,...pts.filter(o=>!o.sign));
  const ends=[{x:80,y:Math.round(H*.66)},{x:W-80,y:Math.round(H*.66)}];
+ const pathPts=()=>[ends[0],...[...pts,...signs].sort((a,b)=>a.x-b.x),ends[1]];
  const curve=a=>a.map((o,i)=>{if(!i)return`M${o.x} ${o.y}`;const b=a[i-1],mx=(b.x+o.x)/2;return` C${mx} ${b.y} ${mx} ${o.y} ${o.x} ${o.y}`}).join('');
- const dAll=curve([ends[0],...pts,ends[1]]);
- const passIdx=pts.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);const dDone=passIdx>=0?curve([ends[0],...pts.slice(0,Math.min(pts.length,passIdx+2))]):'';
+ const PP=pathPts();const dAll=curve(PP);
+ const passIdx=pts.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);const upto=passIdx>=0?pts[Math.min(pts.length-1,passIdx+1)].x:-1;const dDone=passIdx>=0?curve(PP.filter(o=>o.x<=upto)):'';
+ const sign=o=>`<div class="mp-sign" style="left:${o.x}px;top:${o.y}px"><span class="n">${CHNAME[o.sign]}</span><span class="t">${esc(STORY[o.sign].title)}</span></div>`;
  const node=o=>{const st=o.st;const pass=stPassed(st),open=stUnlocked(st),now=cur&&cur.id===st.id;const r=stRec(st)||{};
   const ic=st.k==='pro'?MAP_IC.pro:st.k==='qz'?MAP_IC.qz:(st.last?MAP_IC.last:MAP_IC.sec);
   const lab=st.k==='pro'?'序章':st.k==='sec'?`${st.n+1}節`:'誤植の群れ';
@@ -5421,17 +5435,17 @@ function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PA
  const prevCh=fi>0?F[fi-1]:null,nextCh=fi<F.length-1?F[fi+1]:null;
  const lastSt=L[L.length-1];const nextOpen=lastSt&&stPassed(lastSt);
  const missing=P.chs.filter(c=>c>0&&!(c<STORY.length));
- let right;
- if(nextCh!=null)right=`<button class="mp-door r ${nextOpen?'':'locked'}" id="mpNext" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${nextOpen?'›':MAP_IC.lock}</span><span class="dl">次のフロアへ<small>${CHNAME[nextCh]}</small></span></button>`;
+ let right;const nextNm=nextCh!=null?G[fi+1].map(c=>CHNAME[c]).join('・'):'';
+ if(nextCh!=null)right=`<button class="mp-door r ${nextOpen?'':'locked'}" id="mpNext" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${nextOpen?'›':MAP_IC.lock}</span><span class="dl">次のフロアへ<small>${nextNm}</small></span></button>`;
  else if(missing.length)right=`<div class="mp-door r soon" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">${MAP_IC.lock}</span><span class="dl">この先は準備中<small>${CHNAME[missing[0]]}〜</small></span></div>`;
  else right=p<PARTS.length-1?`<button class="mp-door r" id="mpPart" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr">›</span><span class="dl">部を選ぶ<small>${PARTS[p+1].n}へ</small></span></button>`:'';
- const left=prevCh!=null?`<button class="mp-door l" id="mpPrev" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr">‹</span><span class="dl">前のフロアへ<small>${CHNAME[prevCh]}</small></span></button>`:`<div class="mp-door l start" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr"></span></div>`;
+ const left=prevCh!=null?`<button class="mp-door l" id="mpPrev" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr">‹</span><span class="dl">前のフロアへ<small>${G[fi-1].map(c=>CHNAME[c]).join('・')}</small></span></button>`:`<div class="mp-door l start" style="left:${ends[0].x}px;top:${ends[0].y}px"><span class="dr"></span></div>`;
  show(`<div class="mp h" id="smap"><div class="mp-sc" id="mpSc"><div class="mp-in" style="width:${W}px;height:${H}px">
    <div class="mp-bg ${fi%2?'flip':''}" style="background-image:url(${IMG['地図_背景']})"></div><div class="mp-dim"></div>
    <svg class="mp-path" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><path d="${dAll}" class="all"/>${dDone?`<path d="${dDone}" class="done"/>`:''}</svg>
-   ${left}${pts.map(node).join('')}${right}
+   ${left}${signs.map(sign).join('')}${pts.map(node).join('')}${right}
   </div></div>
-  <div class="mp-plaque h"><span class="n">${P.n}　${CHNAME[ch]}</span><span class="t">${esc(STORY[ch].title)}</span><span class="s">${esc(CHT[ch])}</span>
+  <div class="mp-plaque h" id="mpHead"><span class="n">${P.n}　${CHNAME[ch]}</span><span class="t">${esc(STORY[ch].title)}</span><span class="s">${esc(CHT[ch])}</span>
    <span class="fl">${F.map(c=>`<i class="${c===ch?'on':''}"></i>`).join('')}</span></div>
   <div class="gc-top"><button class="gc-back" id="mpBack">部を選ぶ</button>${coinsHTML()}</div>
   <div class="mp-pop" id="mpPop" hidden></div></div>`);
@@ -5450,6 +5464,10 @@ function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PA
   addEventListener('pointerup',()=>{dx=null});sc.addEventListener('click',e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true)}
  const focus=document.querySelector(MAP_NEW?'.mp-node.fresh':'.mp-node.now');
  if(focus)sc.scrollLeft=Math.max(0,focus.offsetLeft-sc.clientWidth*.45);else if(fl!=null&&fl<(MAP_FL._from||0))sc.scrollLeft=W;
+ /* いま見ている章を左上に出す */
+ const head=()=>{const cx=sc.scrollLeft+sc.clientWidth/2;let c=CH[0];signs.forEach(o=>{if(cx>=o.x)c=o.sign});const h=$('#mpHead');if(!h||h.dataset.c==c)return;h.dataset.c=c;
+  h.querySelector('.n').textContent=`${P.n}　${CHNAME[c]}`;h.querySelector('.t').textContent=STORY[c].title;h.querySelector('.s').textContent=CHT[c]};
+ sc.addEventListener('scroll',head,{passive:true});head();
  MAP_FL._from=ch;MAP_NEW=null}
 function mapPopClose(){const p=$('#mpPop');if(p)p.hidden=true;document.querySelectorAll('.mp-node.sel').forEach(x=>x.classList.remove('sel'))}
 function mapPop(st){const p=$('#mpPop');if(!p)return;document.querySelectorAll('.mp-node.sel').forEach(x=>x.classList.remove('sel'));const nb=document.querySelector(`.mp-node[data-si="${st.i}"]`);if(nb)nb.classList.add('sel');
