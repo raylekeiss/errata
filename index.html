@@ -1889,6 +1889,28 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .mp-door .mp-lock{top:52%;width:34px;height:34px}
 .mp-door:active .dr img{transform:scale(.95)}
 .mp-door{transform:translate(-50%,-62%)}
+
+/* ===== 部を選ぶ：表紙画像 ===== */
+.sp-row{align-items:center;gap:3.5%}
+.sp-vol.bk{position:relative;flex:0 1 auto;width:min(28vw,calc((100vh - 200px)*.53),330px);max-width:none;aspect-ratio:454/858;padding:0;background:none;box-shadow:none;border-radius:0;display:block;filter:drop-shadow(0 18px 26px rgba(0,0,0,.6));transition:transform .25s,filter .25s}
+.sp-vol.bk .sp-cov{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.sp-vol.bk .sp-txt{position:absolute;left:19%;right:8%;top:49%;bottom:8%;display:block;color:#f6e7bf;text-shadow:0 2px 3px rgba(0,0,0,.7)}
+.sp-vol.bk .sp-n{position:absolute;left:0;right:0;top:4%;text-align:center;font-size:max(12px,min(1.7vw,19px));letter-spacing:.3em;opacity:.95}
+.sp-vol.bk .sp-t{position:absolute;left:0;right:0;top:22%;height:36%;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:max(15px,min(2.5vw,30px));font-weight:600;letter-spacing:.08em;line-height:1.35;word-break:keep-all}
+.sp-vol.bk .sp-prog{position:absolute;left:8%;right:8%;top:64%;width:auto;margin:0;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--serif);font-size:max(12px,min(1.5vw,17px));letter-spacing:.15em;color:#f1e3bf}
+.sp-vol.bk .sp-prog b{font-size:1.5em;letter-spacing:0}.sp-vol.bk .sp-prog small{opacity:.8}
+.sp-vol.bk .sp-prog .pbar{width:86%;height:6px;margin:0;border-radius:3px;background:rgba(0,0,0,.45);box-shadow:inset 0 0 0 1px rgba(232,207,134,.35)}
+.sp-vol.bk .sp-prog .pbar i{background:linear-gradient(90deg,#c9a24a,#f2dc94)}
+.sp-vol.bk.now{filter:drop-shadow(0 0 14px rgba(232,207,134,.75)) drop-shadow(0 18px 26px rgba(0,0,0,.6));transform:translateY(-8px)}
+.sp-vol.bk:active{transform:translateY(-12px) scale(1.01)}
+.sp-vol.bk.locked,.sp-vol.bk.soon{filter:grayscale(.45) brightness(.55) drop-shadow(0 18px 26px rgba(0,0,0,.6))}
+.sp-lock{position:absolute;left:55%;top:30%;transform:translate(-50%,-50%);width:48px;height:48px;color:#e9dfc6;filter:drop-shadow(0 3px 6px #000)}
+.sp-lock svg{width:100%;height:100%}
+.sp-vol.bk .sp-now{bottom:-16px;left:55%;font-family:var(--serif);font-size:14px;letter-spacing:.12em;padding:7px 22px 8px;border-radius:0;background:#a8242a;
+ clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%,4% 50%);box-shadow:none}
+.sp-vol.bk .sp-band{display:none}
+@media (orientation:portrait){.sp-row{flex-direction:row!important;inset:calc(env(safe-area-inset-top,0px) + 120px) 3% 6%!important;gap:2.5%!important}
+ .sp-vol.bk{width:31vw;padding:0!important}.sp-vol.bk .sp-n{font-size:12px}.sp-vol.bk .sp-t{font-size:max(12px,2.6vw);line-height:1.25}.sp-vol.bk .sp-prog{font-size:11px}}
 </style>
 </head>
 <body>
@@ -4389,6 +4411,9 @@ const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
 "地図_背景": "img/lib/map_bg.webp?v=2",
+"表紙_1": "img/lib/cover1.webp",
+"表紙_2": "img/lib/cover2.webp",
+"表紙_3": "img/lib/cover3.webp",
 "地図_節": "img/lib/st_sec.webp",
 "地図_群れ": "img/lib/st_qz.webp",
 "地図_結末": "img/lib/st_last.webp",
@@ -5413,9 +5438,11 @@ function StoryMenu(){STG=null;stMigrate();const L=stages();const cur=stCurrent()
  show(`<div class="spv" id="sparts"><div class="sp-fill" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="scr-title">ストーリー</div><div class="gc-top"><button class="gc-back" data-go="home">戻る</button>${coinsHTML()}</div>
   <div class="sp-row">${PARTS.map((P,p)=>{const ls=inP(p);const ready=ls.length>0;const open=ready&&stUnlocked(ls[0]);const done=ls.filter(stPassed).length;
-   return `<button class="sp-vol ${ready?'':'soon'} ${open?'':'locked'} ${p===curP?'now':''}" data-pv="${p}" style="--pc:${ERAS[p].c}">
-    <span class="sp-band"></span><span class="sp-n">${P.n}</span><span class="sp-t">${esc(P.t).replace(/\n/g,'<br>')}</span><span class="sp-sub">${esc(P.sub)}</span>
-    <span class="sp-prog">${ready?`修復 <b>${done}</b>／${ls.length}<span class="pbar"><i style="width:${100*done/ls.length}%"></i></span>`:'準備中'}</span>
+   return `<button class="sp-vol bk ${ready?'':'soon'} ${open?'':'locked'} ${p===curP?'now':''}" data-pv="${p}" style="--pc:${ERAS[p].c}">
+    <img class="sp-cov" src="${IMG['表紙_'+(p+1)]}" alt="" draggable="false">
+    <span class="sp-txt"><span class="sp-n">${P.n}</span><span class="sp-t">${esc(P.t).replace(/\n/g,'<br>')}</span>
+    <span class="sp-prog">${ready?`<span>修復 <b>${done}</b><small>／${ls.length}</small></span><span class="pbar"><i style="width:${100*done/ls.length}%"></i></span>`:'準備中'}</span></span>
+    ${!open||!ready?`<i class="sp-lock">${MAP_IC.lock}</i>`:''}
     ${p===curP?'<span class="sp-now">つづきはここから</span>':''}</button>`}).join('')}</div></div>`);
  document.querySelectorAll('[data-pv]').forEach(b=>b.onclick=()=>{const p=+b.dataset.pv;
   if(b.classList.contains('soon')){FX.shake(b);toast('この部の物語は準備中です。ドリルと頁めくりは、もう遊べます');return}
