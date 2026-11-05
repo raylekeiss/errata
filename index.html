@@ -1911,6 +1911,29 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .sp-vol.bk .sp-band{display:none}
 @media (orientation:portrait){.sp-row{flex-direction:row!important;inset:calc(env(safe-area-inset-top,0px) + 120px) 3% 6%!important;gap:2.5%!important}
  .sp-vol.bk{width:31vw;padding:0!important}.sp-vol.bk .sp-n{font-size:12px}.sp-vol.bk .sp-t{font-size:max(12px,2.6vw);line-height:1.25}.sp-vol.bk .sp-prog{font-size:11px}}
+
+/* ===== キャラ選択 ===== */
+.cs{position:fixed;inset:0;overflow:hidden;background:#0c0f1c;font-family:var(--serif)}
+.cs-bg{position:absolute;inset:-24px;background:center/cover no-repeat;filter:blur(7px) brightness(.5) saturate(.9)}
+.cs-in{position:absolute;inset:calc(env(safe-area-inset-top,0px) + 92px) 4% 3%;display:flex;flex-direction:column;justify-content:center;gap:3vh;overflow-y:auto;padding-top:8px}
+.cs-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2vw}
+.cs-card{display:flex;flex-direction:column;align-items:center;padding:6px 6px 10px;background:#f3ead6;border-radius:4px;box-shadow:0 10px 22px rgba(0,0,0,.5),inset 0 0 0 1px #c9a24a;transition:transform .2s,box-shadow .2s;color:#2a2320}
+.cs-card.on{transform:translateY(-6px);box-shadow:0 0 0 3px #e8c46a,0 0 24px rgba(232,196,106,.6),0 14px 26px rgba(0,0,0,.55)}
+.cs-art{position:relative;display:block;width:100%;height:min(38vh,calc((92vw - 6vw)/4*1.25));border-radius:3px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#2a3352,#121730)}
+.cs-art img{position:absolute;inset:6% 4% 0;width:92%;height:94%;object-fit:contain;object-position:50% 100%}
+.cs-art img.tall{inset:0;width:100%;height:auto;object-fit:initial;top:-2%;left:-6%;width:112%}
+.cs-nm{margin-top:8px;font-size:max(16px,min(2.4vw,24px));font-weight:600;letter-spacing:.12em}
+.cs-tag{margin-top:6px;padding-top:6px;border-top:1px solid #c9b88a;width:84%;text-align:center;font-family:var(--sans);font-size:max(11px,min(1.4vw,14px));font-weight:600;color:#4a3d2a}
+.cs-panel{display:flex;align-items:center;gap:2.4vw;padding:14px 20px;border-radius:3px;box-shadow:0 12px 26px rgba(0,0,0,.5),inset 0 0 0 1px #c9a24a}
+.cs-rel{display:flex;align-items:center;gap:10px;cursor:pointer;flex:0 0 auto;padding-right:2vw;border-right:1px solid #d6c79f}
+.cs-rel .lx-ico{width:72px;height:72px;margin:0;vertical-align:0}
+.cs-rel span{display:flex;flex-direction:column;font-size:15px}.cs-rel b{font-size:16px;margin-bottom:2px}
+.cs-cards{flex:1;min-width:0}.cs-cards>b{font-size:15px}
+.cs-cl{display:flex;gap:10px;margin:6px 0 4px}
+.cs-c{width:min(9vw,96px);cursor:pointer}.cs-c .lxc{width:100%;font-size:9px}.cs-c .lxc-tx{font-size:8px}
+.cs-st{margin:0;font-family:var(--sans);font-size:12px;color:#5a4630}
+.cs-go{flex:0 0 auto;min-height:56px;font-size:18px;padding:0 26px}
+@media (orientation:portrait){.cs-in{inset:calc(env(safe-area-inset-top,0px) + 172px) 3% 3%;justify-content:flex-start}.cs-row{gap:2vw}.cs-art{height:calc(94vw/4*1.3)}.cs-nm{font-size:16px}.cs-tag{font-size:11px}.cs-panel{flex-wrap:wrap}.cs-cards{flex-basis:100%;order:2}.cs-go{order:3;flex:1}.cs-c{width:min(18vw,110px)}}
 </style>
 </head>
 <body>
@@ -7255,16 +7278,24 @@ function DeckEdit(){const persons=lxOwnedPersons().sort((a,b)=>ATTRS.indexOf(a.a
   <div class="pane paper"><h3>基本の頁（足りないときに入る）</h3><div class="lx-grid">${Object.keys(LX_BASE).map(k=>`<div class="lx-cell">${lxCardHTML(lxDef(k))}</div>`).join('')}</div></div>
  </div></div>`);
  $('#lxGl2').onclick=lxGlossary}
-/* キャラを選ぶ */
-function lxCharPick(cb){const L=lxLib();const cur=LX_CHARS[L.char]?L.char:'カコ';
- const art=(k,ch)=>{const src=ch.img?IMG[ch.img]:(()=>{try{return IMG[heroKey()]}catch(e){return null}})();return src?`<img src="${src}" alt="">`:''};
- show(`<div class="screen">${topbar('だれで探索する？','lib')}<div class="scroll"><div class="lx-menu"><div class="lx-chars">${Object.entries(LX_CHARS).map(([k,ch])=>`
-  <div class="pane paper lx-char ${k===cur?'on':''}" data-ch="${esc(k)}"><div class="lx-char-art">${art(k,ch)}</div><div class="lx-char-tx">
-   <h3>${esc(k)}${k==='カコ'?'<small>（あなた）</small>':''}</h3><p class="lx-char-st">${esc(ch.style)}</p>
-   <p class="lx-char-rl">${lxIco(ch.relic,'mid')}<b>最初の装備</b>「${esc(ch.relic)}」${esc(LX_RELIC[ch.relic])}</p>
-   <div class="lx-char-cd"><b>専用の頁</b>${ch.cards.map(c=>{const d=lxDef(c);return `<span><i>${d.cost}</i>${esc(d.name)}（${LX_TYPE[d.type]}）：${esc(d.text)}</span>`}).join('')}</div>
-   <button class="btn ${k===cur?'red':''}" data-chgo="${esc(k)}">${esc(k)}で探索する</button></div></div>`).join('')}</div></div></div></div>`);
- app.querySelectorAll('[data-chgo]').forEach(b=>b.onclick=()=>cb(b.dataset.chgo))}
+/* キャラを選ぶ：上に4人のカード、下に選んだ人の装備・専用の頁 */
+const LX_CHAR_TAG={'カコ':'威信で重い一撃','シミ':'クイズで強くなる','コンラッド':'持続の頁で有利に','ヌル':'余白を溜めて一撃'};
+function lxCharPick(cb){const L=lxLib();let cur=LX_CHARS[L.char]?L.char:'カコ';
+ const art=(k,ch)=>{const src=ch.img?IMG[ch.img]:(()=>{try{return IMG[heroKey()]}catch(e){return null}})();return src?`<img src="${src}" alt="" class="${ch.img&&!/^SD_/.test(ch.img)?'tall':''}" draggable="false">`:''};
+ const bg=IMG['背景_書庫_書架']||IMG['背景_ホーム'];
+ show(`<div class="cs" id="cs"><div class="cs-bg" ${bg?`style="background-image:url(${bg})"`:''}></div>
+  <div class="scr-title">だれで探索する？</div><div class="gc-top"><button class="gc-back" data-go="lib">戻る</button>${coinsHTML()}</div>
+  <div class="cs-in"><div class="cs-row">${Object.entries(LX_CHARS).map(([k,ch])=>`<button class="cs-card" data-ch="${esc(k)}">
+    <span class="cs-art">${art(k,ch)}</span><span class="cs-nm">${k==='カコ'?esc(S.name||'カコ'):esc(k)}</span><span class="cs-tag">${esc(LX_CHAR_TAG[k]||'')}</span></button>`).join('')}</div>
+   <div class="cs-panel parch" id="csP"></div></div></div>`);
+ const panel=()=>{const ch=LX_CHARS[cur];document.querySelectorAll('.cs-card').forEach(c=>c.classList.toggle('on',c.dataset.ch===cur));
+  $('#csP').innerHTML=`<div class="cs-rel" id="csRel">${lxIco(ch.relic)}<span><b>最初の装備</b>${esc(ch.relic)}</span></div>
+   <div class="cs-cards"><b>専用の頁</b><div class="cs-cl">${ch.cards.map((c,i)=>`<div class="cs-c" data-ci="${i}">${lxCardHTML(lxDef(c))}</div>`).join('')}</div><p class="cs-st">${esc(ch.style)}</p></div>
+   <button class="btn red cs-go" id="csGo">${cur==='カコ'?esc(S.name||'カコ'):esc(cur)}で探索する</button>`;
+  $('#csRel').onclick=()=>lxItemInfo(ch.relic,false);
+  document.querySelectorAll('.cs-c').forEach(d=>d.onclick=()=>{const def=lxDef(ch.cards[+d.dataset.ci]);modal(`<div class="sh-big">${lxCardHTML(def)}</div><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)});
+  $('#csGo').onclick=()=>cb(cur)};
+ document.querySelectorAll('.cs-card').forEach(c=>c.onclick=()=>{if(cur===c.dataset.ch)return;cur=c.dataset.ch;FX._replay(c,'fx-glow',400);panel()});panel()}
 function lxStartRun(skipTut){const L=lxLib();
  if(!L.tut&&!skipTut){askYes('はじめての探索です。先に練習の戦闘で、遊び方を確かめますか？\n（3ターンほどで終わります）','練習する',lxTutorial,()=>{L.tut=true;save();lxStartRun(true)},'練習しないで始める');return}
  const si=Math.max(0,Math.min(lxMaxStage(),L.stage||0));
