@@ -4359,7 +4359,7 @@ const CLOUD=!!(window.google&&google.script&&google.script.run);
 const IMG_BASE=window.ERRATA_BASE||'';
 const IMG={
 "シミ": "img/shimi.webp",
-"地図_背景": "img/lib/map_bg.webp",
+"地図_背景": "img/lib/map_bg.webp?v=2",
 "店_背景": "img/lib/shop_bg.webp",
 "店_店主": "img/lib/shopkeeper.webp",
 "店_床": "img/lib/shop_floor.webp",
@@ -5398,7 +5398,7 @@ const MAP_IC={
  lock:'<svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="11" width="14" height="10" rx="1.5" fill="currentColor"/></svg>'};
 let MAP_NEW=null; // 直前に開いたステージ（演出用）
 /* 横スクロールの地図。1章＝1フロア（序章は第1章のフロアに入る）。右端の扉で次のフロアへ */
-const MAP_AR=4.05; // 背景画像の横÷縦
+const MAP_AR=4; // 背景画像の横÷縦
 let MAP_FL={};
 /* フロア分け：部の頭から2章ずつ（第1部なら 1・2／3・4／5） */
 function mapFloors(p){const ok=PARTS[p].chs.filter(c=>c>0&&c<STORY.length);const G=[];for(let i=0;i<ok.length;i+=2)G.push(ok.slice(i,i+2));return G}
@@ -5414,13 +5414,14 @@ function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PA
  const R=mapRand(ch*7+3);
  /* 章の境目には看板の分だけ間をあける */
  const slots=[];L.forEach((st,i)=>{if(i&&st.k!=='pro'&&L[i-1].k!=='pro'&&st.ch!==L[i-1].ch)slots.push({sign:st.ch});slots.push({st})});
- const n=slots.length;const x0=W*.08,x1=W*.9;const ph=R()*6;
- const pts=slots.map((o,i)=>{const t=i*.78+ph;const y=.58+.2*Math.sin(t)+.05*Math.sin(t*2.3+1)+(R()-.5)*.04;
-  const x=n>1?x0+(x1-x0)*i/(n-1)+(R()-.5)*W*.01:W/2;return{...o,x:Math.round(x),y:Math.round(H*Math.min(.8,Math.max(.36,y)))}});
+ /* 道：ゆったりした1本の正弦波（波長は画面幅くらい）。ステージはその上に等間隔で置く */
+ const n=slots.length;const x0=W*.08,x1=W*.9;const ph=R()*Math.PI*2;const lam=Math.max(700,innerWidth*1.15),A=H*.15,yc=H*.6;
+ const wy=x=>yc+A*Math.sin(2*Math.PI*x/lam+ph);
+ const pts=slots.map((o,i)=>{const x=n>1?x0+(x1-x0)*i/(n-1):W/2;return{...o,x:Math.round(x),y:Math.round(wy(x))}});
+ const ends=[{x:80,y:Math.round(wy(80))},{x:W-80,y:Math.round(wy(W-80))}];
  const signs=pts.filter(o=>o.sign);pts.splice(0,pts.length,...pts.filter(o=>!o.sign));
- const ends=[{x:80,y:Math.round(H*.66)},{x:W-80,y:Math.round(H*.66)}];
  const pathPts=()=>[ends[0],...[...pts,...signs].sort((a,b)=>a.x-b.x),ends[1]];
- const curve=a=>a.map((o,i)=>{if(!i)return`M${o.x} ${o.y}`;const b=a[i-1],mx=(b.x+o.x)/2;return` C${mx} ${b.y} ${mx} ${o.y} ${o.x} ${o.y}`}).join('');
+ const curve=a=>{const xa=a[0].x,xb=a[a.length-1].x;let d='';for(let x=xa;x<=xb+.1;x+=12){const xx=Math.min(x,xb);d+=(d?' L':'M')+xx.toFixed(0)+' '+wy(xx).toFixed(1)}return d};
  const PP=pathPts();const dAll=curve(PP);
  const passIdx=pts.reduce((m,o,i)=>stPassed(o.st)?i:m,-1);const upto=passIdx>=0?pts[Math.min(pts.length-1,passIdx+1)].x:-1;const dDone=passIdx>=0?curve(PP.filter(o=>o.x<=upto)):'';
  const sign=o=>`<div class="mp-sign" style="left:${o.x}px;top:${o.y}px"><span class="n">${CHNAME[o.sign]}</span><span class="t">${esc(STORY[o.sign].title)}</span></div>`;
