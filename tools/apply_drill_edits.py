@@ -3,6 +3,7 @@
 
 使い方: python3 tools/apply_drill_edits.py drill-edits_20261106.json
 1問1行の形はそのまま保つ。紙魚の一言（n）を空にした問題は n を消す。
+削除（del）にした問題はデータから取り除く。
 """
 import json, sys, pathlib
 
@@ -15,6 +16,7 @@ def main(path):
     edits = json.loads(pathlib.Path(path).read_text(encoding='utf-8'))
     lines = HTML.read_text(encoding='utf-8').split('\n')
     done = set()
+    removed = []
     for head in ('"Q": [', '"JQ": ['):
         if head not in lines:
             continue
@@ -24,6 +26,11 @@ def main(path):
             comma = t.endswith(',')
             q = json.loads(t.rstrip(','))
             e = edits.get(q['id'])
+            if e and e.get('del'):
+                removed.append(q['id'])
+                done.add(q['id'])
+                del lines[i]
+                continue
             if e:
                 for k in KEYS:
                     if k in e:
@@ -39,8 +46,14 @@ def main(path):
                 lines[i] = '  ' + json.dumps(q, ensure_ascii=False, separators=(',', ':')) + (',' if comma else '')
                 done.add(q['id'])
             i += 1
+        # 配列の最後の要素のあとにカンマが残らないようにする
+        j = i - 1
+        if lines[j].rstrip().endswith(','):
+            lines[j] = lines[j].rstrip()[:-1]
     HTML.write_text('\n'.join(lines), encoding='utf-8')
     miss = [k for k in edits if k not in done]
+    if removed:
+        print(f'削除: {len(removed)}問（{", ".join(removed)}）')
     print(f'{len(done)}問を取り込みました' + (f'（見つからないID: {", ".join(miss)}）' if miss else ''))
 
 

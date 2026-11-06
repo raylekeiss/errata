@@ -4751,7 +4751,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 <script id="errata-main">
 const DATA=JSON.parse(document.getElementById('errata-data').textContent);
 /* tools/drill-edit.html で直したドリル（この端末だけ）を上書き。書き出した分を本体に取り込めば全員に反映される */
-try{const E=JSON.parse(localStorage.getItem('errata_drill')||'{}');for(const L of [DATA.Q,DATA.JQ||[]])for(const q of L){if(E[q.id])Object.assign(q,E[q.id])}}catch(e){}
+try{const E=JSON.parse(localStorage.getItem('errata_drill')||'{}');for(const L of [DATA.Q,DATA.JQ||[]])for(const q of L){if(E[q.id])Object.assign(q,E[q.id])}
+ /* 編集画面で削除した問題は出さない */
+ DATA.Q=DATA.Q.filter(q=>!q.del);if(DATA.JQ)DATA.JQ=DATA.JQ.filter(q=>!q.del)}catch(e){}
 /* 画像：「名前: dataURL」を1行に1枚。カードの肖像は人物名がキー */
 /* GAS版（学校アカウント保存）から読み込まれたときは、画像をGitHub Pagesから読む */
 const CLOUD=!!(window.google&&google.script&&google.script.run);
