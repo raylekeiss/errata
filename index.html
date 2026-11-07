@@ -800,6 +800,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
  .bt-party .card{width:calc(56*var(--u))}
 }
 /* --- drill: earned bookmarks moved to the bottom right --- */
+/* 問題・選択肢・解説は縦に並べて、長いときは画面内でスクロール（解説が下にはみ出して「つぎの問題」が隠れないように） */
+.dr-flow{position:absolute;z-index:3;left:0;right:0;top:calc(110*var(--u));bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  display:flex;flex-direction:column;align-items:center;gap:calc(24*var(--u));padding:0 0 calc(env(safe-area-inset-bottom,0px) + 76px);scroll-padding-bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}
+.dr-flow .dr-paper,.dr-flow .dr-opts,.dr-flow .dr-note{position:relative;left:auto;top:auto;transform:none;flex:0 0 auto}
+.dr-flow .dr-note:empty{display:none}
 .dr-gain{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(7,12,31,.72);border:1px solid #c9a24a;border-radius:999px;padding:6px 16px}
 /* --- stars stand out; gacha tags moved to the right --- */
 .card .rar{color:#ffd54a;background:rgba(8,12,26,.78);padding:0 6px 1px;border-radius:3px;letter-spacing:0;text-shadow:0 0 5px rgba(255,190,60,.85)}
@@ -9234,9 +9239,9 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   ${QZ.tut?'':'<button class="gc-back tl" id="qQuit">やめる</button>'}<div class="gc-top">${coinsHTML(qEras())}</div>
   <div class="dr-gain">この回の獲得　${gainText(QZ.gainE)}</div>
   ${QZ.timer?`<div class="qz-timer" id="qzT"><i style="animation-duration:${QZ.timer}s"></i><b>${QZ.timer}</b></div>`:''}
-  <div class="dr-paper parch"><p>${esc(q.q)}</p></div>
+  <div class="dr-flow" id="qflow"><div class="dr-paper parch"><p>${esc(q.q)}</p></div>
   <div class="dr-opts" id="qo">${shuffle([q.a,...q.d]).map(o=>`<button class="slip" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
-  <div class="dr-note" id="qr"></div></div>`);
+  <div class="dr-note" id="qr"></div></div></div>`);
  QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'ドリル'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',back,null,'続ける')};
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;
@@ -9244,7 +9249,7 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   QZ.res[QZ.i]=ok;save();refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';tabs[QZ.i].textContent=ok?'✦':'✕';
   $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:'正解済みの問題（栞はなし）'):`正しくは「${esc(q.a)}」`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
-  if(QZ.timer)setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest'})},30);
+  setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})},60);
   $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
     saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞はホームの受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
    else FX.pageTurn(quizEnd)}};
