@@ -55,6 +55,8 @@ button.red{background:var(--red);color:#fff}button.on{background:var(--gold);col
 <script>
 const KEY='errata_drill';let LOCAL={},ORIG={},ALL=[],VOLS=[],JU={},CFG0={pending:1},F={ch:false,n:false,un:false,del:false};
 try{LOCAL=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+/* 採否が3択になる前の直し（×＝ok:0）を、新しい形（×＝ok:-1）に読みかえる */
+try{if(!localStorage.getItem(KEY+'_v')){for(const[id,v]of Object.entries(LOCAL))if(id.startsWith('JK-')&&v&&v.ok===0)v.ok=-1;localStorage.setItem(KEY,JSON.stringify(LOCAL));localStorage.setItem(KEY+'_v','2')}}catch(e){}
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $=s=>document.querySelector(s);
 const FIELDS=['q','a','d','x','n','lv','ok'];
@@ -63,6 +65,12 @@ const cur=id=>Object.assign({},ORIG[id],LOCAL[id]||{});
 fetch('../index.html').then(r=>r.text()).then(t=>{
  const d=JSON.parse(t.match(/<script[^>]*id="errata-data"[^>]*>([\s\S]*?)<\/script>/)[1]);
  VOLS=d.vols;JU=d.JU||{};CFG0=d.JCFG||{pending:1};drawPend();
+ /* 本体に取り込み済みの直し（元と同じ値になった項目）は、この端末の記録から片づける */
+ let cl=0;for(const id of Object.keys(LOCAL)){if(id==='__cfg'){if(LOCAL.__cfg&&(LOCAL.__cfg.pending?1:0)===(CFG0.pending?1:0)){delete LOCAL.__cfg;cl++}continue}
+  const o=d.Q.find(q=>q.id===id)||(d.JQ||[]).find(q=>q.id===id);if(!o){if(LOCAL[id].del){delete LOCAL[id];cl++}continue}
+  const L=LOCAL[id];for(const k of Object.keys(L)){if(JSON.stringify(L[k])===JSON.stringify(o[k]??(k==='n'?'':k==='ok'?0:undefined)))delete L[k]}
+  if(!Object.keys(L).length){delete LOCAL[id];cl++}}
+ if(cl)save();
  for(const q of d.Q){q._set='v:'+q.v;ORIG[q.id]=q;ALL.push(q.id)}
  for(const q of d.JQ||[]){q._set='u:'+q.u;q._jk=1;ORIG[q.id]=q;ALL.push(q.id)}
  const o=[['all','すべての問題']];for(const v of VOLS)o.push(['v:'+v.code,'ドリル：'+v.name]);
