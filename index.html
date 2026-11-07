@@ -260,7 +260,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 @media (prefers-reduced-motion:reduce){.drift i{animation:none}}
 @media (orientation:portrait){
   :root{--shelf-h:min(26vh,300px)}
-  .shelf{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;height:var(--shelf-h)}
+  .shelf{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;height:var(--shelf-h)}
   .tome,.tome.lead{height:100%}
   .oshi{height:78vh;bottom:calc(var(--shelf-h) - 10vh)}
   .oshi.cardmode{bottom:calc(var(--shelf-h) + 12vh)}
@@ -8148,7 +8148,7 @@ function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div
  const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():startPrologue()}}
 
 /* ---------- home ---------- */
-const SHIMI_IDLE=['今日はどの棚から読む？','図書館探索は、頁の種類が多いほど戦い方が広がるよ。','箱庭の家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、ドリルの「マイ範囲」に試験範囲を登録しておくと便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
+const SHIMI_IDLE=['今日はどの棚から読む？','カードゲームは、頁の種類が多いほど戦い方が広がるよ。','マイルームの家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、ドリルの「マイ範囲」に試験範囲を登録しておくと便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
 const ICON={
  story:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="24" cy="24" r="15"/><circle cx="24" cy="24" r="10" stroke-width="1"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke-linecap="round"/><path d="M24 12l3.5 12L24 36l-3.5-12z" fill="currentColor" stroke="none"/></svg>',
  drill:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M38 6c-10 2-18 10-22 22l-3 7 6-4c10-3 17-12 19-25z"/><path d="M16 28l-6 14" stroke-linecap="round"/><path d="M22 22l-5 5" stroke-width="1"/><path d="M30 38h10M30 43h6" stroke-linecap="round"/></svg>',
@@ -8185,29 +8185,28 @@ function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=
   <div class="h-coins">${boxBtnHTML()}${coinsHTML()}</div>
   <div class="oshi ${(o==='シミ'||CHARA[o])?'':'cardmode'}" id="oshi" role="button" aria-label="ひとこと">${oshiHTML}</div>
   <button class="oshi-chg" id="oshiChg">人物を変更する</button>
-  <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}${FLO.replace('class="flo"','class="ink"')}</div>
+  <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}</div>
   <nav class="shelf" aria-label="メニュー">
    ${btn('lead','story','story','ストーリー',`<span class="nx">${cst?stName(cst).replace(/　誤植の群れ.*$/,'　誤植の群れ')+'へ':'続きは準備中'}</span><span class="ribbon"></span>`)}
    ${btn('','quiz','drill','ドリル')}
-   ${btn('','gacha','gacha','頁を<wbr>めくる')}
-   ${btn('','lib','lib','図書館<wbr>探索')}
+   ${btn('','gacha','gacha','ガチャ')}
+   ${btn('','lib','lib','カード<wbr>ゲーム')}
    ${btn('','party','party','編成')}
-   ${btn('','niwa','niwa','箱庭')}
-   ${btn('','zukan','zukan','図鑑')}
+   ${btn('','niwa','niwa','マイ<wbr>ルーム')}
   </nav></div>`);
- const talk=()=>{$('#bubble').innerHTML=homeBubble()+FLO.replace('class="flo"','class="ink"')};
+ const talk=()=>{$('#bubble').innerHTML=homeBubble()};
  $('#bubble').onclick=talk;$('#oshi').onclick=talk;$('#oshiChg').onclick=chooseOshi;$('#burger').onclick=openDrawer;
  if(S.tour){S.tour=false;save();setTimeout(()=>{if($('#oshi')&&!$('#modal'))homeTour()},450)}}
 const TOUR=[['[data-go="story"]','ストーリー','部を選ぶと、史書庫の地図が開くよ。節ごとに読み進めて、ときどき出てくる「誤植の群れ」は20秒以内に答えて退治しよう。'],
  ['.h-coins .boxbtn','受け取りボックス','もらった栞は、いったんここに届くよ。タップして受け取ってね。'],
  ['[data-go="quiz"]','ドリル','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「マイ範囲」で試験範囲の章や王朝にチェックを入れておくと、範囲の問題だけを解けるよ。'],
- ['[data-go="gacha"]','頁をめくる','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
- ['[data-go="lib"]','図書館探索','手に入れた頁でデッキを組んで、書架の奥の誤植と戦うんだ。頁の種類が多いほど戦い方が広がるよ。最後まで進むと栞が1枚もらえる。'],
+ ['[data-go="gacha"]','ガチャ','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
+ ['[data-go="lib"]','カードゲーム','手に入れた頁でデッキを組んで、書架の奥の誤植と戦うんだ。頁の種類が多いほど戦い方が広がるよ。最後まで進むと栞が1枚もらえる。'],
  ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
- ['[data-go="niwa"]','箱庭','君の書斎を好きに飾れるよ。家具は栞と交換できるし、手に入れた頁は額に入れて壁に掛けられるんだ。'],
- ['[data-go="zukan"]','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
+ ['[data-go="niwa"]','マイルーム','君の書斎を好きに飾れるよ。家具は栞と交換できるし、手に入れた頁は額に入れて壁に掛けられるんだ。'],
+ ['#burger','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
  ['#oshiChg','人物を変更する','手に入れた頁の人物を、ホームに飾れるよ。'],
- ['#burger','メニュー',TOUCH?'文字の速さの設定は、ここからだよ。':'全画面表示や、文字の速さの設定はここからだよ。']];
+ ['#burger','メニュー',TOUCH?'図鑑や、文字の速さの設定は、ここからだよ。':'図鑑や全画面表示、文字の速さの設定はここからだよ。']];
 let TOUR_I=-1;
 function homeTour(i=0){const old=$('#coach');if(old)old.remove();TOUR_I=i;
  if(i>=TOUR.length){TOUR_I=-1;toast('説明はおしまい。いってらっしゃい');return}
@@ -8522,7 +8521,7 @@ function boxAddTo(key,src,e,n){if(!n)return;S.box=S.box||[];let b=S.box.find(x=>
 function boxHas(e){return (S.box||[]).some(b=>b.e===e)}
 function boxBtnHTML(){const n=boxN();return `<button class="boxbtn${n?' has':''}" aria-label="受け取りボックス（${n}件）">${BOXSVG}<span>受取</span>${n?`<i>${n>99?'99+':n}</i>`:''}</button>`}
 function openBox(){const L=S.box||[];
- const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・ドリル・図書館探索でもらった栞は、ここに届きます。</p>';
+ const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・ドリル・カードゲームでもらった栞は、ここに届きます。</p>';
  modal(`<h3>受け取りボックス</h3><p class="bx-left" id="bxLeft">${L.length?`タップして受け取ろう　残り<b>${L.length}</b>件`:''}</p>
   <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${ERAS[b.e].c}">${ribbon(b.e)}<span class="bx-t"><b>${ERAS[b.e].k}の栞 ×${b.n}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
   <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn');if(b)b.outerHTML=boxBtnHTML()});
@@ -8746,6 +8745,7 @@ function openDrawer(){closeDrawer();
  const d=document.createElement('nav');d.className='drawer';d.id='drawer';d.setAttribute('aria-label','メニュー');
  const sp=k=>`<button data-sp="${k}" class="${CFG.speed===k?'on':''}">${{slow:'遅い',normal:'ふつう',fast:'速い',instant:'一瞬'}[k]}</button>`;
  d.innerHTML=`<h3>メニュー<button id="dwClose" aria-label="閉じる">×</button></h3>
+  <button class="item" id="dwZukan">図鑑<small>手に入れた頁の人物のことを読めます</small></button>
   ${TOUCH?'':`<button class="item" id="dwFS">${isFS()?'全画面表示をやめる':'全画面で表示する'}<small>ブラウザで直接開いているときに使えます</small></button>`}
   <div class="grp">文字の表示の速さ<div class="seg">${['slow','normal','fast','instant'].map(sp).join('')}</div></div>
   <button class="item" id="dwFx">演出の見本<small>揺れ・光る・強調・ページめくりを試せます</small></button>
@@ -8753,6 +8753,7 @@ function openDrawer(){closeDrawer();
   <button class="item" id="dwTitle">タイトルに戻る<small>記録は自動で保存されています</small></button>`;
  document.body.append(bg,d);
  bg.onclick=closeDrawer;$('#dwClose').onclick=closeDrawer;
+ $('#dwZukan').onclick=()=>{closeDrawer();FX.pageTurn(Zukan)};
  {const fb=$('#dwFS');if(fb)fb.onclick=()=>{toggleFS();closeDrawer()}}
  $('#dwTitle').onclick=()=>{closeDrawer();FX.pageTurn(Title)};
  $('#dwFx').onclick=()=>{closeDrawer();FX.pageTurn(FxLab)};
@@ -9003,7 +9004,7 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
   <div class="lkb-l"><div class="lkb-card"><i class="lkb-rose"></i><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt=""></div>
    <label class="lkb-cap" title="タップして名前を変える"><input id="lknm" maxlength="8" value="${esc(S.name||'')}" placeholder="名前" aria-label="名前（8文字まで）"><i class="lkb-pen" aria-hidden="true">✎</i></label><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
   <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
-   <p class="lkb-d">あなたの姿を選んでください。名前は写真の下で直せます。<br>あとから箱庭の「キャラ」でいつでも変えられます。</p>
+   <p class="lkb-d">あなたの姿を選んでください。名前は写真の下で直せます。<br>あとからマイルームの「キャラ」でいつでも変えられます。</p>
    ${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('髪の色')}${sw('color',LOOK_COLORS)}
    ${LOOK_HAIRS.length?`${lb('後ろ髪')}<div class="look-sw tx" data-g="hair">${LOOK_HAIRS.map(x=>`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}
    <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button></div></div></div>`,o.onCancel);
@@ -9276,7 +9277,7 @@ function Gacha(opt={}){GOPT=opt;const tut=!!opt.tut;if(tut)GERA=0;const e=GERA,E
  show(`<div class="gc gc2" id="gc">
   <div class="gc-bg" ${IMG['背景_ガチャ']?`style="background-image:url(${IMG['背景_ガチャ']})"`:''}></div><div class="gc-shade"></div>
   ${tut?'':'<button class="gc-back gc-ret" data-go="home">‹ 戻る</button>'}
-  <div class="gc-head"><div class="gc-title">頁をめくる</div><p class="gc-sub">時の頁をめくり、まだ見ぬ出会いをあなたの元へ。</p></div>
+  <div class="gc-head"><div class="gc-title">ガチャ</div><p class="gc-sub">時の頁をめくり、まだ見ぬ出会いをあなたの元へ。</p></div>
   <div class="gc-top">${coinsHTML()}</div>
   <div class="gc-shimi">${IMG['シミ']?`<img src="${IMG['シミ']}" alt="">`:''}</div>
   <div class="gc-say"><span class="who">シミ</span>${esc(line)}</div>
@@ -9370,7 +9371,7 @@ function Zukan(){const L=zfList(CARDS);show(`<div class="screen">${topbar('図�
  document.querySelectorAll('[data-z]').forEach(d=>d.onclick=()=>{const c=CARD[d.dataset.z];const own=lv(c.n);
   modal(`<div class="detail"><div>${cardHTML(c.n)}</div><div><h3>${own?esc(c.n):'？？？'}</h3><dl>
   <dt>属性</dt><dd><span class="attr ${ATTR_CLASS(c.a)}">${c.a}</span></dd><dt>地域</dt><dd>${own?esc(c.rg):'？？？'}</dd>
-  <dt>どんな人？</dt><dd>${esc(c.f)}</dd>${isSP(c.n)?`<dt>入手</dt><dd>ストーリーで受けとる特別な頁</dd><dt>特別な頁</dt><dd>宗教の創始者の頁です。★や凸はなく、ガチャ・編成・バトルには登場しません。</dd>`:own?`<dt>スキル</dt><dd>${esc(c.sk)}</dd><dt>凸</dt><dd>${lv(c.n)-1}凸（最大4凸）</dd>`:'<dt>入手</dt><dd>'+(c.dist&&c.st<STORY.length?CHNAME[c.st]+'のクリア報酬、または頁をめくると出ることがある':'頁をめくると出ることがある')+'</dd>'}</dl></div></div>
+  <dt>どんな人？</dt><dd>${esc(c.f)}</dd>${isSP(c.n)?`<dt>入手</dt><dd>ストーリーで受けとる特別な頁</dd><dt>特別な頁</dt><dd>宗教の創始者の頁です。★や凸はなく、ガチャ・編成・バトルには登場しません。</dd>`:own?`<dt>スキル</dt><dd>${esc(c.sk)}</dd><dt>凸</dt><dd>${lv(c.n)-1}凸（最大4凸）</dd>`:'<dt>入手</dt><dd>'+(c.dist&&c.st<STORY.length?CHNAME[c.st]+'のクリア報酬、またはガチャで出ることがある':'ガチャで出ることがある')+'</dd>'}</dl></div></div>
   <div class="row"><button class="btn" data-close>閉じる</button></div>`)})}
 
 /* ---------- 箱庭 ---------- */
@@ -9581,8 +9582,8 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
 
 /* ---- 画面 ---- */
 function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab||0,z:{s:1,x:0,y:0}};NWPTR.clear();
- show(`<div class="screen nw-screen">${topbar('箱庭')}
- <div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="箱庭"></svg>
+ show(`<div class="screen nw-screen">${topbar('マイルーム')}
+ <div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="マイルーム"></svg>
   <button class="nw-reset" id="nwReset" hidden aria-label="全体を表示">全体</button>
   <div class="nw-bub" id="nwBub" hidden></div>
   <div class="nw-selbar" id="nwSel" hidden></div><p class="nw-hint" id="nwHint"></p></div>
@@ -9697,7 +9698,7 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
 
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
- modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">箱庭にいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿・名前を変える</button></div>
+ modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">マイルームにいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿・名前を変える</button></div>
  <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>`);
  document.querySelectorAll('.nw-crow').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
   if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1)}
@@ -10278,9 +10279,9 @@ async function lxEndTurn(){if(!X||X.busy||X.over)return;
   lxRender()}
  lxStartTurn()}
 function lxLose(){if(S.lib.run&&S.lib.run.tut){X.over=true;X=null;S.lib.run=S.lib.run.prev||null;save();lxCoachClear();
-  setTimeout(()=>modal(`<h3>練習はここまで</h3><p style="line-height:1.8">誤植に押し返されてしまった。練習なので、何度でも挑戦できます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu),400);return}
+  setTimeout(()=>modal(`<h3>練習はここまで</h3><p style="line-height:1.8">誤植に押し返されてしまった。練習なので、何度でも挑戦できます。</p><div class="row" style="justify-content:center"><button class="btn" data-close>カードゲームへ</button></div>`,LibMenu),400);return}
  X.over=true;X.busy=true;const R=S.lib.run;S.lib.run=null;X=null;saveNow();
- setTimeout(()=>modal(`<h3>探索は失敗に終わった</h3><p style="line-height:1.8">誤植に押し返されてしまった。<br>デッキを組み直して、もう一度挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu),400)}
+ setTimeout(()=>modal(`<h3>探索は失敗に終わった</h3><p style="line-height:1.8">誤植に押し返されてしまった。<br>デッキを組み直して、もう一度挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>カードゲームへ</button></div>`,LibMenu),400)}
 function lxItemInfo(k,isPot,useBtn){const t=isPot?LX_POT[k]:LX_RELIC[k];if(!t)return;
  modal(`${lxIco(k,'big')}<h3 style="text-align:center">${isPot?'薬':'装備'}「${esc(k)}」</h3>${lxCurse(k)?'<p style="text-align:center"><i class="lx-ctag">デメリットあり</i></p>':''}<p style="line-height:1.8;text-align:center">${esc(t)}</p><div class="row" style="justify-content:center">${useBtn?'<button class="btn red" id="lxUse">使う</button><button class="btn light" data-close>やめる</button>':'<button class="btn" data-close>閉じる</button>'}</div>`);
  if(useBtn)$('#lxUse').onclick=()=>{closeModal();useBtn()}}
@@ -10402,7 +10403,7 @@ function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAliv
     <p class="lx-dn">${d.unplayable?'この頁は切れない':d.cost>X.p.en?'エネルギーが足りない':!lxCanPlay(s)?'手札がすべて攻撃の頁になると切れる':'もう一度タップで切る'+(d.target&&alive.length>1?'（狙う敵をタップしても切れる）':'')}</p>`;dp.classList.add('on')}
   else dp.classList.remove('on')}
  if(X.tut&&X.tut.hl)document.querySelectorAll(X.tut.hl).forEach(el=>el.classList.add('lx-hl'))}
-function lxHelp(){modal(`<h3>図書館探索の遊び方</h3><div style="line-height:1.8;font-size:15px">
+function lxHelp(){modal(`<h3>カードゲームの遊び方</h3><div style="line-height:1.8;font-size:15px">
  <p>毎ターン、エネルギー3と手札5枚で始まります。頁を<b>タップで選び、もう一度タップで切ります</b>。攻撃の頁は、敵をタップするとその敵を狙います。</p>
  <p><b>そのターン最初に切った人物の頁</b>でクイズが出ます。正解すると、<b>その頁の効果が1.5倍</b>になります（基本の頁にはクイズは出ません）。</p>
  <p>敵の頭上に、次の行動が予告されています。<b>余白</b>はそのターンのダメージを防ぎます（次の自分のターンの始めに消えます）。<b>威信</b>は攻撃が強くなる、<b>動揺</b>は受けるダメージが1.5倍、<b>衰退</b>は与えるダメージが0.75倍です。</p>
@@ -10446,7 +10447,7 @@ async function lxTutEvent(ev,d){const T=X&&X.tut;if(!T)return;
   await lxCoach('余白は、次の自分のターンの始めに消えるよ。毎ターン張り直そう。今度の予告は「攻撃」と「守り」。守りは、誤植が自分に余白を張るってことだね。',{next:true,hl:'.lx-e .lx-it'});
   await lxCoach('あとは自由に戦って、誤植を退治してみよう。困ったら右下の「遊び方」を見てね。',{next:true})}}
 function lxTutWin(){const L=S.lib;L.run=L.run&&L.run.tut?(L.run.prev||null):L.run;L.tut=true;save();
- modal(`<h3>練習完了！</h3><p style="line-height:1.8">これで戦い方はばっちりだね。<br>本番の探索では、戦闘が5回とボスが1回。デッキを組んで、書架の奥へ進もう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
+ modal(`<h3>練習完了！</h3><p style="line-height:1.8">これで戦い方はばっちりだね。<br>本番の探索では、戦闘が5回とボスが1回。デッキを組んで、書架の奥へ進もう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>カードゲームへ</button></div>`,LibMenu)}
 
 /* ---------- 探索（メニュー・デッキ・道のり） ---------- */
 /* デッキの絵（本と3枚の頁） */
@@ -10471,7 +10472,7 @@ function LibMenu(keep){const L=lxLib();if(!keep)L.stage=lxMaxStage();save();cons
     <button class="lxs-go" id="lxGo" ${short?'disabled':''}>探索をはじめる<i>›</i></button></div>
    ${short?`<p class="lxs-warn">デッキは${LX_MIN}枚以上必要です。「デッキを組む」で頁を足してください。</p>`:''}`;
  show(`<div class="lxs" id="lxs"><div class="lxs-bg" style="background-image:url(${bg})"></div><div class="lxs-shade"></div>
-  <div class="lxs-top"><button class="lxs-back" data-go="home">戻る</button><h2 class="lxs-title">図書館探索${LXS_FLO}</h2><div class="lxs-coins">${coinsHTML()}</div></div>
+  <div class="lxs-top"><button class="lxs-back" data-go="home">戻る</button><h2 class="lxs-title">カードゲーム${LXS_FLO}</h2><div class="lxs-coins">${coinsHTML()}</div></div>
   <div class="lxs-hero"><h1><ruby>書架<rt>ダンジョン</rt></ruby>の奥へ</h1>${LXS_FLO.replace('lxs-flo','lxs-flo big')}<p>手に入れた頁を手に、<br>書架の奥にひそむ誤植を退治しよう。</p>${R?`<p class="lxs-rec">完走 ${L.clears}回　／　挑戦 ${L.runs}回</p>`:lxStagePicker(L)}</div>
   <div class="lxs-panel"><i class="cn tl"></i><i class="cn tr"></i><i class="cn bl"></i><i class="cn br"></i>${panel}</div></div>`);
  if(R){$('#lxCont').onclick=()=>FX.pageTurn(lxMap);$('#lxGive').onclick=()=>askYes('探索をあきらめますか？\n栞はもらえません。','あきらめる',()=>{S.lib.run=null;save();LibMenu()})}
@@ -10775,9 +10776,9 @@ function lxRest(){const R=S.lib.run;const heal=Math.floor(R.max*.3);
   items:R.deck.map((id,i)=>({i,def:lxDef(id),after:lxDef(id,true)})).filter(o=>!R.ann.includes(o.i)),ask:'この頁に注釈を書き込みますか？',yes:'注釈を書き込む',
   pick:it=>{R.ann.push(it.i);toast('注釈を書き込んだ');lxNextFloor()}})}
 function lxComplete(){const L=S.lib;const R=L.run;const si=R?R.stage||0:0;const SG=LX_STAGES[si];const g=[0,0,0];for(let k=0;k<SG.rew;k++)g[Math.floor(Math.random()*3)]++;
- g.forEach((v,i)=>{if(v)boxAdd(`図書館探索　第${si+1}層を完走`,i,v)});L.clears=(L.clears||0)+1;L.sc=L.sc||{};L.sc[si]=(L.sc[si]||0)+1;const first=L.best==null||si>L.best;if(first)L.best=si;L.run=null;saveNow();
+ g.forEach((v,i)=>{if(v)boxAdd(`カードゲーム　第${si+1}層を完走`,i,v)});L.clears=(L.clears||0)+1;L.sc=L.sc||{};L.sc[si]=(L.sc[si]||0)+1;const first=L.best==null||si>L.best;if(first)L.best=si;L.run=null;saveNow();
  const opened=first&&si+1<LX_STAGES.length?`<br><b>第${si+2}層「${esc(LX_STAGES[si+1].n)}」</b>に進めるようになった。`:'';
- FX.flash('#ffe6a8');modal(`<h3>第${si+1}層を完走した！</h3><p style="line-height:1.8;text-align:center">${esc(SG.n)}の誤植を退治した。<br>お礼の<b>${gainText(g)}</b>が、ホームの受け取りボックスに届いた。${opened}</p>${lxTipHTML(R&&R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>図書館探索へ</button></div>`,LibMenu)}
+ FX.flash('#ffe6a8');modal(`<h3>第${si+1}層を完走した！</h3><p style="line-height:1.8;text-align:center">${esc(SG.n)}の誤植を退治した。<br>お礼の<b>${gainText(g)}</b>が、ホームの受け取りボックスに届いた。${opened}</p>${lxTipHTML(R&&R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>カードゲームへ</button></div>`,LibMenu)}
 
 Title();
 cloudInit();
