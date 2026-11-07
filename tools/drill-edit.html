@@ -59,6 +59,7 @@ try{LOCAL=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 try{if(!localStorage.getItem(KEY+'_v')){for(const[id,v]of Object.entries(LOCAL))if(id.startsWith('JK-')&&v&&v.ok===0)v.ok=-1;localStorage.setItem(KEY,JSON.stringify(LOCAL));localStorage.setItem(KEY+'_v','2')}}catch(e){}
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $=s=>document.querySelector(s);
+const qh=t=>esc(t).replace(/\{\{(.+?)\}\}/g,'<u style="text-decoration-color:#b5302a;text-decoration-thickness:2px">$1</u>').replace(/\n/g,'<br>');
 const FIELDS=['q','a','d','x','n','lv','ok'];
 function save(){try{localStorage.setItem(KEY,JSON.stringify(LOCAL))}catch(e){alert('この端末に保存できませんでした（プライベートブラウズなどでは保存できません）')}}
 const cur=id=>Object.assign({},ORIG[id],LOCAL[id]||{});
@@ -90,7 +91,7 @@ function draw(){const set=$('#set').value,w=$('#q').value.trim();try{sessionStor
  $('#g').innerHTML=ids.slice(0,MAX).map(id=>{const o=ORIG[id],q=cur(id);
   const del=q.del,tags=[o._jk?`<span class="tag ${q.lv==='発展'?'adv':''}">${esc(JU[o.u]||o.u)}・${esc(q.lv)}</span>`:`<span class="tag">第${o.ch}章</span>`,q.del?'<span class="tag del">削除</span>':LOCAL[id]?'<span class="tag ch">直した</span>':'',q.n?'<span class="tag n">紙魚の一言</span>':''].join('');
   const yn=o._jk?`<div class="yn"><button class="yes ${q.ok===1?'on':''}" data-yn="1" aria-label="採用">○</button><button class="no ${q.ok===-1?'on':''}" data-yn="-1" aria-label="不採用">×</button></div>`:'';
-  return `<div class="row${q.del?' del':''}" data-id="${esc(id)}"><div><div class="id">${esc(id)}</div><div class="q">${esc(q.q)}</div><div class="a">${esc(q.a)}</div><div class="tags">${tags}</div></div>${yn}</div>`}).join('');
+  return `<div class="row${q.del?' del':''}" data-id="${esc(id)}"><div><div class="id">${esc(id)}</div><div class="q">${qh(q.q)}</div><div class="a">${esc(q.a)}</div><div class="tags">${tags}</div></div>${yn}</div>`}).join('');
  document.querySelectorAll('.row').forEach(r=>r.onclick=e=>{const b=e.target.closest('[data-yn]');const id=r.dataset.id;
   if(b){e.stopPropagation();const v=+b.dataset.yn;setField(id,{ok:cur(id).ok===v?0:v});draw();return}edit(id)})}/* 同じ印をもう一度押すと未定に戻る */
 /* 元と同じ値になった項目は消して、直した分だけを残す */
@@ -101,7 +102,7 @@ $('#q').oninput=draw;$('#set').onchange=draw;
 for(const[k,b]of[['ch','#fCh'],['n','#fN'],['un','#fUn'],['del','#fDel']])$(b).onclick=e=>{F[k]=!F[k];e.target.classList.toggle('on',F[k]);draw()};
 function edit(id){const o=ORIG[id],q=cur(id);const ed=document.createElement('div');ed.className='ed';
  ed.innerHTML=`<div class="box"><h2>${esc(id)}${q.del?'　<span style="color:#b5302a">（削除済み）</span>':''}</h2>
- <label>問題</label><textarea id="eq">${esc(q.q)}</textarea>${q.q!==o.q?`<p class="orig">元：${esc(o.q)}</p>`:''}
+ <label>問題 <small>（下線にしたい部分は {{ と }} で囲む。例：…カノッサで{{教皇が謝罪した}}）</small></label><textarea id="eq">${esc(q.q)}</textarea>${q.q!==o.q?`<p class="orig">元：${esc(o.q)}</p>`:''}
  <label>正解</label><input type="text" id="ea" value="${esc(q.a)}">${q.a!==o.a?`<p class="orig">元：${esc(o.a)}</p>`:''}
  <label>誤答（3つ）</label><div class="ds">${[0,1,2].map(i=>`<input type="text" class="ed-d" value="${esc((q.d||[])[i])}">`).join('')}</div>
  <label>解説 <small>（硬い文章で事実だけ。全問必須）</small></label><textarea id="ex">${esc(q.x)}</textarea>${q.x!==o.x?`<p class="orig">元：${esc(o.x)}</p>`:''}
@@ -115,7 +116,7 @@ function edit(id){const o=ORIG[id],q=cur(id);const ed=document.createElement('di
   if(o._jk){v.lv=$('#elv').value;v.ok=+$('#eok').value}return v};
  const check=v=>{const w=[];if(!v.q)w.push('問題が空です');if(!v.a)w.push('正解が空です');if(v.d.some(x=>!x))w.push('誤答を3つ入れてください');
   if(v.d.includes(v.a))w.push('誤答に正解と同じものがあります');if(new Set(v.d).size<v.d.length)w.push('誤答が重複しています');if(!v.x)w.push('解説が空です');return w};
- const upd=()=>{const v=val();$('#pv').innerHTML=`<p class="hd">正解！　<small style="color:#6d5f4a;font-weight:400">正しくは「${esc(v.a)}」</small></p><p class="tx">${esc(v.x)}${v.n?`<span class="exn"><span class="who">シミ</span>${esc(v.n)}</span>`:''}</p>`;$('#warn').textContent=check(v).join('　')};
+ const upd=()=>{const v=val();$('#pv').innerHTML=`<p class="tx" style="margin-bottom:10px">${qh(v.q)}</p><p class="hd">正解！　<small style="color:#6d5f4a;font-weight:400">正しくは「${esc(v.a)}」</small></p><p class="tx">${esc(v.x)}${v.n?`<span class="exn"><span class="who">シミ</span>${esc(v.n)}</span>`:''}</p>`;$('#warn').textContent=check(v).join('　')};
  ed.addEventListener('input',upd);ed.addEventListener('change',upd);upd();
  const close=()=>{ed.remove();document.body.style.overflow='';draw()};
  const ok=ed.querySelector('#ok');if(ok)ok.onclick=()=>{const v=val();const w=check(v);if(w.length){$('#warn').textContent=w.join('　');return}
