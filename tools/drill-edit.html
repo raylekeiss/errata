@@ -47,13 +47,13 @@ button.red{background:var(--red);color:#fff}button.on{background:var(--gold);col
 <select id="set" aria-label="範囲"></select>
 <input id="q" placeholder="問題文・答え・解説で絞りこむ" aria-label="絞りこみ">
 <button id="fCh">直した分だけ</button><button id="fN">一言あり</button><button id="fUn">採否未定</button><button id="fDel">削除した分</button>
-<button id="imp">読み込む</button><button class="red" id="exp">書き出す</button></header>
-<p class="note">問題をタップして直す → 「保存」。直した分はこの端末のゲームにすぐ反映されます（同じブラウザで開いたとき）。全員に反映するには「書き出す」でできたファイルを送ってください。受験対策の問題は、行の右の ○ / × で採否を決められます（採用にした問題だけが、のちに受験対策タブに出ます）。問題を削除するときは、問題を開いて右下の「この問題を削除」。</p>
+<button id="fPend" title="受験対策タブに、採否未定の問題も出すかどうか">生徒に未定も出す：…</button><button id="imp">読み込む</button><button class="red" id="exp">書き出す</button></header>
+<p class="note">問題をタップして直す → 「保存」。直した分はこの端末のゲームにすぐ反映されます（同じブラウザで開いたとき）。全員に反映するには「書き出す」でできたファイルを送ってください。受験対策の問題は、行の右の ○ / × で採否を決められます。受験対策タブに出るのは「○（採用）」の問題です。「生徒に未定も出す」をオンにしているあいだは、まだ ○ も × もつけていない問題も出ます（× の問題は出ません）。問題を削除するときは、問題を開いて右下の「この問題を削除」。</p>
 <div class="count" id="cnt"></div>
 <div class="list" id="g"></div>
 <input type="file" id="file" accept=".json,application/json" hidden>
 <script>
-const KEY='errata_drill';let LOCAL={},ORIG={},ALL=[],VOLS=[],JU={},F={ch:false,n:false,un:false,del:false};
+const KEY='errata_drill';let LOCAL={},ORIG={},ALL=[],VOLS=[],JU={},CFG0={pending:1},F={ch:false,n:false,un:false,del:false};
 try{LOCAL=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $=s=>document.querySelector(s);
@@ -62,7 +62,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(LOCAL))}catch(e){ale
 const cur=id=>Object.assign({},ORIG[id],LOCAL[id]||{});
 fetch('../index.html').then(r=>r.text()).then(t=>{
  const d=JSON.parse(t.match(/<script[^>]*id="errata-data"[^>]*>([\s\S]*?)<\/script>/)[1]);
- VOLS=d.vols;JU=d.JU||{};
+ VOLS=d.vols;JU=d.JU||{};CFG0=d.JCFG||{pending:1};drawPend();
  for(const q of d.Q){q._set='v:'+q.v;ORIG[q.id]=q;ALL.push(q.id)}
  for(const q of d.JQ||[]){q._set='u:'+q.u;q._jk=1;ORIG[q.id]=q;ALL.push(q.id)}
  const o=[['all','すべての問題']];for(const v of VOLS)o.push(['v:'+v.code,'ドリル：'+v.name]);
@@ -75,19 +75,19 @@ function draw(){const set=$('#set').value,w=$('#q').value.trim();try{sessionStor
  const ids=ALL.filter(id=>{const o=ORIG[id],q=cur(id);
   if(set==='jk'?!o._jk:set!=='all'&&o._set!==set)return false;
   if(F.ch&&!LOCAL[id])return false;if(F.del&&!q.del)return false;if(F.n&&!q.n)return false;
-  if(F.un&&!(o._jk&&!LOCAL[id]?.hasOwnProperty('ok')))return false;
+  if(F.un&&!(o._jk&&!q.ok))return false;
   return hit(q,w)});
  const MAX=300;
- $('#cnt').textContent=`${ids.length}問${ids.length>MAX?`（先頭の${MAX}問を表示。絞りこむとほかの問題も出ます）`:''}　／　この端末で直した問題：${Object.keys(LOCAL).length}問（うち削除${Object.values(LOCAL).filter(v=>v.del).length}問）`;
+ $('#cnt').textContent=`${ids.length}問`+(set==='jk'||set.startsWith('u:')?`（○${ids.filter(i=>cur(i).ok===1).length}・×${ids.filter(i=>cur(i).ok===-1).length}・未定${ids.filter(i=>!cur(i).ok).length}）`:'')+`${ids.length>MAX?`（先頭の${MAX}問を表示。絞りこむとほかの問題も出ます）`:''}　／　この端末で直した問題：${Object.keys(LOCAL).filter(k=>k!=='__cfg').length}問（うち削除${Object.values(LOCAL).filter(v=>v.del).length}問）`;
  $('#g').innerHTML=ids.slice(0,MAX).map(id=>{const o=ORIG[id],q=cur(id);
   const del=q.del,tags=[o._jk?`<span class="tag ${q.lv==='発展'?'adv':''}">${esc(JU[o.u]||o.u)}・${esc(q.lv)}</span>`:`<span class="tag">第${o.ch}章</span>`,q.del?'<span class="tag del">削除</span>':LOCAL[id]?'<span class="tag ch">直した</span>':'',q.n?'<span class="tag n">紙魚の一言</span>':''].join('');
-  const yn=o._jk?`<div class="yn"><button class="yes ${q.ok===1&&LOCAL[id]&&'ok' in LOCAL[id]?'on':''}" data-yn="1" aria-label="採用">○</button><button class="no ${q.ok===0&&LOCAL[id]&&'ok' in LOCAL[id]?'on':''}" data-yn="0" aria-label="不採用">×</button></div>`:'';
+  const yn=o._jk?`<div class="yn"><button class="yes ${q.ok===1?'on':''}" data-yn="1" aria-label="採用">○</button><button class="no ${q.ok===-1?'on':''}" data-yn="-1" aria-label="不採用">×</button></div>`:'';
   return `<div class="row${q.del?' del':''}" data-id="${esc(id)}"><div><div class="id">${esc(id)}</div><div class="q">${esc(q.q)}</div><div class="a">${esc(q.a)}</div><div class="tags">${tags}</div></div>${yn}</div>`}).join('');
  document.querySelectorAll('.row').forEach(r=>r.onclick=e=>{const b=e.target.closest('[data-yn]');const id=r.dataset.id;
-  if(b){e.stopPropagation();setField(id,{ok:+b.dataset.yn});draw();return}edit(id)})}
+  if(b){e.stopPropagation();const v=+b.dataset.yn;setField(id,{ok:cur(id).ok===v?0:v});draw();return}edit(id)})}/* 同じ印をもう一度押すと未定に戻る */
 /* 元と同じ値になった項目は消して、直した分だけを残す */
 function setField(id,ch){const o=ORIG[id];const L=Object.assign({},LOCAL[id]||{},ch);
- for(const k of Object.keys(L)){if(JSON.stringify(L[k])===JSON.stringify(o[k]??(k==='n'?'':undefined))&&!(o._jk&&k==='ok'))delete L[k]}
+ for(const k of Object.keys(L)){if(JSON.stringify(L[k])===JSON.stringify(o[k]??(k==='n'?'':undefined))&&!(k==='ok'&&(o.ok||0)!==0&&L[k]===0))delete L[k];if(L.ok===0&&!o.ok)delete L.ok}
  if(Object.keys(L).length)LOCAL[id]=L;else delete LOCAL[id];save()}
 $('#q').oninput=draw;$('#set').onchange=draw;
 for(const[k,b]of[['ch','#fCh'],['n','#fN'],['un','#fUn'],['del','#fDel']])$(b).onclick=e=>{F[k]=!F[k];e.target.classList.toggle('on',F[k]);draw()};
@@ -99,12 +99,12 @@ function edit(id){const o=ORIG[id],q=cur(id);const ed=document.createElement('di
  <label>解説 <small>（硬い文章で事実だけ。全問必須）</small></label><textarea id="ex">${esc(q.x)}</textarea>${q.x!==o.x?`<p class="orig">元：${esc(o.x)}</p>`:''}
  <label>紙魚の一言 <small>（任意。小ネタがあるときだけ。空にすると出ません）</small></label><textarea id="en">${esc(q.n||'')}</textarea>${(q.n||'')!==(o.n||'')?`<p class="orig">元：${esc(o.n||'（なし）')}</p>`:''}
  ${o._jk?`<div class="opts"><label>難易度 <select id="elv"><option${q.lv==='標準'?' selected':''}>標準</option><option${q.lv==='発展'?' selected':''}>発展</option></select></label>
- <label><input type="checkbox" id="eok"${q.ok===1?' checked':''}>採用する</label></div>`:''}
+ <label>採否 <select id="eok"><option value="0"${!q.ok?' selected':''}>未定</option><option value="1"${q.ok===1?' selected':''}>○ 採用</option><option value="-1"${q.ok===-1?' selected':''}>× 不採用</option></select></label></div>`:''}
  <div class="pv" id="pv"></div><p class="warn" id="warn"></p>
  <div class="btns">${q.del?'<button class="red" id="ud">削除を取り消す</button>':'<button class="red" id="ok">保存</button>'}${LOCAL[id]&&!q.del?'<button id="rs">直す前に戻す</button>':''}<button id="cl">閉じる</button>${q.del?'':'<button id="dl" style="margin-left:auto;background:#3a2a28;color:#f3ead6">この問題を削除</button>'}</div></div>`;
  document.body.appendChild(ed);document.body.style.overflow='hidden';
  const val=()=>{const v={q:$('#eq').value.trim(),a:$('#ea').value.trim(),d:[...ed.querySelectorAll('.ed-d')].map(i=>i.value.trim()),x:$('#ex').value.trim(),n:$('#en').value.trim()};
-  if(o._jk){v.lv=$('#elv').value;v.ok=$('#eok').checked?1:0}return v};
+  if(o._jk){v.lv=$('#elv').value;v.ok=+$('#eok').value}return v};
  const check=v=>{const w=[];if(!v.q)w.push('問題が空です');if(!v.a)w.push('正解が空です');if(v.d.some(x=>!x))w.push('誤答を3つ入れてください');
   if(v.d.includes(v.a))w.push('誤答に正解と同じものがあります');if(new Set(v.d).size<v.d.length)w.push('誤答が重複しています');if(!v.x)w.push('解説が空です');return w};
  const upd=()=>{const v=val();$('#pv').innerHTML=`<p class="hd">正解！　<small style="color:#6d5f4a;font-weight:400">正しくは「${esc(v.a)}」</small></p><p class="tx">${esc(v.x)}${v.n?`<span class="exn"><span class="who">シミ</span>${esc(v.n)}</span>`:''}</p>`;$('#warn').textContent=check(v).join('　')};
@@ -112,14 +112,17 @@ function edit(id){const o=ORIG[id],q=cur(id);const ed=document.createElement('di
  const close=()=>{ed.remove();document.body.style.overflow='';draw()};
  const ok=ed.querySelector('#ok');if(ok)ok.onclick=()=>{const v=val();const w=check(v);if(w.length){$('#warn').textContent=w.join('　');return}
   if(!o._jk){delete v.lv;delete v.ok}
-  else if(!(LOCAL[id]&&'ok' in LOCAL[id])&&v.ok===o.ok)delete v.ok;/* 採否に触れていなければ未定のまま */
   setField(id,v);close()};
  const rs=ed.querySelector('#rs');if(rs)rs.onclick=()=>{if(confirm('この問題を直す前の状態に戻しますか？')){delete LOCAL[id];save();close()}};
  ed.querySelector('#cl').onclick=close;
  const dl=ed.querySelector('#dl');if(dl)dl.onclick=()=>{if(confirm(`「${q.q.slice(0,30)}${q.q.length>30?'…':''}」を削除しますか？\n（書き出して本体に取り込むまでは「削除した分」から取り消せます）`)){setField(id,{del:1});close()}};
  const ud=ed.querySelector('#ud');if(ud)ud.onclick=()=>{const L=Object.assign({},LOCAL[id]);delete L.del;if(Object.keys(L).length)LOCAL[id]=L;else delete LOCAL[id];save();close()}}
+/* 生徒に未定も出すか（JCFG.pending）。直した分と同じく "__cfg" として書き出す */
+function pend(){return LOCAL.__cfg&&'pending' in LOCAL.__cfg?LOCAL.__cfg.pending:(CFG0.pending?1:0)}
+function drawPend(){const b=$('#fPend');b.textContent='生徒に未定も出す：'+(pend()?'オン':'オフ');b.classList.toggle('on',!!pend())}
+$('#fPend').onclick=()=>{const v=pend()?0:1;if(v===(CFG0.pending?1:0))delete LOCAL.__cfg;else LOCAL.__cfg={pending:v};save();drawPend();draw()};
 /* 書き出す：直した分だけを1問1行のJSONで。tools/apply_drill_edits.py で本体に取り込む */
-$('#exp').onclick=()=>{const ids=Object.keys(LOCAL).filter(id=>ORIG[id]);if(!ids.length){alert('まだ直した問題がありません');return}
+$('#exp').onclick=()=>{const ids=Object.keys(LOCAL).filter(id=>ORIG[id]||id==='__cfg');if(!ids.length){alert('まだ直した問題がありません');return}
  const body='{\n'+ids.map(id=>JSON.stringify(id)+':'+JSON.stringify(LOCAL[id])).join(',\n')+'\n}\n';
  const ed=document.createElement('div');ed.className='ed exp';
  ed.innerHTML=`<div class="box"><h2>書き出し（${ids.length}問）</h2><p style="font-size:14px;line-height:1.7">「ファイルに保存」で保存したファイルを送ってください。コピーして貼りつけてもかまいません。</p>
@@ -132,7 +135,7 @@ $('#exp').onclick=()=>{const ids=Object.keys(LOCAL).filter(id=>ORIG[id]);if(!ids
 /* 読み込む：別の端末で書き出したファイルを、この端末の直した分に重ねる */
 $('#imp').onclick=()=>$('#file').click();
 $('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{let o;try{o=JSON.parse(t)}catch(_){alert('読み込めないファイルです');return}
- let n=0;for(const[id,v]of Object.entries(o))if(ORIG[id]&&v&&typeof v==='object'){LOCAL[id]=Object.assign({},LOCAL[id]||{},v);n++}
- save();alert(`${n}問ぶんの直しを読み込みました`);draw()});e.target.value=''};
+ let n=0;for(const[id,v]of Object.entries(o))if((ORIG[id]||id==='__cfg')&&v&&typeof v==='object'){LOCAL[id]=Object.assign({},LOCAL[id]||{},v);n++}
+ save();alert(`${n}問ぶんの直しを読み込みました`);drawPend();draw()});e.target.value=''};
 </script>
 </body></html>

@@ -4,6 +4,7 @@
 使い方: python3 tools/apply_drill_edits.py drill-edits_20261106.json
 1問1行の形はそのまま保つ。紙魚の一言（n）を空にした問題は n を消す。
 削除（del）にした問題はデータから取り除く。
+採否（ok）は 1=採用、-1=不採用、0=未定。"__cfg" があれば JCFG（生徒に未定も出すか）を書きかえる。
 """
 import json, sys, pathlib
 
@@ -17,6 +18,15 @@ def main(path):
     lines = HTML.read_text(encoding='utf-8').split('\n')
     done = set()
     removed = []
+    cfg = edits.pop('__cfg', None)
+    if cfg:
+        for i, l in enumerate(lines):
+            if l.startswith('"JCFG":'):
+                cur = json.loads(l[len('"JCFG":'):].strip().rstrip(','))
+                cur.update(cfg)
+                lines[i] = '"JCFG": ' + json.dumps(cur, ensure_ascii=False, separators=(',', ':')) + ','
+                print('設定: 生徒に未定も出す = ' + ('オン' if cur.get('pending') else 'オフ'))
+                break
     for head in ('"Q": [', '"JQ": ['):
         if head not in lines:
             continue

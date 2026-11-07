@@ -740,6 +740,25 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .dr-mode button.on{background:#c9a24a;color:#1a1408;font-weight:700}
 @media (orientation:portrait) and (min-width:601px){.dr-mode{top:calc(env(safe-area-inset-top,0px) + 166*var(--u))}.dr .shelf2{top:calc(206*var(--u))}.dr .gc-shimi.kon{bottom:calc(-170*var(--u))}}
 @media (orientation:portrait) and (max-width:600px){.dr-mode{top:calc(env(safe-area-inset-top,0px) + 118px)}}
+/* 受験対策：難易度の切りかえとマイ範囲 */
+.dr-sub{position:absolute;z-index:6;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 98*var(--u) + 46px);white-space:nowrap;display:flex;gap:4px;background:rgba(7,12,31,.6);padding:3px;border-radius:999px;border:1px solid rgba(201,162,74,.35)}
+.dr-sub button{padding:4px 12px;border-radius:999px;color:#e6c77a;font-size:13px;min-height:32px}
+.dr-sub button.on{background:#6b4f8a;color:#fff;font-weight:700}
+.dr .shelf2.jk{top:calc(140*var(--u) + 40px)}
+.tome2.my .med{box-shadow:inset 0 0 0 calc(3*var(--u)) #f0d27a}
+.tome2.my .lbl{outline:2px dashed rgba(240,210,122,.7);outline-offset:-6px}
+@media (orientation:portrait) and (min-width:601px){.dr-sub{top:calc(env(safe-area-inset-top,0px) + 166*var(--u) + 46px)}.dr .shelf2.jk{top:calc(206*var(--u) + 40px)}}
+@media (orientation:portrait) and (max-width:600px){.dr-sub{top:calc(env(safe-area-inset-top,0px) + 118px + 44px)}.dr .shelf2.jk{top:calc(160*var(--u) + 84px)}}
+.jk-list{display:flex;flex-direction:column;gap:6px;margin:10px 0;max-height:46vh;overflow:auto;padding-right:4px}
+.jk-g{border:1px solid rgba(90,70,40,.35);border-radius:4px;background:rgba(255,255,255,.35)}
+.jk-g summary{padding:8px 10px;cursor:pointer;font-weight:700;list-style-position:inside}
+.jk-g label{display:flex;align-items:center;gap:8px;cursor:pointer}
+.jk-all{display:inline-flex!important}
+.jk-u{padding:6px 10px 6px 30px;border-top:1px dashed rgba(90,70,40,.25);font-size:14px;line-height:1.5}
+.jk-u span{flex:1}.jk-u small{opacity:.7;white-space:nowrap}
+.jk-g input,.jk-mix input{width:22px;height:22px;flex:0 0 auto;accent-color:#7a1f24}
+.jk-mix{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px;font-weight:600}
+.jk-mix small{font-weight:400;opacity:.75}
 .sm-parts{display:flex;gap:calc(var(--sw)*.006);margin-bottom:calc(var(--sw)*.01)}
 .sm-parts button{font-family:var(--serif);font-size:calc(var(--sw)*.011);padding:.25em .9em;border:1px solid #b8923f;border-radius:2px;color:#8a6d3a;background:rgba(246,238,219,.6);letter-spacing:.1em}
 .sm-parts button.on{background:#8a2a25;border-color:#8a2a25;color:#f6eedb}
@@ -3447,6 +3466,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   {"id":"MOD-Q13-008","ch":15,"q":"諸国民戦争に敗れたナポレオンが流された島は？","a":"エルバ島","d":["セントヘレナ島","コルシカ島","シチリア島"],"x":"1814年、ナポレオンが退位後に流された地中海の島。翌年脱出して百日天下を実現した。","v":"MOD","n":"一度はここを抜け出して、皇帝に返り咲いたんだ。いわゆる「百日天下」だね。最後はもっと遠いセントヘレナ島に流されたよ。"}
 ],
 "JU": {"M1":"世界史へのまなざし1 地球環境からみる人類の歴史（p.4〜7）","M2":"世界史へのまなざし2 日常生活からみる世界の歴史（p.8〜14）","P1":"第Ⅰ部を学ぶ前に（p.16〜17）","1-1":"第1章1 文明の誕生（p.18〜19）","1-2":"第1章2 古代オリエント文明とその周辺","1-3":"第1章3 南アジアの古代文明","1-4":"第1章4 中国の古代文明","1-5":"第1章5 南北アメリカ文明","2-1":"第2章1 中央ユーラシア――草原とオアシスの世界","2-2":"第2章2 秦・漢帝国","2-3":"第2章3 中国の動乱と変容","2-4":"第2章4 東アジア文化圏の形成","3-1":"第3章1 仏教の成立と南アジアの統一国家","3-2":"第3章2 インド古典文化とヒンドゥー教の定着","3-3":"第3章3 東南アジア世界の形成と展開","4-1":"第4章1 イラン諸国家の興亡とイラン文明","4-2":"第4章2 ギリシア人の都市国家","4-3":"第4章3 ローマと地中海支配","4-4":"第4章4 キリスト教の成立と発展","5-1":"第5章1 アラブの大征服とイスラーム政権の成立","5-2":"第5章2 ヨーロッパ世界の形成","P2":"第Ⅱ部を学ぶ前に（p.104〜105）","6-1":"第6章1 イスラーム教の諸地域への伝播","6-2":"第6章2 西アジアの動向","7-1":"第7章1 西ヨーロッパの封建社会とその展開","7-2":"第7章2 東ヨーロッパ世界の展開","7-3":"第7章3 西ヨーロッパ世界の変容","7-4":"第7章4 西ヨーロッパの中世文化","8-1":"第8章1 アジア諸地域の自立化と宋","8-2":"第8章2 モンゴルの大帝国","9-1":"第9章1 アジア交易世界の興隆","9-2":"第9章2 ヨーロッパの海洋進出とアメリカ大陸の変容","10-1":"第10章1 オスマン帝国とサファヴィー朝","10-2":"第10章2 ムガル帝国の興隆","10-3":"第10章3 清代の中国と隣接諸地域","11-1":"第11章1 ルネサンス","11-2":"第11章2 宗教改革","11-3":"第11章3 主権国家体制の成立","11-4":"第11章4 オランダ・イギリス・フランスの台頭","11-5":"第11章5 北欧・東欧の動向","11-6":"第11章6 科学革命と啓蒙思想","12-1":"第12章1 産業革命","12-2":"第12章2 アメリカ合衆国の独立と発展","12-3":"第12章3 フランス革命とナポレオンの支配","12-4":"第12章4 中南米諸国の独立","13-1":"第13章1 ウィーン体制とヨーロッパの政治・社会の変動","13-2":"第13章2 列強体制の動揺とヨーロッパの再編成","13-3":"第13章3 アメリカ合衆国の発展","13-4":"第13章4 19世紀欧米文化の展開と市民文化の繁栄","14-1":"第14章1 西アジア地域の変容","14-2":"第14章2 南アジア・東南アジアの植民地化","14-3":"第14章3 東アジアの激動","15-1":"第15章1 第2次産業革命と帝国主義","15-2":"第15章2 列強の世界分割と列強体制の二分化","15-3":"第15章3 アジア諸国の変革と民族運動","16-1":"第16章1 第一次世界大戦とロシア革命","16-2":"第16章2 ヴェルサイユ体制下の欧米諸国","16-3":"第16章3 アジア・アフリカ地域の民族運動","17-1":"第17章1 世界恐慌とヴェルサイユ体制の破壊","17-2":"第17章2 第二次世界大戦","17-3":"第17章3 新しい国際秩序の形成"},
+"JCFG": {"pending":1},
 "JQ": [
   {"id":"JK-M1-001","u":"M1","lv":"標準","q":"人類をほかの動物から区別する最大の特徴とされ、大きな脳を支えて前足を手として使えるようにしたものは？","a":"直立二足歩行","d":["火の使用","言語の使用","集団での狩猟"],"x":"人類をほかの動物から区別する最大の特徴。直立二足歩行によって大きな脳を支え、前足を手として発達させ、道具を使用するようになった。","ok":0},
   {"id":"JK-M1-002","u":"M1","lv":"標準","q":"約700万年前のアフリカに現れた、最初の人類の段階を何という？","a":"猿人","d":["原人","旧人","新人"],"x":"約700万年前のアフリカに出現した最初の人類。人類は猿人→原人→旧人→新人の順に出現した。","ok":0},
@@ -7228,6 +7248,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 const DATA=JSON.parse(document.getElementById('errata-data').textContent);
 /* tools/drill-edit.html で直したドリル（この端末だけ）を上書き。書き出した分を本体に取り込めば全員に反映される */
 try{const E=JSON.parse(localStorage.getItem('errata_drill')||'{}');for(const L of [DATA.Q,DATA.JQ||[]])for(const q of L){if(E[q.id])Object.assign(q,E[q.id])}
+ if(E.__cfg&&typeof E.__cfg==='object')DATA.JCFG=Object.assign({},DATA.JCFG||{},E.__cfg);
  /* 編集画面で削除した問題は出さない */
  DATA.Q=DATA.Q.filter(q=>!q.del);if(DATA.JQ)DATA.JQ=DATA.JQ.filter(q=>!q.del)}catch(e){}
 /* 画像：「名前: dataURL」を1行に1枚。カードの肖像は人物名がキー */
@@ -7772,10 +7793,10 @@ function emblem(e){const s='<svg viewBox="0 0 40 40" class="emb" aria-hidden="tr
 function ribbon(e){const c=ERAS[e].c;return `<svg class="rb" viewBox="0 0 30 44" aria-hidden="true"><path d="M3 0h24v42l-12-9-12 9z" fill="${c}"/><path d="M3 0h24v42l-12-9-12 9z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/><g transform="translate(5 6) scale(.5)" color="#fbf3df">${emblem(e).replace('<svg viewBox="0 0 40 40" class="emb" aria-hidden="true">','').replace('</svg>','')}</g></svg>`}
 function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
 function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
-function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>eraOfCh(q.ch)))].sort():[0,1,2]}
+function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>qEra(q)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
 function freshState(){return{name:'',look:null,prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
-  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},party:[],prog:null,mid:{},tour:false,drills:0,room:{f:[],w:[],inv:{}},t:0}}
+  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},jq:{},jk:{lv:'std',my:[],mix:false},party:[],prog:null,mid:{},tour:false,drills:0,room:{f:[],w:[],inv:{}},t:0}}
 /* 記録の章数をそろえる */
 function normState(N){if(N.oshi==='シミ'&&!N.oshiSet)N.oshi='ハンムラビ';N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
  /* 栞を時代別に（古い記録は、正解した問題の時代の割合で分ける） */
@@ -8802,26 +8823,74 @@ const KON_FIRST=(()=>{for(let c=1;c<STORY.length;c++){const i=STORY[c].ev.findIn
 function konradMet(){if(!KON_FIRST)return true;const {c,i}=KON_FIRST;if(S.cleared&&S.cleared[c-1])return true;if(S.stg&&stages().some(s=>s.k==='sec'&&s.ch===c&&s.b>i&&stRec(s)&&stRec(s).c>0))return true;const at=(S.prog&&S.prog.ch===c)?S.prog.i:((S.mid&&S.mid[c])||0);return at>i}
 function vtitle(s){const c=[...s].map(x=>x==='ー'?'丨':x==='＝'?'‖':x);const cols=c.length<=8?[c]:[c.slice(0,Math.ceil(c.length/2)),c.slice(Math.ceil(c.length/2))];
  return cols.map(col=>`<span class="col">${col.map(x=>`<b>${esc(x)}</b>`).join('')}</span>`).join('')}
-function poolOf(key){return typeof key==='number'?Q.filter(q=>q.ch===key):Q.filter(q=>q.v===key)}
-function labelOf(key){return typeof key==='number'?'第'+key+'章「'+CHT[key]+'」':'試験範囲「'+(VOLS.find(v=>v.code===key)||{}).name+'」'}
-function chStat(key){const pool=poolOf(key);return {n:pool.length,done:pool.filter(q=>S.qs[q.id]===1).length}}
+function poolOf(key){return typeof key==='number'?Q.filter(q=>q.ch===key):String(key).startsWith('J:')?jkPool(key):Q.filter(q=>q.v===key)}
+function labelOf(key){if(String(key).startsWith('J:'))return '受験対策　'+jkName(key);return typeof key==='number'?'第'+key+'章「'+CHT[key]+'」':'試験範囲「'+(VOLS.find(v=>v.code===key)||{}).name+'」'}
+function chStat(key){const pool=poolOf(key);return {n:pool.length,done:pool.filter(q=>qst(q)===1).length}}
 function embOf(ch){return EMB[ch]||EMB[((ch-1)%11)+1]||''}
+/* ---------- 受験対策ドリル（教科書の単元ごと） ----------
+   進み具合は容量節約のため単元ごとの文字列で持つ（S.jq["6-1"]="0120…"：0=未回答 1=正解 2=不正解、位置＝IDの末尾番号）
+   出す問題は採用（ok:1）だけ。JCFG.pending=1 のあいだは採否未定（ok:0）も出す。不採用（ok:-1）は出さない */
+const JK=DATA.JQ||[],JUN=DATA.JU||{},JCFG=DATA.JCFG||{pending:1};
+const JCH=[['M','世界史へのまなざし'],['1','文明の成立'],['2','中央ユーラシアと東アジア'],['3','南アジアと東南アジア'],['4','西アジアと地中海'],['5','イスラームとヨーロッパ'],
+ ['6','イスラームの伝播'],['7','ヨーロッパの変容'],['8','東アジアとモンゴル'],['9','大交易・大交流'],['10','アジアの諸帝国'],['11','近世ヨーロッパ'],
+ ['12','産業革命と環大西洋革命'],['13','欧米国民国家の形成'],['14','アジア諸地域の動揺'],['15','帝国主義と民族運動'],['16','第一次世界大戦'],['17','第二次世界大戦と戦後']];
+/* 通常ドリルを混ぜるときの対応表（教科書の単元 → ゲームの章）。対応する章がない単元は混ぜない */
+const JMAP={'1-2':[1],'1-3':[2],'1-4':[3],'2-2':[4],'2-3':[4],'2-4':[9],'3-1':[2],'3-2':[2],'4-1':[6],'4-2':[5],'4-3':[6],'4-4':[7],'5-1':[8],'5-2':[7],
+ '6-1':[8],'6-2':[8],'7-1':[10],'7-2':[10],'7-3':[10],'7-4':[10],'8-1':[11],'8-2':[11],'9-1':[12],'9-2':[13],'10-3':[12],'11-1':[13],'11-2':[14],'11-3':[14],'11-4':[14],'11-5':[14],'11-6':[15],'12-1':[15],'12-2':[15],'12-3':[15],'12-4':[15]};
+function jkGroup(u){return u[0]==='M'?'M':u==='P1'?'1':u==='P2'?'6':u.split('-')[0]}
+function jkShown(q){return q.ok===1||(!!JCFG.pending&&!q.ok)}
+function jkCfg(){if(!S.jk||typeof S.jk!=='object')S.jk={};if(!Array.isArray(S.jk.my))S.jk.my=[];if(S.jk.lv!=='all')S.jk.lv='std';return S.jk}
+function jkName(key){const g=String(key).slice(2);return g==='my'?'マイ範囲':((JCH.find(c=>c[0]===g)||[])[1]||g)}
+function jkShort(key){const g=String(key).slice(2);return g==='my'?'マイ範囲':g==='M'?'序':'第'+g+'章'}
+function jkPool(key){const c=jkCfg(),g=String(key).slice(2);const base=JK.filter(q=>jkShown(q)&&(c.lv==='all'||q.lv==='標準'));
+ if(g!=='my')return base.filter(q=>jkGroup(q.u)===g);
+ const us=new Set(c.my);const out=base.filter(q=>us.has(q.u));
+ if(c.mix){const chs=new Set();for(const u of us)for(const ch of (JMAP[u]||[]))chs.add(ch);out.push(...Q.filter(q=>chs.has(q.ch)))}
+ return out}
+function jqIdx(q){return Math.max(0,parseInt(q.id.split('-').pop(),10)-1)}
+function qst(q){if(!q.u)return S.qs[q.id]||0;const s=(S.jq||{})[q.u]||'';return +(s[jqIdx(q)]||0)}
+function qSet(q,v){if(!q.u){S.qs[q.id]=v;return}if(!S.jq)S.jq={};const i=jqIdx(q);let s=S.jq[q.u]||'';if(s.length<=i)s=s.padEnd(i+1,'0');S.jq[q.u]=s.slice(0,i)+v+s.slice(i+1)}
+function qEra(q){if(!q.u)return eraOfCh(q.ch);const g=jkGroup(q.u);if(g==='M')return 0;const n=+g;return n<=5?0:n<=9?1:2}
+/* 受験対策の栞は控えめ（はじめて正解1枚、克服2枚、正解済み0枚）。通常ドリルは3・5・1枚のまま */
+function qGain(q,st){return q.u?(st===0?1:st===2?2:0):(st===0?3:st===2?5:1)}
+const JK_LINES=['この棚は受験生向けだ。教科書の単元ごとに問題が並んでいる。','「マイ範囲」に単元を登録しておけば、授業の進度に合わせて解ける。','発展の問題は手ごわいぞ。まずは標準から固めたまえ。','ここで正解しても栞は少なめだ。報酬より、身につくことのほうが大事だろう？'];
+/* マイ範囲：単元にチェックを入れて保存。この端末（と学校アカウント）の記録に残る */
+function jkMyEdit(){const c=jkCfg();const sel=new Set(c.my);
+ const groups=JCH.map(([g,n])=>{const us=Object.keys(JUN).filter(u=>jkGroup(u)===g);if(!us.length)return '';
+  return `<details class="jk-g"${us.some(u=>sel.has(u))?' open':''}><summary><label class="jk-all"><input type="checkbox" data-g="${g}"${us.every(u=>sel.has(u))?' checked':''}>${g==='M'?'':'第'+g+'章　'}${esc(n)}</label></summary>
+  ${us.map(u=>{const k=JK.filter(q=>q.u===u&&jkShown(q)).length;return `<label class="jk-u"><input type="checkbox" data-u="${u}"${sel.has(u)?' checked':''}><span>${esc(JUN[u])}</span><small>${k}問</small></label>`}).join('')}</details>`}).join('');
+ modal(`<h3>マイ範囲</h3><p class="sub" style="margin-top:-6px;line-height:1.7">解きたい単元にチェックを入れてください。章の名前のチェックで、その章をまとめて選べます。</p>
+  <div class="jk-list">${groups}</div>
+  <label class="jk-mix"><input type="checkbox" id="jkMix"${c.mix?' checked':''}>通常ドリルの問題も混ぜる<small>（選んだ単元に近い章の問題）</small></label>
+  <p class="sub" id="jkN"></p>
+  <div class="row" style="flex-wrap:wrap"><button class="btn red" id="jkGo">この範囲で解く</button><button class="btn light" id="jkSave">保存して閉じる</button><button class="btn light" id="jkClr">選択をすべて外す</button></div>`);
+ const box=$('#modal');const cnt=()=>{const us=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);const old=c.my,om=c.mix;c.my=us;c.mix=$('#jkMix').checked;const n=jkPool('J:my').length;c.my=old;c.mix=om;$('#jkN').textContent=us.length?`${us.length}単元・${n}問（${c.lv==='all'?'標準＋発展':'標準だけ'}）`:'まだ単元が選ばれていません'};
+ box.querySelectorAll('[data-g]').forEach(b=>{b.onclick=e=>e.stopPropagation();b.onchange=()=>{box.querySelectorAll('[data-u]').forEach(i=>{if(jkGroup(i.dataset.u)===b.dataset.g)i.checked=b.checked});cnt()}});
+ box.querySelectorAll('[data-u]').forEach(i=>i.onchange=()=>{const g=jkGroup(i.dataset.u);const all=[...box.querySelectorAll('[data-u]')].filter(x=>jkGroup(x.dataset.u)===g);const h=box.querySelector(`[data-g="${g}"]`);if(h)h.checked=all.every(x=>x.checked);cnt()});
+ $('#jkMix').onchange=cnt;cnt();
+ const keep=()=>{c.my=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);c.mix=$('#jkMix').checked;saveNow()};
+ $('#jkSave').onclick=()=>{keep();closeModal(true);QuizMenu()};
+ $('#jkClr').onclick=()=>{box.querySelectorAll('input[type=checkbox]').forEach(i=>{if(i.id!=='jkMix')i.checked=false});cnt()};
+ $('#jkGo').onclick=()=>{keep();if(!c.my.length){toast('単元を1つ以上選んでください');return}if(!jkPool('J:my').length){toast('この範囲には、まだ出せる問題がありません');return}closeModal(true);FX.pageTurn(()=>startQuiz('J:my'))}}
 let DRMODE='ch';
-function QuizMenu(){
- const keys=DRMODE==='ch'?Object.keys(CHT).map(Number):VOLS.map(v=>v.code);
+function QuizMenu(){const JKM=DRMODE==='jk';const jc=jkCfg();
+ const keys=DRMODE==='ch'?Object.keys(CHT).map(Number):JKM?['J:my',...JCH.map(c=>'J:'+c[0]).filter(k=>JK.some(q=>jkGroup(q.u)===k.slice(2)))]:VOLS.map(v=>v.code);
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
   <div class="gc-title">ドリル</div>
   <button class="gc-back tl" data-go="home">戻る</button><div class="gc-top">${coinsHTML()}</div>
-  <div class="dr-mode"><button data-mode="ch" class="${DRMODE==='ch'?'on':''}">章で選ぶ</button><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button></div>
+  <div class="dr-mode"><button data-mode="ch" class="${DRMODE==='ch'?'on':''}">章で選ぶ</button><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button><button data-mode="jk" class="${JKM?'on':''}">受験対策</button></div>
+  ${JKM?`<div class="dr-sub"><button data-lv="std" class="${jc.lv==='std'?'on':''}">標準だけ</button><button data-lv="all" class="${jc.lv==='all'?'on':''}">標準＋発展</button></div>`:''}
   <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
-  ${konradMet()?`<div class="gc-say"><span class="who">コンラッド</span>${esc(DRMODE==='ch'?DR_LINES[Math.floor(Math.random()*DR_LINES.length)]:DR_VOL_LINE)}</div>`:''}
+  ${konradMet()?`<div class="gc-say"><span class="who">コンラッド</span>${esc(DRMODE==='ch'?DR_LINES[Math.floor(Math.random()*DR_LINES.length)]:JKM?JK_LINES[Math.floor(Math.random()*JK_LINES.length)]:DR_VOL_LINE)}</div>`:''}
   <div class="shelf2-board"></div>
-  <div class="shelf2" id="shelf">${keys.map((key,ix)=>{const st=chStat(key);const on=Math.round(5*st.done/Math.max(1,st.n));const isCh=typeof key==='number';
-   const name=isCh?CHT[key]:VOLS.find(v=>v.code===key).name;
-   return `<button class="tome2" data-q="${key}" style="--bc:${BOOKC[ix%BOOKC.length]}"><span class="med"><svg viewBox="0 0 48 48">${isCh?embOf(key):embOf(ix+1)}</svg></span><span class="no">${isCh?'第'+key+'章':'試験範囲'}</span>
-    <span class="lbl">${vtitle(name)}</span><span class="beads">${[0,1,2,3,4].map(i=>`<i class="${i<on?'on':''}"></i>`).join('')}</span><span class="cnt">${st.done}／${st.n}</span></button>`}).join('')}</div></div>`);
+  <div class="shelf2${JKM?' jk':''}" id="shelf">${keys.map((key,ix)=>{const st=chStat(key);const on=Math.round(5*st.done/Math.max(1,st.n));const isCh=typeof key==='number';const isJ=String(key).startsWith('J:'),isMy=key==='J:my';
+   const name=isCh?CHT[key]:isJ?jkName(key):VOLS.find(v=>v.code===key).name;const g=isJ?key.slice(2):'';
+   return `<button class="tome2${isMy?' my':''}" data-q="${key}" style="--bc:${isMy?'#6b5320':BOOKC[ix%BOOKC.length]}"><span class="med"><svg viewBox="0 0 48 48">${isCh?embOf(key):isMy?EMB[9]:embOf(isJ&&g!=='M'?+g:ix+1)}</svg></span><span class="no">${isCh?'第'+key+'章':isMy?'自分で選ぶ':isJ?(g==='M'?'序':'第'+g+'章'):'試験範囲'}</span>
+    <span class="lbl">${vtitle(name)}</span><span class="beads">${[0,1,2,3,4].map(i=>`<i class="${i<on?'on':''}"></i>`).join('')}</span><span class="cnt">${isMy&&!jc.my.length?'単元を選ぶ':st.done+'／'+st.n}</span></button>`}).join('')}</div></div>`);
+ document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{jc.lv=b.dataset.lv;save();QuizMenu()});
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=b.dataset.mode;QuizMenu()});
- document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;FX.pageTurn(()=>startQuiz(key))})}
+ document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;
+  if(key==='J:my'){jkMyEdit();return}if(!poolOf(key).length){toast('この棚には、まだ出せる問題がありません');return}FX.pageTurn(()=>startQuiz(key))})}
 function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done,fin:o.fin,quit:o.quit,timer:o.timer||0,src:o.src||o.label}}
  else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'ドリル　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();quizQ()}
 /* 誤植の群れの制限時間 */
@@ -8829,13 +8898,13 @@ function qzStop(){if(QZ){clearTimeout(QZ.tm);clearInterval(QZ.ti);QZ.tm=QZ.ti=nu
 function qzStart(onUp){const T=QZ.timer;let left=T;const el=$('#qzT');if(!el)return;el.querySelector('b').textContent=left;
  QZ.ti=setInterval(()=>{left--;const b=$('#qzT b');if(b)b.textContent=Math.max(0,left);if(left<=5&&el)el.classList.add('hurry')},1000);QZ.tm=setTimeout(()=>{qzStop();if($('#qo'))onUp()},T*1000)}
 /* ドリルの出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
-function drillPick(key){const pool=poolOf(key);const st=q=>S.qs[q.id]||0;
+function drillPick(key){const pool=poolOf(key);const st=qst;
  const fresh=shuffle(pool.filter(q=>st(q)===0)),wrong=shuffle(pool.filter(q=>st(q)===2)),done=shuffle(pool.filter(q=>st(q)===1));
  const list=fresh.concat(wrong,done).slice(0,10);
  const mode=fresh.length?'fresh':wrong.length?'wrong':'random';
  const msg=mode==='fresh'?`まだ解いていない問題から出すよ（残り${fresh.length}問）`:mode==='wrong'?`一周したね。間違えた問題を復習しよう（残り${wrong.length}問）`:'全部正解済み！　ランダムに出すよ';
  return {list,mode,msg}}
-function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${QZ.key}章<br>${esc(CHT[QZ.key])}`:QZ.timer?esc(QZ.label).replace('　','<br>'):esc(QZ.label);
+function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${QZ.key}章<br>${esc(CHT[QZ.key])}`:String(QZ.key).startsWith('J:')?'受験対策<br>'+jkShort(QZ.key):QZ.timer?esc(QZ.label).replace('　','<br>'):esc(QZ.label);
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}</small>`:''}</div>
   <div class="dr-tabs"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
@@ -8847,11 +8916,11 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   <div class="dr-note" id="qr"></div></div>`);
  QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'ドリル'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',back,null,'続ける')};
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
-  const st=S.qs[q.id]||0;const ok=!!b&&b.dataset.v===q.a;let g=0;
-  const qe=eraOfCh(q.ch);if(ok){g=st===0?3:st===2?5:1;S.qs[q.id]=1;if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g);QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');S.qs[q.id]=2;QZ.wrong.push(q)}
+  const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;
+  const qe=qEra(q);if(ok){g=qGain(q,st);qSet(q,1);if(g){if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g)}QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');qSet(q,2);QZ.wrong.push(q)}
   QZ.res[QZ.i]=ok;save();refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';tabs[QZ.i].textContent=ok?'✦':'✕';
-  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:`正しくは「${esc(q.a)}」`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
+  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:'正解済みの問題（栞はなし）'):`正しくは「${esc(q.a)}」`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
   if(QZ.timer)setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest'})},30);
   $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
     saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞はホームの受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
@@ -8861,7 +8930,7 @@ function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;saveNow()}const w=
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="gc-top">${coinsHTML(qEras())}</div>
   <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞はホームの受け取りボックスに届いています</p>':''}<p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
-  ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}<p class="sub">次に正解すると、栞が5枚もらえます。</p></div>`:'<p>全問正解！</p>'}
+  ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${esc(q.q)}<br><b>答え：${esc(q.a)}</b></p>`).join('')}<p class="sub">次に正解すると、克服ボーナスの栞がもらえます。</p></div>`:'<p>全問正解！</p>'}
   <div class="rowb"><button class="btn red" id="again">もう一度解く</button><button class="btn light" id="toShelf">ほかの棚を選ぶ</button><button class="btn light" data-go="home">ホームへ</button></div></div></div>`);
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
 
