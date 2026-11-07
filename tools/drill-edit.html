@@ -59,7 +59,7 @@ try{LOCAL=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 try{if(!localStorage.getItem(KEY+'_v')){for(const[id,v]of Object.entries(LOCAL))if(id.startsWith('JK-')&&v&&v.ok===0)v.ok=-1;localStorage.setItem(KEY,JSON.stringify(LOCAL));localStorage.setItem(KEY+'_v','2')}}catch(e){}
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $=s=>document.querySelector(s);
-const qh=t=>esc(t).replace(/\{\{(.+?)\}\}/g,'<u style="text-decoration-color:#b5302a;text-decoration-thickness:2px">$1</u>').replace(/\n/g,'<br>');
+const qh=t=>esc(t).replace(/^下線部を訂正すると？/,'<span style="display:inline-block;border:1.5px solid currentColor;padding:0 .4em">下線部を訂正すると？</span>').replace(/\{\{(.+?)\}\}/g,'<u style="text-decoration-color:#b5302a;text-decoration-thickness:2px">$1</u>').replace(/\n/g,'<br>');
 const FIELDS=['q','a','d','x','n','lv','ok'];
 function save(){try{localStorage.setItem(KEY,JSON.stringify(LOCAL))}catch(e){alert('この端末に保存できませんでした（プライベートブラウズなどでは保存できません）')}}
 const cur=id=>Object.assign({},ORIG[id],LOCAL[id]||{});
