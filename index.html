@@ -2041,6 +2041,7 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .lx-hiup{text-align:center;font-weight:700;color:#b5121b;font-size:20px;letter-spacing:.1em;margin:6px 0}
 .lx-rank td.rk{width:2.5em;text-align:center;font-weight:700}.lx-rank td.ch,.lx-rank td.fl{color:#6b5a44;font-size:13px;white-space:nowrap}
 .lx-rank tr.me td{background:rgba(255,214,120,.35);font-weight:700}
+.lxs-rk{width:auto;padding:0 max(14px,calc(22*var(--u)));font:700 max(14px,calc(18*var(--u))) var(--serif);letter-spacing:.15em;writing-mode:horizontal-tb;cursor:pointer}
 .lxs-hi{display:block;font-size:13px;opacity:.85;margin-top:2px}
 </style>
 </head>
@@ -10620,7 +10621,9 @@ const LX_TERMS={
  '脚注':'コスト0・攻撃4の小さな頁。切ると廃棄される',
  '捨てる':'手札から捨て札へ送る。捨てられたときに効く頁もある',
  '注記':'頁で書き込む小さな効果。毎ターン終了時に効き、枠（最初は3）があふれると古いものから「発動」して消える。朱注：ランダムな敵に3（発動で8）。付箋：余白2（発動で5）。墨注：毎ターン6ずつ溜まり、発動で一番HPの少ない敵にその分のダメージ',
- '判読不能':'受けるダメージが、1回につき1になる'};
+ '判読不能':'受けるダメージが、1回につき1になる',
+ '注釈':'写本室などで頁に書き込む強化。主な数字が上がる。数字のない頁はコストが1下がる（コスト0なら1枚多く引く）',
+ 'すべて使い':'コストがXの頁。残っているエネルギーをすべて使い、使った数だけ効果がくり返される'};
 const lxTermsIn=t=>Object.keys(LX_TERMS).filter(k=>t.includes(k));
 const lxTermHTML=k=>`<p class="lx-tt"><b>${esc(k)}</b>${esc(LX_TERMS[k])}</p>`;
 function lxTipClose(){const t=$('#lxTip');if(t)t.remove()}
@@ -10778,9 +10781,7 @@ const LXS_DECK='<svg viewBox="0 0 200 150" aria-hidden="true"><defs><linearGradi
  +[['M30 18c-6 2-11 7-13 14l-2 5 4-3c6-2 10-7 11-16zM17 32l-4 9',-6,92],['M22 10l10 4v7c0 6-4 10-10 13-6-3-10-7-10-13v-7zM22 14v20',2,124],['M22 8l2 12 10 2-10 2-2 12-2-12-10-2 10-2zM22 22a8 8 0 1 0 .1 0',10,156]].map(([d,r,x])=>`<g transform="translate(${x-26} 30) rotate(${r} 26 50)"><rect x="0" y="0" width="52" height="84" rx="4" fill="url(#lxsP)" stroke="#b8923f" stroke-width="1.6"/><rect x="4" y="4" width="44" height="76" rx="2" fill="none" stroke="#b8923f" stroke-width=".8" opacity=".7"/><g transform="translate(4 18)" fill="none" stroke="#5a4630" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="${d}"/></g></g>`).join('')+'</svg>';
 const LXS_FLO='<svg class="lxs-flo" viewBox="0 0 120 12" aria-hidden="true"><path d="M2 6h48M70 6h48" stroke="currentColor" stroke-width="1"/><path d="M60 1l5 5-5 5-5-5z" fill="currentColor"/><circle cx="2" cy="6" r="2" fill="currentColor"/></svg>';
 /* ハイスコアの表示（層選びの代わり） */
-function lxHiPanel(L){return `<div class="lxs-stage"><div class="lxs-sn"><small>ハイスコア</small><b>${(L.hi||0).toLocaleString()}点</b><span class="lxs-hi">最高 ${L.hiFl||0}階／${LX_TOP}階${L.clears?`　オールクリア ${L.clears}回`:''}</span></div></div>
-  <p class="lxs-sd">1階から${LX_TOP}階まで登りきるとオールクリア。どこまで登れたか・何体倒したかでスコアが決まります。</p>
-  <div class="row" style="justify-content:center;margin-top:6px"><button class="lxs-b dark" id="lxRank">ランキング</button></div>`}
+function lxHiPanel(L){return `<div class="lxs-stage"><div class="lxs-sn"><small>ハイスコア</small><b>${(L.hi||0).toLocaleString()}点</b><span class="lxs-hi">最高 ${L.hiFl||0}階／${LX_TOP}階${L.ac?`　オールクリア ${L.ac}回`:''}</span></div><button class="lxs-arr lxs-rk" id="lxRank">ランキング</button></div>`}
 function LibMenu(keep){const L=lxLib();save();const R=L.run;const persons=Math.min(LX_MIN,lxOwnedPersons().length);const short=false;
  const bg=IMG['背景_図書館探索']||IMG['背景_ホーム']||'';
  const panel=R?`<div class="lxs-deck">${LXS_DECK}</div>
@@ -11114,7 +11115,7 @@ function lxRunEnd(clear,gaveUp){const L=S.lib;const R=L.run;if(!R)return LibMenu
  const best=v.total>(L.hi||0);if(best){L.hi=v.total;L.hiFl=R.fl||0;L.hiCh0=ch}L.hiFl=Math.max(L.hiFl||0,R.fl||0);
  L.hiCh=L.hiCh||{};L.hiCh[ch]=Math.max(L.hiCh[ch]||0,v.total);
  L.hist=[{s:v.total,f:R.fl||0,c:ch,cl:!!clear,t:Date.now()},...(L.hist||[])].slice(0,10);
- if(clear){L.clears=(L.clears||0)+1;const g=[0,0,0];for(let k=0;k<3;k++)g[Math.floor(Math.random()*3)]++;g.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)})}
+ if(clear){L.clears=(L.clears||0)+1;L.ac=(L.ac||0)+1;const g=[0,0,0];for(let k=0;k<3;k++)g[Math.floor(Math.random()*3)]++;g.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)})}
  L.run=null;saveNow();try{cloudPush(true)}catch(e){}
  const row=(l,n)=>n?`<tr><td>${l}</td><td>${n.toLocaleString()}</td></tr>`:'';
  const head=clear?`${LX_TOP}階を登りきった！　オールクリア`:gaveUp?'探索をあきらめた':'探索は失敗に終わった';
