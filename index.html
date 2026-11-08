@@ -7795,6 +7795,25 @@ const IMG={
 "シェイクスピア": "img/73fd120e61a9.webp",
 "セルバンテス": "img/fa96cfab93f5.webp",
 "誤植": "img/374881b265a4.webp",
+"誤植_伏せ字": "img/8e9aa259100b.webp",
+"誤植_虫損": "img/74c9d95a2a7c.webp",
+"誤植_錯簡": "img/7e3a7f0fddd1.webp",
+"誤植_竄入": "img/035a63585153.webp",
+"誤植_焼け": "img/7f0db19d8856.webp",
+"誤植_墨塗り": "img/f172520af0fd.webp",
+"誤植_褪色": "img/b6d8ee877609.webp",
+"誤植_判読不能": "img/36ea12445ec8.webp",
+"誤植_偽作": "img/a521a476dd02.webp",
+"誤植_偽史": "img/0654a4cb4b7a.webp",
+"誤植_脱字": "img/4e8131441026.webp",
+"誤植_誤字": "img/683eb2268c04.webp",
+"誤植_落丁": "img/6b4aadb4f13b.webp",
+"誤植_乱丁": "img/546bb4f3beee.webp",
+"誤植_衍字": "img/e75b37883e26.webp",
+"誤植_焚書": "img/ab560cb88149.webp",
+"誤植_かすれ": "img/e858a81acf45.webp",
+"誤植_墨汚れ": "img/f4c34be0563c.webp",
+"誤植_異本": "img/d7b4d349276a.webp",
 "道具_誤植の本": "img/4fcfbab94c64.webp",
 "道具_誤植ミニサイズ": "img/f1e8a70f96f8.webp",
 "アイスキュロス": "img/5f55940787ab.webp",
@@ -10644,7 +10663,7 @@ function lxRender(){if(!X||!$('#lx'))return;const R=S.lib.run;const alive=lxAliv
  $('#lxGear').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>lxUsePot(+b.dataset.p));
  $('#lxBonus').innerHTML=X.qz==='free'?'<span class="ok">改変を正した！　次に切る人物の頁は、クイズなしで1.5倍</span>':X.qz==='done'?'<span>このターンのクイズは終了</span>':'<span>このターン最初に切った人物の頁でクイズ（正解するとその頁が1.5倍）</span>';
  $('#lxEn').innerHTML=X.en.map((e,i)=>e.dead?'':`<div class="lx-e ${LX_EN[e.key].boss?'boss':''} ${LX_EN[e.key].elite?'elite':''} ${alive[X.tg]===e?'tg':''}" data-e="${i}">
-   ${lxIntentHTML(e)}<div class="blob">${blobSVG(!!LX_EN[e.key].boss)}</div><div class="lx-ename">${esc(e.name)}</div>
+   ${lxIntentHTML(e)}<div class="blob">${IMG['誤植_'+e.key]?`<img src="${IMG['誤植_'+e.key]}" alt="${esc(e.key)}">`:blobSVG(!!LX_EN[e.key].boss)}</div><div class="lx-ename">${esc(e.name)}</div>
    <div class="lx-hprow">${lxShield(e.blk)}<div class="lx-hpbar e"><i style="width:${100*e.hp/e.max}%"></i><span>${e.hp}／${e.max}</span></div></div><div class="lx-st">${lxStHTML(e.st,0)}${e.stun?'<i class="s-weak">次の行動なし</i>':''}${e.intan?'<i class="s-pw" data-term="判読不能">判読不能</i>':''}${LX_EN[e.key].warp?`<i class="s-pw">時のゆがみ ${e.warp||0}／${LX_EN[e.key].warp}</i>`:''}</div></div>`).join('');
  $('#lxEnergy').innerHTML=`<b>${X.p.en}</b><small>／${LX_ENERGY+X.pw.en+(lxHas('借り物の王冠')?1:0)}</small><span>エネルギー</span>`;
  $('#lxPiles').onclick=e=>{const b=e.target.closest('[data-pile]');if(b)lxPileView(b.dataset.pile)};$('#lxPiles').innerHTML=`<button data-pile="draw">山札 ${X.draw.length}</button><button data-pile="disc">捨て札 ${X.disc.length}</button>${X.exh.length?`<button data-pile="exh">廃棄 ${X.exh.length}</button>`:''}`;
