@@ -84,3 +84,40 @@ function putSave(json) {
   }
   return { ok: true };
 }
+
+/**
+ * カードゲームのランキング（ハイスコア順）を返す。
+ * 全員のセーブデータからハイスコアを読み出し、5分間キャッシュする。
+ * 返すのはゲーム内の名前・スコア・到達階・キャラだけ（メールアドレスは返さない）。
+ */
+function getRanking() {
+  const email = me_();
+  const cache = CacheService.getScriptCache();
+  let list = null;
+  const hit = cache.get('lxRank');
+  if (hit) { try { list = JSON.parse(hit); } catch (e) { list = null; } }
+  if (!list) {
+    const sh = sheet_();
+    const n = sh.getLastRow();
+    list = [];
+    if (n >= 2) {
+      const vals = sh.getRange(2, 1, n - 1, COL_DATA).getValues();
+      vals.forEach(function (v) {
+        try {
+          const S = JSON.parse(String(v[COL_DATA - 1] || '{}'));
+          const L = S.lib || {};
+          if (Number(L.hi) > 0) list.push({ m: String(v[0]), name: String(S.name || '名無し').slice(0, 12), score: Number(L.hi), fl: Number(L.hiFl || 0), ch: String(L.hiCh0 || '') });
+        } catch (e) {}
+      });
+    }
+    list.sort(function (a, b) { return b.score - a.score; });
+    try { cache.put('lxRank', JSON.stringify(list), 300); } catch (e) {}
+  }
+  let mine = -1;
+  for (let i = 0; i < list.length; i++) if (list[i].m === email) { mine = i; break; }
+  return {
+    top: list.slice(0, 30).map(function (x) { return { name: x.name, score: x.score, fl: x.fl, ch: x.ch === 'カコ' ? '' : x.ch, me: x.m === email }; }),
+    me: mine >= 0 ? { rank: mine + 1, score: list[mine].score } : null,
+    n: list.length,
+  };
+}
