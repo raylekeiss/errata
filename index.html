@@ -7995,6 +7995,8 @@ const IMG={
 "背景_図書館探索": "img/bg_lib2.webp",
 "UI_本": "img/ui_book.webp",
 "背景_図書館探索_戦闘": "img/bg_lib_battle.webp",
+"背景_図書館探索_戦闘2": "img/bg_lib_battle2.webp",
+"背景_図書館探索_戦闘3": "img/bg_lib_battle3.webp",
 "家具_A4": "img/furn_A4.webp",
 "家具_A9": "img/furn_A9.webp",
 "家具_A10": "img/furn_A10.webp",
@@ -10432,6 +10434,8 @@ const LX_TOP=50;
 /* p のマスが何階か（p がなければ、いま立っている階） */
 /* 幕の情報。3幕より先は無限回廊（16段＋ボス、ボスは全員から） */
 function lxAct(a){a=a||0;if(a<LX_ACTS.length)return LX_ACTS[a];const k=a-LX_ACTS.length;return {n:'無限回廊',rows:16,from:LX_TOP+1+k*17,elite:.14,boss:LX_BOSS,loop:k+1}}
+/* 幕ごとの戦闘背景：第1幕は書庫、第2幕は地下、第3幕と無限回廊は宇宙 */
+function lxBattleBg(){const R=S.lib&&S.lib.run;const a=R&&!R.tut?(R.act||0):0;return (a>=2&&IMG['背景_図書館探索_戦闘3'])||(a===1&&IMG['背景_図書館探索_戦闘2'])||IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''}
 function lxActName(R){const A=lxAct(R.act);return A.loop?`無限回廊　第${A.loop}周`:`第${(R.act||0)+1}幕　${A.n}`}
 function lxFloorOf(R,p){const A=lxAct(R.act);if(p)return A.from+p.c;return R.at?A.from+R.at.c:A.from-1}
 /* 敵の強さ：階が上がるほど少しずつ強くなる（1階でHP0.74倍・攻撃0.81倍 → 50階でHP1.57倍・攻撃1.35倍） */
@@ -11278,7 +11282,7 @@ function lxStHTML(st,blk){const a=[];if(st.str)a.push(`<i class="s-str" data-ter
 function lxHeroArt(){let src=null;try{src=IMG[heroKey()]}catch(e){}const ch=lxChar();if(ch&&ch.img&&IMG[ch.img])return `<img src="${IMG[ch.img]}" alt="" class="${ch.img.startsWith('SD_')?'sd':'tall'}">`;
  return src?`<img src="${src}" alt="主人公">`:'<svg viewBox="0 0 100 200" aria-hidden="true"><ellipse cx="50" cy="194" rx="34" ry="6" fill="rgba(0,0,0,.35)"/><path d="M22 190c0-50 10-80 28-82 18 2 28 32 28 82z" fill="#2b3658"/><circle cx="50" cy="78" r="30" fill="#2b3658"/></svg>'}
 function lxRenderBase(){const R=S.lib.run;
- show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="lx-shade2"></div>
+ show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${lxBattleBg()})"></div><div class="lx-shade2"></div>
   <div class="lx-top"><div class="lx-gear" id="lxGear"></div></div>
   <div class="lx-bonus" id="lxBonus"></div>
   <div class="lx-stage"><div class="lx-hero"><div class="lx-sd" id="lxSd">${lxHeroArt()}</div><div class="lx-me" id="lxMe"></div></div><div class="lx-ens" id="lxEn"></div></div>
@@ -11494,7 +11498,7 @@ function lxMapSVG(R,vert){const M=R.map,F=M.length;const CW=118,RH=92,PX=70,PY=6
 function lxMap(){const R=S.lib.run;if(!R)return LibMenu();if(!R.map){S.lib.run=null;save();return LibMenu()}
  const A=lxAct(R.act);const ms=lxMapSVG(R,innerHeight>innerWidth);const ch=lxNextChoices(R);
  const curT=R.cur?lxNode(R).t:null;
- show(`<div class="lxm" id="lxm"><div class="lxs-bg" style="background-image:url(${IMG['背景_図書館探索']||''})"></div><div class="lxm-shade"></div>
+ show(`<div class="lxm" id="lxm"><div class="lxs-bg" style="background-image:url(${(R.act||0)>0?lxBattleBg():(IMG['背景_図書館探索']||'')})"></div><div class="lxm-shade"></div>
   <div class="lxs-top"><button class="lxs-back" data-go="lib">戻る</button><h2 class="lxs-title">${esc(lxActName(R))}　${Math.max(1,lxFloorOf(R)+(R.cur?0:1))}階${LXS_FLO}</h2>
    <div class="lxm-st"><span>HP <b>${R.hp}</b>／${R.max}</span><span>デッキ <b>${R.deck.length}</b>枚</span><span class="lx-silver">銀貨 <b>${R.silver||0}</b></span><span>スコア <b>${lxScore(R).total}</b></span><button class="lxs-b dark" id="lxSee">デッキを見る</button></div></div>
   <div class="lxm-book ${ms.vert?'vert':''}"><div class="lxm-page"><div class="lxm-scroll" id="lxmScroll">${ms.svg}</div>
@@ -11703,7 +11707,7 @@ function lxScribe(){const R=S.lib.run;const cost=6;
 function lxGiveRelic(curse,boss){const R=S.lib.run;let L=Object.keys(LX_RELIC).filter(r=>curse?(LX_RELIC_CURSE.has(r)&&!R.relics.includes(r)):lxRelicOk(r,R));
  if(boss){const B=[...LX_RELIC_BOSS].filter(r=>!R.relics.includes(r));if(B.length)L=B}if(!L.length)return null;return lxAddRelic(L[Math.floor(Math.random()*L.length)])}
 function lxGivePot(curse){const R=S.lib.run;if(R.pots.length>=3){R.hp=Math.min(R.max,R.hp+10);save();return null}const L=Object.keys(LX_POT).filter(k=>LX_POT_CURSE.has(k)===!!curse);const p=L[Math.floor(Math.random()*L.length)];R.pots.push(p);save();return p}
-function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${IMG['背景_図書館探索_戦闘']||IMG['背景_図書館探索']||IMG['背景_ホーム']||''})"></div><div class="lx-shade2"></div></div>`);
+function bossCutLx(cb){show(`<div class="lx" id="lx"><div class="bt-bg lx-bg" style="background-image:url(${lxBattleBg()})"></div><div class="lx-shade2"></div></div>`);
  const o=document.createElement('div');o.className='bosscut';o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">${esc(S.lib.run.boss)}が現れた！</b><span class="bc-s">3ターンごとの「改変の予告」に気をつけよう</span></div>`;
  let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#lx').appendChild(o);setTimeout(fin,FX.reduce()?600:2000)}
 /* 戦闘報酬の候補：持っていない頁も含めた全人物から、レアリティに関係なく均等に3枚（デッキにいる人物は出ない） */
