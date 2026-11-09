@@ -2042,6 +2042,7 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .lx-rank td.rk{width:2.5em;text-align:center;font-weight:700}.lx-rank td.ch,.lx-rank td.fl{color:#6b5a44;font-size:13px;white-space:nowrap}
 .lx-rank tr.me td{background:rgba(255,214,120,.35);font-weight:700}
 .lxs-rk{width:auto;padding:0 max(14px,calc(22*var(--u)));font:700 max(14px,calc(18*var(--u))) var(--serif);letter-spacing:.15em;writing-mode:horizontal-tb;cursor:pointer}
+.lx-mode{display:flex;flex-direction:column;gap:10px;margin:10px 0 14px}.lx-mb{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px 16px;border:2px solid #c9a24a;border-radius:8px;background:linear-gradient(180deg,#fffaf0,#f1e4c6);color:#2a1d05;cursor:pointer}.lx-mb b{font-size:19px;letter-spacing:.08em}.lx-mb span{font-size:14px;line-height:1.6;color:#5b4a33}
 .lxs-hi{display:block;font-size:13px;opacity:.85;margin-top:2px}
 </style>
 </head>
@@ -9921,9 +9922,12 @@ const LX_ACTS=[
  {n:'書架の最奥',rows:16,from:34,elite:.12,boss:['異本','大誤植']}];
 const LX_TOP=50;
 /* p のマスが何階か（p がなければ、いま立っている階） */
-function lxFloorOf(R,p){const A=LX_ACTS[R.act||0];if(p)return A.from+p.c;return R.at?A.from+R.at.c:A.from-1}
+/* 幕の情報。3幕より先は無限回廊（16段＋ボス、ボスは全員から） */
+function lxAct(a){a=a||0;if(a<LX_ACTS.length)return LX_ACTS[a];const k=a-LX_ACTS.length;return {n:'無限回廊',rows:16,from:LX_TOP+1+k*17,elite:.14,boss:LX_BOSS,loop:k+1}}
+function lxActName(R){const A=lxAct(R.act);return A.loop?`無限回廊　第${A.loop}周`:`第${(R.act||0)+1}幕　${A.n}`}
+function lxFloorOf(R,p){const A=lxAct(R.act);if(p)return A.from+p.c;return R.at?A.from+R.at.c:A.from-1}
 /* 敵の強さ：階が上がるほど少しずつ強くなる（1階でHP0.74倍・攻撃0.81倍 → 50階でHP1.57倍・攻撃1.35倍） */
-function lxDiff(R){const f=Math.max(1,lxFloorOf(R,R.cur));return {hp:.72+f*.017,dmg:.8+f*.011}}
+function lxDiff(R){const f=Math.max(1,lxFloorOf(R,R.cur));const o=Math.max(0,f-LX_TOP);return {hp:.72+f*.017+o*.012,dmg:.8+f*.011+o*.006}}
 const LX_NT={'戦闘':'戦闘','エリート':'エリート','？':'？','宝箱':'宝箱','写本室':'写本室','休憩':'休憩','ボス':'ボス'};
 /* 地図を作る（Slay the Spire と同じ考え方）
    ・幅7×高さrowsの格子。下の段から6本の道を、左上・上・右上のどれかへ1段ずつ伸ばす（道どうしは交差しない）
@@ -9931,7 +9935,7 @@ const LX_NT={'戦闘':'戦闘','エリート':'エリート','？':'？','宝箱
      お店5%・休憩12%・？22%・エリート8〜12%・写本室4%、残りは戦闘
    ・エリートと休憩は6段目から。ボスの2つ手前の段に休憩は置かない
    ・休憩・お店・エリート・写本室は、つながった前のマスと同じにしない。同じマスから分かれた先どうしも同じにしない */
-function lxGenMap(a){const A=LX_ACTS[a],H=A.rows,W=7;
+function lxGenMap(a){const A=lxAct(a),H=A.rows,W=7;
  const E=Array.from({length:H},()=>Array.from({length:W},()=>new Set()));const used=Array.from({length:H},()=>new Array(W).fill(false));let first=-1;
  for(let p=0;p<6;p++){let x;do{x=Math.floor(Math.random()*W)}while(p===1&&x===first);if(p===0)first=x;used[0][x]=true;
   for(let r=0;r<H-1;r++){const c=[x-1,x,x+1].filter(n=>n>=0&&n<W&&!(n===x+1&&E[r][x+1].has(x))&&!(n===x-1&&E[r][x-1].has(x)));
@@ -10781,11 +10785,11 @@ const LXS_DECK='<svg viewBox="0 0 200 150" aria-hidden="true"><defs><linearGradi
  +[['M30 18c-6 2-11 7-13 14l-2 5 4-3c6-2 10-7 11-16zM17 32l-4 9',-6,92],['M22 10l10 4v7c0 6-4 10-10 13-6-3-10-7-10-13v-7zM22 14v20',2,124],['M22 8l2 12 10 2-10 2-2 12-2-12-10-2 10-2zM22 22a8 8 0 1 0 .1 0',10,156]].map(([d,r,x])=>`<g transform="translate(${x-26} 30) rotate(${r} 26 50)"><rect x="0" y="0" width="52" height="84" rx="4" fill="url(#lxsP)" stroke="#b8923f" stroke-width="1.6"/><rect x="4" y="4" width="44" height="76" rx="2" fill="none" stroke="#b8923f" stroke-width=".8" opacity=".7"/><g transform="translate(4 18)" fill="none" stroke="#5a4630" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="${d}"/></g></g>`).join('')+'</svg>';
 const LXS_FLO='<svg class="lxs-flo" viewBox="0 0 120 12" aria-hidden="true"><path d="M2 6h48M70 6h48" stroke="currentColor" stroke-width="1"/><path d="M60 1l5 5-5 5-5-5z" fill="currentColor"/><circle cx="2" cy="6" r="2" fill="currentColor"/></svg>';
 /* ハイスコアの表示（層選びの代わり） */
-function lxHiPanel(L){return `<div class="lxs-stage"><div class="lxs-sn"><small>ハイスコア</small><b>${(L.hi||0).toLocaleString()}点</b><span class="lxs-hi">最高 ${L.hiFl||0}階／${LX_TOP}階${L.ac?`　オールクリア ${L.ac}回`:''}</span></div><button class="lxs-arr lxs-rk" id="lxRank">ランキング</button></div>`}
+function lxHiPanel(L){return `<div class="lxs-stage"><div class="lxs-sn"><small>ハイスコア</small><b>${(L.hi||0).toLocaleString()}点</b><span class="lxs-hi">最高 ${L.hiFl||0}階／${LX_TOP}階${L.ac?`　オールクリア ${L.ac}回`:''}${L.hiE?`<br>無限回廊 ${(L.hiE||0).toLocaleString()}点（${L.hiEFl||0}階）`:''}</span></div><button class="lxs-arr lxs-rk" id="lxRank">ランキング</button></div>`}
 function LibMenu(keep){const L=lxLib();save();const R=L.run;const persons=Math.min(LX_MIN,lxOwnedPersons().length);const short=false;
  const bg=IMG['背景_図書館探索']||IMG['背景_ホーム']||'';
  const panel=R?`<div class="lxs-deck">${LXS_DECK}</div>
-   <div class="lxs-info"><p class="lxs-lab">探索のつづき${LXS_FLO}</p><p class="lxs-dots"><span class="now">第${(R.act||0)+1}幕</span><span>${esc(LX_ACTS[R.act||0].n)}</span><span>${Math.max(0,lxFloorOf(R))}階／${LX_TOP}階</span></p><p class="lxs-sub">HP ${R.hp}／${R.max}　・　デッキ ${R.deck.length}枚　・　スコア ${lxScore(R).total}</p></div>
+   <div class="lxs-info"><p class="lxs-lab">探索のつづき${LXS_FLO}</p><p class="lxs-dots"><span class="now">${esc(lxActName(R))}</span><span>${Math.max(0,lxFloorOf(R))}階／${LX_TOP}階</span></p><p class="lxs-sub">HP ${R.hp}／${R.max}　・　デッキ ${R.deck.length}枚　・　スコア ${lxScore(R).total}</p></div>
    <div class="lxs-btns"><button class="lxs-b dark" id="lxGive">あきらめる</button><button class="lxs-go" id="lxCont">つづきから<i>›</i></button></div>`
   :`<div class="lxs-deck">${LXS_DECK}</div>
    <div class="lxs-info"><p class="lxs-lab">デッキ${LXS_FLO}</p><p class="lxs-num"><b>${LX_MIN}</b>枚</p><p class="lxs-sub">持っている頁からランダム<br>人物の頁 ${persons}枚・基本の頁 ${LX_MIN-persons}枚</p></div>
@@ -10794,7 +10798,7 @@ function LibMenu(keep){const L=lxLib();save();const R=L.run;const persons=Math.m
    ${short?`<p class="lxs-warn">デッキは${LX_MIN}枚以上必要です。「デッキを組む」で頁を足してください。</p>`:''}`;
  show(`<div class="lxs" id="lxs"><div class="lxs-bg" style="background-image:url(${bg})"></div><div class="lxs-shade"></div>
   <div class="lxs-top"><button class="lxs-back" data-go="home">戻る</button><h2 class="lxs-title">カードゲーム${LXS_FLO}</h2><div class="lxs-coins">${coinsHTML()}</div></div>
-  <div class="lxs-hero"><h1><ruby>書架<rt>ダンジョン</rt></ruby>の奥へ</h1>${LXS_FLO.replace('lxs-flo','lxs-flo big')}<p>手に入れた頁を手に、<br>書架の奥にひそむ誤植を退治しよう。</p>${R?`<p class="lxs-rec">ハイスコア ${(L.hi||0).toLocaleString()}点　／　挑戦 ${L.runs}回</p>`:lxHiPanel(L)}</div>
+  <div class="lxs-hero"><h1><ruby>書架<rt>ダンジョン</rt></ruby>の奥へ</h1>${LXS_FLO.replace('lxs-flo','lxs-flo big')}<p>手に入れた頁を手に、<br>書架の奥にひそむ誤植を退治しよう。</p>${R?`<p class="lxs-rec">${R.endless?'無限回廊　':''}ハイスコア ${((R.endless?L.hiE:L.hi)||0).toLocaleString()}点　／　挑戦 ${L.runs}回</p>`:lxHiPanel(L)}</div>
   <div class="lxs-panel"><i class="cn tl"></i><i class="cn tr"></i><i class="cn bl"></i><i class="cn br"></i>${panel}</div></div>`);
  if(R){$('#lxCont').onclick=()=>FX.pageTurn(lxMap);$('#lxGive').onclick=()=>askYes('探索をあきらめますか？\nここまでのスコアで記録されます。','あきらめる',()=>lxRunEnd(false,true))}
  else{const rk=$('#lxRank');if(rk)rk.onclick=lxRanking;
@@ -10824,10 +10828,12 @@ function lxCharPick(cb){const L=lxLib();let cur=LX_CHARS[L.char]?L.char:'カコ'
   document.querySelectorAll('.cs-c').forEach(d=>d.onclick=()=>{const def=lxDef(ch.cards[+d.dataset.ci]);modal(`<div class="sh-big">${lxCardHTML(def)}</div><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)});
   $('#csGo').onclick=()=>cb(cur)};
  document.querySelectorAll('.cs-card').forEach(c=>c.onclick=()=>{if(cur===c.dataset.ch)return;cur=c.dataset.ch;FX._replay(c,'fx-glow',400);panel()});panel()}
-function lxStartRun(skipTut){const L=lxLib();if(L.tut||skipTut)msTick('lx');
+function lxStartRun(skipTut,mode){const L=lxLib();if(mode)L.mode=mode;if(L.tut||skipTut)msTick('lx');
  if(!L.tut&&!skipTut){askYes('はじめての探索です。先に練習の戦闘で、遊び方を確かめますか？\n（3ターンほどで終わります）','練習する',lxTutorial,()=>{L.tut=true;save();lxStartRun(true)},'練習しないで始める');return}
+ if(!mode&&!L.pickedChar){modal(`<h3>どちらに挑戦しますか？</h3><div class="lx-mode"><button class="lx-mb" id="mdT"><b>${LX_TOP}階に挑む</b><span>1階から${LX_TOP}階まで。登りきるとオールクリア</span></button><button class="lx-mb" id="mdI"><b>無限回廊</b><span>${LX_TOP}階を越えても終わらず、どこまでも登る。上に行くほど誤植が強くなる（スコアは別に記録）</span></button></div><div class="row" style="justify-content:center"><button class="btn light" data-close>やめる</button></div>`);
+  $('#mdT').onclick=()=>{closeModal(true);lxStartRun(true,'top')};$('#mdI').onclick=()=>{closeModal(true);lxStartRun(true,'inf')};return}
  if(!L.pickedChar){lxCharPick(c=>{L.char=c;L.pickedChar=true;lxStartRun(true)});return}L.pickedChar=false;const chn=LX_CHARS[L.char]?L.char:'カコ';
- L.runs++;const hp0=LX_CHARS[chn].hp||LX_HP;const B0=LX_ACTS[0].boss;L.run={qstreak:0,char:chn,silver:60,act:0,fights:0,fl:0,sc:{},map:lxGenMap(0),at:null,cur:null,path:[],deck:lxRandomDeck(LX_CHARS[chn]),ann:[],hp:hp0,max:hp0,relics:[LX_CHARS[chn].relic],pots:[],boss:B0[Math.floor(Math.random()*B0.length)],usedQ:[],usedK:[],q:null};
+ L.runs++;const hp0=LX_CHARS[chn].hp||LX_HP;const B0=LX_ACTS[0].boss;L.run={qstreak:0,char:chn,silver:60,act:0,fights:0,fl:0,sc:{},map:lxGenMap(0),at:null,cur:null,path:[],deck:lxRandomDeck(LX_CHARS[chn]),ann:[],hp:hp0,max:hp0,relics:[LX_CHARS[chn].relic],pots:[],boss:B0[Math.floor(Math.random()*B0.length)],usedQ:[],usedK:[],q:null,endless:L.mode==='inf'};L.mode=null;
  save();FX.pageTurn(lxMap)}
 /* キャラ。pref=最初のデッキ・報酬・お店に出やすい頁の型 */
 const LX_CHARS={
@@ -10884,10 +10890,10 @@ function lxMapSVG(R,vert){const M=R.map,F=M.length;const CW=118,RH=92,PX=70,PY=6
    nodes+=`<g class="${cls}" data-c="${c}" data-i="${i}"><polygon points="${hex}"/><g transform="translate(${x-r*.62} ${y-r*.62}) scale(${r*1.24/48})">${LX_ICON[o.t]||''}</g>${R.at&&R.at.c===c&&R.at.i===i?lxMapHero(x,y-r*.25):''}</g>`}));
  return {svg:`<svg class="lx-mapsvg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${lines}${nodes}</svg>`,W,H,vert,x:c=>PX+c*CW,y:c=>L-(PX+c*CW)}}
 function lxMap(){const R=S.lib.run;if(!R)return LibMenu();if(!R.map){S.lib.run=null;save();return LibMenu()}
- const A=LX_ACTS[R.act||0];const ms=lxMapSVG(R,innerHeight>innerWidth);const ch=lxNextChoices(R);
+ const A=lxAct(R.act);const ms=lxMapSVG(R,innerHeight>innerWidth);const ch=lxNextChoices(R);
  const curT=R.cur?lxNode(R).t:null;
  show(`<div class="lxm" id="lxm"><div class="lxs-bg" style="background-image:url(${IMG['背景_図書館探索']||''})"></div><div class="lxm-shade"></div>
-  <div class="lxs-top"><button class="lxs-back" data-go="lib">戻る</button><h2 class="lxs-title">第${(R.act||0)+1}幕　${esc(A.n)}　${Math.max(1,lxFloorOf(R)+(R.cur?0:1))}階${LXS_FLO}</h2>
+  <div class="lxs-top"><button class="lxs-back" data-go="lib">戻る</button><h2 class="lxs-title">${esc(lxActName(R))}　${Math.max(1,lxFloorOf(R)+(R.cur?0:1))}階${LXS_FLO}</h2>
    <div class="lxm-st"><span>HP <b>${R.hp}</b>／${R.max}</span><span>デッキ <b>${R.deck.length}</b>枚</span><span class="lx-silver">銀貨 <b>${R.silver||0}</b></span><span>スコア <b>${lxScore(R).total}</b></span><button class="lxs-b dark" id="lxSee">デッキを見る</button></div></div>
   <div class="lxm-book ${ms.vert?'vert':''}"><div class="lxm-page"><div class="lxm-scroll" id="lxmScroll">${ms.svg}</div>
    <p class="lxm-foot"><b>${esc(A.n)}</b>　${A.from}〜${A.from+A.rows}階</p></div></div>
@@ -10913,7 +10919,7 @@ function lxBt(R,pool,fight){if(!R.bt||R.bt.c!==R.cur.c||R.bt.i!==R.cur.i){if(fig
  save();return R.bt}
 function lxEnter(){const R=S.lib.run;const o=lxNode(R);if(!o)return lxMap();const n=o.t;const pick=a=>a[Math.floor(Math.random()*a.length)];
  if(R.bt&&R.bt.won&&R.bt.c===R.cur.c&&R.bt.i===R.cur.i){toast('この戦闘はもう勝っています');return lxNextFloor()}
- const PL=LX_POOLS[R.act||0];const pool=()=>(R.fights||0)<3?PL.easy:PL.hard;
+ const PL=LX_POOLS[Math.min(LX_POOLS.length-1,R.act||0)];const pool=()=>(R.fights||0)<3?PL.easy:PL.hard;
  if(n==='戦闘'){const b=lxBt(R,pool(),true);crumbleCut(()=>lxBattle('normal',b.keys,()=>lxReward(false),{seed:b.seed}))}
  else if(n==='エリート'){const b=lxBt(R,PL.elite);toast('強い誤植が待ち構えている！');crumbleCut(()=>lxBattle('elite',b.keys,()=>lxReward(true),{seed:b.seed}))}
  else if(n==='ボス'){const b=lxBt(R,[[R.boss]]);bossCutLx(()=>lxBattle('boss',b.keys,()=>{lxComplete()},{seed:b.seed}))}
@@ -11100,37 +11106,43 @@ function lxRest(){const R=S.lib.run;const heal=Math.floor(R.max*.3);
  $('#lxAnn').onclick=()=>lxChooseCard({title:'注釈を書き込む頁を選ぶ',note:'強化はこの探索のあいだだけ。主な数値が上がります（伸ばす数値のない頁はコストが1下がり、コスト0の頁は1枚多く引けるようになります）。',
   items:R.deck.map((id,i)=>({i,def:lxDef(id),after:lxDef(id,true)})).filter(o=>!R.ann.includes(o.i)),ask:'この頁に注釈を書き込みますか？',yes:'注釈を書き込む',
   pick:it=>{R.ann.push(it.i);toast('注釈を書き込んだ');lxNextFloor()}})}
-function lxComplete(){const L=S.lib;const R=L.run;if(!R)return LibMenu();const a=R.act||0;const A=LX_ACTS[a];
+function lxComplete(){const L=S.lib;const R=L.run;if(!R)return LibMenu();const a=R.act||0;const A=lxAct(a);
  R.fl=A.from+A.rows;R.sc=R.sc||{};R.sc.boss=(R.sc.boss||0)+50*(a+1);
  const g=[0,0,0];g[Math.floor(Math.random()*3)]++;boxAdd(`カードゲーム　${R.fl}階のボスを退治`,g.indexOf(1),1);
- if(a>=LX_ACTS.length-1)return lxRunEnd(true);
+ if(a>=LX_ACTS.length-1&&!R.endless)return lxRunEnd(true);
+ let topMsg='';if(a===LX_ACTS.length-1){R.sc.cl=250;L.ac=(L.ac||0)+1;const g3=[0,0,0];for(let k=0;k<3;k++)g3[Math.floor(Math.random()*3)]++;g3.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)});topMsg=`<br><b>${LX_TOP}階を登りきった！</b>　オールクリアのお礼の栞も届いた。ここから先は無限回廊。`}
  /* 次の幕へ：失ったHPの75%を回復し、装備を1つもらう */
  const heal=Math.floor((R.max-R.hp)*.75);R.hp+=heal;const r=lxGiveRelic();
- R.act=a+1;R.fights=0;R.map=lxGenMap(R.act);R.at=null;R.cur=null;R.path=[];R.bt=null;R.q=null;const NB=LX_ACTS[R.act].boss;R.boss=NB[Math.floor(Math.random()*NB.length)];saveNow();
- FX.flash('#ffe6a8');modal(`<h3>${A.from+A.rows}階のボスを退治した！</h3><p style="line-height:1.8;text-align:center">お礼の<b>${gainText(g)}</b>が、ホームの受け取りボックスに届いた。<br>ひと息ついて、HPが${heal}回復した。${r?`<br>${lxIco(r,'big')}ボスの落とした装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:''}<br><br>次は<b>第${R.act+1}幕「${esc(LX_ACTS[R.act].n)}」</b>（${LX_ACTS[R.act].from}階から）。誤植はさらに強くなる。</p>${lxTipHTML(R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,()=>FX.pageTurn(lxMap))}
+ R.act=a+1;R.fights=0;R.map=lxGenMap(R.act);R.at=null;R.cur=null;R.path=[];R.bt=null;R.q=null;const NB=lxAct(R.act).boss;R.boss=NB[Math.floor(Math.random()*NB.length)];saveNow();
+ FX.flash('#ffe6a8');modal(`<h3>${A.from+A.rows}階のボスを退治した！</h3><p style="line-height:1.8;text-align:center">お礼の<b>${gainText(g)}</b>が、ホームの受け取りボックスに届いた。<br>ひと息ついて、HPが${heal}回復した。${topMsg}${r?`<br>${lxIco(r,'big')}ボスの落とした装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:''}<br><br>次は<b>${esc(lxActName(R))}</b>（${lxAct(R.act).from}階から）。誤植はさらに強くなる。</p>${lxTipHTML(R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,()=>FX.pageTurn(lxMap))}
 /* スコア：登った階×5、倒した誤植×2、エリート10×幕、ボス50×幕、クイズ正解×1、オールクリア250 */
-function lxScore(R,clear){const s=(R&&R.sc)||{};const v={fl:((R&&R.fl)||0)*5,kill:(s.kill||0)*2,el:s.el||0,boss:s.boss||0,q:s.q||0,clear:clear?250:0};v.total=v.fl+v.kill+v.el+v.boss+v.q+v.clear;return v}
+function lxScore(R,clear){const s=(R&&R.sc)||{};const v={fl:((R&&R.fl)||0)*5,kill:(s.kill||0)*2,el:s.el||0,boss:s.boss||0,q:s.q||0,clear:clear?250:(s.cl||0)};v.total=v.fl+v.kill+v.el+v.boss+v.q+v.clear;return v}
 /* 探索の終わり（負け・あきらめ・オールクリア）。スコアを記録して、ハイスコアなら更新 */
-function lxRunEnd(clear,gaveUp){const L=S.lib;const R=L.run;if(!R)return LibMenu();const v=lxScore(R,clear);const ch=R.char||'カコ';
- const best=v.total>(L.hi||0);if(best){L.hi=v.total;L.hiFl=R.fl||0;L.hiCh0=ch}L.hiFl=Math.max(L.hiFl||0,R.fl||0);
+function lxRunEnd(clear,gaveUp){const L=S.lib;const R=L.run;if(!R)return LibMenu();const v=lxScore(R,clear);const ch=R.char||'カコ';const EN=!!R.endless;
+ const hk=EN?'hiE':'hi';const best=v.total>(L[hk]||0);if(best){L[hk]=v.total;L[hk+'Fl']=R.fl||0;L[hk+'Ch0']=ch}L[hk+'Fl']=Math.max(L[hk+'Fl']||0,R.fl||0);
  L.hiCh=L.hiCh||{};L.hiCh[ch]=Math.max(L.hiCh[ch]||0,v.total);
- L.hist=[{s:v.total,f:R.fl||0,c:ch,cl:!!clear,t:Date.now()},...(L.hist||[])].slice(0,10);
+ L.hist=[{s:v.total,f:R.fl||0,c:ch,cl:!!clear,e:EN,t:Date.now()},...(L.hist||[])].slice(0,10);
  if(clear){L.clears=(L.clears||0)+1;L.ac=(L.ac||0)+1;const g=[0,0,0];for(let k=0;k<3;k++)g[Math.floor(Math.random()*3)]++;g.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)})}
  L.run=null;saveNow();try{cloudPush(true)}catch(e){}
  const row=(l,n)=>n?`<tr><td>${l}</td><td>${n.toLocaleString()}</td></tr>`:'';
- const head=clear?`${LX_TOP}階を登りきった！　オールクリア`:gaveUp?'探索をあきらめた':'探索は失敗に終わった';
+ const head=clear?`${LX_TOP}階を登りきった！　オールクリア`:EN?`無限回廊　${R.fl||0}階まで`:gaveUp?'探索をあきらめた':'探索は失敗に終わった';
  FX.flash(clear?'#ffe6a8':'#c9b6a0');
  modal(`<h3>${head}</h3><p style="text-align:center;line-height:1.7">${clear?'書架の最奥の誤植まで、すべて退治した。<br>お礼の栞が受け取りボックスに届いた。次はもっと高いスコアを目指そう。':`${R.fl||0}階までたどり着いた。`}</p>
-  <table class="lx-score"><tbody>${row(`登った階（${R.fl||0}階×5）`,v.fl)}${row('倒した誤植',v.kill)}${row('エリート',v.el)}${row('ボス',v.boss)}${row('クイズの正解',v.q)}${row('オールクリア',v.clear)}<tr class="tot"><td>スコア</td><td>${v.total.toLocaleString()}点</td></tr></tbody></table>
-  ${best?'<p class="lx-hiup">ハイスコア更新！</p>':`<p style="text-align:center" class="muted">ハイスコア ${(L.hi||0).toLocaleString()}点</p>`}
+  <table class="lx-score"><tbody>${row(`登った階（${R.fl||0}階×5）`,v.fl)}${row('倒した誤植',v.kill)}${row('エリート',v.el)}${row('ボス',v.boss)}${row('クイズの正解',v.q)}${row(`${LX_TOP}階を突破`,v.clear)}<tr class="tot"><td>スコア</td><td>${v.total.toLocaleString()}点</td></tr></tbody></table>
+  ${best?`<p class="lx-hiup">${EN?'無限回廊の':''}ハイスコア更新！</p>`:`<p style="text-align:center" class="muted">${EN?'無限回廊の':''}ハイスコア ${(L[hk]||0).toLocaleString()}点</p>`}
   ${lxTipHTML(R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>カードゲームへ</button></div>`,LibMenu)}
 /* ランキング（学校アカウントで開いたときだけ） */
 function lxRanking(){if(!CLOUD){modal(`<h3>ランキング</h3><p style="line-height:1.8">ランキングは、学校アカウント（Googleのリンク）から開いたときだけ見られます。<br>あなたのハイスコア：<b>${(S.lib.hi||0).toLocaleString()}点</b></p><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`);return}
  toast('ランキングを読み込んでいます…');try{cloudPush(true)}catch(e){}
  google.script.run.withSuccessHandler(r=>{if(!r||!r.top){toast('ランキングを読み込めませんでした');return}
+   const tb=(L,me)=>`<table class="lx-rank"><tbody>${(L||[]).map((x,i)=>`<tr class="${x.me?'me':''}"><td class="rk">${i+1}</td><td>${esc(x.name)}</td><td class="ch">${esc(x.ch||'')}</td><td class="fl">${x.fl}階</td><td class="sc">${Number(x.score).toLocaleString()}</td></tr>`).join('')||'<tr><td>まだ記録がありません</td></tr>'}</tbody></table>
+     <p style="text-align:center">${me?`あなたは <b>${me.rank}位</b>（${me.n}人中・${Number(me.score).toLocaleString()}点）`:'まだあなたの記録はありません'}</p>`;
    modal(`<div class="mhead"><h3>カードゲーム　ランキング</h3><button class="btn light" data-close>閉じる</button></div>
-    <table class="lx-rank"><tbody>${r.top.map((x,i)=>`<tr class="${x.me?'me':''}"><td class="rk">${i+1}</td><td>${esc(x.name)}</td><td class="ch">${esc(x.ch||'')}</td><td class="fl">${x.fl}階</td><td class="sc">${Number(x.score).toLocaleString()}</td></tr>`).join('')||'<tr><td>まだ記録がありません</td></tr>'}</tbody></table>
-    <p style="text-align:center">${r.me?`あなたは <b>${r.me.rank}位</b>（${r.n}人中・${Number(r.me.score).toLocaleString()}点）`:'まだあなたの記録はありません'}</p><p class="muted" style="text-align:center;font-size:13px">名前はゲーム内の名前です。数分おきに更新されます。</p>`)})
+    <div class="row" style="justify-content:center;gap:8px"><button class="btn" id="rkA">${LX_TOP}階</button><button class="btn light" id="rkB">無限回廊</button></div>
+    <div id="rkA1">${tb(r.top,r.me&&{...r.me,n:r.n})}</div><div id="rkB1" style="display:none">${tb(r.topE,r.meE&&{...r.meE,n:r.nE})}</div>
+    <p class="muted" style="text-align:center;font-size:13px">名前はゲーム内の名前です。数分おきに更新されます。</p>`);
+   const sw=k=>{$('#rkA1').style.display=k?'none':'';$('#rkB1').style.display=k?'':'none';$('#rkA').className='btn'+(k?' light':'');$('#rkB').className='btn'+(k?'':' light')};
+   $('#rkA').onclick=()=>sw(0);$('#rkB').onclick=()=>sw(1)})
   .withFailureHandler(()=>toast('ランキングを読み込めませんでした（先生が新しい保存係を設定するまで使えません）')).getRanking()}
 
 Title();

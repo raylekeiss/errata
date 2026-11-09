@@ -86,38 +86,46 @@ function putSave(json) {
 }
 
 /**
- * カードゲームのランキング（ハイスコア順）を返す。
+ * カードゲームのランキング（ハイスコア順）を返す。50階モード（hi）と無限回廊（hiE）の2つ。
  * 全員のセーブデータからハイスコアを読み出し、5分間キャッシュする。
  * 返すのはゲーム内の名前・スコア・到達階・キャラだけ（メールアドレスは返さない）。
  */
 function getRanking() {
   const email = me_();
   const cache = CacheService.getScriptCache();
-  let list = null;
-  const hit = cache.get('lxRank');
-  if (hit) { try { list = JSON.parse(hit); } catch (e) { list = null; } }
-  if (!list) {
+  let rows = null;
+  const hit = cache.get('lxRank2');
+  if (hit) { try { rows = JSON.parse(hit); } catch (e) { rows = null; } }
+  if (!rows) {
     const sh = sheet_();
     const n = sh.getLastRow();
-    list = [];
+    rows = [];
     if (n >= 2) {
       const vals = sh.getRange(2, 1, n - 1, COL_DATA).getValues();
       vals.forEach(function (v) {
         try {
           const S = JSON.parse(String(v[COL_DATA - 1] || '{}'));
           const L = S.lib || {};
-          if (Number(L.hi) > 0) list.push({ m: String(v[0]), name: String(S.name || '名無し').slice(0, 12), score: Number(L.hi), fl: Number(L.hiFl || 0), ch: String(L.hiCh0 || '') });
+          if (Number(L.hi) > 0 || Number(L.hiE) > 0) rows.push({
+            m: String(v[0]), name: String(S.name || '名無し').slice(0, 12),
+            a: Number(L.hi || 0), af: Number(L.hiFl || 0), ac: String(L.hiCh0 || ''),
+            b: Number(L.hiE || 0), bf: Number(L.hiEFl || 0), bc: String(L.hiECh0 || ''),
+          });
         } catch (e) {}
       });
     }
-    list.sort(function (a, b) { return b.score - a.score; });
-    try { cache.put('lxRank', JSON.stringify(list), 300); } catch (e) {}
+    try { cache.put('lxRank2', JSON.stringify(rows), 300); } catch (e) {}
   }
-  let mine = -1;
-  for (let i = 0; i < list.length; i++) if (list[i].m === email) { mine = i; break; }
-  return {
-    top: list.slice(0, 30).map(function (x) { return { name: x.name, score: x.score, fl: x.fl, ch: x.ch === 'カコ' ? '' : x.ch, me: x.m === email }; }),
-    me: mine >= 0 ? { rank: mine + 1, score: list[mine].score } : null,
-    n: list.length,
-  };
+  function board(key, fk, ck) {
+    const list = rows.filter(function (x) { return x[key] > 0; }).sort(function (p, q) { return q[key] - p[key]; });
+    let mine = -1;
+    for (let i = 0; i < list.length; i++) if (list[i].m === email) { mine = i; break; }
+    return {
+      top: list.slice(0, 30).map(function (x) { return { name: x.name, score: x[key], fl: x[fk], ch: x[ck] === 'カコ' ? '' : x[ck], me: x.m === email }; }),
+      me: mine >= 0 ? { rank: mine + 1, score: list[mine][key] } : null,
+      n: list.length,
+    };
+  }
+  const A = board('a', 'af', 'ac'), B = board('b', 'bf', 'bc');
+  return { top: A.top, me: A.me, n: A.n, topE: B.top, meE: B.me, nE: B.n };
 }
