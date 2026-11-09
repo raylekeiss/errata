@@ -910,13 +910,13 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .shiori3{font-family:var(--sans);font-size:13px;color:var(--paper);white-space:nowrap}.shiori3 b{font-family:var(--serif);font-size:17px;color:#fff;margin:0 .4em 0 .2em}
 /* --- 頁をめくる（時代別） --- */
 .gc2 .gc-ret{position:absolute;z-index:4;left:clamp(16px,3vw,40px);top:calc(env(safe-area-inset-top,0px) + 18*var(--u));min-width:calc(110*var(--u))}
-.gc2 .gc-head{position:absolute;z-index:3;left:44%;top:calc(env(safe-area-inset-top,0px) + 14*var(--u));transform:translateX(-50%);text-align:center}
-.gc2 .gc-title{position:relative;left:auto;top:auto;transform:none;min-width:calc(380*var(--u));font-size:max(18px,calc(34*var(--u)));padding:calc(8*var(--u)) calc(64*var(--u))}
+.gc2 .gc-head{position:absolute;z-index:3;left:50%;top:calc(env(safe-area-inset-top,0px) + 14*var(--u));transform:translateX(-50%);text-align:center}
+.gc2 .gc-title{display:inline-block;position:relative;left:auto;top:auto;transform:none;min-width:0;font-size:max(18px,calc(34*var(--u)));padding:calc(8*var(--u)) calc(70*var(--u)) calc(8*var(--u)) calc(76*var(--u))}
 .gc2 .gc-sub{margin:calc(8*var(--u)) 0 0;font-size:max(11px,calc(15*var(--u)));letter-spacing:.14em;color:#e9e1cc;text-shadow:0 2px 6px rgba(0,0,0,.8);white-space:nowrap}
-.gc2 .gc-shimi{left:calc(-40*var(--u));bottom:calc(-90*var(--u));height:calc(640*var(--u));aspect-ratio:810/1500}
+.gc2 .gc-shimi{left:calc(10*var(--u));bottom:calc(-110*var(--u));height:calc(720*var(--u));aspect-ratio:810/1500}
 .gc2 .gc-say{left:calc(40*var(--u));top:calc(118*var(--u));max-width:calc(250*var(--u));font-size:max(13px,calc(17*var(--u)))}
 .gc2 .gc-say::before{left:calc(120*var(--u));top:auto;bottom:-12px;border:none;border-left:9px solid transparent;border-right:9px solid transparent;border-top:12px solid #ebe0c8}
-.gc-panel{position:absolute;z-index:3;left:27%;right:3.5%;top:19%;bottom:13%;display:flex;flex-direction:column;gap:calc(12*var(--u));padding:calc(14*var(--u));
+.gc-panel{position:absolute;z-index:3;left:29%;right:3.5%;top:19%;bottom:12.5%;display:flex;flex-direction:column;gap:calc(16*var(--u));padding:calc(20*var(--u));
  background:linear-gradient(180deg,rgba(14,20,46,.88),rgba(7,12,31,.92));box-shadow:inset 0 0 0 1px rgba(201,162,74,.75),inset 0 0 0 5px rgba(7,12,31,.9),inset 0 0 0 6px rgba(201,162,74,.35),0 14px 40px rgba(0,0,0,.6)}
 .gc-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(12*var(--u));flex:none}
 .gc-tab{position:relative;display:flex;align-items:center;justify-content:center;gap:calc(10*var(--u));min-height:max(44px,calc(66*var(--u)));padding:0 calc(10*var(--u)) 0 calc(56*var(--u));
@@ -929,11 +929,11 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .gc-banner{position:relative;flex:1;min-height:0;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(201,162,74,.6)}
 .gb-art{position:absolute;inset:0;background:#141c38 center/cover no-repeat}
 .gb-fade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,12,31,.92) 0,rgba(7,12,31,.7) 34%,rgba(7,12,31,0) 62%)}
-.gb-tx{position:absolute;left:calc(46*var(--u));top:50%;transform:translateY(-50%);max-width:46%;display:flex;flex-direction:column;align-items:flex-start;color:#f1e3bf}
-.gb-emb{width:calc(48*var(--u));min-width:34px;color:var(--ec);filter:drop-shadow(0 0 10px rgba(255,214,140,.35));margin-left:calc(58*var(--u))}
-.gb-tx h3{margin:calc(2*var(--u)) 0 0;font-family:var(--serif);font-weight:600;font-size:max(24px,calc(46*var(--u)));letter-spacing:.14em;color:#fbf3df;text-shadow:0 3px 10px rgba(0,0,0,.7)}
+.gb-tx{position:absolute;left:calc(52*var(--u));top:0;bottom:0;transform:none;justify-content:center;padding:calc(22*var(--u)) 0 calc(26*var(--u));box-sizing:border-box;max-width:46%;display:flex;flex-direction:column;align-items:flex-start;color:#f1e3bf}
+.gb-emb{width:calc(40*var(--u));min-width:28px;color:var(--ec);filter:drop-shadow(0 0 10px rgba(255,214,140,.35));margin-left:calc(58*var(--u))}
+.gb-tx h3{margin:calc(2*var(--u)) 0 0;font-family:var(--serif);font-weight:600;font-size:max(22px,calc(38*var(--u)));letter-spacing:.14em;color:#fbf3df;text-shadow:0 3px 10px rgba(0,0,0,.7)}
 .gb-en{font-family:var(--serif);font-size:max(10px,calc(15*var(--u)));letter-spacing:.4em;color:var(--ec);margin:0 0 calc(8*var(--u)) calc(56*var(--u))}
-.gb-tx p{margin:0 0 calc(10*var(--u));font-size:max(12px,calc(16*var(--u)));line-height:1.8;letter-spacing:.06em;white-space:pre-line;text-shadow:0 2px 6px rgba(0,0,0,.8)}
+.gb-tx p{margin:0 0 calc(12*var(--u));font-size:max(12px,calc(15*var(--u)));line-height:1.65;letter-spacing:.06em;white-space:pre-line;text-shadow:0 2px 6px rgba(0,0,0,.8)}
 .gb-more{font-family:var(--sans);font-size:max(12px,calc(15*var(--u)));color:#f1e3bf;padding:calc(4*var(--u)) calc(24*var(--u));min-height:36px;border-radius:999px;background:rgba(7,12,31,.6);box-shadow:inset 0 0 0 1px rgba(201,162,74,.8)}
 .gb-arrow{position:absolute;z-index:2;top:50%;transform:translateY(-50%);width:44px;height:64px;font-size:40px;line-height:1;color:#f1e3bf;background:none;text-shadow:0 2px 8px rgba(0,0,0,.9)}
 .gb-arrow.l{left:0}.gb-arrow.r{right:0}
@@ -950,7 +950,7 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .gp::before,.gp::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);font-size:max(14px,calc(24*var(--u)));opacity:.55}
 .gp::before{left:calc(36*var(--u))}.gp::after{right:calc(36*var(--u))}
 .gp:active{transform:translateY(2px)}.gp.off{filter:grayscale(.75) brightness(.7)}
-.gc-links{position:absolute;z-index:3;left:27%;right:3.5%;bottom:calc(env(safe-area-inset-bottom,0px) + 2.6%);display:flex;justify-content:center;gap:calc(14*var(--u))}
+.gc-links{position:absolute;z-index:3;left:29%;right:3.5%;bottom:calc(env(safe-area-inset-bottom,0px) + 2.6%);display:flex;justify-content:center;gap:calc(14*var(--u))}
 .gc-links button{flex:0 1 calc(210*var(--u));min-height:44px;font-family:var(--serif);font-size:max(12px,calc(16*var(--u)));letter-spacing:.1em;color:#f1e3bf;background:rgba(7,12,31,.82);border-radius:4px;box-shadow:inset 0 0 0 1px rgba(201,162,74,.75)}
 .gh-list{max-height:55vh;overflow:auto;margin:6px 0 0;padding:0;list-style:none}
 .gh-list li{display:flex;gap:10px;align-items:baseline;padding:6px 2px;border-bottom:1px solid rgba(120,88,40,.25);font-size:14px}
@@ -2047,7 +2047,11 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .lxs-hi{display:block;font-size:13px;opacity:.85;margin-top:2px}
 /* ===== 記述対策 ===== */
 .dr.kj .scr-title{z-index:6}
-.kj-scroll{position:absolute;z-index:3;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 120*var(--u) + 40px);bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 60px)}
+.kj-scroll{position:absolute;z-index:3;left:0;right:0;top:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 60px)}
+.kj-head{display:flex;align-items:flex-start;gap:14px;max-width:1100px;margin:0 auto 18px;padding-top:calc(env(safe-area-inset-top,0px) + 14px)}
+.kj-head .gc-back.tl,.kj-head .scr-title,.kj-head .gc-top{position:static!important;transform:none!important;left:auto!important;right:auto!important;top:auto!important}
+.kj-head .scr-title{flex:1;min-width:0}
+.kj-head .gc-top{margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
 .kj-col{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 .kj-tt{margin:0;font-size:max(20px,calc(30*var(--u)));letter-spacing:.08em;color:#f3ecdc;text-shadow:0 2px 8px rgba(0,0,0,.6)}
 .kj-steps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -2083,8 +2087,7 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 .kj-score{font-size:max(15px,calc(20*var(--u)))}.kj-score b{font-size:max(30px,calc(48*var(--u)));font-variant-numeric:tabular-nums}
 .kj-gain{color:#8a2a25;font-weight:600}.kj-gain small{color:#6d5f4a;font-weight:400;font-family:var(--sans)}
 .kj-gainnote{font-family:var(--sans);font-size:13px;color:#6d5f4a}
-.kj-paper{padding:calc(24*var(--u)) calc(28*var(--u));border-radius:2px;font-size:max(16px,calc(20*var(--u)));line-height:2.2;
-  background-image:repeating-linear-gradient(transparent 0 calc(2.2em - 1px),rgba(150,115,55,.35) calc(2.2em - 1px) 2.2em),radial-gradient(ellipse at 50% 40%,#f6eedb 0,#ece0c3 60%,#dccaa2 100%)}
+.kj-paper{padding:calc(24*var(--u)) calc(28*var(--u));border-radius:2px;font-size:max(16px,calc(20*var(--u)));line-height:2.1}
 .kj-paper .seg{cursor:pointer;border-radius:2px;transition:background .15s}
 .kj-paper .seg:hover{background:rgba(201,162,74,.22)}
 .kj-paper .seg.sel{background:rgba(201,162,74,.38);box-shadow:0 0 0 2px #c9a24a}
@@ -7892,7 +7895,7 @@ u.ul{text-decoration:underline;text-decoration-thickness:2px;text-underline-offs
 </script>
 <script id="errata-main">
 const DATA=JSON.parse(document.getElementById('errata-data').textContent);
-/* tools/drill-edit.html で直したドリル（この端末だけ）を上書き。書き出した分を本体に取り込めば全員に反映される */
+/* tools/drill-edit.html で直した問題演習（この端末だけ）を上書き。書き出した分を本体に取り込めば全員に反映される */
 try{const E=JSON.parse(localStorage.getItem('errata_drill')||'{}');if(!localStorage.getItem('errata_drill_v'))for(const[id,v]of Object.entries(E))if(id.startsWith('JK-')&&v&&v.ok===0)v.ok=-1;for(const L of [DATA.Q,DATA.JQ||[]])for(const q of L){if(E[q.id])Object.assign(q,E[q.id])}
  if(E.__cfg&&typeof E.__cfg==='object')DATA.JCFG=Object.assign({},DATA.JCFG||{},E.__cfg);
  /* 編集画面で削除した問題は出さない */
@@ -8472,7 +8475,7 @@ function evOf(ch){return ch===0&&S&&S.pv==='short'&&STORY_SHORT?STORY_SHORT:STOR
 const QUIZ_ORDER=Q.map(q=>q.id);
 const HELPER={1:'ラメス2世',2:'アショーカ王',3:'始皇帝',4:'武帝',5:'ペリクレス',6:'カエサル',7:'カール大帝',8:'アブー＝バクル',9:'太宗',10:'グレゴリウス7世',11:'チンギス＝ハン',12:'康熙帝',13:'コロンブス',14:'ルター',15:'ナポレオン'};
 const NCH=15; // 章の数
-const PARTS=[{n:'第1部',t:'名を残す者、\n名を消す者',sub:'文明の誕生から　ギリシア・ヘレニズムまで',chs:[0,1,2,3,4,5],story:'史書庫の古い本に、「世界初」を自分の名前で書き足す学者があらわれた。一方で、偉人の名前だけが静かに消えていく。名を残したい男と、名を消したい女。二人を追って、古代の書架をめぐろう。'},{n:'第2部',t:'理想の帝国',sub:'ローマから　中世ヨーロッパまで',chs:[6,7,8,9,10],story:'この部の物語は準備中です。ドリルと頁めくりは、もう遊べます。'},{n:'第3部',t:'つながる世界',sub:'宋・モンゴルから　革命の時代まで',chs:[11,12,13,14,15],story:'この部の物語は準備中です。ドリルと頁めくりは、もう遊べます。'}];
+const PARTS=[{n:'第1部',t:'名を残す者、\n名を消す者',sub:'文明の誕生から　ギリシア・ヘレニズムまで',chs:[0,1,2,3,4,5],story:'史書庫の古い本に、「世界初」を自分の名前で書き足す学者があらわれた。一方で、偉人の名前だけが静かに消えていく。名を残したい男と、名を消したい女。二人を追って、古代の書架をめぐろう。'},{n:'第2部',t:'理想の帝国',sub:'ローマから　中世ヨーロッパまで',chs:[6,7,8,9,10],story:'この部の物語は準備中です。問題演習と頁めくりは、もう遊べます。'},{n:'第3部',t:'つながる世界',sub:'宋・モンゴルから　革命の時代まで',chs:[11,12,13,14,15],story:'この部の物語は準備中です。問題演習と頁めくりは、もう遊べます。'}];
 const VOLS=DATA.vols;
 /* 特別な頁：宗教の創始者。★なし・ガチャ/編成/バトル補正の対象外 */
 /* 物語・バトルの背景：章ごとの既定背景（未用意ならホーム背景） */
@@ -8565,7 +8568,7 @@ function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div
  const c=$('#cont');if(c)c.onclick=()=>{load();S.prologue?Home():startPrologue()}}
 
 /* ---------- home ---------- */
-const SHIMI_IDLE=['今日はどの棚から読む？','カードゲームは、頁の種類が多いほど戦い方が広がるよ。','マイルームの家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、ドリルの「マイ範囲」に試験範囲を登録しておくと便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','ドリルは何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
+const SHIMI_IDLE=['今日はどの棚から読む？','カードゲームは、頁の種類が多いほど戦い方が広がるよ。','マイルームの家具は、栞と交換できるよ。君の書斎、どんなふうにする？','テストが近いなら、問題演習の「マイ範囲」に試験範囲を登録しておくと便利だよ。','誤植、今日も元気だね。','栞が貯まったら、本をめくってみるといいよ。','問題演習は何度解き直してもいいんだよ。前に間違えた問題は、栞が多めにもらえるからね。','ディオクレティアヌスは、引退したあとキャベツを育ててたらしいよ。','ここの本、たまに上から落ちてくるから気をつけてね。'];
 const ICON={
  story:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="24" cy="24" r="15"/><circle cx="24" cy="24" r="10" stroke-width="1"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke-linecap="round"/><path d="M24 12l3.5 12L24 36l-3.5-12z" fill="currentColor" stroke="none"/></svg>',
  drill:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M38 6c-10 2-18 10-22 22l-3 7 6-4c10-3 17-12 19-25z"/><path d="M16 28l-6 14" stroke-linecap="round"/><path d="M22 22l-5 5" stroke-width="1"/><path d="M30 38h10M30 43h6" stroke-linecap="round"/></svg>',
@@ -8576,7 +8579,7 @@ const ICON={
  niwa:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M24 30L6 21V9l18 9z" fill="currentColor" opacity=".18"/><path d="M24 30l18-9V9L24 18z" fill="currentColor" opacity=".32"/><path d="M6 9l18 9 18-9M24 18v12M6 9v12l18 9 18-9V9"/><path d="M6 21l18 9 18-9 0 6-18 9-18-9z" fill="currentColor"/><path d="M30 22l6-3v-6l-6 3z" fill="currentColor"/><path d="M12 19l5 2.5v-4L12 15z" stroke-width="1.2"/></svg>'};
 const FLO='<svg class="flo" viewBox="0 0 40 14" fill="none" stroke="#b5302a" stroke-width="1.2" stroke-linecap="round"><path d="M2 11c6-1 9-7 14-7 4 0 2 6-2 5s1-7 8-6c5 1 8 4 16 1"/><path d="M34 3l2 2-2 2"/></svg>';
 let homeLine=-1;
-const CHARA={'コンラッド':{c:'#a5621b',lines:['研究員という肩書きも、悪くはない。名刺の文字は大きめに頼んだがね。','今日の調べ物は済んだかね？　私は『三国志演義』をもう一周するところだ。','ドリルの正答率が低いようでは、私の助手は務まらんぞ。','頁をめくるたびに一喜一憂するのは、発掘と同じだな。','ネフェルティティの胸像の片目の謎は、まだ解けていない。だから面白いのだ。']},
+const CHARA={'コンラッド':{c:'#a5621b',lines:['研究員という肩書きも、悪くはない。名刺の文字は大きめに頼んだがね。','今日の調べ物は済んだかね？　私は『三国志演義』をもう一周するところだ。','問題演習の正答率が低いようでは、私の助手は務まらんぞ。','頁をめくるたびに一喜一憂するのは、発掘と同じだな。','ネフェルティティの胸像の片目の謎は、まだ解けていない。だから面白いのだ。']},
  'ヌル':{c:'#5b5470',lines:['名前のわからない人たちの棚、少しずつ増えてる。','今日は、誰の記録を読むの？','博士の字、また少し大きくなってた。……直しておいた。','わからないことは、わからないって書く。紙魚に教わった。','栞、たくさん集めたのね。']}};
 function p1Clear(){return !!(S.cleared&&S.cleared[4])}
 function oshiName(){if(CHARA[S.oshi]&&p1Clear())return S.oshi;return S.oshi&&S.oshi!=='シミ'&&lv(S.oshi)?S.oshi:'シミ'}
@@ -8604,7 +8607,7 @@ function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=
   <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}</div>
   <nav class="shelf" aria-label="メニュー">
    ${btn('lead','story','story','ストーリー',`<span class="nx">${cst?stName(cst).replace(/　誤植の群れ.*$/,'　誤植の群れ')+'へ　→':'続きは準備中'}</span><span class="ribbon"></span>`)}
-   ${btn('','quiz','drill','ドリル')}
+   ${btn('','quiz','drill','問題演習')}
    ${btn('','gacha','gacha','ガチャ')}
    ${btn('','lib','lib','カード<wbr>ゲーム')}
    ${btn('','party','party','編成')}
@@ -8616,8 +8619,8 @@ function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=
 const TOUR=[['[data-go="story"]','ストーリー','部を選ぶと、史書庫の地図が開くよ。節ごとに読み進めて、ときどき出てくる「誤植の群れ」は20秒以内に答えて退治しよう。'],
  ['#msBtn','ミッション','毎日のミッションを達成すると、栞がもらえるよ。日付が変わると新しくなるんだ。'],
  ['.h-coins .boxbtn:not(.msbtn)','受け取りボックス','もらった栞は、いったんここに届くよ。タップして受け取ってね。'],
- ['[data-go="quiz"]','ドリル','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「マイ範囲」で試験範囲の章や王朝にチェックを入れておくと、範囲の問題だけを解けるよ。'],
- ['[data-go="gacha"]','ガチャ','栞は古代・中世・近世の3種類。ドリルで正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
+ ['[data-go="quiz"]','問題演習','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「マイ範囲」で試験範囲の章や王朝にチェックを入れておくと、範囲の問題だけを解けるよ。'],
+ ['[data-go="gacha"]','ガチャ','栞は古代・中世・近世の3種類。問題演習で正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
  ['[data-go="lib"]','カードゲーム','手に入れた頁でデッキを組んで、書架の奥の誤植と戦うんだ。頁の種類が多いほど戦い方が広がるよ。最後まで進むと栞が1枚もらえる。'],
  ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
  ['[data-go="niwa"]','マイルーム','君の書斎を好きに飾れるよ。家具は栞と交換できるし、手に入れた頁は額に入れて壁に掛けられるんだ。'],
@@ -8929,16 +8932,16 @@ try{Object.assign(FOCUS,JSON.parse(localStorage.getItem('errata_focus')||'{}'))}
 function fcAttr(n){const f=FOCUS[n];return f?` class="fc" style="--fx:${f[0]/100};--fy:${f[1]/100};--s:${f[2]};--ia:${f[3]}"`:''}
 function partOf(ch){return PARTS.findIndex(p=>p.chs.includes(ch))}
 /* ---------- 受け取りボックス（栞はいったんここに届き、タップで受け取る） ---------- */
-const BOXSVG='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 12h24v15H4z" fill="#6b3a24"/><path d="M4 12h24v4H4z" fill="#8a4d2f"/><path d="M2 8h28v5H2z" fill="#a0603a"/><path d="M14 8h4v19h-4z" fill="#c9a24a"/><path d="M16 8c-3-6-9-5-8-1 1 3 6 2 8 1zm0 0c3-6 9-5 8-1-1 3-6 2-8 1z" fill="#c4302b"/></svg>';
+const BOXSVG='<svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke-linejoin="round" stroke-linecap="round"><path d="M16 3v12M10.5 10l5.5 5.5 5.5-5.5" stroke="#c4302b" stroke-width="2.6"/><path d="M3.5 18.5h7l2 4h7l2-4h7V27a2 2 0 0 1-2 2h-21a2 2 0 0 1-2-2z" fill="rgba(201,162,74,.28)" stroke="currentColor" stroke-width="1.8"/><path d="M6 18.5l2-6h3M26 18.5l-2-6h-3" stroke="currentColor" stroke-width="1.8"/></svg>';
 function boxN(){return (S.box||[]).length}
 function boxId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function boxAdd(src,e,n){if(!n)return;S.box=S.box||[];S.box.push({id:boxId(),src,e,n});save();refreshCoins()}
-/* ドリルは1回分を1件にまとめる（正解するたびに数が増える。途中で閉じても消えない） */
+/* 問題演習は1回分を1件にまとめる（正解するたびに数が増える。途中で閉じても消えない） */
 function boxAddTo(key,src,e,n){if(!n)return;S.box=S.box||[];let b=S.box.find(x=>x.k===key&&x.e===e);if(!b){b={id:boxId(),k:key,src,e,n:0};S.box.push(b)}b.n+=n;save()}
 function boxHas(e){return (S.box||[]).some(b=>b.e===e)}
 function boxBtnHTML(){const n=boxN();return `<button class="boxbtn${n?' has':''}" aria-label="受け取りボックス（${n}件）">${BOXSVG}<span>受取</span>${n?`<i>${n>99?'99+':n}</i>`:''}</button>`}
 function openBox(){const L=S.box||[];
- const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・ドリル・カードゲームでもらった栞は、ここに届きます。</p>';
+ const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・問題演習・カードゲームでもらった栞は、ここに届きます。</p>';
  modal(`<h3>受け取りボックス</h3><p class="bx-left" id="bxLeft">${L.length?`タップして受け取ろう　残り<b>${L.length}</b>件`:''}</p>
   <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${ERAS[b.e].c}">${ribbon(b.e)}<span class="bx-t"><b>${ERAS[b.e].k}の栞 ×${b.n}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
   <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn');if(b)b.outerHTML=boxBtnHTML()});
@@ -8950,10 +8953,10 @@ function openBox(){const L=S.box||[];
 /* ===== ミッション =====
    デイリー：その日（端末の日付）のうちに達成すると、各時代の栞がもらえる。日付が変わるとリセット
    達成：通算の記録で段階的に。報酬は受け取りボックスに届く */
-const MS_DAILY=[['dq','ドリルを10問解こう',10,1],['dc','ドリルで5問正解しよう',5,1],['st','ストーリーを1節読もう',1,1],['lx','カードゲームで1回遊ぼう',1,1]];
+const MS_DAILY=[['dq','問題演習を10問解こう',10,1],['dc','問題演習で5問正解しよう',5,1],['st','ストーリーを1節読もう',1,1],['lx','カードゲームで1回遊ぼう',1,1]];
 const MS_ALL_BONUS=2;
 const MS_ACH=[
- ['dr','ドリルで正解した問題',[50,200,500,1000],[2,3,5,8],()=>Object.values(S.qs||{}).filter(v=>v===1).length],
+ ['dr','問題演習で正解した問題',[50,200,500,1000],[2,3,5,8],()=>Object.values(S.qs||{}).filter(v=>v===1).length],
  ['jk','受験対策で正解した問題',[50,200,500,1000],[2,3,5,8],()=>Object.values(S.jq||{}).reduce((a,t)=>a+(String(t).split('1').length-1),0)],
  ['cd','集めた頁',[10,30,60],[2,4,6],()=>Object.values(S.cards||{}).filter(v=>v>0).length],
  ['sc','読み終えた節',[5,20,50],[2,4,6],()=>{try{return stages().filter(x=>x.k==='sec'&&stPassed(x)).length}catch(e){return 0}}]];
@@ -9045,7 +9048,7 @@ function StoryMenu(){STG=null;stMigrate();const L=stages();const cur=stCurrent()
     ${!open||!ready?`<i class="sp-lock">${MAP_IC.lock}</i>`:''}
     ${p===curP?'<span class="sp-now">つづきはここから</span>':''}</button>`}).join('')}</div></div>`);
  document.querySelectorAll('[data-pv]').forEach(b=>b.onclick=()=>{const p=+b.dataset.pv;
-  if(b.classList.contains('soon')){FX.shake(b);toast('この部の物語は準備中です。ドリルと頁めくりは、もう遊べます');return}
+  if(b.classList.contains('soon')){FX.shake(b);toast('この部の物語は準備中です。問題演習と頁めくりは、もう遊べます');return}
   if(b.classList.contains('locked')){FX.shake(b);toast('前の部のステージを修復すると、読めるようになります');return}
   FX._replay(b,'fx-glow',500);PART=p;FX.pageTurn(()=>StoryMap(p))})}
 
@@ -9397,7 +9400,7 @@ function crumbleCut(done){const st=$('#story'),bg=$('#vnbg');if(!st||!bg||FX.red
   const t=setTimeout(end,1750);o.onclick=ev=>{ev.stopPropagation();end()}};
  if(BG_SIZE[url]){go(...BG_SIZE[url]);return}
  const im=new Image();im.onload=()=>{BG_SIZE[url]=[im.naturalWidth,im.naturalHeight];go(im.naturalWidth,im.naturalHeight)};im.onerror=()=>done();im.src=url}
-/* ---------- おさらいドリルのカットイン ---------- */
+/* ---------- おさらい問題演習のカットイン ---------- */
 function quizCut(title,tut,done){const st=$('#story');if(!st){done();return}
  const o=document.createElement('div');o.className='quizcut';
  o.innerHTML=`<div class="qc-band"></div><div class="qc-in"><div class="qc-face" style="${IMG['シミ_顔']?`background-image:url(${IMG['シミ_顔']})`:''}"></div><div class="qc-tx"><span class="qc-eye">${tut?'TUTORIAL':'REVIEW DRILL'}</span><b class="qc-t">${esc(title)}</b><span class="qc-s">${tut?'まずは問題に答えてみよう':'ここまでの内容を、おさらいしよう'}</span></div></div>`;
@@ -9523,7 +9526,7 @@ function askKai(){const k=B.k;B.turn++;B.phase='who';$('#bms').innerHTML=msText(
 function lockSlips(sel,right){document.querySelectorAll(sel+' .slip').forEach(b=>{b.disabled=true;if(b.dataset.v===right)b.classList.add('right')})}
 function noteHTML(cls,head,sub,body,btn='つぎへ',face=true){return `<div class="note parch${face?'':' noface'}"><div class="face" style="background-image:url(${IMG['シミ_顔']||''})"></div>
  <div><p class="hd ${cls}">${head}${sub?`<small>${sub}</small>`:''}</p><p class="tx">${body}</p></div><button class="nx" id="nx">${btn}</button></div>`}
-/* ドリルの解説：硬い解説（x）＋任意の紙魚の一言（n）。一言があるときだけ紙魚の顔を出す */
+/* 問題演習の解説：硬い解説（x）＋任意の紙魚の一言（n）。一言があるときだけ紙魚の顔を出す */
 /* 問題文：{{…}} を下線部、改行を<br>に */
 function qHTML(t){return esc(t).replace(/^下線部を訂正すると？/,'<span class="qbox">下線部を訂正すると？</span>').replace(/\{\{(.+?)\}\}/g,'<u class="ul">$1</u>').replace(/\n/g,'<br>')}
 function exHTML(q){return esc(q.x||'')+(q.n?`<span class="ex-n"><span class="who">シミ</span>${esc(q.n)}</span>`:'')}
@@ -9573,9 +9576,9 @@ const EMB={
 9:'<path d="M12 6v36" stroke="currentColor" stroke-width="3"/><path d="M14 8h22l-6 7 6 7H14z" fill="currentColor"/>',
 10:'<circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2" fill="none"/><path d="M24 8l4 16-4 16-4-16z" fill="currentColor"/><path d="M8 24l16-3 16 3-16 3z" fill="currentColor" opacity=".6"/>',
 11:'<path d="M38 6C26 9 17 18 13 32l-3 9 7-5c12-4 19-15 21-30z" fill="currentColor"/><path d="M13 32l-4 10" stroke="currentColor" stroke-width="2"/>'};
-const DR_LINES=['どの章から解くのかね。間違えた問題は、何度でも解き直したまえ。研究とはそういうものだ。','前に間違えた問題に正解すれば、栞が多めにもらえる。失敗を取り返した者には、報酬があって然るべきだ。','10問ずつ出る。手早く片付けたまえ。','このドリルの監修は私だ。……と書き足したいところだが、やめておこう。'];
+const DR_LINES=['どの章から解くのかね。間違えた問題は、何度でも解き直したまえ。研究とはそういうものだ。','前に間違えた問題に正解すれば、栞が多めにもらえる。失敗を取り返した者には、報酬があって然るべきだ。','10問ずつ出る。手早く片付けたまえ。','この問題演習の監修は私だ。……と書き足したいところだが、やめておこう。'];
 const DR_VOL_LINE='試験範囲が決まったら「マイ範囲」に登録したまえ。章や王朝ごとに選べるぞ。';
-/* 通常ドリルの小分け（問題IDの節ごと）。マイ範囲で章の中の王朝・テーマ単位でチェックを外せる */
+/* 通常問題演習の小分け（問題IDの節ごと）。マイ範囲で章の中の王朝・テーマ単位でチェックを外せる */
 const QSEC={'ORI-Q01':'先史の人類','ORI-Q02':'メソポタミア','ORI-Q03':'エジプト','ORI-Q04':'東地中海の諸民族','ORI-Q05':'オリエントの統一と四王国','ORI-Q06':'エーゲ文明',
  'IND-Q01':'インダス文明とアーリヤ人','IND-Q02':'仏教とジャイナ教','IND-Q03':'マウリヤ朝・クシャーナ朝','IND-Q04':'グプタ朝・ヴァルダナ朝と南インド',
  'CHN-Q01':'中国文明・殷・周','CHN-Q02':'春秋・戦国と諸子百家','CHN-Q03':'秦','CHN-Q04':'前漢','CHN-Q05':'後漢','CHN-Q06':'三国・晋・五胡十六国','CHN-Q07':'南北朝と文化',
@@ -9607,7 +9610,7 @@ function qMyEdit(){const c=qmyCfg();const sel=new Set(c.secs);
  $('#qmSave').onclick=()=>{keep();closeModal(true);QuizMenu()};
  $('#qmClr').onclick=()=>{box.querySelectorAll('input[type=checkbox]').forEach(i=>i.checked=false);cnt()};
  $('#qmGo').onclick=()=>{keep();if(!c.secs.length){toast('範囲を1つ以上選んでください');return}closeModal(true);FX.pageTurn(()=>startQuiz('T:my'))}}
-/* ドリル画面の人物はコンラッド。ストーリーで初めて登場する台詞を過ぎるまでは、灰色でセリフなし */
+/* 問題演習画面の人物はコンラッド。ストーリーで初めて登場する台詞を過ぎるまでは、灰色でセリフなし */
 const KON_FIRST=(()=>{for(let c=1;c<STORY.length;c++){const i=STORY[c].ev.findIndex(e=>e.s==='コンラッド'||e.img==='コンラッド');if(i>=0)return {c,i}}return null})();
 function konradMet(){if(!KON_FIRST)return true;const {c,i}=KON_FIRST;if(S.cleared&&S.cleared[c-1])return true;if(S.stg&&stages().some(s=>s.k==='sec'&&s.ch===c&&s.b>i&&stRec(s)&&stRec(s).c>0))return true;const at=(S.prog&&S.prog.ch===c)?S.prog.i:((S.mid&&S.mid[c])||0);return at>i}
 function vtitle(s){const c=[...s].map(x=>x==='ー'?'丨':x==='＝'?'‖':x);const cols=c.length<=8?[c]:[c.slice(0,Math.ceil(c.length/2)),c.slice(Math.ceil(c.length/2))];
@@ -9616,14 +9619,14 @@ function poolOf(key){if(key==='T:my'){const ss=new Set(qmyCfg().secs);return Q.f
 function labelOf(key){if(key==='T:my')return '試験範囲　マイ範囲';if(String(key).startsWith('J:'))return '受験対策　'+jkName(key);return typeof key==='number'?'第'+key+'章「'+CHT[key]+'」':'試験範囲「'+(VOLS.find(v=>v.code===key)||{}).name+'」'}
 function chStat(key){const pool=poolOf(key);return {n:pool.length,done:pool.filter(q=>qst(q)===1).length}}
 function embOf(ch){return EMB[ch]||EMB[((ch-1)%11)+1]||''}
-/* ---------- 受験対策ドリル（教科書の単元ごと） ----------
+/* ---------- 受験対策問題演習（教科書の単元ごと） ----------
    進み具合は容量節約のため単元ごとの文字列で持つ（S.jq["6-1"]="0120…"：0=未回答 1=正解 2=不正解、位置＝IDの末尾番号）
    出す問題は採用（ok:1）だけ。JCFG.pending=1 のあいだは採否未定（ok:0）も出す。不採用（ok:-1）は出さない */
 const JK=DATA.JQ||[],JUN=DATA.JU||{},JCFG=DATA.JCFG||{pending:1};
 const JCH=[['M','世界史へのまなざし'],['1','文明の成立'],['2','中央ユーラシアと東アジア'],['3','南アジアと東南アジア'],['4','西アジアと地中海'],['5','イスラームとヨーロッパ'],
  ['6','イスラームの伝播'],['7','ヨーロッパの変容'],['8','東アジアとモンゴル'],['9','大交易・大交流'],['10','アジアの諸帝国'],['11','近世ヨーロッパ'],
  ['12','産業革命と環大西洋革命'],['13','欧米国民国家の形成'],['14','アジア諸地域の動揺'],['15','帝国主義と民族運動'],['16','第一次世界大戦'],['17','第二次世界大戦と戦後'],['18','冷戦と第三世界'],['19','冷戦の終結と今日の世界']];
-/* 通常ドリルを混ぜるときの対応表（教科書の単元 → ゲームの章）。対応する章がない単元は混ぜない */
+/* 通常問題演習を混ぜるときの対応表（教科書の単元 → ゲームの章）。対応する章がない単元は混ぜない */
 const JMAP={'1-2':[1],'1-3':[2],'1-4':[3],'2-2':[4],'2-3':[4],'2-4':[9],'3-1':[2],'3-2':[2],'4-1':[6],'4-2':[5],'4-3':[6],'4-4':[7],'5-1':[8],'5-2':[7],
  '6-1':[8],'6-2':[8],'7-1':[10],'7-2':[10],'7-3':[10],'7-4':[10],'8-1':[11],'8-2':[11],'9-1':[12],'9-2':[13],'10-3':[12],'11-1':[13],'11-2':[14],'11-3':[14],'11-4':[14],'11-5':[14],'11-6':[15],'12-1':[15],'12-2':[15],'12-3':[15],'12-4':[15]};
 function jkGroup(u){return u[0]==='M'?'M':u==='P1'?'1':u==='P2'?'6':u.split('-')[0]}
@@ -9640,7 +9643,7 @@ function jqIdx(q){return Math.max(0,parseInt(q.id.split('-').pop(),10)-1)}
 function qst(q){if(!q.u)return S.qs[q.id]||0;const s=(S.jq||{})[q.u]||'';return +(s[jqIdx(q)]||0)}
 function qSet(q,v){if(!q.u){S.qs[q.id]=v;return}if(!S.jq)S.jq={};const i=jqIdx(q);let s=S.jq[q.u]||'';if(s.length<=i)s=s.padEnd(i+1,'0');S.jq[q.u]=s.slice(0,i)+v+s.slice(i+1)}
 function qEra(q){if(!q.u)return eraOfCh(q.ch);const g=jkGroup(q.u);if(g==='M')return 0;const n=+g;return n<=5?0:n<=9?1:2}
-/* 受験対策の栞は控えめ（はじめて正解1枚、克服2枚、正解済み0枚）。通常ドリルは3・5・1枚のまま */
+/* 受験対策の栞は控えめ（はじめて正解1枚、克服2枚、正解済み0枚）。通常問題演習は3・5・1枚のまま */
 function qGain(q,st){return q.u?(st===0?1:st===2?2:0):(st===0?3:st===2?5:1)}
 const JK_LINES=['この棚は受験生向けだ。教科書の単元ごとに問題が並んでいる。','「マイ範囲」に単元を登録しておけば、授業の進度に合わせて解ける。','発展の問題は手ごわいぞ。まずは標準から固めたまえ。','ここで正解しても栞は少なめだ。報酬より、身につくことのほうが大事だろう？'];
 /* マイ範囲：単元にチェックを入れて保存。この端末（と学校アカウント）の記録に残る */
@@ -9650,7 +9653,7 @@ function jkMyEdit(){const c=jkCfg();const sel=new Set(c.my);
   ${us.map(u=>{const k=JK.filter(q=>q.u===u&&jkShown(q)).length;return `<label class="jk-u"><input type="checkbox" data-u="${u}"${sel.has(u)?' checked':''}><span>${esc(JUN[u])}</span><small>${k}問</small></label>`}).join('')}</details>`}).join('');
  modal(`<h3>マイ範囲</h3><p class="sub" style="margin-top:-6px;line-height:1.7">解きたい単元にチェックを入れてください。章の名前のチェックで、その章をまとめて選べます。</p>
   <div class="jk-list">${groups}</div>
-  <label class="jk-mix"><input type="checkbox" id="jkMix"${c.mix?' checked':''}>通常ドリルの問題も混ぜる<small>（選んだ単元に近い章の問題）</small></label>
+  <label class="jk-mix"><input type="checkbox" id="jkMix"${c.mix?' checked':''}>「試験範囲で選ぶ」の問題も混ぜる<small>（選んだ単元に近い章の問題）</small></label>
   <p class="sub" id="jkN"></p>
   <div class="row" style="flex-wrap:wrap"><button class="btn red" id="jkGo">この範囲で解く</button><button class="btn light" id="jkSave">保存して閉じる</button><button class="btn light" id="jkClr">選択をすべて外す</button></div>`);
  const box=$('#modal');const cnt=()=>{const us=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);const old=c.my,om=c.mix;c.my=us;c.mix=$('#jkMix').checked;const n=jkPool('J:my').length;c.my=old;c.mix=om;$('#jkN').textContent=us.length?`${us.length}単元・${n}問（${c.lv==='all'?'標準＋発展':'標準だけ'}）`:'まだ単元が選ばれていません'};
@@ -9661,7 +9664,7 @@ function jkMyEdit(){const c=jkCfg();const sel=new Set(c.my);
  $('#jkSave').onclick=()=>{keep();closeModal(true);QuizMenu()};
  $('#jkClr').onclick=()=>{box.querySelectorAll('input[type=checkbox]').forEach(i=>{if(i.id!=='jkMix')i.checked=false});cnt()};
  $('#jkGo').onclick=()=>{keep();if(!c.my.length){toast('単元を1つ以上選んでください');return}if(!jkPool('J:my').length){toast('この範囲には、まだ出せる問題がありません');return}closeModal(true);FX.pageTurn(()=>startQuiz('J:my'))}}
-/* ---------- 記述対策（ドリルの「記述」タブ） ----------
+/* ---------- 記述対策（問題演習の「記述」タブ） ----------
    データは "KQ"（1件1行）。基本問題＝STEP1 設問の読み解き → STEP2 誤植答案の訂正。実戦問題＝同じ設問を実際に書いて自己採点
    id＝ID、u＝教科書の単元（"JU"のキー。棚はその章）、t＝題名、q＝問題文、lim＝制限字数、terms＝指定語句（年代の古い順。ord＝先頭から何語を並べ替え問題に使うか。0なら並べ替えなし）
    rd＝読み解きの4択（q・o・a＝正解の番号）。並べ替え問題は2問目に自動で入る
@@ -9701,9 +9704,9 @@ function kjDoneN(list){return list.filter(p=>KJM==='b'?kjRec(p.id)[0]>0:kjRec(p.
 function KjMenu(){const chs=JCH.filter(c=>KQ.some(p=>kjCh(p)===c[0]));
  const keys=['R',...chs.map(c=>c[0])];
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
-  <div class="gc-title">ドリル</div>
+  <div class="gc-title">問題演習</div>
   <button class="gc-back tl" data-go="home">戻る</button><div class="gc-top">${coinsHTML()}</div>
-  <div class="dr-mode"><button data-mode="vol">試験範囲で選ぶ</button><button data-mode="jk">受験対策</button><button data-mode="kj" class="on">記述</button></div>
+  <div class="dr-mode"><button data-mode="vol">試験範囲で選ぶ</button><button data-mode="jk">受験対策</button><button data-mode="kj" class="on">記述対策</button></div>
   <div class="dr-sub"><button data-kjm="b" class="${KJM==='b'?'on':''}">基本問題</button><button data-kjm="j" class="${KJM==='j'?'on':''}">実戦問題</button></div>
   <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
   ${konradMet()?`<div class="gc-say"><span class="who">コンラッド</span>${esc(KJ_LINES[Math.floor(Math.random()*KJ_LINES.length)])}</div>`:''}
@@ -9729,9 +9732,7 @@ function kjList(g){const list=kjPoolCh(g);const name=(JCH.find(c=>c[0]===g)||[])
 function kjStart(id){const p=KQ.find(x=>x.id===id);if(!p)return;KJ={p,mode:KJM,step:0,ri:0,ok:0,fixed:{},bk:'kj'+boxId()};kjDraw()}
 function kjFrame(inner){const p=KJ.p,g=kjCh(p);
  show(`<div class="dr q kj" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
-  <div class="scr-title">記述　${KJ.mode==='b'?'基本問題':'実戦問題'}<br>${g==='M'?'序':'第'+g+'章'}</div>
-  <button class="gc-back tl" id="kjQuit">やめる</button><div class="gc-top">${coinsHTML([kjEra(p)])}</div>
-  <div class="kj-scroll" id="kjS"><div class="kj-col">
+  <div class="kj-scroll" id="kjS"><div class="kj-head"><button class="gc-back tl" id="kjQuit">やめる</button><div class="scr-title">記述対策　${KJ.mode==='b'?'基本問題':'実戦問題'}<br>${g==='M'?'序':'第'+g+'章'}</div><div class="gc-top">${coinsHTML([kjEra(p)])}</div></div><div class="kj-col">
    <h2 class="kj-tt">${esc(p.t)}</h2>
    ${KJ.mode==='b'?`<div class="kj-steps"><span class="${KJ.step===0?'cur':'done'}">STEP 1　設問を読み解く</span><span class="${KJ.step===1?'cur':''}">STEP 2　誤植答案を正す</span></div>`:''}
    <div class="kj-q parch corners"><p>${esc(p.q)}</p>${p.terms&&p.terms.length?`<div class="kj-terms" id="kjTerms">${kjTermsShown(p).map(t=>`<span data-t="${esc(t)}">${esc(t)}</span>`).join('')}</div>`:''}</div>
@@ -9777,7 +9778,7 @@ function kjFix(){const p=KJ.p,L=kjWrongList(p);const errs=L.filter(x=>x.e);const
   <div class="kj-paper parch" id="kjP">${L.map((x,k)=>{if(x.e&&KJ.fixed[x.n]){const fx=x.ins?'':p.ms[x.i];return `<span class="seg fixed${x.ins?' cut':''}"><s>${esc(x.s)}</s>${fx?`<em>${esc(fx)}</em>`:''}</span>`}
    return `<span class="seg${all?' lock':''}" data-k="${k}">${esc(x.s)}</span>`}).join('')}</div><div id="kjPn"></div>`);
  const pn=$('#kjPn');
- if(all){const r=kjRec(p.id),first=!r[0],g=first?10:2,e=kjEra(p);kjSet(p.id,0,r[0]+1);boxAddTo(KJ.bk,'記述　'+p.t,e,g);save();refreshCoins();
+ if(all){const r=kjRec(p.id),first=!r[0],g=first?10:2,e=kjEra(p);kjSet(p.id,0,r[0]+1);boxAddTo(KJ.bk,'記述対策　'+p.t,e,g);save();refreshCoins();
   pn.innerHTML=`<div class="kj-card parch"><h3>クリア</h3><p>誤植を${errs.length}か所すべて訂正した。${kjRec(p.id)[0]}回目のクリア。</p><p class="kj-gain">${ERAS[e].k}の栞＋${g}${first?'（はじめてのクリア）':''}<br><small>栞はホームの受け取りボックスに届いています</small></p>
    <div class="row"><button class="btn red" id="kjBk">棚にもどる</button><button class="btn light" id="kjRe">最初からもう一度</button></div></div>`;
   $('#kjBk').onclick=()=>{KJ=null;FX.pageTurn(()=>{DRMODE='kj';QuizMenu()})};$('#kjRe').onclick=()=>{KJ={...KJ,step:0,ri:0,ok:0,fixed:{},bk:'kj'+boxId()};kjDraw();kjTop()};return}
@@ -9825,7 +9826,7 @@ function kjWrite(){const p=KJ.p,r=kjRec(p.id),l8=Math.ceil(p.lim*.8);
   G.querySelectorAll('.kj-rub input').forEach(c=>c.onchange=()=>{chk[c.dataset.i]=c.checked;$('#kjSc').textContent=calc()});
   $('#kjBk2').onclick=()=>{KJ=null;FX.pageTurn(()=>{DRMODE='kj';QuizMenu()})};
   $('#kjDone').onclick=()=>{const s=calc(),rr=kjRec(p.id);let msg=`${s}／${max}点で記録しました。`;
-   if(rr[2]<0&&n>=p.lim*.5&&n<=p.lim&&!miss.length){const e=kjEra(p);boxAddTo(KJ.bk,'記述　'+p.t,e,15);msg+=`<br>${ERAS[e].k}の栞＋15（受け取りボックスに届いています）`}
+   if(rr[2]<0&&n>=p.lim*.5&&n<=p.lim&&!miss.length){const e=kjEra(p);boxAddTo(KJ.bk,'記述対策　'+p.t,e,15);msg+=`<br>${ERAS[e].k}の栞＋15（受け取りボックスに届いています）`}
    if(s>rr[2])kjSet(p.id,2,s);else if(rr[2]<0)kjSet(p.id,2,s);saveNow();refreshCoins();
    modal(`<h3>自己採点を記録した</h3><p style="line-height:1.8;text-align:center">${msg}</p><div class="row" style="justify-content:center"><button class="btn red" data-close>棚にもどる</button></div>`,()=>{KJ=null;FX.pageTurn(()=>{DRMODE='kj';QuizMenu()})})};
   setTimeout(()=>G.scrollIntoView({block:'start',behavior:'smooth'}),60)}}
@@ -9833,9 +9834,9 @@ let DRMODE='vol';
 function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk')DRMODE='vol';const JKM=DRMODE==='jk';const jc=jkCfg(),qc=qmyCfg();
  const keys=JKM?['J:my',...JCH.map(c=>'J:'+c[0]).filter(k=>JK.some(q=>jkGroup(q.u)===k.slice(2)))]:['T:my',...Object.keys(CHT).map(Number)];
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
-  <div class="gc-title">ドリル</div>
+  <div class="gc-title">問題演習</div>
   <button class="gc-back tl" data-go="home">戻る</button><div class="gc-top">${coinsHTML()}</div>
-  <div class="dr-mode"><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button><button data-mode="jk" class="${JKM?'on':''}">受験対策</button><button data-mode="kj">記述</button></div>
+  <div class="dr-mode"><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button><button data-mode="jk" class="${JKM?'on':''}">受験対策</button><button data-mode="kj">記述対策</button></div>
   ${JKM?`<div class="dr-sub"><button data-lv="std" class="${jc.lv==='std'?'on':''}">標準だけ</button><button data-lv="all" class="${jc.lv==='all'?'on':''}">標準＋発展</button></div>`:''}
   <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
   ${konradMet()?`<div class="gc-say"><span class="who">コンラッド</span>${esc(JKM?JK_LINES[Math.floor(Math.random()*JK_LINES.length)]:(()=>{const L=DR_LINES.concat(DR_VOL_LINE);return L[Math.floor(Math.random()*L.length)]})())}</div>`:''}
@@ -9849,12 +9850,12 @@ function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk')DRMODE='vo
  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;
   if(key==='J:my'){jkMyEdit();return}if(key==='T:my'){qMyEdit();return}if(!poolOf(key).length){toast('この棚には、まだ出せる問題がありません');return}FX.pageTurn(()=>startQuiz(key))})}
 function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done,fin:o.fin,quit:o.quit,timer:o.timer||0,src:o.src||o.label}}
- else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'ドリル　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();quizQ()}
+ else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'問題演習　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();quizQ()}
 /* 誤植の群れの制限時間 */
 function qzStop(){if(QZ){clearTimeout(QZ.tm);clearInterval(QZ.ti);QZ.tm=QZ.ti=null}}
 function qzStart(onUp){const T=QZ.timer;let left=T;const el=$('#qzT');if(!el)return;el.querySelector('b').textContent=left;
  QZ.ti=setInterval(()=>{left--;const b=$('#qzT b');if(b)b.textContent=Math.max(0,left);if(left<=5&&el)el.classList.add('hurry')},1000);QZ.tm=setTimeout(()=>{qzStop();if($('#qo'))onUp()},T*1000)}
-/* ドリルの出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
+/* 問題演習の出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
 function drillPick(key){const pool=poolOf(key);const st=qst;
  const fresh=shuffle(pool.filter(q=>st(q)===0)),wrong=shuffle(pool.filter(q=>st(q)===2)),done=shuffle(pool.filter(q=>st(q)===1));
  const list=fresh.concat(wrong,done).slice(0,10);
@@ -9871,7 +9872,7 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   <div class="dr-flow" id="qflow"><div class="dr-paper parch"><p>${qHTML(q.q)}</p></div>
   <div class="dr-opts" id="qo">${shuffle([q.a,...q.d]).map(o=>`<button class="slip" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
   <div class="dr-note" id="qr"></div></div></div>`);
- QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'ドリル'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',back,null,'続ける')};
+ QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'問題演習'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',back,null,'続ける')};
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;
   if(QZ.key!=null&&!QZ.tut){msTick('dq');if(ok)msTick('dc')}
@@ -9893,7 +9894,7 @@ function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;saveNow()}const w=
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
 
 let QZ=null;
-const GC_LINES=['どの時代の頁をめくろうか。新しい出会いがあるかもしれないね。','★3の頁は、出てくるときの光り方がちょっと違うんだよ。','同じ時代で50回めくったら、その時代の好きな頁を1枚選べるよ。','同じ頁が重なると、記述がくわしくなるんだ。凸っていうらしいね。','栞が足りなかったら、その時代のドリルで集めておいで。'];
+const GC_LINES=['どの時代の頁をめくろうか。新しい出会いがあるかもしれないね。','★3の頁は、出てくるときの光り方がちょっと違うんだよ。','同じ時代で50回めくったら、その時代の好きな頁を1枚選べるよ。','同じ頁が重なると、記述がくわしくなるんだ。凸っていうらしいね。','栞が足りなかったら、その時代の問題演習で集めておいで。'];
 const BM='<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#b5302a"/><path d="M11 7h8v16l-4-3-4 3z" fill="#f3ead6"/></svg>';
 let GOPT={},GERA=0;
 function Gacha(opt={}){GOPT=opt;const tut=!!opt.tut;if(tut)GERA=0;const e=GERA,E=ERAS[e];const left=50-S.pt[e];
@@ -9928,7 +9929,7 @@ function Gacha(opt={}){GOPT=opt;const tut=!!opt.tut;if(tut)GERA=0;const e=GERA,E
  if(!tut){$('#gMore').onclick=()=>gachaMore(e);$('#gRate').onclick=gachaRate;$('#gList').onclick=()=>gachaList(e);$('#gHist').onclick=gachaHist;$('#gEx').onclick=()=>shiryoEx(e)}}
 function gachaMore(e){const E=ERAS[e];
  modal(`<h3>${E.k}の頁</h3><p style="line-height:1.9;margin:0">${E.part}の人物の頁が出てきます。<br>${E.chs.map(c=>`第${c}章　${esc(CHT[c])}`).join('<br>')}</p>
-  <p style="line-height:1.8">${E.k}の栞は、${E.part}の章のドリルや、ストーリーのおさらいで正解するともらえます。<br>いま　${E.k}の栞 <b>${S.sh[e]}</b>枚　／　天井まであと <b>${50-S.pt[e]}</b>回</p>
+  <p style="line-height:1.8">${E.k}の栞は、${E.part}の章の問題演習や、ストーリーのおさらいで正解するともらえます。<br>いま　${E.k}の栞 <b>${S.sh[e]}</b>枚　／　天井まであと <b>${50-S.pt[e]}</b>回</p>
   <div class="row"><button class="btn light" data-close>閉じる</button></div>`)}
 function gachaRate(){modal(`<h3>提供割合</h3><p style="line-height:1.9;margin:0">★3：5%　★2：35%　★1：60%<br>10回めくると、★2以上が1枚以上出ます。<br>時代ごとに、50回めくるたびに、その時代の好きな頁を1枚選べます。<br>4凸を超えて重なった頁は「史料片」になり、史料片10個で好きな頁と交換できます。</p>
   <div class="row"><button class="btn light" data-close>閉じる</button></div>`)}
@@ -9946,7 +9947,7 @@ function gachaPool(e){return CARDS.filter(c=>!isSP(c.n)&&(e===undefined||eraOfCa
 function draw1(e,minR){const pool=gachaPool(e);let r=Math.random()*100;let rar=r<5?3:r<40?2:1;if(minR&&rar<minR)rar=minR;
  let c=pool.filter(x=>x.r===rar);for(const alt of [2,3,1]){if(c.length)break;if(alt<(minR||0))continue;c=pool.filter(x=>x.r===alt)}
  return c[Math.floor(Math.random()*c.length)].n}
-function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(boxHas(e)?`ホームの受け取りボックスに${ERAS[e].k}の栞が届いています。受け取ってからめくろう`:`${ERAS[e].k}の栞が足りません。${ERAS[e].part}のドリルで集めてこよう`);return}
+function pull(n,tut){const e=tut?0:GERA;const cost=n===10?50:5;if(S.sh[e]<cost){toast(boxHas(e)?`ホームの受け取りボックスに${ERAS[e].k}の栞が届いています。受け取ってからめくろう`:`${ERAS[e].k}の栞が足りません。${ERAS[e].part}の問題演習で集めてこよう`);return}
  S.sh[e]-=cost;const res=[];for(let i=0;i<n;i++)res.push(tut?pickTutorial():draw1(e));if(tut)S.tutorial=true;
  if(n===10&&!res.some(x=>CARD[x].r>=2))res[9]=draw1(e,2);
  const tags=res.map(x=>{const before=lv(x);const r=giveCard(x);return before===0?'NEW':before<5?(lv(x)-1)+'凸':'史料片'});
@@ -10021,8 +10022,9 @@ const SD_H=92; // SDの絵の表示の高さ
 const SD_LIST=[
  {n:'主人公',c:'#6f86ad',ok:()=>true,say:()=>['……よし、今日もがんばろう。','この部屋、だいぶ書斎らしくなってきた。','栞、もう少し集めたいな。']},
  {n:'シミ',c:'#cfc8b6',ok:()=>true,say:()=>SHIMI_IDLE},
- {n:'コンラッド',c:'#a5621b',ok:()=>p1Clear(),say:()=>CHARA['コンラッド'].lines},
+ {n:'コンラッド',c:'#a5621b',rev:1,ok:()=>p1Clear(),say:()=>CHARA['コンラッド'].lines},
  {n:'ヌル',c:'#5b5470',ok:()=>p1Clear(),say:()=>CHARA['ヌル'].lines}];
+/* rev:1 … 絵の向きがほかのキャラと逆（歩くときの左右反転を逆にする） */
 const SDBY=Object.fromEntries(SD_LIST.map(c=>[c.n,c]));
 let NWS={edit:false,sel:null,drag:null,tab:0,z:{s:1,x:0,y:0}};
 const NWPTR=new Map();
@@ -10372,7 +10374,7 @@ function nwWanderTick(ts){const svg=$('#nwSvg');if(!svg){NWW.raf=0;return}NWW.ra
     /* ほかのキャラが今まさに出ていこうとしているマスにも入らない */
     const clash=SDs.some(q=>{if(q===o)return false;const t=NWW.st.get(q);return t&&t.from&&Math.abs(t.from[0]-nx)<2&&Math.abs(t.from[1]-ny)<2});
     if(clash||!floorFree(c,o)){st.path=null;st.wait=600+Math.random()*1200}
-    else{const dx=nx-o.x,dy=ny-o.y;const m=(dx>0||dy<0)?1:0;st.from=[o.x,o.y];st.t=0;o.x=nx;o.y=ny;st.fx=st.from[0];st.fy=st.from[1];moving=true;
+    else{const dx=nx-o.x,dy=ny-o.y;const m=((dx>0||dy<0)?1:0)^((SDBY[o.n]||{}).rev?1:0);st.from=[o.x,o.y];st.t=0;o.x=nx;o.y=ny;st.fx=st.from[0];st.fy=st.from[1];moving=true;
      if(o.m!==m)o.m=m;redraw=true}}
    if(!st.path){st.wait-=dt;if(st.wait<=0){st.path=nwPath(o);if(!st.path)st.wait=2000+Math.random()*3000}}}
   else if(st.from){st.from=null;st.fx=o.x;st.fy=o.y;redraw=true}
@@ -11401,7 +11403,7 @@ function LibMenu(keep){const L=lxLib();save();const R=L.run;const persons=Math.m
 function DeckEdit(){const persons=lxOwnedPersons().sort((a,b)=>ATTRS.indexOf(a.a)-ATTRS.indexOf(b.a)||b.r-a.r);const n=Math.min(LX_MIN,persons.length);
  show(`<div class="screen">${topbar('持っている頁','lib')}<div class="scroll">
   <div class="pane paper lx-deckhead"><b>${persons.length}枚</b><span>探索のたびに、ここからランダムに${LX_MIN}枚がデッキになります。${persons.length<LX_MIN?`${LX_MIN}枚に足りない${LX_MIN-n}枚は、基本の頁（名もなき兵士など）で埋まります。`:''}</span><button class="btn light" id="lxGl2" style="margin-left:auto;min-height:44px;font-size:14px;white-space:nowrap">用語の説明</button></div>
-  <div class="pane paper"><h3>人物の頁</h3>${persons.length?`<div class="lx-grid">${persons.map(c=>`<div class="lx-cell">${lxCardHTML(lxDef(c.n))}</div>`).join('')}</div>`:'<p>まだ人物の頁を持っていません。ドリルで栞を集めて、頁をめくってみよう。</p>'}</div>
+  <div class="pane paper"><h3>人物の頁</h3>${persons.length?`<div class="lx-grid">${persons.map(c=>`<div class="lx-cell">${lxCardHTML(lxDef(c.n))}</div>`).join('')}</div>`:'<p>まだ人物の頁を持っていません。問題演習で栞を集めて、頁をめくってみよう。</p>'}</div>
   <div class="pane paper"><h3>基本の頁（足りないときに入る）</h3><div class="lx-grid">${Object.keys(LX_BASE).map(k=>`<div class="lx-cell">${lxCardHTML(lxDef(k))}</div>`).join('')}</div></div>
  </div></div>`);
  $('#lxGl2').onclick=lxGlossary}
