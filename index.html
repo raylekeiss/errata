@@ -8938,12 +8938,17 @@ function openBox(){const L=S.box||[];
  const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・問題演習・カードゲームでもらった栞は、ここに届きます。</p>';
  modal(`<h3>受け取りボックス</h3><p class="bx-left" id="bxLeft">${L.length?`タップして受け取ろう　残り<b>${L.length}</b>件`:''}</p>
   <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${ERAS[b.e].c}">${ribbon(b.e)}<span class="bx-t"><b>${ERAS[b.e].k}の栞 ×${b.n}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
-  <div class="row" style="justify-content:center;margin-top:14px"><button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn');if(b)b.outerHTML=boxBtnHTML()});
+  <div class="row" style="justify-content:center;margin-top:14px">${L.length>1?'<button class="btn red" id="bxAll">すべて受け取る</button>':''}<button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn:not(.msbtn)');if(b)b.outerHTML=boxBtnHTML()});
  document.querySelectorAll('#modal [data-bx]').forEach(el=>el.onclick=()=>{if(el.classList.contains('got'))return;const i=(S.box||[]).findIndex(b=>b.id===el.dataset.bx);if(i<0){el.remove();return}
   const b=S.box[i];S.box.splice(i,1);S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n);save();
   el.classList.add('got');const f=document.createElement('span');f.className='bx-plus';f.textContent='+'+b.n;el.appendChild(f);
   refreshCoins();const n=boxN();const lf=$('#bxLeft');if(lf)lf.innerHTML=n?`タップして受け取ろう　残り<b>${n}</b>件`:'ぜんぶ受け取った！';
-  setTimeout(()=>{el.remove();const ls=$('#bxList');if(ls&&!ls.children.length)ls.innerHTML=empty},420);if(!n)saveNow()})}
+  setTimeout(()=>{el.remove();const ls=$('#bxList');if(ls&&!ls.children.length)ls.innerHTML=empty},420);if(!n){saveNow();const ba=$('#bxAll');if(ba)ba.remove()}})
+ /* すべて受け取る：時代ごとに合計して一度に受け取る */
+ const ba=$('#bxAll');if(ba)ba.onclick=()=>{const L2=S.box||[];if(!L2.length)return;const sum=[0,0,0];L2.forEach(b=>{sum[b.e]+=b.n;S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n)});S.box=[];saveNow();refreshCoins();
+  document.querySelectorAll('#bxList .bx-it').forEach((el,i)=>setTimeout(()=>el.classList.add('got'),i*40));
+  const lf=$('#bxLeft');if(lf)lf.innerHTML='ぜんぶ受け取った！　'+sum.map((n,e)=>n?`${ERAS[e].k}の栞 <b>＋${n}</b>`:'').filter(Boolean).join('　');ba.remove();
+  setTimeout(()=>{const ls=$('#bxList');if(ls)ls.innerHTML=empty},500)}}
 /* ===== ミッション =====
    デイリー：その日（端末の日付）のうちに達成すると、各時代の栞がもらえる。日付が変わるとリセット
    達成：通算の記録で段階的に。報酬は受け取りボックスに届く */
