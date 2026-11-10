@@ -8854,7 +8854,15 @@ const CHNAME=['序章'].concat(Array.from({length:NCH},(_,i)=>'第'+(i+1)+'章')
 const TUTORIAL_K={id:'TUT',ch:1,boss:false,t:'バビロン第1王朝の時代、コンラッド博士が全282条の法典を定めた',slot:'コンラッド博士が',who:'ハンムラビ',
   wd:['ネブカドネザル2世','ラメス2世','モーセ'],ok:'第6代の王ハンムラビが',ng:['アッカド人のサルゴン1世が','ヒッタイトの王が'],
   cm:'ハンムラビはバビロン第1王朝の第6代の王。法典の石碑は、のちにイランの古都スサで見つかったんだ。'};
-const SAVE_KEY='errata_all_v1';
+/* デバッグモード：URLの末尾に ?debug を付けて開く（学校アカウント版では無効）。
+   ふだんの記録とは別の記録を使い、ストーリーのステージをすべて解放、頁はすべて最大凸、栞は各9999枚 */
+const DEBUG=!CLOUD&&/(^|[?&])debug(=|&|$)/.test(location.search);
+const SAVE_KEY=DEBUG?'errata_debug_v1':'errata_all_v1';
+function debugFill(){if(!DEBUG||!S)return;if(!S.name)S.name='デバッグ';S.prologue=true;S.tutorial=true;S.tour=false;
+ S.sh=S.sh&&S.sh.length===3?S.sh.map(x=>Math.max(x||0,9999)):[9999,9999,9999];S.shiori=S.sh[0]+S.sh[1]+S.sh[2];
+ S.cards=S.cards||{};CARDS.forEach(c=>{if(!isSP(c.n))S.cards[c.n]=5});save();
+ if(!document.getElementById('dbgB')){const b=document.createElement('div');b.id='dbgB';b.textContent='デバッグモード';
+  b.style.cssText='position:fixed;left:50%;bottom:4px;transform:translateX(-50%);z-index:9999;pointer-events:none;font:12px sans-serif;color:#fff;background:rgba(160,30,30,.85);padding:2px 10px;border-radius:10px';document.body.appendChild(b)}}
 const CL={mem:null,ready:false,busy:false,dirty:false,last:0,fail:0,pendingLocal:null};
 /* iPadなどタッチ端末のSafariは、全画面中にタップが素早く続くと「タイプ入力」とみなして詐欺警告を出すため、タッチ端末では全画面ボタンを出さない */
 const TOUCH=(navigator.maxTouchPoints||0)>0;
@@ -8922,7 +8930,7 @@ function topbar(title,backTo='home'){return `<div class="bar"><button class="bac
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,niwa:Niwa,lib:LibMenu,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
 
 /* ---------- title ---------- */
-function Title(){PL=null;closeDrawer();show(`<div class="screen" id="title"><div class="title-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
+function Title(){PL=null;closeDrawer();if(DEBUG){if(!load())S=freshState();debugFill();Home();return}show(`<div class="screen" id="title"><div class="title-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
  <h1 class="logo"><img class="logo-img" src="${IMG_BASE}img/logo.webp" alt="エラータ ERRATA" draggable="false"></h1>
  <p class="subtitle">世界史探究</p>
  <div class="titlebtns">
@@ -9398,7 +9406,7 @@ function stPlace(st){if(st.k==='pro')return '史書庫へようこそ';if(st.k==
 function stRec(st){S.stg=S.stg||{};return S.stg[st.id]||null}
 function stPassed(st){if(st.k==='pro')return !!S.prologue;const r=stRec(st);if(r&&r.c>0)return true;if(S.cleared[st.ch-1])return true;
  if(st.k==='qz')return stages().some(s=>s.k==='sec'&&s.ch===st.ch&&s.a>=st.b&&stPassed(s));return false}
-function stUnlocked(st){return st.i===0||stPassed(stages()[st.i-1])}
+function stUnlocked(st){return DEBUG||st.i===0||stPassed(stages()[st.i-1])}
 function stCurrent(){return stages().find(s=>!stPassed(s)&&stUnlocked(s))||null}
 /* 星（正解率）とメダル（クリア回数：1回目 銅・3回目 銀・5回目 金） */
 function stStars(ok,n){return ok>=n?3:ok>=Math.ceil(n*.8)?2:ok>=Math.ceil(n*.5)?1:0}
@@ -9471,7 +9479,7 @@ function StoryMap(p,fl){if(p==null)p=PART;PART=p;STG=null;stMigrate();const P=PA
    <span class="mp-lab"><b>${lab}</b>${sub}</span></button>`};
  /* 両端の扉 */
  const prevCh=fi>0?F[fi-1]:null,nextCh=fi<F.length-1?F[fi+1]:null;
- const lastSt=L[L.length-1];const nextOpen=lastSt&&stPassed(lastSt);
+ const lastSt=L[L.length-1];const nextOpen=DEBUG||lastSt&&stPassed(lastSt);
  const missing=P.chs.filter(c=>c>0&&!(c<STORY.length));
  let right;const nextNm=nextCh!=null?G[fi+1].map(c=>CHNAME[c]).join('・'):'';
  if(nextCh!=null)right=`<button class="mp-door r ${nextOpen?'':'locked'}" id="mpNext" style="left:${ends[1].x}px;top:${ends[1].y}px"><span class="dr"><img src="${IMG['地図_行く扉']}" alt="">${nextOpen?'':`<i class="mp-lock">${MAP_IC.lock}</i>`}</span><span class="dl">次のフロアへ<small>${nextNm}</small></span></button>`;
