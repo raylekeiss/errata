@@ -7,6 +7,8 @@
 const SHEET = 'セーブ';
 const HEAD = ['メール', '名前', '最終保存', '修復した章', 'ドリル回数', '正解済みの問題', '間違えたままの問題', '栞', '持っている頁', 'セーブデータ'];
 const COL_DATA = HEAD.length; // セーブデータの列（J列）
+// 本名（フルネーム）はセーブデータの右（K列）に入れる。列の並びを変えるとずれるので、列は動かさないこと
+const COL_REAL = COL_DATA + 1;
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('index')
@@ -23,6 +25,7 @@ function sheet_() {
     sh.setFrozenRows(1);
     sh.getRange(1, 1, 1, HEAD.length).setFontWeight('bold');
   }
+  if (sh.getRange(1, COL_REAL).getValue() !== '本名') sh.getRange(1, COL_REAL).setValue('本名').setFontWeight('bold');
   return sh;
 }
 
@@ -64,6 +67,7 @@ function putSave(json) {
     Object.keys(S.cards || {}).length,
     json,
   ];
+  const real = S.real && S.real.sei ? String(S.real.sei) + ' ' + String(S.real.mei || '') : '';
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
@@ -76,8 +80,9 @@ function putSave(json) {
         if ((old.t || 0) > (S.t || 0)) return { ok: true, skipped: true };
       } catch (e) {}
       sh.getRange(row, 1, 1, record.length).setValues([record]);
+      if (real) sh.getRange(row, COL_REAL).setValue(real);
     } else {
-      sh.appendRow(record);
+      sh.appendRow(record.concat([real]));
     }
   } finally {
     lock.releaseLock();
