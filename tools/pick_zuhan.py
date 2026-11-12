@@ -84,6 +84,23 @@ SLOTS = {
     'laocoon': ('ラオコーン群像', ['Laocoön and His Sons Vatican']),
     'colosseum': ('コロッセウム', ['Colosseum Rome exterior', 'Colosseo']),
     'pontdugard': ('ポン＝デュ＝ガール（水道橋）', ['Pont du Gard']),
+    'domeofrock': ('岩のドーム', ['Dome of the Rock', 'Dome of the Rock Jerusalem']),
+    'kaaba': ('カーバ聖殿', ['Kaaba Masjid al-Haram', 'Kaaba Mecca']),
+    'aachen': ('アーヘン大聖堂の宮廷礼拝堂', ['Aachen Cathedral Palatine Chapel interior', 'Aachener Dom Oktogon']),
+    'kutub': ('クトゥブ＝ミナール', ['Qutb Minar']),
+    'zimbabwe': ('大ジンバブエ遺跡', ['Great Zimbabwe', 'Great Zimbabwe ruins']),
+    'timbuktu': ('トンブクトゥのジンガリベリ＝モスク', ['Djinguereber Mosque Timbuktu', 'Timbuktu mosque']),
+    'azhar': ('アズハル＝モスク', ['Al-Azhar Mosque Cairo', 'Al-Azhar Mosque courtyard']),
+    'bayeux': ('バイユーの刺繍画', ['Bayeux Tapestry', 'Bayeux Tapestry scene']),
+    'mosaic': ('サン＝ヴィターレ聖堂のモザイク', ['San Vitale Justinian mosaic', 'Ravenna Justinian mosaic']),
+    'alhambra': ('アルハンブラ宮殿', ['Alhambra Court of the Lions', 'Alhambra Granada']),
+    'avignon': ('アヴィニョンの教皇庁宮殿', ['Palais des Papes Avignon']),
+    'stainedglass': ('ゴシック聖堂のステンドグラス', ['Chartres Cathedral stained glass', 'Sainte-Chapelle stained glass']),
+    'qingming': ('「清明上河図」', ['Along the River During the Qingming Festival']),
+    'celadon': ('宋代の青磁', ['Longquan celadon Song', 'Song dynasty celadon']),
+    'huizong': ('徽宗「瑞鶴図」', ['Auspicious Cranes Huizong', 'Huizong cranes']),
+    'goryeo': ('高麗青磁', ['Goryeo celadon', 'Goryeo celadon maebyeong']),
+    'paiza': ('パクパ文字の牌子', ['Phags-pa paiza', 'Mongol paiza']),
 }
 
 S = requests.Session()
