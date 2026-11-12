@@ -123,6 +123,20 @@ SLOTS = {
     'versailles': ('ヴェルサイユ宮殿', ['Palace of Versailles', 'Château de Versailles façade']),
     'sanssouci': ('サンスーシ宮殿', ['Sanssouci Palace', 'Schloss Sanssouci']),
     'meninas': ('ベラスケス「ラス＝メニーナス」', ['Las Meninas Velázquez']),
+    'nushizhen': ('「女史箴図」', ['Admonitions Scroll Gu Kaizhi', 'Admonitions of the Instructress to the Court Ladies']),
+    'lanting': ('「蘭亭序」', ['Lantingji Xu', 'Lanting Xu Feng Chengsu copy']),
+    'emperors': ('「歴代帝王図巻」', ['Thirteen Emperors Scroll Yan Liben']),
+    'fuchun': ('「富春山居図」', ['Dwelling in the Fuchun Mountains', 'Huang Gongwang Fuchun']),
+    'akbarnama': ('ムガル絵画（『アクバル＝ナーマ』の挿絵）', ['Akbarnama miniature', 'Akbarnama painting']),
+    'primavera': ('ボッティチェリ「春（プリマヴェーラ）」', ['Botticelli Primavera']),
+    'monalisa': ('レオナルド＝ダ＝ヴィンチ「モナ＝リザ」', ['Mona Lisa Louvre']),
+    'lastjudgment': ('ミケランジェロ「最後の審判」', ['Last Judgment Michelangelo Sistine']),
+    'ghent': ('ファン＝アイク兄弟「ヘント（ガン）の祭壇画」', ['Ghent Altarpiece']),
+    'fourapostles': ('デューラー「四人の使徒」', ['Dürer Four Apostles']),
+    'erasmus': ('ホルバイン「エラスムス像」', ['Holbein Erasmus portrait']),
+    'rubens': ('ルーベンス「キリスト降架」', ['Rubens Descent from the Cross Antwerp']),
+    'tutankhamun': ('ツタンカーメン王の黄金のマスク', ['Tutankhamun mask']),
+    'milo': ('「ミロのヴィーナス」', ['Venus de Milo Louvre']),
 }
 
 S = requests.Session()
