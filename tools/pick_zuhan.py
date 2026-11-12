@@ -234,22 +234,37 @@ def make(path):
         print("知らない枠のキーがあります（無視します）：", ", ".join(bad))
     choice = {k: v for k, v in choice.items() if k in SLOTS}
     os.makedirs(OUT, exist_ok=True)
-    cands = info(["File:" + f for f in choice.values()], 1600)
+    cands = info(["File:" + f for f in choice.values()], 960)  # Wikimedia は決まった幅（500・960・1280など）の縮小画像しか作らない
     by = {c["file"]: c for c in cands}
+    cpath = os.path.join(OUT, "zuhan_credits.json")
     credits = {}
+    if os.path.exists(cpath):  # 途中で止まったときは、書き出し済みの枠を飛ばして続きから
+        with open(cpath, encoding="utf-8") as f:
+            credits = json.load(f)
+    failed = []
     for k, fn in choice.items():
+        if credits.get(k, {}).get("f") == fn and os.path.exists(os.path.join(OUT, k + ".webp")):
+            continue
         c = by.get(fn)
         if not c:
             print(f"{k}：{fn} の情報が取れませんでした")
+            failed.append(k)
             continue
-        im = Image.open(io.BytesIO(fetch(c["thumb"]))).convert("RGB")
+        try:
+            im = Image.open(io.BytesIO(fetch(c["thumb"]))).convert("RGB")
+        except Exception as e:
+            print(f"{k}：画像を取得できませんでした（{e}）")
+            failed.append(k)
+            continue
         im.thumbnail((OUT_SIZE, OUT_SIZE))
         im.save(os.path.join(OUT, k + ".webp"), "WEBP", quality=74)
         credits[k] = {"f": c["file"], "a": c["author"], "lic": c["license"], "url": c["url"]}
+        with open(cpath, "w", encoding="utf-8") as f:
+            json.dump(credits, f, ensure_ascii=False, indent=1)
         print(f"{k}：{fn}（{c['license']}）")
-        time.sleep(0.5)
-    with open(os.path.join(OUT, "zuhan_credits.json"), "w", encoding="utf-8") as f:
-        json.dump(credits, f, ensure_ascii=False, indent=1)
+        time.sleep(1.5)
+    if failed:
+        print("取得できなかった枠：", " ".join(failed), "（しばらく待ってから同じコマンドをもう一度実行すると、続きから書き出します）")
     print(f"おわり。zuhan_out フォルダの中身（{len(credits)} 枚の webp と zuhan_credits.json）を Claude に渡してください。")
 
 
