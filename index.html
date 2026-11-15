@@ -178,7 +178,18 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .look-sw.tx:has(.look-hd){flex-wrap:nowrap;gap:6px}
 .look-hd{flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1;height:auto;padding:3px;background:#fffaf0;border:1px solid var(--line);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .look-hd img{max-width:100%;max-height:100%;display:block;pointer-events:none}
-/* 外見の選択：髪／顔／服 のタブ */
+/* 外見の選択：髪／顔／服／小物 のタブ */
+.lkb-go{position:relative}
+.lkb-cost{position:absolute;right:0;bottom:-1.9cqw;font-size:1.1cqw;color:#7a5a20;font-weight:700;white-space:nowrap}
+.lkb-cost.ng{color:#b3262d}
+.look-acc{display:flex;flex-wrap:wrap;gap:1cqw;padding-left:.5cqw}
+.look-acc .look-hd{width:7cqw;height:8.5cqw;flex-direction:column;padding:.3cqw}
+.look-acc .look-hd img{width:100%;flex:1;min-height:0;object-fit:contain}
+.look-acc .look-hd span{font-size:1.1cqw;font-weight:700;color:#1c2540}
+.acc-have{display:flex;gap:14px;margin:0 0 10px;font-size:13px;color:#555}.acc-have b{color:var(--ec);font-size:16px}
+.acc-pv{width:64px;height:84px;flex:0 0 64px;display:flex;align-items:center;justify-content:center;background:#f6efe0;border-radius:8px;overflow:hidden}
+.acc-pv img{max-width:100%;max-height:100%}
+
 .lk-tabs{display:flex;gap:.6cqw;margin:.6cqw 0 .4cqw;align-self:stretch;justify-content:center}
 .lk-tabs button{flex:1;max-width:9cqw;padding:.5cqw 0;border:1px solid #b8923f;background:#fffaf0;color:#1c2540;font-family:var(--serif);font-size:1.45cqw;font-weight:700;border-radius:.5cqw;cursor:pointer}
 .lk-tabs button.on{background:#1c2540;color:#f4e9cf;border-color:#1c2540}
@@ -10262,20 +10273,26 @@ const LOOK_COLORS=[{k:'濃茶',c:'#7d4130'},{k:'黒',c:'#3a3a3a'},{k:'金',c:'#c
 const LOOK_HAIRS=[{k:'短髪',n:'ショート'},{k:'ボブ',n:'ボブ'},{k:'ポニーテール',n:'ポニーテール'},{k:'ツインテール',n:'ツインテール'},{k:'三つ編み',n:'三つ編み'},{k:'ロング',n:'ロング'},{k:'レイヤー',n:'レイヤーショート'},{k:'短髪2',n:'ショート2'},{k:'二つ三つ編み',n:'三つ編み（二本）'}]; // 後ろ髪（選択画面では頭部のシルエット UI_髪型_〇〇 で表示）
 const LOOK_EYES=[{k:1,n:'目1'},{k:2,n:'目2'},{k:3,n:'目3'},{k:4,n:'目4'}],LOOK_BROWS=[{k:1,n:'眉1'},{k:2,n:'垂れ眉'},{k:3,n:'釣り眉'}]; // 選択画面ではアイコン UI_目_〇・UI_眉_〇 で表示
 const LOOK_BANGS=[{k:1,n:'前髪1'},{k:2,n:'ぱっつん'},{k:3,n:'センター分け'},{k:4,n:'横流し'}],LOOK_WEARS=[{k:'スカート',n:'スカート'},{k:'ズボン',n:'ズボン'}]; // 性別は聞かず、服で選ぶ
-function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,bang:LOOK_BANGS.some(o=>o.k===l.bang)?l.bang:1,wear:LOOK_WEARS.some(o=>o.k===l.wear)?l.wear:'スカート',eye:LOOK_EYES.some(o=>o.k===l.eye)?l.eye:1,brow:LOOK_BROWS.some(o=>o.k===l.brow)?l.brow:1,
+/* 小物（服屋で栞と交換）。絵は tools/hero_parts/acc_〇〇.png（2048pxのキャンバス、位置は合わせた状態で）。
+   e＝どの時代の栞か（0古代・1中世・2近世）、p＝枚数、top＝前髪より上に重ねる（ふつうは目の上・前髪の下） */
+const LOOK_ACCS=[];
+const LOOK_COST=2; /* 姿を変えるたびに、各時代の栞をこの枚数ずつ使う（はじめて決めるとき・小物の付け外しだけのときは使わない） */
+function accOwned(k){return (S.accs||[]).includes(k)}
+function lookOf(){const l=S.look||{};return{acc:(Array.isArray(l.acc)?l.acc:[]).filter(k=>LOOK_ACCS.some(a=>a.k===k)&&accOwned(k)).sort(),skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,bang:LOOK_BANGS.some(o=>o.k===l.bang)?l.bang:1,wear:LOOK_WEARS.some(o=>o.k===l.wear)?l.wear:'スカート',eye:LOOK_EYES.some(o=>o.k===l.eye)?l.eye:1,brow:LOOK_BROWS.some(o=>o.k===l.brow)?l.brow:1,
  color:LOOK_COLORS.some(o=>o.k===l.color)?l.color:'濃茶',hair:LOOK_HAIRS.some(o=>o.k===l.hair)?l.hair:(LOOK_HAIRS[0]||{}).k||null}}
 /* 主人公のSD：パーツ（IMG の HERO_〇〇。tools/compose_hero.py で書き出す）をその場で重ねて1枚の絵にする。
    重ねる順：後ろ髪 → 素体（服）→ mid（三つ編みなど）→ 頭 → 目 → side → 前髪 → 眉（乗算）
    できた絵は IMG['SD_主人公_肌_髪型_色_目_眉'] に入れる。いまの外見の絵は端末に覚えておき、次に開いたときすぐ出す */
 const HERO_MEMO='errata_hero_v3';let HERO_LAST=null;const HERO_JOBS={};const HERO_IMGS={};
-function heroSig(lk){return lk.skin+'_'+lk.wear+'_'+lk.hair+'_前'+lk.bang+'_'+lk.color+'_目'+lk.eye+'_眉'+lk.brow}
+function heroSig(lk){return lk.skin+'_'+lk.wear+'_'+lk.hair+'_前'+lk.bang+'_'+lk.color+'_目'+lk.eye+'_眉'+lk.brow+((lk.acc||[]).length?'_小'+lk.acc.join('+'):'')}
+function lookBase(lk){return heroSig(Object.assign({},lk,{acc:[]}))}
 function heroKey(lk){lk=Object.assign(lookOf(),lk||{});const k='SD_主人公_'+heroSig(lk);
  if(IMG[k])return k;heroBuild(lk);return HERO_LAST&&IMG[HERO_LAST]?HERO_LAST:k}
 function heroPart(n){const src=IMG['HERO_'+n];if(!src)return Promise.resolve(null);
  if(!HERO_IMGS[n])HERO_IMGS[n]=new Promise(r=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src});return HERO_IMGS[n]}
 function heroBuild(lk){lk=Object.assign(lookOf(),lk||{});const k='SD_主人公_'+heroSig(lk);if(IMG[k])return Promise.resolve(k);
  if(HERO_JOBS[k])return HERO_JOBS[k];const h=lk.hair,c=lk.color;
- const L=[['back_'+h+'_'+c],['body'+lk.skin+(lk.wear==='スカート'?'':'_'+lk.wear)],['mid_'+h+'_'+c],['head'+lk.skin],['eyes_'+lk.eye],['side_'+h+'_'+c],['front_'+lk.bang+'_'+c],['brows_'+lk.brow,'multiply']];
+ const L=[['back_'+h+'_'+c],['body'+lk.skin+(lk.wear==='スカート'?'':'_'+lk.wear)],['mid_'+h+'_'+c],['head'+lk.skin],['eyes_'+lk.eye],...(lk.acc||[]).filter(k=>!(LOOK_ACCS.find(a=>a.k===k)||{}).top).map(k=>['acc_'+k]),['side_'+h+'_'+c],['front_'+lk.bang+'_'+c],['brows_'+lk.brow,'multiply'],...(lk.acc||[]).filter(k=>(LOOK_ACCS.find(a=>a.k===k)||{}).top).map(k=>['acc_'+k])];
  return HERO_JOBS[k]=Promise.all(L.map(x=>heroPart(x[0]))).then(ims=>{const base=ims.find(Boolean);if(!base)return null;
   const W=base.naturalWidth,H=base.naturalHeight,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
   ims.forEach((im,i)=>{if(!im)return;g.globalCompositeOperation=L[i][1]||'source-over';g.drawImage(im,0,0)});g.globalCompositeOperation='source-over';
@@ -10288,7 +10305,8 @@ function heroBuild(lk){lk=Object.assign(lookOf(),lk||{});const k='SD_主人公_'
 /* 起動時：前回作った絵があればすぐ使い、なければ作り始める */
 function heroWarm(){try{const m=JSON.parse(localStorage.getItem(HERO_MEMO)||'null');if(m&&m.k&&m.url){IMG[m.k]=m.url;HERO_LAST=m.k}}catch(e){}
  try{if(S)heroBuild(lookOf())}catch(e){}}
-function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color:cur.color,hair:cur.hair,bang:cur.bang,eye:cur.eye,brow:cur.brow,wear:cur.wear};
+function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color:cur.color,hair:cur.hair,bang:cur.bang,eye:cur.eye,brow:cur.brow,wear:cur.wear,acc:cur.acc.slice()};const base0=lookBase(cur);
+ const myAcc=LOOK_ACCS.filter(a=>accOwned(a.k));
  const sw=(grp,L)=>`<div class="look-sw" data-g="${grp}">${L.map(x=>`<button class="look-dot${sel[grp]===x.k?' on':''}" data-v="${x.k}" style="--c:${x.c}" aria-label="${grp==='skin'?'肌':'髪'}の色${L.indexOf(x)+1}"></button>`).join('')}</div>`;
  const lb=t=>`<div class="look-lb"><i>✦</i>${t}</div>`;
  /* 開いた本の上に、左ページ＝職員証の写真、右ページ＝選ぶところ */
@@ -10296,20 +10314,27 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
   <div class="lkb-l"><div class="lkb-card"><i class="lkb-rose"></i><div class="look-pv"><img id="lookpv" src="${IMG[heroKey(sel)]||''}" alt="" onload="this.style.opacity=1"></div>
    <label class="lkb-cap" title="タップして名前を変える"><input id="lknm" maxlength="8" value="${esc(S.name||'')}" placeholder="名前" aria-label="名前（8文字まで）"><i class="lkb-pen" aria-hidden="true">✎</i></label><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
   <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
-   <p class="lkb-d">あとからマイルームの「キャラ」でいつでも変えられます。</p>
+   <p class="lkb-d">${o.cost?`変えるには各時代の栞が${LOOK_COST}枚ずつ要ります（名前・小物は無料）。`:'あとからマイルームの「キャラ」でいつでも変えられます。'}</p>
    ${(()=>{const ic=(g,L,p,cls='')=>`<div class="look-sw tx ic${cls}" data-g="${g}">${L.map(x=>`<button class="look-hd${sel[g]===x.k?' on':''}" data-v="${x.k}" title="${esc(x.n)}" aria-label="${esc(x.n)}"><img src="${IMG['UI_'+p+'_'+x.k]||''}" alt="" draggable="false">${cls?`<span>${esc(x.n)}</span>`:''}</button>`).join('')}</div>`;
-    return `<div class="lk-tabs">${['髪','顔','服'].map((t,n)=>`<button data-t="${n}" class="${n?'':'on'}">${t}</button>`).join('')}</div>
+    return `<div class="lk-tabs">${['髪','顔','服','小物'].map((t,n)=>`<button data-t="${n}" class="${n?'':'on'}">${t}</button>`).join('')}</div>
     <div class="lk-pane on" data-p="0">${lb('髪の色')}${sw('color',LOOK_COLORS)}${lb('髪型')}${ic('hair',LOOK_HAIRS,'髪型')}${lb('前髪')}${ic('bang',LOOK_BANGS,'前髪')}</div>
     <div class="lk-pane" data-p="1">${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('目')}${ic('eye',LOOK_EYES,'目',)}${lb('眉')}${ic('brow',LOOK_BROWS,'眉')}</div>
-    <div class="lk-pane" data-p="2">${lb('着ている服はどっち？')}${ic('wear',LOOK_WEARS,'服',' wr')}</div>`})()}
-   <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button></div></div></div>`,o.onCancel);
+    <div class="lk-pane" data-p="2">${lb('着ている服はどっち？')}${ic('wear',LOOK_WEARS,'服',' wr')}</div>
+    <div class="lk-pane" data-p="3">${lb('身につける小物')}${myAcc.length?`<div class="look-acc">${myAcc.map(a=>`<button class="look-hd${sel.acc.includes(a.k)?' on':''}" data-acc="${esc(a.k)}"><img src="${IMG['UI_小物_'+a.k]||''}" alt="" draggable="false"><span>${esc(a.n)}</span></button>`).join('')}</div>`:'<p class="lkb-d" style="text-align:left">まだ持っていません。マイルームの「服屋」で、栞と交換できます。</p>'}</div>`})()}
+   <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button><small class="lkb-cost" id="lookcost"></small></div></div></div>`,o.onCancel);
  heroBuild(sel).then(k=>{const pv=$('#lookpv');if(pv&&k)pv.src=IMG[k]});
  document.querySelectorAll('.lk-tabs button').forEach(t=>t.onclick=()=>{document.querySelectorAll('.lk-tabs button').forEach(x=>x.classList.toggle('on',x===t));document.querySelectorAll('.lk-pane').forEach(p=>p.classList.toggle('on',p.dataset.p===t.dataset.t))});
  const m=$('#modal');if(m){m.classList.add('lookbook');m.addEventListener('click',e=>{if(e.target===m&&o.cancel)closeModal()})}
+ const costUp=()=>{const c=$('#lookcost');if(!c)return;const pay=o.cost&&lookBase(sel)!==base0;c.textContent=pay?`各時代の栞${LOOK_COST}枚ずつ`:'';c.classList.toggle('ng',pay&&S.sh.some(x=>x<LOOK_COST))};costUp();
+ const redraw=()=>{costUp();const want=JSON.parse(JSON.stringify(sel));heroBuild(want).then(k=>{const pv=$('#lookpv');if(pv&&k&&heroSig(want)===heroSig(sel))pv.src=IMG[k]})};
+ document.querySelectorAll('.look-acc [data-acc]').forEach(b=>b.onclick=()=>{const k=b.dataset.acc;const i=sel.acc.indexOf(k);if(i>=0)sel.acc.splice(i,1);else{sel.acc.push(k);sel.acc.sort()}b.classList.toggle('on',i<0);redraw()});
  document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=(g==='skin'||g==='eye'||g==='brow'||g==='bang')?+b.dataset.v:b.dataset.v;
-  b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const want=Object.assign({},sel);heroBuild(want).then(k=>{const pv=$('#lookpv');if(pv&&k&&heroSig(want)===heroSig(sel))pv.src=IMG[k]})});
+  b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));redraw()});
  $('#lookok').onclick=()=>{const nm=($('#lknm')||{}).value;const v=(nm||'').trim();if(nm!=null&&!v){toast('名前を入れてください');$('#lknm').focus();return}
-  if(v)S.name=v;S.look=Object.assign({},S.look||{},sel);save();heroBuild(lookOf()).then(k=>{if(!k)return;HERO_LAST=k;try{localStorage.setItem(HERO_MEMO,JSON.stringify({k,url:IMG[k]}))}catch(e){}});closeModal(true);cb&&cb()}}
+  const pay=o.cost&&lookBase(sel)!==base0;
+  if(pay&&S.sh.some(x=>x<LOOK_COST)){toast(`栞が足りません（古代・中世・近世の栞が${LOOK_COST}枚ずつ必要です）`);return}
+  if(pay){S.sh=S.sh.map(x=>x-LOOK_COST);document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge())}
+  if(v)S.name=v;S.look=Object.assign({},S.look||{},sel,{acc:sel.acc.slice()});pay?saveNow():save();heroBuild(lookOf()).then(k=>{if(!k)return;HERO_LAST=k;try{localStorage.setItem(HERO_MEMO,JSON.stringify({k,url:IMG[k]}))}catch(e){}});closeModal(true);cb&&cb()}}
 function pickTutorial(){return 'ハンムラビ'}
 
 /* ---------- modal ---------- */
@@ -11208,13 +11233,26 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
 
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
- modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">マイルームにいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿・名前を変える</button></div>
+ modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">マイルームにいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿・名前を変える</button><button class="btn light" id="nwAccShop">服屋</button></div>
  <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>`);
  document.querySelectorAll('.nw-crow').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
   if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1)}
   else{const o=findFloorSpot('SD',n);if(!o){toast('床に空きがありません');return}R.f.push(o)}
   save();nwSelBar();nwDraw();nwCharaPanel()});
- const lb=$('#nwLook');if(lb)lb.onclick=()=>askLook(()=>{nwDraw();nwCharaPanel()},{title:'姿を変える',cancel:true,onCancel:nwCharaPanel})}
+ const lb=$('#nwLook');if(lb)lb.onclick=()=>askLook(()=>{nwDraw();nwCharaPanel()},{title:'姿を変える',cancel:true,cost:true,onCancel:nwCharaPanel});
+ const ab=$('#nwAccShop');if(ab)ab.onclick=()=>accShop()}
+
+/* ---- 服屋（主人公の小物を栞と交換） ---- */
+function accShop(){const L=LOOK_ACCS;
+ modal(`<div class="mhead"><h3>服屋</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">交換した小物は「姿を変える」の「小物」で付け外しできます（付け外しに栞は要りません）。</p>
+ <div class="acc-have">${ERAS.map((E,i)=>`<span style="--ec:${E.c}">${E.k}の栞 <b>${S.sh[i]}</b></span>`).join('')}</div>
+ <div class="nw-shop">${L.length?L.map(a=>{const own=accOwned(a.k),can=S.sh[a.e]>=a.p;return `<div class="nw-row"><div class="acc-pv"><img data-accpv="${esc(a.k)}" alt=""></div><div class="tx"><b>${esc(a.n)}</b><p>${esc(a.x||'')}</p></div>
+  ${own?'<span class="nw-owned">交換ずみ</span>':`<button class="btn ${can?'':'light'}" data-buy="${esc(a.k)}" ${can?'':'disabled'}>${ERAS[a.e].k}の栞${a.p}枚</button>`}</div>`}).join(''):'<p class="muted">準備中です。品物が届くまで、もう少し待っていてね。</p>'}</div>`,()=>nwCharaPanel());
+ /* 見本は、いまの主人公にその小物を付けた姿 */
+ L.forEach(a=>{const lk=lookOf();lk.acc=[...new Set([...lk.acc,a.k])].sort();heroBuild(lk).then(k=>{const im=document.querySelector(`[data-accpv="${CSS.escape(a.k)}"]`);if(im&&k)im.src=IMG[k]})});
+ document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const a=LOOK_ACCS.find(x=>x.k===b.dataset.buy);
+  askYes(`${ERAS[a.e].k}の栞${a.p}枚で「${a.n}」と交換しますか？`,'交換する',()=>{if(S.sh[a.e]<a.p){toast('栞が足りません');return}
+   S.sh[a.e]-=a.p;S.accs=[...new Set([...(S.accs||[]),a.k])];saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('「姿を変える」の「小物」から身につけられます');accShop()},()=>accShop())})}
 
 /* ---- ショップ（栞と交換） ---- */
 function nwShop(){const e=NWS.tab;const cat=NWS.scat||'すべて';const CH=['すべて',...FCATS,'壁紙・床'];

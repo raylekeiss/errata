@@ -82,3 +82,11 @@ for n in bangs:
 wears=[('スカート','body2.png')]+[(m.group(1),f) for f in files if (m:=re.match(r'body2_(.+)\.png$',f))]
 for k,f in wears:
   save_icon(load(f),(600,1080,1460,1960),f'look_wear_{k}.webp',160)
+# 小物（acc_〇〇.png）：顔（頭・目1）に重ねて、顔のあたりを切り出す。index.html の LOOK_ACCS にも1行足し、
+# IMG に "UI_小物_〇〇": "img/look_acc_〇〇.webp" を入れる。
+for f in files:
+  m=re.match(r'acc_(.+)\.png$',f)
+  if not m: continue
+  im=load('head2.png'); im.alpha_composite(load(f'eyes_{eyes[0]}.png')); im.alpha_composite(load(f))
+  save_icon(im,FACEBOX,f'look_acc_{m.group(1)}.webp',96)
+  print(f'"UI_小物_{m.group(1)}": "img/look_acc_{m.group(1)}.webp"')
