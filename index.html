@@ -178,6 +178,17 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .look-sw.tx:has(.look-hd){flex-wrap:nowrap;gap:6px}
 .look-hd{flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1;height:auto;padding:3px;background:#fffaf0;border:1px solid var(--line);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .look-hd img{max-width:100%;max-height:100%;display:block;pointer-events:none}
+/* 目と眉：2つのグループを1行に並べる */
+.look-fc{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.look-fc .look-sw{margin-bottom:0}
+.look-fc .look-sw:not(.tx){flex-wrap:nowrap}
+.lkb-r .look-fc{align-self:stretch;gap:1.2cqw;padding-left:1cqw}
+.lkb-r .look-fc .look-sw{align-self:auto;flex:0 0 auto;padding-left:0;gap:1.2cqw}
+.lkb-r .look-fc .look-dot{width:3.4cqw;height:3.4cqw}
+.lkb-r .look-fc .look-hd.fc{flex:0 0 auto;width:4.3cqw;height:4.3cqw}
+.look-sep{width:1px;align-self:stretch;background:var(--line);margin:4px 2px}
+.look-hd.fc{max-width:56px;padding:0;overflow:hidden}
+.look-hd.fc img{width:100%;height:100%;object-fit:cover}
 .look-hd.on{outline:3px solid var(--gold);outline-offset:2px;background:#fff}
 @media (max-width:420px){.look-wrap{grid-template-columns:1fr}.look-pv{max-width:170px;margin:0 auto}}
 @media (min-width:560px){.pv-opts{grid-template-columns:1fr 1fr}}
@@ -8746,45 +8757,45 @@ const IMG={
 "家具_A11": "img/furn_A11.webp",
 "SD_シミ": "img/sd_shimi.webp",
 "SD_コンラッド": "img/sd_conrad.webp",
-"SD_主人公_肌1": "img/sd_hero_s1.webp",
-"SD_主人公_肌2": "img/sd_hero_s2.webp",
-"SD_主人公_肌3": "img/sd_hero_s3.webp",
-"SD_主人公_肌1_濃茶": "img/sd_hero_s1_濃茶.webp",
-"SD_主人公_肌1_金": "img/sd_hero_s1_金.webp",
-"SD_主人公_肌1_黒": "img/sd_hero_s1_黒.webp",
-"SD_主人公_肌1_ポニーテール_濃茶": "img/sd_hero_s1_ポニーテール_濃茶.webp",
-"SD_主人公_肌1_ポニーテール_金": "img/sd_hero_s1_ポニーテール_金.webp",
-"SD_主人公_肌1_ポニーテール_黒": "img/sd_hero_s1_ポニーテール_黒.webp",
-"SD_主人公_肌1_短髪_濃茶": "img/sd_hero_s1_短髪_濃茶.webp",
-"SD_主人公_肌1_短髪_金": "img/sd_hero_s1_短髪_金.webp",
-"SD_主人公_肌1_短髪_黒": "img/sd_hero_s1_短髪_黒.webp",
-"SD_主人公_肌2_濃茶": "img/sd_hero_s2_濃茶.webp",
-"SD_主人公_肌2_金": "img/sd_hero_s2_金.webp",
-"SD_主人公_肌2_黒": "img/sd_hero_s2_黒.webp",
-"SD_主人公_肌2_ポニーテール_濃茶": "img/sd_hero_s2_ポニーテール_濃茶.webp",
-"SD_主人公_肌2_ポニーテール_金": "img/sd_hero_s2_ポニーテール_金.webp",
-"SD_主人公_肌2_ポニーテール_黒": "img/sd_hero_s2_ポニーテール_黒.webp",
-"SD_主人公_肌2_短髪_濃茶": "img/sd_hero_s2_短髪_濃茶.webp",
-"SD_主人公_肌2_短髪_金": "img/sd_hero_s2_短髪_金.webp",
-"SD_主人公_肌2_短髪_黒": "img/sd_hero_s2_短髪_黒.webp",
-"SD_主人公_肌3_濃茶": "img/sd_hero_s3_濃茶.webp",
-"SD_主人公_肌3_金": "img/sd_hero_s3_金.webp",
-"SD_主人公_肌3_黒": "img/sd_hero_s3_黒.webp",
-"SD_主人公_肌3_ポニーテール_濃茶": "img/sd_hero_s3_ポニーテール_濃茶.webp",
-"SD_主人公_肌3_ポニーテール_金": "img/sd_hero_s3_ポニーテール_金.webp",
-"SD_主人公_肌3_ポニーテール_黒": "img/sd_hero_s3_ポニーテール_黒.webp",
-"SD_主人公_肌3_短髪_濃茶": "img/sd_hero_s3_短髪_濃茶.webp",
-"SD_主人公_肌3_短髪_金": "img/sd_hero_s3_短髪_金.webp",
-"SD_主人公_肌3_短髪_黒": "img/sd_hero_s3_短髪_黒.webp",
-"SD_主人公_肌1_ツインテール_濃茶": "img/sd_hero_s1_ツインテール_濃茶.webp", "SD_主人公_肌1_ツインテール_金": "img/sd_hero_s1_ツインテール_金.webp", "SD_主人公_肌1_ツインテール_黒": "img/sd_hero_s1_ツインテール_黒.webp", "SD_主人公_肌1_三つ編み_濃茶": "img/sd_hero_s1_三つ編み_濃茶.webp", "SD_主人公_肌1_三つ編み_金": "img/sd_hero_s1_三つ編み_金.webp", "SD_主人公_肌1_三つ編み_黒": "img/sd_hero_s1_三つ編み_黒.webp", "SD_主人公_肌2_ツインテール_濃茶": "img/sd_hero_s2_ツインテール_濃茶.webp", "SD_主人公_肌2_ツインテール_金": "img/sd_hero_s2_ツインテール_金.webp", "SD_主人公_肌2_ツインテール_黒": "img/sd_hero_s2_ツインテール_黒.webp", "SD_主人公_肌2_三つ編み_濃茶": "img/sd_hero_s2_三つ編み_濃茶.webp", "SD_主人公_肌2_三つ編み_金": "img/sd_hero_s2_三つ編み_金.webp", "SD_主人公_肌2_三つ編み_黒": "img/sd_hero_s2_三つ編み_黒.webp", "SD_主人公_肌3_ツインテール_濃茶": "img/sd_hero_s3_ツインテール_濃茶.webp", "SD_主人公_肌3_ツインテール_金": "img/sd_hero_s3_ツインテール_金.webp", "SD_主人公_肌3_ツインテール_黒": "img/sd_hero_s3_ツインテール_黒.webp", "SD_主人公_肌3_三つ編み_濃茶": "img/sd_hero_s3_三つ編み_濃茶.webp", "SD_主人公_肌3_三つ編み_金": "img/sd_hero_s3_三つ編み_金.webp", "SD_主人公_肌3_三つ編み_黒": "img/sd_hero_s3_三つ編み_黒.webp", "UI_髪型_短髪": "img/look_hair_短髪.webp", "UI_髪型_ボブ": "img/look_hair_ボブ.webp", "UI_髪型_ポニーテール": "img/look_hair_ポニーテール.webp", "UI_髪型_ツインテール": "img/look_hair_ツインテール.webp", "UI_髪型_三つ編み": "img/look_hair_三つ編み.webp", "SD_主人公_肌1_ボブ_濃茶": "img/sd_hero_s1_ボブ_濃茶.webp",
-"SD_主人公_肌1_ボブ_金": "img/sd_hero_s1_ボブ_金.webp",
-"SD_主人公_肌1_ボブ_黒": "img/sd_hero_s1_ボブ_黒.webp",
-"SD_主人公_肌2_ボブ_濃茶": "img/sd_hero_s2_ボブ_濃茶.webp",
-"SD_主人公_肌2_ボブ_金": "img/sd_hero_s2_ボブ_金.webp",
-"SD_主人公_肌2_ボブ_黒": "img/sd_hero_s2_ボブ_黒.webp",
-"SD_主人公_肌3_ボブ_濃茶": "img/sd_hero_s3_ボブ_濃茶.webp",
-"SD_主人公_肌3_ボブ_金": "img/sd_hero_s3_ボブ_金.webp",
-"SD_主人公_肌3_ボブ_黒": "img/sd_hero_s3_ボブ_黒.webp",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"UI_髪型_短髪": "img/look_hair_短髪.webp", "UI_目_1": "img/look_eyes_1.webp", "UI_目_2": "img/look_eyes_2.webp", "UI_眉_1": "img/look_brows_1.webp", "UI_眉_2": "img/look_brows_2.webp", "UI_眉_3": "img/look_brows_3.webp", "SD_主人公_肌1_ツインテール_濃茶_目1_眉1": "img/sd_hero_s1_ツインテール_濃茶_e1b1.webp", "SD_主人公_肌1_ツインテール_濃茶_目1_眉2": "img/sd_hero_s1_ツインテール_濃茶_e1b2.webp", "SD_主人公_肌1_ツインテール_濃茶_目1_眉3": "img/sd_hero_s1_ツインテール_濃茶_e1b3.webp", "SD_主人公_肌1_ツインテール_濃茶_目2_眉1": "img/sd_hero_s1_ツインテール_濃茶_e2b1.webp", "SD_主人公_肌1_ツインテール_濃茶_目2_眉2": "img/sd_hero_s1_ツインテール_濃茶_e2b2.webp", "SD_主人公_肌1_ツインテール_濃茶_目2_眉3": "img/sd_hero_s1_ツインテール_濃茶_e2b3.webp", "SD_主人公_肌1_ツインテール_金_目1_眉1": "img/sd_hero_s1_ツインテール_金_e1b1.webp", "SD_主人公_肌1_ツインテール_金_目1_眉2": "img/sd_hero_s1_ツインテール_金_e1b2.webp", "SD_主人公_肌1_ツインテール_金_目1_眉3": "img/sd_hero_s1_ツインテール_金_e1b3.webp", "SD_主人公_肌1_ツインテール_金_目2_眉1": "img/sd_hero_s1_ツインテール_金_e2b1.webp", "SD_主人公_肌1_ツインテール_金_目2_眉2": "img/sd_hero_s1_ツインテール_金_e2b2.webp", "SD_主人公_肌1_ツインテール_金_目2_眉3": "img/sd_hero_s1_ツインテール_金_e2b3.webp", "SD_主人公_肌1_ツインテール_黒_目1_眉1": "img/sd_hero_s1_ツインテール_黒_e1b1.webp", "SD_主人公_肌1_ツインテール_黒_目1_眉2": "img/sd_hero_s1_ツインテール_黒_e1b2.webp", "SD_主人公_肌1_ツインテール_黒_目1_眉3": "img/sd_hero_s1_ツインテール_黒_e1b3.webp", "SD_主人公_肌1_ツインテール_黒_目2_眉1": "img/sd_hero_s1_ツインテール_黒_e2b1.webp", "SD_主人公_肌1_ツインテール_黒_目2_眉2": "img/sd_hero_s1_ツインテール_黒_e2b2.webp", "SD_主人公_肌1_ツインテール_黒_目2_眉3": "img/sd_hero_s1_ツインテール_黒_e2b3.webp", "SD_主人公_肌1_ボブ_濃茶_目1_眉1": "img/sd_hero_s1_ボブ_濃茶_e1b1.webp", "SD_主人公_肌1_ボブ_濃茶_目1_眉2": "img/sd_hero_s1_ボブ_濃茶_e1b2.webp", "SD_主人公_肌1_ボブ_濃茶_目1_眉3": "img/sd_hero_s1_ボブ_濃茶_e1b3.webp", "SD_主人公_肌1_ボブ_濃茶_目2_眉1": "img/sd_hero_s1_ボブ_濃茶_e2b1.webp", "SD_主人公_肌1_ボブ_濃茶_目2_眉2": "img/sd_hero_s1_ボブ_濃茶_e2b2.webp", "SD_主人公_肌1_ボブ_濃茶_目2_眉3": "img/sd_hero_s1_ボブ_濃茶_e2b3.webp", "SD_主人公_肌1_ボブ_金_目1_眉1": "img/sd_hero_s1_ボブ_金_e1b1.webp", "SD_主人公_肌1_ボブ_金_目1_眉2": "img/sd_hero_s1_ボブ_金_e1b2.webp", "SD_主人公_肌1_ボブ_金_目1_眉3": "img/sd_hero_s1_ボブ_金_e1b3.webp", "SD_主人公_肌1_ボブ_金_目2_眉1": "img/sd_hero_s1_ボブ_金_e2b1.webp", "SD_主人公_肌1_ボブ_金_目2_眉2": "img/sd_hero_s1_ボブ_金_e2b2.webp", "SD_主人公_肌1_ボブ_金_目2_眉3": "img/sd_hero_s1_ボブ_金_e2b3.webp", "SD_主人公_肌1_ボブ_黒_目1_眉1": "img/sd_hero_s1_ボブ_黒_e1b1.webp", "SD_主人公_肌1_ボブ_黒_目1_眉2": "img/sd_hero_s1_ボブ_黒_e1b2.webp", "SD_主人公_肌1_ボブ_黒_目1_眉3": "img/sd_hero_s1_ボブ_黒_e1b3.webp", "SD_主人公_肌1_ボブ_黒_目2_眉1": "img/sd_hero_s1_ボブ_黒_e2b1.webp", "SD_主人公_肌1_ボブ_黒_目2_眉2": "img/sd_hero_s1_ボブ_黒_e2b2.webp", "SD_主人公_肌1_ボブ_黒_目2_眉3": "img/sd_hero_s1_ボブ_黒_e2b3.webp", "SD_主人公_肌1_ポニーテール_濃茶_目1_眉1": "img/sd_hero_s1_ポニーテール_濃茶_e1b1.webp", "SD_主人公_肌1_ポニーテール_濃茶_目1_眉2": "img/sd_hero_s1_ポニーテール_濃茶_e1b2.webp", "SD_主人公_肌1_ポニーテール_濃茶_目1_眉3": "img/sd_hero_s1_ポニーテール_濃茶_e1b3.webp", "SD_主人公_肌1_ポニーテール_濃茶_目2_眉1": "img/sd_hero_s1_ポニーテール_濃茶_e2b1.webp", "SD_主人公_肌1_ポニーテール_濃茶_目2_眉2": "img/sd_hero_s1_ポニーテール_濃茶_e2b2.webp", "SD_主人公_肌1_ポニーテール_濃茶_目2_眉3": "img/sd_hero_s1_ポニーテール_濃茶_e2b3.webp", "SD_主人公_肌1_ポニーテール_金_目1_眉1": "img/sd_hero_s1_ポニーテール_金_e1b1.webp", "SD_主人公_肌1_ポニーテール_金_目1_眉2": "img/sd_hero_s1_ポニーテール_金_e1b2.webp", "SD_主人公_肌1_ポニーテール_金_目1_眉3": "img/sd_hero_s1_ポニーテール_金_e1b3.webp", "SD_主人公_肌1_ポニーテール_金_目2_眉1": "img/sd_hero_s1_ポニーテール_金_e2b1.webp", "SD_主人公_肌1_ポニーテール_金_目2_眉2": "img/sd_hero_s1_ポニーテール_金_e2b2.webp", "SD_主人公_肌1_ポニーテール_金_目2_眉3": "img/sd_hero_s1_ポニーテール_金_e2b3.webp", "SD_主人公_肌1_ポニーテール_黒_目1_眉1": "img/sd_hero_s1_ポニーテール_黒_e1b1.webp", "SD_主人公_肌1_ポニーテール_黒_目1_眉2": "img/sd_hero_s1_ポニーテール_黒_e1b2.webp", "SD_主人公_肌1_ポニーテール_黒_目1_眉3": "img/sd_hero_s1_ポニーテール_黒_e1b3.webp", "SD_主人公_肌1_ポニーテール_黒_目2_眉1": "img/sd_hero_s1_ポニーテール_黒_e2b1.webp", "SD_主人公_肌1_ポニーテール_黒_目2_眉2": "img/sd_hero_s1_ポニーテール_黒_e2b2.webp", "SD_主人公_肌1_ポニーテール_黒_目2_眉3": "img/sd_hero_s1_ポニーテール_黒_e2b3.webp", "SD_主人公_肌1_三つ編み_濃茶_目1_眉1": "img/sd_hero_s1_三つ編み_濃茶_e1b1.webp", "SD_主人公_肌1_三つ編み_濃茶_目1_眉2": "img/sd_hero_s1_三つ編み_濃茶_e1b2.webp", "SD_主人公_肌1_三つ編み_濃茶_目1_眉3": "img/sd_hero_s1_三つ編み_濃茶_e1b3.webp", "SD_主人公_肌1_三つ編み_濃茶_目2_眉1": "img/sd_hero_s1_三つ編み_濃茶_e2b1.webp", "SD_主人公_肌1_三つ編み_濃茶_目2_眉2": "img/sd_hero_s1_三つ編み_濃茶_e2b2.webp", "SD_主人公_肌1_三つ編み_濃茶_目2_眉3": "img/sd_hero_s1_三つ編み_濃茶_e2b3.webp", "SD_主人公_肌1_三つ編み_金_目1_眉1": "img/sd_hero_s1_三つ編み_金_e1b1.webp", "SD_主人公_肌1_三つ編み_金_目1_眉2": "img/sd_hero_s1_三つ編み_金_e1b2.webp", "SD_主人公_肌1_三つ編み_金_目1_眉3": "img/sd_hero_s1_三つ編み_金_e1b3.webp", "SD_主人公_肌1_三つ編み_金_目2_眉1": "img/sd_hero_s1_三つ編み_金_e2b1.webp", "SD_主人公_肌1_三つ編み_金_目2_眉2": "img/sd_hero_s1_三つ編み_金_e2b2.webp", "SD_主人公_肌1_三つ編み_金_目2_眉3": "img/sd_hero_s1_三つ編み_金_e2b3.webp", "SD_主人公_肌1_三つ編み_黒_目1_眉1": "img/sd_hero_s1_三つ編み_黒_e1b1.webp", "SD_主人公_肌1_三つ編み_黒_目1_眉2": "img/sd_hero_s1_三つ編み_黒_e1b2.webp", "SD_主人公_肌1_三つ編み_黒_目1_眉3": "img/sd_hero_s1_三つ編み_黒_e1b3.webp", "SD_主人公_肌1_三つ編み_黒_目2_眉1": "img/sd_hero_s1_三つ編み_黒_e2b1.webp", "SD_主人公_肌1_三つ編み_黒_目2_眉2": "img/sd_hero_s1_三つ編み_黒_e2b2.webp", "SD_主人公_肌1_三つ編み_黒_目2_眉3": "img/sd_hero_s1_三つ編み_黒_e2b3.webp", "SD_主人公_肌1_短髪_濃茶_目1_眉1": "img/sd_hero_s1_短髪_濃茶_e1b1.webp", "SD_主人公_肌1_短髪_濃茶_目1_眉2": "img/sd_hero_s1_短髪_濃茶_e1b2.webp", "SD_主人公_肌1_短髪_濃茶_目1_眉3": "img/sd_hero_s1_短髪_濃茶_e1b3.webp", "SD_主人公_肌1_短髪_濃茶_目2_眉1": "img/sd_hero_s1_短髪_濃茶_e2b1.webp", "SD_主人公_肌1_短髪_濃茶_目2_眉2": "img/sd_hero_s1_短髪_濃茶_e2b2.webp", "SD_主人公_肌1_短髪_濃茶_目2_眉3": "img/sd_hero_s1_短髪_濃茶_e2b3.webp", "SD_主人公_肌1_短髪_金_目1_眉1": "img/sd_hero_s1_短髪_金_e1b1.webp", "SD_主人公_肌1_短髪_金_目1_眉2": "img/sd_hero_s1_短髪_金_e1b2.webp", "SD_主人公_肌1_短髪_金_目1_眉3": "img/sd_hero_s1_短髪_金_e1b3.webp", "SD_主人公_肌1_短髪_金_目2_眉1": "img/sd_hero_s1_短髪_金_e2b1.webp", "SD_主人公_肌1_短髪_金_目2_眉2": "img/sd_hero_s1_短髪_金_e2b2.webp", "SD_主人公_肌1_短髪_金_目2_眉3": "img/sd_hero_s1_短髪_金_e2b3.webp", "SD_主人公_肌1_短髪_黒_目1_眉1": "img/sd_hero_s1_短髪_黒_e1b1.webp", "SD_主人公_肌1_短髪_黒_目1_眉2": "img/sd_hero_s1_短髪_黒_e1b2.webp", "SD_主人公_肌1_短髪_黒_目1_眉3": "img/sd_hero_s1_短髪_黒_e1b3.webp", "SD_主人公_肌1_短髪_黒_目2_眉1": "img/sd_hero_s1_短髪_黒_e2b1.webp", "SD_主人公_肌1_短髪_黒_目2_眉2": "img/sd_hero_s1_短髪_黒_e2b2.webp", "SD_主人公_肌1_短髪_黒_目2_眉3": "img/sd_hero_s1_短髪_黒_e2b3.webp", "SD_主人公_肌2_ツインテール_濃茶_目1_眉1": "img/sd_hero_s2_ツインテール_濃茶_e1b1.webp", "SD_主人公_肌2_ツインテール_濃茶_目1_眉2": "img/sd_hero_s2_ツインテール_濃茶_e1b2.webp", "SD_主人公_肌2_ツインテール_濃茶_目1_眉3": "img/sd_hero_s2_ツインテール_濃茶_e1b3.webp", "SD_主人公_肌2_ツインテール_濃茶_目2_眉1": "img/sd_hero_s2_ツインテール_濃茶_e2b1.webp", "SD_主人公_肌2_ツインテール_濃茶_目2_眉2": "img/sd_hero_s2_ツインテール_濃茶_e2b2.webp", "SD_主人公_肌2_ツインテール_濃茶_目2_眉3": "img/sd_hero_s2_ツインテール_濃茶_e2b3.webp", "SD_主人公_肌2_ツインテール_金_目1_眉1": "img/sd_hero_s2_ツインテール_金_e1b1.webp", "SD_主人公_肌2_ツインテール_金_目1_眉2": "img/sd_hero_s2_ツインテール_金_e1b2.webp", "SD_主人公_肌2_ツインテール_金_目1_眉3": "img/sd_hero_s2_ツインテール_金_e1b3.webp", "SD_主人公_肌2_ツインテール_金_目2_眉1": "img/sd_hero_s2_ツインテール_金_e2b1.webp", "SD_主人公_肌2_ツインテール_金_目2_眉2": "img/sd_hero_s2_ツインテール_金_e2b2.webp", "SD_主人公_肌2_ツインテール_金_目2_眉3": "img/sd_hero_s2_ツインテール_金_e2b3.webp", "SD_主人公_肌2_ツインテール_黒_目1_眉1": "img/sd_hero_s2_ツインテール_黒_e1b1.webp", "SD_主人公_肌2_ツインテール_黒_目1_眉2": "img/sd_hero_s2_ツインテール_黒_e1b2.webp", "SD_主人公_肌2_ツインテール_黒_目1_眉3": "img/sd_hero_s2_ツインテール_黒_e1b3.webp", "SD_主人公_肌2_ツインテール_黒_目2_眉1": "img/sd_hero_s2_ツインテール_黒_e2b1.webp", "SD_主人公_肌2_ツインテール_黒_目2_眉2": "img/sd_hero_s2_ツインテール_黒_e2b2.webp", "SD_主人公_肌2_ツインテール_黒_目2_眉3": "img/sd_hero_s2_ツインテール_黒_e2b3.webp", "SD_主人公_肌2_ボブ_濃茶_目1_眉1": "img/sd_hero_s2_ボブ_濃茶_e1b1.webp", "SD_主人公_肌2_ボブ_濃茶_目1_眉2": "img/sd_hero_s2_ボブ_濃茶_e1b2.webp", "SD_主人公_肌2_ボブ_濃茶_目1_眉3": "img/sd_hero_s2_ボブ_濃茶_e1b3.webp", "SD_主人公_肌2_ボブ_濃茶_目2_眉1": "img/sd_hero_s2_ボブ_濃茶_e2b1.webp", "SD_主人公_肌2_ボブ_濃茶_目2_眉2": "img/sd_hero_s2_ボブ_濃茶_e2b2.webp", "SD_主人公_肌2_ボブ_濃茶_目2_眉3": "img/sd_hero_s2_ボブ_濃茶_e2b3.webp", "SD_主人公_肌2_ボブ_金_目1_眉1": "img/sd_hero_s2_ボブ_金_e1b1.webp", "SD_主人公_肌2_ボブ_金_目1_眉2": "img/sd_hero_s2_ボブ_金_e1b2.webp", "SD_主人公_肌2_ボブ_金_目1_眉3": "img/sd_hero_s2_ボブ_金_e1b3.webp", "SD_主人公_肌2_ボブ_金_目2_眉1": "img/sd_hero_s2_ボブ_金_e2b1.webp", "SD_主人公_肌2_ボブ_金_目2_眉2": "img/sd_hero_s2_ボブ_金_e2b2.webp", "SD_主人公_肌2_ボブ_金_目2_眉3": "img/sd_hero_s2_ボブ_金_e2b3.webp", "SD_主人公_肌2_ボブ_黒_目1_眉1": "img/sd_hero_s2_ボブ_黒_e1b1.webp", "SD_主人公_肌2_ボブ_黒_目1_眉2": "img/sd_hero_s2_ボブ_黒_e1b2.webp", "SD_主人公_肌2_ボブ_黒_目1_眉3": "img/sd_hero_s2_ボブ_黒_e1b3.webp", "SD_主人公_肌2_ボブ_黒_目2_眉1": "img/sd_hero_s2_ボブ_黒_e2b1.webp", "SD_主人公_肌2_ボブ_黒_目2_眉2": "img/sd_hero_s2_ボブ_黒_e2b2.webp", "SD_主人公_肌2_ボブ_黒_目2_眉3": "img/sd_hero_s2_ボブ_黒_e2b3.webp", "SD_主人公_肌2_ポニーテール_濃茶_目1_眉1": "img/sd_hero_s2_ポニーテール_濃茶_e1b1.webp", "SD_主人公_肌2_ポニーテール_濃茶_目1_眉2": "img/sd_hero_s2_ポニーテール_濃茶_e1b2.webp", "SD_主人公_肌2_ポニーテール_濃茶_目1_眉3": "img/sd_hero_s2_ポニーテール_濃茶_e1b3.webp", "SD_主人公_肌2_ポニーテール_濃茶_目2_眉1": "img/sd_hero_s2_ポニーテール_濃茶_e2b1.webp", "SD_主人公_肌2_ポニーテール_濃茶_目2_眉2": "img/sd_hero_s2_ポニーテール_濃茶_e2b2.webp", "SD_主人公_肌2_ポニーテール_濃茶_目2_眉3": "img/sd_hero_s2_ポニーテール_濃茶_e2b3.webp", "SD_主人公_肌2_ポニーテール_金_目1_眉1": "img/sd_hero_s2_ポニーテール_金_e1b1.webp", "SD_主人公_肌2_ポニーテール_金_目1_眉2": "img/sd_hero_s2_ポニーテール_金_e1b2.webp", "SD_主人公_肌2_ポニーテール_金_目1_眉3": "img/sd_hero_s2_ポニーテール_金_e1b3.webp", "SD_主人公_肌2_ポニーテール_金_目2_眉1": "img/sd_hero_s2_ポニーテール_金_e2b1.webp", "SD_主人公_肌2_ポニーテール_金_目2_眉2": "img/sd_hero_s2_ポニーテール_金_e2b2.webp", "SD_主人公_肌2_ポニーテール_金_目2_眉3": "img/sd_hero_s2_ポニーテール_金_e2b3.webp", "SD_主人公_肌2_ポニーテール_黒_目1_眉1": "img/sd_hero_s2_ポニーテール_黒_e1b1.webp", "SD_主人公_肌2_ポニーテール_黒_目1_眉2": "img/sd_hero_s2_ポニーテール_黒_e1b2.webp", "SD_主人公_肌2_ポニーテール_黒_目1_眉3": "img/sd_hero_s2_ポニーテール_黒_e1b3.webp", "SD_主人公_肌2_ポニーテール_黒_目2_眉1": "img/sd_hero_s2_ポニーテール_黒_e2b1.webp", "SD_主人公_肌2_ポニーテール_黒_目2_眉2": "img/sd_hero_s2_ポニーテール_黒_e2b2.webp", "SD_主人公_肌2_ポニーテール_黒_目2_眉3": "img/sd_hero_s2_ポニーテール_黒_e2b3.webp", "SD_主人公_肌2_三つ編み_濃茶_目1_眉1": "img/sd_hero_s2_三つ編み_濃茶_e1b1.webp", "SD_主人公_肌2_三つ編み_濃茶_目1_眉2": "img/sd_hero_s2_三つ編み_濃茶_e1b2.webp", "SD_主人公_肌2_三つ編み_濃茶_目1_眉3": "img/sd_hero_s2_三つ編み_濃茶_e1b3.webp", "SD_主人公_肌2_三つ編み_濃茶_目2_眉1": "img/sd_hero_s2_三つ編み_濃茶_e2b1.webp", "SD_主人公_肌2_三つ編み_濃茶_目2_眉2": "img/sd_hero_s2_三つ編み_濃茶_e2b2.webp", "SD_主人公_肌2_三つ編み_濃茶_目2_眉3": "img/sd_hero_s2_三つ編み_濃茶_e2b3.webp", "SD_主人公_肌2_三つ編み_金_目1_眉1": "img/sd_hero_s2_三つ編み_金_e1b1.webp", "SD_主人公_肌2_三つ編み_金_目1_眉2": "img/sd_hero_s2_三つ編み_金_e1b2.webp", "SD_主人公_肌2_三つ編み_金_目1_眉3": "img/sd_hero_s2_三つ編み_金_e1b3.webp", "SD_主人公_肌2_三つ編み_金_目2_眉1": "img/sd_hero_s2_三つ編み_金_e2b1.webp", "SD_主人公_肌2_三つ編み_金_目2_眉2": "img/sd_hero_s2_三つ編み_金_e2b2.webp", "SD_主人公_肌2_三つ編み_金_目2_眉3": "img/sd_hero_s2_三つ編み_金_e2b3.webp", "SD_主人公_肌2_三つ編み_黒_目1_眉1": "img/sd_hero_s2_三つ編み_黒_e1b1.webp", "SD_主人公_肌2_三つ編み_黒_目1_眉2": "img/sd_hero_s2_三つ編み_黒_e1b2.webp", "SD_主人公_肌2_三つ編み_黒_目1_眉3": "img/sd_hero_s2_三つ編み_黒_e1b3.webp", "SD_主人公_肌2_三つ編み_黒_目2_眉1": "img/sd_hero_s2_三つ編み_黒_e2b1.webp", "SD_主人公_肌2_三つ編み_黒_目2_眉2": "img/sd_hero_s2_三つ編み_黒_e2b2.webp", "SD_主人公_肌2_三つ編み_黒_目2_眉3": "img/sd_hero_s2_三つ編み_黒_e2b3.webp", "SD_主人公_肌2_短髪_濃茶_目1_眉1": "img/sd_hero_s2_短髪_濃茶_e1b1.webp", "SD_主人公_肌2_短髪_濃茶_目1_眉2": "img/sd_hero_s2_短髪_濃茶_e1b2.webp", "SD_主人公_肌2_短髪_濃茶_目1_眉3": "img/sd_hero_s2_短髪_濃茶_e1b3.webp", "SD_主人公_肌2_短髪_濃茶_目2_眉1": "img/sd_hero_s2_短髪_濃茶_e2b1.webp", "SD_主人公_肌2_短髪_濃茶_目2_眉2": "img/sd_hero_s2_短髪_濃茶_e2b2.webp", "SD_主人公_肌2_短髪_濃茶_目2_眉3": "img/sd_hero_s2_短髪_濃茶_e2b3.webp", "SD_主人公_肌2_短髪_金_目1_眉1": "img/sd_hero_s2_短髪_金_e1b1.webp", "SD_主人公_肌2_短髪_金_目1_眉2": "img/sd_hero_s2_短髪_金_e1b2.webp", "SD_主人公_肌2_短髪_金_目1_眉3": "img/sd_hero_s2_短髪_金_e1b3.webp", "SD_主人公_肌2_短髪_金_目2_眉1": "img/sd_hero_s2_短髪_金_e2b1.webp", "SD_主人公_肌2_短髪_金_目2_眉2": "img/sd_hero_s2_短髪_金_e2b2.webp", "SD_主人公_肌2_短髪_金_目2_眉3": "img/sd_hero_s2_短髪_金_e2b3.webp", "SD_主人公_肌2_短髪_黒_目1_眉1": "img/sd_hero_s2_短髪_黒_e1b1.webp", "SD_主人公_肌2_短髪_黒_目1_眉2": "img/sd_hero_s2_短髪_黒_e1b2.webp", "SD_主人公_肌2_短髪_黒_目1_眉3": "img/sd_hero_s2_短髪_黒_e1b3.webp", "SD_主人公_肌2_短髪_黒_目2_眉1": "img/sd_hero_s2_短髪_黒_e2b1.webp", "SD_主人公_肌2_短髪_黒_目2_眉2": "img/sd_hero_s2_短髪_黒_e2b2.webp", "SD_主人公_肌2_短髪_黒_目2_眉3": "img/sd_hero_s2_短髪_黒_e2b3.webp", "SD_主人公_肌3_ツインテール_濃茶_目1_眉1": "img/sd_hero_s3_ツインテール_濃茶_e1b1.webp", "SD_主人公_肌3_ツインテール_濃茶_目1_眉2": "img/sd_hero_s3_ツインテール_濃茶_e1b2.webp", "SD_主人公_肌3_ツインテール_濃茶_目1_眉3": "img/sd_hero_s3_ツインテール_濃茶_e1b3.webp", "SD_主人公_肌3_ツインテール_濃茶_目2_眉1": "img/sd_hero_s3_ツインテール_濃茶_e2b1.webp", "SD_主人公_肌3_ツインテール_濃茶_目2_眉2": "img/sd_hero_s3_ツインテール_濃茶_e2b2.webp", "SD_主人公_肌3_ツインテール_濃茶_目2_眉3": "img/sd_hero_s3_ツインテール_濃茶_e2b3.webp", "SD_主人公_肌3_ツインテール_金_目1_眉1": "img/sd_hero_s3_ツインテール_金_e1b1.webp", "SD_主人公_肌3_ツインテール_金_目1_眉2": "img/sd_hero_s3_ツインテール_金_e1b2.webp", "SD_主人公_肌3_ツインテール_金_目1_眉3": "img/sd_hero_s3_ツインテール_金_e1b3.webp", "SD_主人公_肌3_ツインテール_金_目2_眉1": "img/sd_hero_s3_ツインテール_金_e2b1.webp", "SD_主人公_肌3_ツインテール_金_目2_眉2": "img/sd_hero_s3_ツインテール_金_e2b2.webp", "SD_主人公_肌3_ツインテール_金_目2_眉3": "img/sd_hero_s3_ツインテール_金_e2b3.webp", "SD_主人公_肌3_ツインテール_黒_目1_眉1": "img/sd_hero_s3_ツインテール_黒_e1b1.webp", "SD_主人公_肌3_ツインテール_黒_目1_眉2": "img/sd_hero_s3_ツインテール_黒_e1b2.webp", "SD_主人公_肌3_ツインテール_黒_目1_眉3": "img/sd_hero_s3_ツインテール_黒_e1b3.webp", "SD_主人公_肌3_ツインテール_黒_目2_眉1": "img/sd_hero_s3_ツインテール_黒_e2b1.webp", "SD_主人公_肌3_ツインテール_黒_目2_眉2": "img/sd_hero_s3_ツインテール_黒_e2b2.webp", "SD_主人公_肌3_ツインテール_黒_目2_眉3": "img/sd_hero_s3_ツインテール_黒_e2b3.webp", "SD_主人公_肌3_ボブ_濃茶_目1_眉1": "img/sd_hero_s3_ボブ_濃茶_e1b1.webp", "SD_主人公_肌3_ボブ_濃茶_目1_眉2": "img/sd_hero_s3_ボブ_濃茶_e1b2.webp", "SD_主人公_肌3_ボブ_濃茶_目1_眉3": "img/sd_hero_s3_ボブ_濃茶_e1b3.webp", "SD_主人公_肌3_ボブ_濃茶_目2_眉1": "img/sd_hero_s3_ボブ_濃茶_e2b1.webp", "SD_主人公_肌3_ボブ_濃茶_目2_眉2": "img/sd_hero_s3_ボブ_濃茶_e2b2.webp", "SD_主人公_肌3_ボブ_濃茶_目2_眉3": "img/sd_hero_s3_ボブ_濃茶_e2b3.webp", "SD_主人公_肌3_ボブ_金_目1_眉1": "img/sd_hero_s3_ボブ_金_e1b1.webp", "SD_主人公_肌3_ボブ_金_目1_眉2": "img/sd_hero_s3_ボブ_金_e1b2.webp", "SD_主人公_肌3_ボブ_金_目1_眉3": "img/sd_hero_s3_ボブ_金_e1b3.webp", "SD_主人公_肌3_ボブ_金_目2_眉1": "img/sd_hero_s3_ボブ_金_e2b1.webp", "SD_主人公_肌3_ボブ_金_目2_眉2": "img/sd_hero_s3_ボブ_金_e2b2.webp", "SD_主人公_肌3_ボブ_金_目2_眉3": "img/sd_hero_s3_ボブ_金_e2b3.webp", "SD_主人公_肌3_ボブ_黒_目1_眉1": "img/sd_hero_s3_ボブ_黒_e1b1.webp", "SD_主人公_肌3_ボブ_黒_目1_眉2": "img/sd_hero_s3_ボブ_黒_e1b2.webp", "SD_主人公_肌3_ボブ_黒_目1_眉3": "img/sd_hero_s3_ボブ_黒_e1b3.webp", "SD_主人公_肌3_ボブ_黒_目2_眉1": "img/sd_hero_s3_ボブ_黒_e2b1.webp", "SD_主人公_肌3_ボブ_黒_目2_眉2": "img/sd_hero_s3_ボブ_黒_e2b2.webp", "SD_主人公_肌3_ボブ_黒_目2_眉3": "img/sd_hero_s3_ボブ_黒_e2b3.webp", "SD_主人公_肌3_ポニーテール_濃茶_目1_眉1": "img/sd_hero_s3_ポニーテール_濃茶_e1b1.webp", "SD_主人公_肌3_ポニーテール_濃茶_目1_眉2": "img/sd_hero_s3_ポニーテール_濃茶_e1b2.webp", "SD_主人公_肌3_ポニーテール_濃茶_目1_眉3": "img/sd_hero_s3_ポニーテール_濃茶_e1b3.webp", "SD_主人公_肌3_ポニーテール_濃茶_目2_眉1": "img/sd_hero_s3_ポニーテール_濃茶_e2b1.webp", "SD_主人公_肌3_ポニーテール_濃茶_目2_眉2": "img/sd_hero_s3_ポニーテール_濃茶_e2b2.webp", "SD_主人公_肌3_ポニーテール_濃茶_目2_眉3": "img/sd_hero_s3_ポニーテール_濃茶_e2b3.webp", "SD_主人公_肌3_ポニーテール_金_目1_眉1": "img/sd_hero_s3_ポニーテール_金_e1b1.webp", "SD_主人公_肌3_ポニーテール_金_目1_眉2": "img/sd_hero_s3_ポニーテール_金_e1b2.webp", "SD_主人公_肌3_ポニーテール_金_目1_眉3": "img/sd_hero_s3_ポニーテール_金_e1b3.webp", "SD_主人公_肌3_ポニーテール_金_目2_眉1": "img/sd_hero_s3_ポニーテール_金_e2b1.webp", "SD_主人公_肌3_ポニーテール_金_目2_眉2": "img/sd_hero_s3_ポニーテール_金_e2b2.webp", "SD_主人公_肌3_ポニーテール_金_目2_眉3": "img/sd_hero_s3_ポニーテール_金_e2b3.webp", "SD_主人公_肌3_ポニーテール_黒_目1_眉1": "img/sd_hero_s3_ポニーテール_黒_e1b1.webp", "SD_主人公_肌3_ポニーテール_黒_目1_眉2": "img/sd_hero_s3_ポニーテール_黒_e1b2.webp", "SD_主人公_肌3_ポニーテール_黒_目1_眉3": "img/sd_hero_s3_ポニーテール_黒_e1b3.webp", "SD_主人公_肌3_ポニーテール_黒_目2_眉1": "img/sd_hero_s3_ポニーテール_黒_e2b1.webp", "SD_主人公_肌3_ポニーテール_黒_目2_眉2": "img/sd_hero_s3_ポニーテール_黒_e2b2.webp", "SD_主人公_肌3_ポニーテール_黒_目2_眉3": "img/sd_hero_s3_ポニーテール_黒_e2b3.webp", "SD_主人公_肌3_三つ編み_濃茶_目1_眉1": "img/sd_hero_s3_三つ編み_濃茶_e1b1.webp", "SD_主人公_肌3_三つ編み_濃茶_目1_眉2": "img/sd_hero_s3_三つ編み_濃茶_e1b2.webp", "SD_主人公_肌3_三つ編み_濃茶_目1_眉3": "img/sd_hero_s3_三つ編み_濃茶_e1b3.webp", "SD_主人公_肌3_三つ編み_濃茶_目2_眉1": "img/sd_hero_s3_三つ編み_濃茶_e2b1.webp", "SD_主人公_肌3_三つ編み_濃茶_目2_眉2": "img/sd_hero_s3_三つ編み_濃茶_e2b2.webp", "SD_主人公_肌3_三つ編み_濃茶_目2_眉3": "img/sd_hero_s3_三つ編み_濃茶_e2b3.webp", "SD_主人公_肌3_三つ編み_金_目1_眉1": "img/sd_hero_s3_三つ編み_金_e1b1.webp", "SD_主人公_肌3_三つ編み_金_目1_眉2": "img/sd_hero_s3_三つ編み_金_e1b2.webp", "SD_主人公_肌3_三つ編み_金_目1_眉3": "img/sd_hero_s3_三つ編み_金_e1b3.webp", "SD_主人公_肌3_三つ編み_金_目2_眉1": "img/sd_hero_s3_三つ編み_金_e2b1.webp", "SD_主人公_肌3_三つ編み_金_目2_眉2": "img/sd_hero_s3_三つ編み_金_e2b2.webp", "SD_主人公_肌3_三つ編み_金_目2_眉3": "img/sd_hero_s3_三つ編み_金_e2b3.webp", "SD_主人公_肌3_三つ編み_黒_目1_眉1": "img/sd_hero_s3_三つ編み_黒_e1b1.webp", "SD_主人公_肌3_三つ編み_黒_目1_眉2": "img/sd_hero_s3_三つ編み_黒_e1b2.webp", "SD_主人公_肌3_三つ編み_黒_目1_眉3": "img/sd_hero_s3_三つ編み_黒_e1b3.webp", "SD_主人公_肌3_三つ編み_黒_目2_眉1": "img/sd_hero_s3_三つ編み_黒_e2b1.webp", "SD_主人公_肌3_三つ編み_黒_目2_眉2": "img/sd_hero_s3_三つ編み_黒_e2b2.webp", "SD_主人公_肌3_三つ編み_黒_目2_眉3": "img/sd_hero_s3_三つ編み_黒_e2b3.webp", "SD_主人公_肌3_短髪_濃茶_目1_眉1": "img/sd_hero_s3_短髪_濃茶_e1b1.webp", "SD_主人公_肌3_短髪_濃茶_目1_眉2": "img/sd_hero_s3_短髪_濃茶_e1b2.webp", "SD_主人公_肌3_短髪_濃茶_目1_眉3": "img/sd_hero_s3_短髪_濃茶_e1b3.webp", "SD_主人公_肌3_短髪_濃茶_目2_眉1": "img/sd_hero_s3_短髪_濃茶_e2b1.webp", "SD_主人公_肌3_短髪_濃茶_目2_眉2": "img/sd_hero_s3_短髪_濃茶_e2b2.webp", "SD_主人公_肌3_短髪_濃茶_目2_眉3": "img/sd_hero_s3_短髪_濃茶_e2b3.webp", "SD_主人公_肌3_短髪_金_目1_眉1": "img/sd_hero_s3_短髪_金_e1b1.webp", "SD_主人公_肌3_短髪_金_目1_眉2": "img/sd_hero_s3_短髪_金_e1b2.webp", "SD_主人公_肌3_短髪_金_目1_眉3": "img/sd_hero_s3_短髪_金_e1b3.webp", "SD_主人公_肌3_短髪_金_目2_眉1": "img/sd_hero_s3_短髪_金_e2b1.webp", "SD_主人公_肌3_短髪_金_目2_眉2": "img/sd_hero_s3_短髪_金_e2b2.webp", "SD_主人公_肌3_短髪_金_目2_眉3": "img/sd_hero_s3_短髪_金_e2b3.webp", "SD_主人公_肌3_短髪_黒_目1_眉1": "img/sd_hero_s3_短髪_黒_e1b1.webp", "SD_主人公_肌3_短髪_黒_目1_眉2": "img/sd_hero_s3_短髪_黒_e1b2.webp", "SD_主人公_肌3_短髪_黒_目1_眉3": "img/sd_hero_s3_短髪_黒_e1b3.webp", "SD_主人公_肌3_短髪_黒_目2_眉1": "img/sd_hero_s3_短髪_黒_e2b1.webp", "SD_主人公_肌3_短髪_黒_目2_眉2": "img/sd_hero_s3_短髪_黒_e2b2.webp", "SD_主人公_肌3_短髪_黒_目2_眉3": "img/sd_hero_s3_短髪_黒_e2b3.webp", "UI_髪型_ボブ": "img/look_hair_ボブ.webp", "UI_髪型_ポニーテール": "img/look_hair_ポニーテール.webp", "UI_髪型_ツインテール": "img/look_hair_ツインテール.webp", "UI_髪型_三つ編み": "img/look_hair_三つ編み.webp", 
+
+
+
+
+
+
+
+
 "家具_B1": "img/furn_B1.webp",
 "家具_B2": "img/furn_B2.webp",
 "家具_B3": "img/furn_B3.webp",
@@ -10231,12 +10242,14 @@ function askName(cb){modal(`<h3>名前を入力してください</h3><p class="
 const LOOK_SKINS=[{k:1,c:'#e6a072'},{k:2,c:'#f7c9a6'},{k:3,c:'#f9dcc6'}];
 const LOOK_COLORS=[{k:'濃茶',c:'#7d4130'},{k:'黒',c:'#3a3a3a'},{k:'金',c:'#c8ab99'}];
 const LOOK_HAIRS=[{k:'短髪',n:'ショート'},{k:'ボブ',n:'ボブ'},{k:'ポニーテール',n:'ポニーテール'},{k:'ツインテール',n:'ツインテール'},{k:'三つ編み',n:'三つ編み'}]; // 後ろ髪（選択画面では頭部のシルエット UI_髪型_〇〇 で表示）
-function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,
+const LOOK_EYES=[{k:1,n:'目1'},{k:2,n:'目2'}],LOOK_BROWS=[{k:1,n:'眉1'},{k:2,n:'眉2'},{k:3,n:'眉3'}]; // 選択画面ではアイコン UI_目_〇・UI_眉_〇 で表示
+function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,eye:LOOK_EYES.some(o=>o.k===l.eye)?l.eye:1,brow:LOOK_BROWS.some(o=>o.k===l.brow)?l.brow:1,
  color:LOOK_COLORS.some(o=>o.k===l.color)?l.color:'濃茶',hair:LOOK_HAIRS.some(o=>o.k===l.hair)?l.hair:(LOOK_HAIRS[0]||{}).k||null}}
-/* 主人公のSDの絵の名前。肌_後ろ髪_色 → 肌_色 → 肌だけ、の順にあるものを使う */
-function heroKey(lk){lk=Object.assign(lookOf(),lk||{});const b='SD_主人公_肌'+lk.skin;
- for(const k of [lk.hair&&lk.color?b+'_'+lk.hair+'_'+lk.color:null,lk.color?b+'_'+lk.color:null,b])if(k&&IMG[k])return k;return b}
-function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color:cur.color,hair:cur.hair};
+/* 主人公のSDの絵の名前。肌_後ろ髪_色_目_眉 → 目1・眉1 → その肌のどれか、の順にあるものを使う */
+function heroKey(lk){lk=Object.assign(lookOf(),lk||{});const b='SD_主人公_肌'+lk.skin+'_'+lk.hair+'_'+lk.color;
+ for(const k of [b+'_目'+lk.eye+'_眉'+lk.brow,b+'_目1_眉1'])if(IMG[k])return k;
+ return Object.keys(IMG).find(k=>k.startsWith('SD_主人公_肌'+lk.skin+'_'))||b}
+function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color:cur.color,hair:cur.hair,eye:cur.eye,brow:cur.brow};
  const sw=(grp,L)=>`<div class="look-sw" data-g="${grp}">${L.map(x=>`<button class="look-dot${sel[grp]===x.k?' on':''}" data-v="${x.k}" style="--c:${x.c}" aria-label="${grp==='skin'?'肌':'髪'}の色${L.indexOf(x)+1}"></button>`).join('')}</div>`;
  const lb=t=>`<div class="look-lb"><i>✦</i>${t}</div>`;
  /* 開いた本の上に、左ページ＝職員証の写真、右ページ＝選ぶところ */
@@ -10245,11 +10258,12 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
    <label class="lkb-cap" title="タップして名前を変える"><input id="lknm" maxlength="8" value="${esc(S.name||'')}" placeholder="名前" aria-label="名前（8文字まで）"><i class="lkb-pen" aria-hidden="true">✎</i></label><i class="lkb-rose sm"></i><p class="lkb-mark">ERRATA</p></div></div>
   <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
    <p class="lkb-d">あなたの姿を選んでください。名前は写真の下で直せます。<br>あとからマイルームの「キャラ」でいつでも変えられます。</p>
-   ${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('髪の色')}${sw('color',LOOK_COLORS)}
+   ${lb('肌と髪の色')}<div class="look-fc">${sw('skin',LOOK_SKINS)}<i class="look-sep"></i>${sw('color',LOOK_COLORS)}</div>
    ${LOOK_HAIRS.length?`${lb('髪型')}<div class="look-sw tx" data-g="hair">${LOOK_HAIRS.map(x=>IMG['UI_髪型_'+x.k]?`<button class="look-hd${sel.hair===x.k?' on':''}" data-v="${x.k}" title="${esc(x.n)}" aria-label="${esc(x.n)}"><img src="${IMG['UI_髪型_'+x.k]}" alt="" draggable="false"></button>`:`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}
+   ${lb('目と眉')}<div class="look-fc">${[['eye',LOOK_EYES,'目'],['brow',LOOK_BROWS,'眉']].map(([g,L,p])=>`<div class="look-sw tx" data-g="${g}">${L.map(x=>`<button class="look-hd fc${sel[g]===x.k?' on':''}" data-v="${x.k}" aria-label="${esc(x.n)}"><img src="${IMG['UI_'+p+'_'+x.k]||''}" alt="" draggable="false"></button>`).join('')}</div>`).join('<i class="look-sep"></i>')}</div>
    <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button></div></div></div>`,o.onCancel);
  const m=$('#modal');if(m){m.classList.add('lookbook');m.addEventListener('click',e=>{if(e.target===m&&o.cancel)closeModal()})}
- document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=g==='skin'?+b.dataset.v:b.dataset.v;
+ document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=(g==='skin'||g==='eye'||g==='brow')?+b.dataset.v:b.dataset.v;
   b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#lookpv').src=IMG[heroKey(sel)]||''});
  $('#lookok').onclick=()=>{const nm=($('#lknm')||{}).value;const v=(nm||'').trim();if(nm!=null&&!v){toast('名前を入れてください');$('#lknm').focus();return}
   if(v)S.name=v;S.look=Object.assign({},S.look||{},sel);save();closeModal(true);cb&&cb()}}
