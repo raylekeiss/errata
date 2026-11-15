@@ -10267,7 +10267,7 @@ function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin
 /* 主人公のSD：パーツ（IMG の HERO_〇〇。tools/compose_hero.py で書き出す）をその場で重ねて1枚の絵にする。
    重ねる順：後ろ髪 → 素体（服）→ mid（三つ編みなど）→ 頭 → 目 → side → 前髪 → 眉（乗算）
    できた絵は IMG['SD_主人公_肌_髪型_色_目_眉'] に入れる。いまの外見の絵は端末に覚えておき、次に開いたときすぐ出す */
-const HERO_MEMO='errata_hero_v2';let HERO_LAST=null;const HERO_JOBS={};const HERO_IMGS={};
+const HERO_MEMO='errata_hero_v3';let HERO_LAST=null;const HERO_JOBS={};const HERO_IMGS={};
 function heroSig(lk){return lk.skin+'_'+lk.wear+'_'+lk.hair+'_前'+lk.bang+'_'+lk.color+'_目'+lk.eye+'_眉'+lk.brow}
 function heroKey(lk){lk=Object.assign(lookOf(),lk||{});const k='SD_主人公_'+heroSig(lk);
  if(IMG[k])return k;heroBuild(lk);return HERO_LAST&&IMG[HERO_LAST]?HERO_LAST:k}
