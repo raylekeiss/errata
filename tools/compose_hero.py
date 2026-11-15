@@ -2,23 +2,24 @@
 tools/hero_parts/ に置いたパーツ（すべて同じ2048px四方のキャンバス・透明背景）を、
 全パーツが収まる範囲で切り出して縮め、img/hero/{パーツ名}.webp に書き出す。
 
-  body1.png〜body3.png      … 首から下の素体（1褐色・2薄橙・3クリーム）
+  body1.png〜body3.png      … 首から下の素体・スカート（1褐色・2薄橙・3クリーム）
+  body1_ズボン.png〜        … 首から下の素体・ズボン（肌の番号は同じ）
   head1.png〜head3.png      … 頭（顔の輪郭・耳・口。肌の番号は素体と同じ）
   eyes_{番号}.png           … 目（選べる）
   brows_{番号}.png          … 眉（選べる。前髪より手前に「乗算」で重ねる）
-  front_{色}.png            … 前髪（必ず重ねる）
+  front_{番号}_{色}.png     … 前髪（選べる）
   back_{長さ}_{色}.png      … 後ろ髪（いちばん奥）
   mid_{長さ}_{色}.png       … 体の手前・頭の後ろに来る髪（任意。三つ編みなど）
   side_{長さ}_{色}.png      … 頭の手前・前髪の奥に来る髪（任意）
   back・mid・side のどれか1つだけの髪型でもよい
 
-重ねる順（index.html の heroBuild）：後ろ髪 → 素体 → mid → 頭 → 目 → side → 前髪 → 眉（乗算）
+重ねる順（index.html の heroBuild）：後ろ髪 → 素体（服） → mid → 頭 → 目 → side → 前髪 → 眉（乗算）
 
 使い方：python3 tools/compose_hero.py
   書き出したあと、表示された IMG の行（"HERO_パーツ名"）を index.html の IMG に入れる。
   パーツを足しただけなら、足したものの行だけ追加すればよい。
-  選択画面のアイコン（img/look_hair_長さ.webp・img/look_eyes_番号.webp・img/look_brows_番号.webp）も書き出す。
-目・眉・髪型を足したら、index.html の LOOK_EYES・LOOK_BROWS・LOOK_HAIRS にも1行足す。
+  選択画面のアイコン（髪型 img/look_hair_長さ.webp・前髪 img/look_bang_番号.webp（どちらも頭部のシルエット）、目 img/look_eyes_番号.webp、眉 img/look_brows_番号.webp、服 img/look_wear_服.webp）も書き出す。
+目・眉・髪型・前髪・服を足したら、index.html の LOOK_EYES・LOOK_BROWS・LOOK_HAIRS・LOOK_BANGS・LOOK_WEARS にも1行足す。
 """
 import os, re
 from PIL import Image, ImageChops
@@ -60,7 +61,7 @@ brows=sorted({int(m.group(1)) for f in files if (m:=re.match(r'brows_(\d+)\.png$
 # 髪型：頭部のシルエット（髪＝濃い色、顔＝明るい色）。黒髪のパーツを型に使う
 for ln in lengths:
   c='黒'; im=Image.new('RGBA',(2048,2048),(0,0,0,0))
-  for layer,col in ((f'back_{ln}_{c}.png',INK),(f'mid_{ln}_{c}.png',INK),('head2.png',FACE),(f'side_{ln}_{c}.png',INK),(f'front_{c}.png',INK)):
+  for layer,col in ((f'back_{ln}_{c}.png',INK),(f'mid_{ln}_{c}.png',INK),('head2.png',FACE),(f'side_{ln}_{c}.png',INK),(f'front_1_{c}.png',INK)):
     l=load(layer)
     if l: im.alpha_composite(fill(l,col))
   save_icon(im,(180,0,1868,1720),f'look_hair_{ln}.webp')
@@ -72,3 +73,12 @@ for e in eyes:
 for b in brows:
   im=load('head2.png'); im.alpha_composite(load(f'eyes_{eyes[0]}.png')); im=multiply(im,load(f'brows_{b}.png'))
   save_icon(im,FACEBOX,f'look_brows_{b}.webp',96)
+# 前髪：髪のない頭に前髪だけを重ねたシルエット
+bangs=sorted({int(m.group(1)) for f in files if (m:=re.match(r'front_(\d+)_.+\.png$',f))})
+for n in bangs:
+  im=Image.new('RGBA',(2048,2048),(0,0,0,0)); im.alpha_composite(fill(load('head2.png'),FACE)); im.alpha_composite(fill(load(f'front_{n}_黒.png'),INK))
+  save_icon(im,(250,120,1620,1260),f'look_bang_{n}.webp')
+# 服：素体（肌2）の首から下
+wears=[('スカート','body2.png')]+[(m.group(1),f) for f in files if (m:=re.match(r'body2_(.+)\.png$',f))]
+for k,f in wears:
+  save_icon(load(f),(600,1080,1460,1960),f'look_wear_{k}.webp',160)
