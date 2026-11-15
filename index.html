@@ -175,6 +175,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .look-dot.on{outline:3px solid var(--gold);outline-offset:3px}
 .look-tx{padding:8px 14px;background:#fff;border:1px solid var(--line);border-radius:3px;cursor:pointer}
 .look-tx.on{border:2px solid var(--gold);background:#fffaf0}
+.look-sw.tx:has(.look-hd){flex-wrap:nowrap;gap:6px}
+.look-hd{flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1;height:auto;padding:3px;background:#fffaf0;border:1px solid var(--line);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.look-hd img{max-width:100%;max-height:100%;display:block;pointer-events:none}
+.look-hd.on{outline:3px solid var(--gold);outline-offset:2px;background:#fff}
 @media (max-width:420px){.look-wrap{grid-template-columns:1fr}.look-pv{max-width:170px;margin:0 auto}}
 @media (min-width:560px){.pv-opts{grid-template-columns:1fr 1fr}}
 .pv-opt{display:grid;gap:6px;align-content:start;text-align:left;padding:16px 18px;background:#fff;color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:3px;min-height:56px;cursor:pointer}
@@ -8772,7 +8776,7 @@ const IMG={
 "SD_主人公_肌3_短髪_濃茶": "img/sd_hero_s3_短髪_濃茶.webp",
 "SD_主人公_肌3_短髪_金": "img/sd_hero_s3_短髪_金.webp",
 "SD_主人公_肌3_短髪_黒": "img/sd_hero_s3_短髪_黒.webp",
-"SD_主人公_肌1_ボブ_濃茶": "img/sd_hero_s1_ボブ_濃茶.webp",
+"SD_主人公_肌1_ツインテール_濃茶": "img/sd_hero_s1_ツインテール_濃茶.webp", "SD_主人公_肌1_ツインテール_金": "img/sd_hero_s1_ツインテール_金.webp", "SD_主人公_肌1_ツインテール_黒": "img/sd_hero_s1_ツインテール_黒.webp", "SD_主人公_肌1_三つ編み_濃茶": "img/sd_hero_s1_三つ編み_濃茶.webp", "SD_主人公_肌1_三つ編み_金": "img/sd_hero_s1_三つ編み_金.webp", "SD_主人公_肌1_三つ編み_黒": "img/sd_hero_s1_三つ編み_黒.webp", "SD_主人公_肌2_ツインテール_濃茶": "img/sd_hero_s2_ツインテール_濃茶.webp", "SD_主人公_肌2_ツインテール_金": "img/sd_hero_s2_ツインテール_金.webp", "SD_主人公_肌2_ツインテール_黒": "img/sd_hero_s2_ツインテール_黒.webp", "SD_主人公_肌2_三つ編み_濃茶": "img/sd_hero_s2_三つ編み_濃茶.webp", "SD_主人公_肌2_三つ編み_金": "img/sd_hero_s2_三つ編み_金.webp", "SD_主人公_肌2_三つ編み_黒": "img/sd_hero_s2_三つ編み_黒.webp", "SD_主人公_肌3_ツインテール_濃茶": "img/sd_hero_s3_ツインテール_濃茶.webp", "SD_主人公_肌3_ツインテール_金": "img/sd_hero_s3_ツインテール_金.webp", "SD_主人公_肌3_ツインテール_黒": "img/sd_hero_s3_ツインテール_黒.webp", "SD_主人公_肌3_三つ編み_濃茶": "img/sd_hero_s3_三つ編み_濃茶.webp", "SD_主人公_肌3_三つ編み_金": "img/sd_hero_s3_三つ編み_金.webp", "SD_主人公_肌3_三つ編み_黒": "img/sd_hero_s3_三つ編み_黒.webp", "UI_髪型_短髪": "img/look_hair_短髪.webp", "UI_髪型_ボブ": "img/look_hair_ボブ.webp", "UI_髪型_ポニーテール": "img/look_hair_ポニーテール.webp", "UI_髪型_ツインテール": "img/look_hair_ツインテール.webp", "UI_髪型_三つ編み": "img/look_hair_三つ編み.webp", "SD_主人公_肌1_ボブ_濃茶": "img/sd_hero_s1_ボブ_濃茶.webp",
 "SD_主人公_肌1_ボブ_金": "img/sd_hero_s1_ボブ_金.webp",
 "SD_主人公_肌1_ボブ_黒": "img/sd_hero_s1_ボブ_黒.webp",
 "SD_主人公_肌2_ボブ_濃茶": "img/sd_hero_s2_ボブ_濃茶.webp",
@@ -10226,7 +10230,7 @@ function askName(cb){modal(`<h3>名前を入力してください</h3><p class="
 /* 主人公の外見。肌（skin）・髪色（color）・後ろ髪（hair）を選ぶ。前髪は必ずある */
 const LOOK_SKINS=[{k:1,c:'#e6a072'},{k:2,c:'#f7c9a6'},{k:3,c:'#f9dcc6'}];
 const LOOK_COLORS=[{k:'濃茶',c:'#7d4130'},{k:'黒',c:'#3a3a3a'},{k:'金',c:'#c8ab99'}];
-const LOOK_HAIRS=[{k:'短髪',n:'ショート'},{k:'ボブ',n:'ボブ'},{k:'ポニーテール',n:'ポニーテール'}]; // 後ろ髪
+const LOOK_HAIRS=[{k:'短髪',n:'ショート'},{k:'ボブ',n:'ボブ'},{k:'ポニーテール',n:'ポニーテール'},{k:'ツインテール',n:'ツインテール'},{k:'三つ編み',n:'三つ編み'}]; // 後ろ髪（選択画面では頭部のシルエット UI_髪型_〇〇 で表示）
 function lookOf(){const l=S.look||{};return{skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,
  color:LOOK_COLORS.some(o=>o.k===l.color)?l.color:'濃茶',hair:LOOK_HAIRS.some(o=>o.k===l.hair)?l.hair:(LOOK_HAIRS[0]||{}).k||null}}
 /* 主人公のSDの絵の名前。肌_後ろ髪_色 → 肌_色 → 肌だけ、の順にあるものを使う */
@@ -10242,7 +10246,7 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
   <div class="lkb-r"><h3 class="lkb-t">${esc(o.title||'職員証の写真')}</h3><div class="lkb-orn"><i>✦</i></div>
    <p class="lkb-d">あなたの姿を選んでください。名前は写真の下で直せます。<br>あとからマイルームの「キャラ」でいつでも変えられます。</p>
    ${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('髪の色')}${sw('color',LOOK_COLORS)}
-   ${LOOK_HAIRS.length?`${lb('後ろ髪')}<div class="look-sw tx" data-g="hair">${LOOK_HAIRS.map(x=>`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}
+   ${LOOK_HAIRS.length?`${lb('髪型')}<div class="look-sw tx" data-g="hair">${LOOK_HAIRS.map(x=>IMG['UI_髪型_'+x.k]?`<button class="look-hd${sel.hair===x.k?' on':''}" data-v="${x.k}" title="${esc(x.n)}" aria-label="${esc(x.n)}"><img src="${IMG['UI_髪型_'+x.k]}" alt="" draggable="false"></button>`:`<button class="look-tx${sel.hair===x.k?' on':''}" data-v="${x.k}">${esc(x.n)}</button>`).join('')}</div>`:''}
    <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button></div></div></div>`,o.onCancel);
  const m=$('#modal');if(m){m.classList.add('lookbook');m.addEventListener('click',e=>{if(e.target===m&&o.cancel)closeModal()})}
  document.querySelectorAll('.look-sw button').forEach(b=>b.onclick=()=>{const g=b.parentNode.dataset.g;sel[g]=g==='skin'?+b.dataset.v:b.dataset.v;

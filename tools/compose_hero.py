@@ -5,12 +5,14 @@ img/sd_hero_s{肌}_{後ろ髪}_{色}.webp を作る。
   skin1.png〜skin3.png      … 素体（1褐色・2薄橙・3クリーム）
   front_{色}.png            … 前髪（必ず重ねる）
   back_{長さ}_{色}.png      … 後ろ髪（素体の下に重ねる。なければ前髪だけ）
-  side_{長さ}_{色}.png      … 後ろ髪のうち、素体の上に来る部分（任意）
+  side_{長さ}_{色}.png      … 後ろ髪のうち、素体の上に来る部分（任意。三つ編みのように side だけの髪型もある）
 
-使い方：python3 tools/compose_hero.py
+使い方：python3 tools/compose_hero.py            … すべて書き出す
+        python3 tools/compose_hero.py 三つ編み   … 指定した後ろ髪だけ書き出す
+あわせて、選択画面で使う髪型のアイコン img/look_hair_{後ろ髪}.webp も書き出す
 書き出したら、表示されたIMGの行を index.html の IMG に貼る（すでにあれば不要）。
 """
-import os, re
+import os, re, sys
 from PIL import Image
 HERE=os.path.dirname(os.path.abspath(__file__)); P=os.path.join(HERE,'hero_parts'); OUT=os.path.join(HERE,'..','img')
 H=420  # 書き出す高さ（px）
@@ -18,17 +20,19 @@ def load(n):
   f=os.path.join(P,n); return Image.open(f).convert('RGBA') if os.path.exists(f) else None
 files=os.listdir(P)
 colors=sorted({m.group(1) for f in files if (m:=re.match(r'front_(.+)\.png$',f))})
-lengths=sorted({m.group(1) for f in files if (m:=re.match(r'back_(.+?)_.+\.png$',f))})
+lengths=sorted({m.group(1) for f in files if (m:=re.match(r'(?:back|side)_(.+?)_.+\.png$',f))})
+only=set(sys.argv[1:])
 rows=[]
 for s in (1,2,3):
   for ln in [None]+lengths:
     for c in colors:
+      if only and ln not in only: continue
       back=load(f'back_{ln}_{c}.png') if ln else None
-      if ln and back is None: continue
+      side=load(f'side_{ln}_{c}.png') if ln else None
+      if ln and back is None and side is None: continue
       im=Image.new('RGBA',(2048,2048),(0,0,0,0))
       if back: im.alpha_composite(back)
       im.alpha_composite(load(f'skin{s}.png'))
-      side=load(f'side_{ln}_{c}.png') if ln else None
       if side: im.alpha_composite(side)
       im.alpha_composite(load(f'front_{c}.png'))
       im=im.crop(im.getchannel('A').getbbox())
@@ -38,3 +42,20 @@ for s in (1,2,3):
       key=f'SD_主人公_肌{s}'+(f'_{ln}' if ln else '')+f'_{c}'
       rows.append(f'"{key}": "img/{name}",')
 for r in rows: print(r)
+# 髪型のアイコン（頭部のシルエット）。髪＝濃い色、顔＝明るい色の2色。黒髪のパーツを型に使う
+NECK=1180  # 素体のうち、この高さより上を頭とみなす
+INK=(58,48,44,255); FACE=(244,232,214,255)
+def fill(layer,col):
+  m=layer.getchannel('A').point(lambda v:255 if v>96 else 0); out=Image.new('RGBA',layer.size,(0,0,0,0)); out.paste(Image.new('RGBA',layer.size,col),(0,0),m); return out
+head=load('skin2.png'); head=head.crop((0,0,2048,NECK)); h2=Image.new('RGBA',(2048,2048),(0,0,0,0)); h2.paste(head,(0,0))
+for ln in [None]+lengths:
+  if only and ln not in only: continue
+  c='黒'; back=load(f'back_{ln}_{c}.png') if ln else None; side=load(f'side_{ln}_{c}.png') if ln else None
+  im=Image.new('RGBA',(2048,2048),(0,0,0,0))
+  if back: im.alpha_composite(fill(back,INK))
+  im.alpha_composite(fill(h2,FACE))
+  if side: im.alpha_composite(fill(side,INK))
+  im.alpha_composite(fill(load(f'front_{c}.png'),INK))
+  im=im.crop((180,0,1868,1720)); im=im.resize((round(im.width*128/im.height),128),Image.LANCZOS)
+  name=f'look_hair_{ln or "なし"}.webp'; im.save(os.path.join(OUT,name),'WEBP',quality=90,method=6)
+  print('icon',name)
