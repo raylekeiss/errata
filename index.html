@@ -10620,12 +10620,12 @@ const LOOK_BANGS=[{k:1,n:'前髪1'},{k:2,n:'ぱっつん'},{k:3,n:'センター�
 /* 小物（服屋で栞と交換）。絵は tools/hero_parts/acc_〇〇.png（2048pxのキャンバス、位置は合わせた状態で）。
    e＝どの時代の栞か（0古代・1中世・2近世）、p＝枚数、top＝前髪より上に重ねる、z:'neck'＝首飾りなど体の上・頭の下（指定なしは目の上・前髪の下） */
 const LOOK_ACCS=[
- {k:'月桂冠',n:'黄金の月桂冠',e:0,p:60,top:true,x:'古代ローマで勝者や皇帝が頭に戴いた冠。'},
- {k:'ウセク',n:'ウセク（胸飾り）',e:0,p:40,z:'neck',x:'古代エジプトの幅広い首飾り。'},
- {k:'ネメス',n:'ファラオの頭巾',e:0,p:80,top:true,x:'ツタンカーメンの黄金のマスクでおなじみ、王の縞模様の頭巾。'},
- {k:'テオドラの冠',n:'テオドラの冠',e:1,p:60,top:true,x:'ビザンツ皇帝ユスティニアヌスの妃テオドラの、真珠と宝石の冠。'},
- {k:'ナポレオン帽',n:'ナポレオン帽',e:2,p:60,top:true,x:'二角帽に三色の帽章。'},
- {k:'サングラス',n:'丸サングラス',e:2,p:30,x:'丸いレンズの色眼鏡。'}];
+ {k:'月桂冠',n:'黄金の月桂冠',e:0,p:75,top:true,x:'古代ローマで勝者や皇帝が頭に戴いた冠。'},
+ {k:'ウセク',n:'ウセク（胸飾り）',e:0,p:75,z:'neck',x:'古代エジプトの幅広い首飾り。'},
+ {k:'ネメス',n:'ファラオの頭巾',e:0,p:75,top:true,x:'ツタンカーメンの黄金のマスクでおなじみ、王の縞模様の頭巾。'},
+ {k:'テオドラの冠',n:'テオドラの冠',e:1,p:75,top:true,x:'ビザンツ皇帝ユスティニアヌスの妃テオドラの、真珠と宝石の冠。'},
+ {k:'ナポレオン帽',n:'ナポレオン帽',e:2,p:75,top:true,x:'二角帽に三色の帽章。'},
+ {k:'サングラス',n:'丸サングラス',e:2,p:75,x:'丸いレンズの色眼鏡。'}];
 const LOOK_COST=2; /* 姿を変えるたびに、各時代の栞をこの枚数ずつ使う（はじめて決めるとき・小物の付け外しだけのときは使わない） */
 function accOwned(k){return (S.accs||[]).includes(k)}
 function lookOf(){const l=S.look||{};return{acc:(Array.isArray(l.acc)?l.acc:[]).filter(k=>LOOK_ACCS.some(a=>a.k===k)&&accOwned(k)).sort(),skin:LOOK_SKINS.some(o=>o.k===l.skin)?l.skin:2,bang:LOOK_BANGS.some(o=>o.k===l.bang)?l.bang:1,wear:LOOK_WEARS.some(o=>o.k===l.wear)?l.wear:'スカート',eye:LOOK_EYES.some(o=>o.k===l.eye)?l.eye:1,brow:LOOK_BROWS.some(o=>o.k===l.brow)?l.brow:1,
