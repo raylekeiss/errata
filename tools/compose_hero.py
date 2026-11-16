@@ -88,5 +88,6 @@ for f in files:
   m=re.match(r'acc_(.+)\.png$',f)
   if not m: continue
   im=load('head2.png'); im.alpha_composite(load(f'eyes_{eyes[0]}.png')); im.alpha_composite(load(f))
-  save_icon(im,FACEBOX,f'look_acc_{m.group(1)}.webp',96)
+  b=im.getchannel('A').point(lambda v:255 if v>40 else 0).getbbox()  # 頭全体と小物が入る範囲（帽子・冠は顔の外に出るため）
+  save_icon(im,b,f'look_acc_{m.group(1)}.webp',128)
   print(f'"UI_小物_{m.group(1)}": "img/look_acc_{m.group(1)}.webp"')
