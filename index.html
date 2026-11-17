@@ -771,7 +771,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 
 /* ===== 道具の表示と誤植イラスト（v14） ===== */
 .vn-item{position:absolute;z-index:2;left:50%;transform:translateX(-50%);bottom:calc(max(110px,200*var(--u)) + max(14px,30*var(--u)) + 30*var(--u));width:min(calc(520*var(--u)),80vw);pointer-events:none;animation:item-in .35s ease-out}
-.vn-item img{width:100%;height:auto;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6)) drop-shadow(0 0 24px rgba(255,220,150,.25))}
+.vn-item img{width:100%;height:auto;max-height:min(calc(360*var(--u)),45vh);object-fit:contain;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6)) drop-shadow(0 0 24px rgba(255,220,150,.25))}
 @keyframes item-in{from{opacity:0;transform:translate(-50%,12px) scale(.96)}to{opacity:1;transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.vn-item{animation:none}}
 .bt-enemy.img{aspect-ratio:724/543;width:calc(350*var(--u));top:calc(95*var(--u))}
@@ -8521,13 +8521,13 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
     {"t": "d", "x": "フィデリスは、頁の光を見つめたまま動かない。"},
     {"t": "l", "s": "フィデリス", "x": "……陛下。"},
     {"t": "d", "x": "何か言いかけて、やめる。"},
-    {"t": "d", "x": "しばらくして、外套の内側から日時計に似た小さな時計を取り出し、目を落とす。"},
+    {"t": "d", "x": "【道具：携帯日時計】しばらくして、外套の内側から日時計に似た小さな時計を取り出し、目を落とす。"},
     {"t": "l", "s": "フィデリス", "x": "……定時だ。失礼する。"},
-    {"t": "d", "x": "声をかける間もなく、フィデリスは背を向ける。喪の列のあいだを抜けていく。"},
+    {"t": "d", "x": "【道具：なし】声をかける間もなく、フィデリスは背を向ける。喪の列のあいだを抜けていく。"},
     {"t": "d", "x": "さっきの二人の廷臣が、すれ違いざまに、わずかに身を引いた。"},
     {"t": "d", "x": "その姿が、広間の奥へ消えていく。", "out": ["フィデリス"]},
-    {"t": "d", "x": "○○の手元には、テオドシウスの頁が残った。"},
-    {"t": "d", "x": "五人は、本の外へ戻る。【演出：閃光】"},
+    {"t": "d", "x": "【道具：テオドシウスの頁】○○の手元には、テオドシウスの頁が残った。"},
+    {"t": "d", "x": "【道具：なし】五人は、本の外へ戻る。【演出：閃光】"},
     {"t": "bg", "v": "背景_書庫_書架"},
     {"t": "d", "x": "見える範囲の光は消え、ローマの書架に静けさが戻る。"},
     {"t": "act", "a": "quiz", "v": ["Q01-002", "Q01-004", "Q01-010", "Q01-014", "Q01-015"]},
@@ -8628,7 +8628,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
     {"t": "bg", "v": "背景_書庫_書架"},
     {"t": "d", "x": "西ヨーロッパの書架。"},
     {"t": "d", "x": "整然と並ぶ本のあいだに、一冊だけ、見たことのない装丁の本が差しこまれている。"},
-    {"t": "d", "x": "深い紅の革に、金の文字。背表紙には「ROMA AETERNA」とある。"},
+    {"t": "d", "x": "【道具：ROMA AETERNA】深い紅の革に、金の文字。背表紙には「ROMA AETERNA」とある。"},
     {"t": "l", "s": "主人公", "x": "ローマ……アエテルナ？"},
     {"t": "l", "s": "コンラッド", "x": "『永遠のローマ』。ラテン語だ。"},
     {"t": "l", "s": "シミ", "x": "……異本だ。"},
@@ -8639,7 +8639,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
     {"t": "l", "s": "シミ", "x": "矛盾のもとになった歴史が、丸ごと切り捨てられる。ローマ帝国そのものが、歴史からも、この世界からも消えてしまうかもしれない。"},
     {"t": "l", "s": "主人公", "x": "ローマを残したくて、書き換えてるのに……"},
     {"t": "l", "s": "シミ", "x": "急ごう。まず、この本がどんな歴史になっているのか、確かめる。"},
-    {"t": "d", "x": "紙魚が本を開く。光があふれ、五人を包む。【演出：閃光】"},
+    {"t": "d", "x": "【道具：なし】紙魚が本を開く。光があふれ、五人を包む。【演出：閃光】"},
     {"t": "bg", "v": "背景_異本ローマ"},
     {"t": "d", "x": "異本の中。見覚えのある広場だった。"},
     {"t": "d", "x": "けれど、建物はどれも新しく金色に輝き、石畳には、轍の跡ひとつない。"},
@@ -9532,6 +9532,15 @@ const IMG={
 "背景_異本ローマ": "img/92bc70e011af.webp",
 "背景_ヒッポ_城壁": "img/4bf06b3a857b.webp",
 "背景_ヒッポ": "img/94546ebca5b5.webp",
+"道具_ROMA AETERNA": "img/450602d4d8c7.webp",
+"背景_サンピエトロ": "img/4ba31a48081e.webp",
+"背景_ミラノ_寝室": "img/92ab286d0ea2.webp",
+"背景_ラヴェンナ": "img/f2d39bafa66e.webp",
+"背景_異本ローマ_城門": "img/025d6b71f43a.webp",
+"背景_軍営": "img/44c275eca5ee.webp",
+"道具_テオドシウスの頁": "img/1594eed6b8ab.webp",
+"道具_携帯日時計": "img/04a78ed53ce7.webp",
+"道具_白い本": "img/17f177844a01.webp",
 "背景_白い空間": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201600%20900%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%20cx%3D%2250%25%22%20cy%3D%2246%25%22%20r%3D%2275%25%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffffff%22/%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23f6f4ef%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dcd8cf%22/%3E%3C/radialGradient%3E%3ClinearGradient%20id%3D%22f%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%22.62%22%20stop-color%3D%22%23fff%22%20stop-opacity%3D%220%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23cfc9bd%22%20stop-opacity%3D%22.35%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url%28%23g%29%22/%3E%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url%28%23f%29%22/%3E%3C/svg%3E",
 "荀子": "img/d81d9197002f.webp",
 "荘子": "img/4f82e77aeabb.webp",
