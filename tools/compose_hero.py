@@ -91,3 +91,12 @@ for f in files:
   b=im.getchannel('A').point(lambda v:255 if v>40 else 0).getbbox()  # 頭全体と小物が入る範囲（帽子・冠は顔の外に出るため）
   save_icon(im,b,f'look_acc_{m.group(1)}.webp',128)
   print(f'"UI_小物_{m.group(1)}": "img/look_acc_{m.group(1)}.webp"')
+# 持ち物（hold_〇〇.png）：素体（2番・スカート）の手に重ね、持ち物のまわりを切り出す。
+# index.html の LOOK_HOLDS に1行足し、IMG に "UI_持ち物_〇〇": "img/look_hold_〇〇.webp" を入れる。
+for f in files:
+  m=re.match(r'hold_(.+)\.png$',f)
+  if not m: continue
+  it=load(f); im=load('body2.png'); im.alpha_composite(it)
+  x0,y0,x1,y1=it.getchannel('A').point(lambda v:255 if v>40 else 0).getbbox(); p=max(x1-x0,y1-y0)//2
+  save_icon(im,(x0-p,y0-p,x1+p,y1+p),f'look_hold_{m.group(1)}.webp',128)
+  print(f'"UI_持ち物_{m.group(1)}": "img/look_hold_{m.group(1)}.webp"')
