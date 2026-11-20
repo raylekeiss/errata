@@ -137,7 +137,7 @@ async function boot(){
 const secOf=q=>q.id.replace(/-\d+$/,'');
 function jkGroup(u){return u[0]==='M'?'M':u==='P1'?'1':u==='P2'?'6':u.split('-')[0]}
 function jkShown(q){return q.ok===1||(!!JCFG.pending&&!q.ok)}
-function jkCfg(){if(!S.jk||typeof S.jk!=='object')S.jk={};if(!Array.isArray(S.jk.my))S.jk.my=[];if(S.jk.lv!=='all')S.jk.lv='std';return S.jk}
+function jkCfg(){if(!S.jk||typeof S.jk!=='object')S.jk={};if(!Array.isArray(S.jk.my))S.jk.my=[];if(S.jk.lv!=='all')S.jk.lv='std';S.jk.mix=false;return S.jk}  /* 「試験範囲で選ぶ」の問題は混ぜない */
 function qmyCfg(){if(!S.qmy||typeof S.qmy!=='object')S.qmy={};if(!Array.isArray(S.qmy.secs))S.qmy.secs=[];return S.qmy}
 function jkName(key){const g=String(key).slice(2);return g==='my'?'マイ範囲':((JCH.find(c=>c[0]===g)||[])[1]||g)}
 function jkShort(key){const g=String(key).slice(2);return g==='my'?'マイ範囲':g==='M'?'序':'第'+g+'章'}
@@ -214,7 +214,7 @@ function Records(){const jAll=JK.filter(jkShown),zAll=zhPool('Z:all');
  const r=(n,L)=>{const d=L.filter(q=>qst(q)===1).length,ng=L.filter(q=>qst(q)===2).length;return `<tr><td>${n}</td><td>正解 ${d}／${L.length}${ng?`<small>要復習 ${ng}</small>`:''}</td></tr>`};
  const kb=KQ.filter(p=>kjRec(p.id)[0]>0).length,kw=KQ.filter(p=>kjRec(p.id)[2]>=0).length;
  modal(`<h3>記録</h3><p class="sub" style="margin-top:-6px;line-height:1.7">記録はこの端末のこのブラウザだけに残ります。</p>
-  <table class="ens-st">${r('受験対策（標準＋発展）',jAll)}${r('図版・地図',zAll)}${r('試験範囲で選ぶ',Q)}
+  <table class="ens-st">${r('受験対策（標準＋発展）',jAll)}${r('図版・地図',zAll)}
   <tr><td>記述対策　基本問題</td><td>クリア ${kb}／${KQ.length}</td></tr><tr><td>記述対策　実戦問題</td><td>自己採点 ${kw}／${KQ.length}</td></tr></table>
   <p class="sub" style="margin:0">1回に出す問題数</p>
   <div class="ens-n">${[10,20,30].map(n=>`<button class="btn light${S.n===n?' on':''}" data-n="${n}">${n}問</button>`).join('')}</div>
@@ -248,16 +248,15 @@ function jkMyEdit(){const c=jkCfg();const sel=new Set(c.my);
   ${us.map(u=>{const k=JK.filter(q=>q.u===u&&jkShown(q)).length;return `<label class="jk-u"><input type="checkbox" data-u="${u}"${sel.has(u)?' checked':''}><span>${esc(JUN[u])}</span><small>${k}問</small></label>`}).join('')}</details>`}).join('');
  modal(`<h3>マイ範囲</h3><p class="sub" style="margin-top:-6px;line-height:1.7">解きたい単元にチェックを入れてください。章の名前のチェックで、その章をまとめて選べます。</p>
   <div class="jk-list">${groups}</div>
-  <label class="jk-mix"><input type="checkbox" id="jkMix"${c.mix?' checked':''}>「試験範囲で選ぶ」の問題も混ぜる<small>（選んだ単元に近い章の問題）</small></label>
   <p class="sub" id="jkN"></p>
   <div class="row" style="flex-wrap:wrap"><button class="btn red" id="jkGo">この範囲で解く</button><button class="btn light" id="jkSave">保存して閉じる</button><button class="btn light" id="jkClr">選択をすべて外す</button></div>`);
- const box=$('#modal');const cnt=()=>{const us=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);const old=c.my,om=c.mix;c.my=us;c.mix=$('#jkMix').checked;const n=jkPool('J:my').length;c.my=old;c.mix=om;$('#jkN').textContent=us.length?`${us.length}単元・${n}問（${c.lv==='all'?'標準＋発展':'標準だけ'}）`:'まだ単元が選ばれていません'};
+ const box=$('#modal');const cnt=()=>{const us=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);const old=c.my;c.my=us;const n=jkPool('J:my').length;c.my=old;$('#jkN').textContent=us.length?`${us.length}単元・${n}問（${c.lv==='all'?'標準＋発展':'標準だけ'}）`:'まだ単元が選ばれていません'};
  box.querySelectorAll('[data-g]').forEach(b=>{b.onclick=e=>e.stopPropagation();b.onchange=()=>{box.querySelectorAll('[data-u]').forEach(i=>{if(jkGroup(i.dataset.u)===b.dataset.g)i.checked=b.checked});cnt()}});
  box.querySelectorAll('[data-u]').forEach(i=>i.onchange=()=>{const g=jkGroup(i.dataset.u);const all=[...box.querySelectorAll('[data-u]')].filter(x=>jkGroup(x.dataset.u)===g);const h=box.querySelector(`[data-g="${g}"]`);if(h)h.checked=all.every(x=>x.checked);cnt()});
- $('#jkMix').onchange=cnt;cnt();
- const keep=()=>{c.my=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);c.mix=$('#jkMix').checked;save()};
+ cnt();
+ const keep=()=>{c.my=[...box.querySelectorAll('[data-u]:checked')].map(i=>i.dataset.u);save()};
  $('#jkSave').onclick=()=>{keep();closeModal(true);QuizMenu()};
- $('#jkClr').onclick=()=>{box.querySelectorAll('input[type=checkbox]').forEach(i=>{if(i.id!=='jkMix')i.checked=false});cnt()};
+ $('#jkClr').onclick=()=>{box.querySelectorAll('input[type=checkbox]').forEach(i=>i.checked=false);cnt()};
  $('#jkGo').onclick=()=>{keep();if(!c.my.length){toast('単元を1つ以上選んでください');return}if(!jkPool('J:my').length){toast('この範囲には、まだ出せる問題がありません');return}closeModal(true);FX.pageTurn(()=>startQuiz('J:my'))}}
 
 /* ---------- 4択の出題（本体と同じ画面。栞の表示はなし） ---------- */
