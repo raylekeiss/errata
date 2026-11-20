@@ -190,9 +190,9 @@ function zhReveal(q,v){const vis=$('#zv');if(!vis)return;vis.classList.add('reve
 
 /* ---------- 棚（本体の問題演習と同じ画面） ---------- */
 let DRMODE='jk';
-function modeTabs(on){return `<div class="dr-mode"><button data-mode="vol" class="${on==='vol'?'on':''}">試験範囲で選ぶ</button><button data-mode="jk" class="${on==='jk'?'on':''}">受験対策</button><button data-mode="kj" class="${on==='kj'?'on':''}">記述対策</button><button data-mode="zh" class="${on==='zh'?'on':''}">図版・地図</button></div>`}
+function modeTabs(on){return `<div class="dr-mode"><button data-mode="jk" class="${on==='jk'?'on':''}">受験対策</button><button data-mode="kj" class="${on==='kj'?'on':''}">記述対策</button><button data-mode="zh" class="${on==='zh'?'on':''}">図版・地図</button></div>`}
 function bindMenu(){$('#ensRec').onclick=Records;document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=S.mode=b.dataset.mode;save();QuizMenu()})}
-function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk'&&DRMODE!=='zh')DRMODE='vol';const JKM=DRMODE==='jk',ZHM=DRMODE==='zh';const jc=jkCfg(),qc=qmyCfg();
+function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk'&&DRMODE!=='zh')DRMODE='jk';  /* 「試験範囲で選ぶ」はボタンを外してある */const JKM=DRMODE==='jk',ZHM=DRMODE==='zh';const jc=jkCfg(),qc=qmyCfg();
  const keys=ZHM?['Z:all',...JCH.map(c=>'Z:'+c[0]).filter(k=>zhPool(k).length)]:JKM?['J:my',...JCH.map(c=>'J:'+c[0]).filter(k=>JK.some(q=>jkGroup(q.u)===k.slice(2)&&jkShown(q)))]:['T:my',...Object.keys(CHT).map(Number)];
  show(`<div class="dr" id="drill"><div class="dr-bg"></div><div class="gc-shade"></div>
   <div class="gc-title">問題演習</div>
