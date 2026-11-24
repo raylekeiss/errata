@@ -43,8 +43,6 @@ html,body{height:100%;margin:0;background:#171a22}
    ===================================================================== */
 const BASE='../';
 const SAVE_KEY='errata_enshu_v1',KJ_DKEY='errata_enshu_kj_drafts';
-/* 図版・地図：写真がそろった問題だけを出す（本体の ZH_TEST を false にしたのと同じ） */
-const ZH_TEST=false;
 
 const QSEC={'ORI-Q01':'先史の人類','ORI-Q02':'メソポタミア','ORI-Q03':'エジプト','ORI-Q04':'東地中海の諸民族','ORI-Q05':'オリエントの統一と四王国','ORI-Q06':'エーゲ文明',
  'IND-Q01':'インダス文明とアーリヤ人','IND-Q02':'仏教とジャイナ教','IND-Q03':'マウリヤ朝・クシャーナ朝','IND-Q04':'グプタ朝・ヴァルダナ朝と南インド',
@@ -158,7 +156,7 @@ function chStat(key){const pool=poolOf(key);return {n:pool.length,done:pool.filt
 const ZH_KANA=['ア','イ','ウ','エ'];
 function zhHas(k){return !!(ZI[k]&&ZI[k].f)}
 function zhReady(q){return q.t==='img-name'?zhHas(q.img):q.t==='img-pick'?[q.a,...q.d].every(zhHas):true}
-function zhPool(key){const g=String(key).slice(2);return ZQS.filter(q=>(ZH_TEST||zhReady(q))&&(g==='all'||jkGroup(q.u)===g))}
+function zhPool(key){const g=String(key).slice(2);return ZQS.filter(q=>zhReady(q)&&(g==='all'||jkGroup(q.u)===g))}
 function zhKana(q){return q.t==='map-pick'||q.t==='img-pick'}
 function zhAns(q){if(!q.z)return q.a;if(q.t==='img-pick')return (ZI[q.a]||{}).l||q.a;return q.a}
 function zhSrc(k){return zhHas(k)?BASE+'img/zuhan/'+k+'.webp':''}
@@ -181,7 +179,7 @@ function zhVis(q,opts){let h='';
  else if(q.t==='map-name')h=zhMap(q.view,w=>{const [px,py]=ZMAP.pt[q.pt];return `<circle cx="${px}" cy="${py}" r="${w*.016}" fill="#b5302a" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke"/>`});
  else if(q.t==='map-route')h=zhMap(q.view,w=>(ZMAP.route[q.route]||[]).map((seg,si)=>`<polyline points="${seg.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5302a" stroke-width="3" stroke-dasharray="8 5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>${si?'':`<circle cx="${seg[0][0]}" cy="${seg[0][1]}" r="${w*.009}" fill="#b5302a"/>`}`).join(''));
  else if(q.t==='img-pick')h=`<div class="zh-g4">${opts.map((o,i)=>`<button data-i="${i}"><span class="k">${ZH_KANA[i]}</span>${zhPhoto(o,false)}<span class="cap">${esc((ZI[o]||{}).l||o)}</span></button>`).join('')}</div>`;
- else h=zhPhoto(q.img,ZH_TEST);
+ else h=zhPhoto(q.img,false);
  const v=q.t.startsWith('map')&&ZMAP.view[q.view];const st=v?` style="width:min(calc(900*var(--u)),94vw,${(56*v[2]/v[3]).toFixed(1)}vh);height:auto;aspect-ratio:${v[2]}/${v[3]}"`:'';
  return `<div class="zh-vis${v?' zm':''}" id="zv"${st}>${h}</div>`}
 function zhReveal(q,v){const vis=$('#zv');if(!vis)return;vis.classList.add('revealed');const opts=QZ.opts||[];

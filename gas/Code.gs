@@ -134,3 +134,114 @@ function getRanking() {
   const A = board('a', 'af', 'ac'), B = board('b', 'bf', 'bc');
   return { top: A.top, me: A.me, n: A.n, topE: B.top, meE: B.me, nE: B.n };
 }
+
+/* ===================================================================
+ * 先生用：取り組み状況シート
+ * スプレッドシートを開くと、メニューに「エラータ」→「取り組み状況を更新」が出る。
+ * 押すと「取り組み状況」シートを作り直す（生徒の操作では動かない）。
+ * 問題の数と章は、GitHub Pages のゲーム本体（index.html）から読み込むので、問題を足してもここは直さなくてよい。
+ * 1行＝生徒1人。章ごとに「回数」（その章を解いた問題演習の回数）と「正解率」（その章の問題のうち、正解済みの割合）。
+ * 正解率のセルにカーソルを合わせると、正解・間違えたまま・全問の数が出る（メモ）。
+ * 章ごとの回数は、この仕組みを入れた日（2026年11月25日）より前の分は数えていない。
+ * =================================================================== */
+const PROG_SHEET = '取り組み状況';
+const GAME_URL = 'https://raylekeiss.github.io/errata/index.html';
+
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('エラータ')
+    .addItem('取り組み状況を更新', 'updateProgress')
+    .addToUi();
+}
+
+/** ゲーム本体から、問題ID→章 と 章ごとの問題数・章の名前を読む */
+function gameData_() {
+  const html = UrlFetchApp.fetch(GAME_URL + '?v=' + Date.now(), { muteHttpExceptions: true }).getContentText('UTF-8');
+  const m = html.match(/<script[^>]*id="errata-data"[^>]*>([\s\S]*?)<\/script>/);
+  if (!m) throw new Error('ゲーム本体から問題を読み込めませんでした');
+  const D = JSON.parse(m[1]);
+  const chOf = {}, total = {};
+  (D.Q || []).forEach(function (q) { chOf[q.id] = q.ch; total[q.ch] = (total[q.ch] || 0) + 1; });
+  const n = Object.keys(D.chapters || {}).length || 15;
+  const names = [];
+  for (let c = 1; c <= n; c++) names.push((D.chapters || {})[c] || ('第' + c + '章'));
+  return { chOf: chOf, total: total, names: names };
+}
+
+function updateProgress() {
+  const G = gameData_();
+  const N = G.names.length;
+  const src = sheet_();
+  const last = src.getLastRow();
+  const rows = last >= 2 ? src.getRange(2, 1, last - 1, COL_REAL).getValues() : [];
+
+  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（全体）', '受験対策の正解数', '記述対策（実戦を書いた数）'];
+  const FIX = head.length;
+  G.names.forEach(function (nm, i) {
+    head.push('第' + (i + 1) + '章 回数');
+    head.push('第' + (i + 1) + '章 ' + nm + '（' + (G.total[i + 1] || 0) + '問）正解率');
+  });
+
+  const out = [], notes = [];
+  rows.forEach(function (v) {
+    let S = {};
+    try { S = JSON.parse(String(v[COL_DATA - 1] || '{}')); } catch (e) { return; }
+    const ok = {}, ng = {};
+    const qs = S.qs || {};
+    Object.keys(qs).forEach(function (id) {
+      const c = G.chOf[id];
+      if (!c) return;
+      if (qs[id] === 1) ok[c] = (ok[c] || 0) + 1;
+      else if (qs[id] === 2) ng[c] = (ng[c] || 0) + 1;
+    });
+    let jk = 0;
+    Object.keys(S.jq || {}).forEach(function (u) { jk += String(S.jq[u]).split('1').length - 1; });
+    let kjW = 0;
+    Object.keys(S.kj || {}).forEach(function (id) { const r = S.kj[id]; if (Array.isArray(r) && Number(r[2]) >= 0) kjW++; });
+    const dch = Array.isArray(S.dch) ? S.dch : [];
+    const row = [String(v[COL_REAL - 1] || ''), String(S.name || ''), String(v[0] || ''), v[2] || '', Number(S.drills || 0), jk, kjW];
+    const note = ['', '', '', '', '', '', ''];
+    for (let c = 1; c <= N; c++) {
+      const t = G.total[c] || 0, a = ok[c] || 0, b = ng[c] || 0;
+      row.push(Number(dch[c - 1] || 0));
+      row.push(t ? a / t : 0);
+      note.push('');
+      note.push('正解 ' + a + '問／間違えたまま ' + b + '問／まだ解いていない ' + Math.max(0, t - a - b) + '問（全' + t + '問）');
+    }
+    out.push(row); notes.push(note);
+  });
+  // メールアドレス順（出席番号順になることが多い）
+  const order = out.map(function (r, i) { return i; }).sort(function (i, j) { return String(out[i][2]).localeCompare(String(out[j][2])); });
+  const body = order.map(function (i) { return out[i]; });
+  const bodyNotes = order.map(function (i) { return notes[i]; });
+
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(PROG_SHEET);
+  if (sh) sh.clear(); else sh = ss.insertSheet(PROG_SHEET);
+  sh.clearConditionalFormatRules();
+  sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight('bold').setWrap(true).setVerticalAlignment('top');
+  sh.setFrozenRows(1);
+  sh.setFrozenColumns(2);
+  if (body.length) {
+    sh.getRange(2, 1, body.length, head.length).setValues(body);
+    sh.getRange(2, 1, body.length, head.length).setNotes(bodyNotes);
+    sh.getRange(2, 4, body.length, 1).setNumberFormat('yyyy/mm/dd hh:mm');
+    const rules = [];
+    for (let c = 1; c <= N; c++) {
+      const col = FIX + c * 2;
+      const r = sh.getRange(2, col, body.length, 1);
+      r.setNumberFormat('0%');
+      rules.push(SpreadsheetApp.newConditionalFormatRule()
+        .setGradientMinpointWithValue('#f4c7c3', SpreadsheetApp.InterpolationType.NUMBER, '0')
+        .setGradientMidpointWithValue('#fce8b2', SpreadsheetApp.InterpolationType.NUMBER, '0.5')
+        .setGradientMaxpointWithValue('#b7e1cd', SpreadsheetApp.InterpolationType.NUMBER, '1')
+        .setRanges([r]).build());
+      sh.getRange(1, col - 1, body.length + 1, 1).setBackground('#f3f3f3');
+    }
+    sh.setConditionalFormatRules(rules);
+  }
+  sh.setColumnWidth(3, 200);
+  for (let c = FIX + 1; c <= head.length; c++) sh.setColumnWidth(c, (c - FIX) % 2 ? 56 : 110);
+  sh.setRowHeight(1, 60);
+  sh.getRange(1, head.length + 2).setValue('更新：' + Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd HH:mm'));
+  SpreadsheetApp.getActive().toast(body.length + '人分の取り組み状況を更新しました', 'エラータ', 5);
+}
