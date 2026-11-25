@@ -216,6 +216,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .sh-card .sh-img,.sh-det .sh-img{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#efe5cf;border-radius:6px;overflow:hidden;margin-bottom:4px}
 .sh-grid.wear .sh-img,.sh-det.wear .sh-img{aspect-ratio:3/4}
 .sh-img svg{width:100%;height:100%;flex:none}.sh-img .nw-th.sk{border:0}
+.sh-img img.bg-th{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:cover}
+.nw-inv.bg{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}.nw-cell img.bg-th{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:4px}
 .sh-img img{max-width:92%;max-height:92%;object-fit:contain}
 .sh-card b{font-family:var(--serif);font-size:15px;line-height:1.35}
 .sh-card small{color:#7a6a50;font-size:12px}
@@ -9268,6 +9270,22 @@ const IMG={
 "床_F2": "img/floor_F2.webp",
 "壁紙_W1": "img/wall_W1.webp",
 "部屋背景_星空の書庫": "img/roombg_星空の書庫.webp",
+"部屋背景_ナイル": "img/roombg_ナイル.webp",
+"部屋背景_地中海の中庭": "img/roombg_地中海の中庭.webp",
+"部屋背景_地中海の列柱": "img/roombg_地中海の列柱.webp",
+"部屋背景_修道院": "img/roombg_修道院.webp",
+"部屋背景_バグダード": "img/roombg_バグダード.webp",
+"部屋背景_雲海": "img/roombg_雲海.webp",
+"部屋背景_港町": "img/roombg_港町.webp",
+"部屋背景_大図書館": "img/roombg_大図書館.webp",
+"部屋背景小_ナイル": "img/roombg_ナイル_s.webp",
+"部屋背景小_地中海の中庭": "img/roombg_地中海の中庭_s.webp",
+"部屋背景小_地中海の列柱": "img/roombg_地中海の列柱_s.webp",
+"部屋背景小_修道院": "img/roombg_修道院_s.webp",
+"部屋背景小_バグダード": "img/roombg_バグダード_s.webp",
+"部屋背景小_雲海": "img/roombg_雲海_s.webp",
+"部屋背景小_港町": "img/roombg_港町_s.webp",
+"部屋背景小_大図書館": "img/roombg_大図書館_s.webp",
 "店_家具屋": "img/shop_家具屋.webp",
 "店_服屋": "img/shop_服屋.webp",
 "壁紙_W4": "img/wall_W4.webp",
@@ -11406,7 +11424,7 @@ const NWPTR=new Map();
 
 function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
  if(!Array.isArray(R.f))R.f=[];if(!Array.isArray(R.w))R.w=[];if(!R.inv||typeof R.inv!=='object')R.inv={};
- if(!Array.isArray(R.skins))R.skins=[];if(!SKBY[R.wall])R.wall='W0';if(!SKBY[R.floor])R.floor='F0';
+ if(!Array.isArray(R.skins))R.skins=[];if(!Array.isArray(R.bgs))R.bgs=[];if(!SKBY[R.wall])R.wall='W0';if(!SKBY[R.floor])R.floor='F0';
  /* 8×8マスの記録は、位置を2倍にして16×16マスへ */
  if(R.v!==2){R.f.forEach(o=>{o.x*=2;o.y*=2});R.w.forEach(o=>{o.p*=2});R.v=2}
  /* 最初から持っている家具（e:-1）。はじめて箱庭を開いたときは、空いていれば置いておく */
@@ -11492,6 +11510,7 @@ function imgAspect(src){if(NWASP[src])return NWASP[src];NWASP[src]=1;const i=new
 function wallMats(){const {N,a,b,OX,OY,WH}=NW;
  /* (s,z)：s＝壁ぞいのマス、z＝壁の上端からの高さ。左の壁は左端から、右の壁は奥から並べる */
  return{L:`matrix(${a},${-b},0,1,${OX-N*a},${OY-WH+N*b})`,R:`matrix(${a},${b},0,1,${OX},${OY-WH})`}}
+function bgThumb(b){return `<img class="bg-th" src="${IMG['部屋背景小_'+b.k]||IMG['部屋背景_'+b.k]||''}" alt="" draggable="false">`}
 function skinPreview(f){if(f.clear){let c='';for(let y=0;y<90;y+=15)for(let x=0;x<120;x+=15)if((x+y)/15%2)c+=`<rect x="${x}" y="${y}" width="15" height="15" fill="#d8d2c4"/>`;
   return `<svg viewBox="0 0 120 90" class="nw-th sk"><rect width="120" height="90" fill="#f4f0e6"/>${c}<text x="60" y="52" text-anchor="middle" font-size="14" fill="#6b5a44" font-family="serif">透明</text></svg>`}
  if(f.t==='wall'){const src=IMG['壁紙_'+f.k]||IMG['壁紙_'+f.k+'_L'];
@@ -11585,9 +11604,20 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
  const v=nwView();const {rc,k,ox,oy}=nwScreenK();z.x=P[0]-(cx-rc.left-ox)/k;z.y=P[1]-(cy-rc.top-oy)/k;nwApplyZoom()}
 
 /* ---- 画面 ---- */
-/* マイルームの背景（部屋の下に敷く絵）。試作：いまは1種類。あとで選べるようにする */
-const ROOM_BGS=[{k:'星空の書庫',n:'星空の書庫'}];
-function roomBgUrl(){const k=(S.room&&S.room.bg)||ROOM_BGS[0].k;return IMG['部屋背景_'+k]||''}
+/* マイルームの背景（部屋の下に敷く絵）。家具屋の「背景」で交換し、もようがえの「持ち物」→「背景」で切りかえる */
+const ROOM_BGS=[
+ {k:'星空の書庫',n:'星海に浮かぶ書庫',e:-1,p:0,x:'星の海にただよう、終わりのない書庫。エラータの頁は、ここから世界じゅうの時代へつながっている。'},
+ {k:'ナイル',n:'ナイル河畔の夕暮れ',e:0,p:20,x:'「エジプトはナイルのたまもの」（ヘロドトス）。毎年の氾濫が肥えた土を運び、川沿いに神殿や家が建ちならんだ。'},
+ {k:'地中海の中庭',n:'地中海を望む中庭',e:0,p:20,x:'オリーブとキョウチクトウの茂る、ギリシア・ローマの邸宅の中庭。海の交易が、地中海の都市をむすびつけた。'},
+ {k:'地中海の列柱',n:'地中海を望む列柱廊',e:0,p:20,x:'列柱の並ぶ回廊（ストア）は、ギリシアの人々が集まり語りあう場所だった。ゼノンが教えたストア派の名も、ここからきている。'},
+ {k:'修道院',n:'月夜の修道院の回廊',e:1,p:20,x:'中庭をかこむ回廊は、修道士が祈りと労働の合間に歩いた場所。「祈り、働け」はベネディクト会のことば。'},
+ {k:'バグダード',n:'バグダードの河畔・夜',e:1,p:20,x:'アッバース朝の都バグダードは、ティグリス川のほとりの円城。知恵の館では、ギリシアの書物がアラビア語に訳された。'},
+ {k:'雲海',n:'山水画の雲海',e:1,p:20,x:'宋の山水画は、雲や霧にかすむ山々を描いた。描かれた楼閣は、文人があこがれた俗世を離れた住まい。'},
+ {k:'港町',n:'大航海時代の港町',e:2,p:20,x:'帆船が行きかい、香辛料や銀が運びこまれた港。16〜17世紀、ヨーロッパの港町は世界の海とつながった。'},
+ {k:'大図書館',n:'バロックの大図書館',e:2,p:20,x:'金の装飾と大理石の柱にかこまれた、18世紀ヨーロッパの修道院図書館。天井まで本がならぶ。'}];
+const BGBY=Object.fromEntries(ROOM_BGS.map(b=>[b.k,b]));
+function bgOwned(k){const b=BGBY[k];return !!b&&(b.p===0||(S.room.bgs||[]).includes(k))}
+function roomBgUrl(){let k=S.room&&S.room.bg;if(!bgOwned(k))k=ROOM_BGS[0].k;return IMG['部屋背景_'+k]||''}
 function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab??'all',scat:NWS.scat,ccat:NWS.ccat,ctab:NWS.ctab,z:{s:1,x:0,y:0}};NWPTR.clear();
  show(`<div class="screen nw-screen" style="--nwbg:url('${roomBgUrl()}')"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">マイルーム</div><div class="gc-top">${coinsHTML()}</div>
  <div class="nw-body"><div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="マイルーム"></svg>
@@ -11688,13 +11718,15 @@ function catOf(f){return f.t==='wall'?'壁かけ':(f.g||'置物')}
 function nwChips(list,cur,attr){return `<div class="nw-chips">${list.map(c=>`<button data-${attr}="${esc(c)}" class="${c===cur?'on':''}">${esc(c)}</button>`).join('')}</div>`}
 
 /* ---- 持ち物（家具・頁・壁紙と床）。分類ごとに切りかえ ---- */
-function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=cat;const TABS=[...FCATS,'頁','壁紙・床'];
+function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=cat;const TABS=[...FCATS,'頁','壁紙・床','背景'];
  let body='';
  if(FCATS.includes(cat)){const L=FURN.filter(f=>catOf(f)===cat&&invOf(f.k)>0);
   body=L.length?`<div class="nw-inv">${L.map(f=>{const n=nwSpare(f.k);return `<button class="nw-cell" data-k="${f.k}" ${n>0?'':'disabled'}>${thumbSVG(f)}<span>${esc(f.n)}</span><small>${n>0?`のこり${n}`:'全部置いてあります'}</small></button>`}).join('')}</div>`
    :`<p class="muted">この分類の家具は、まだ持っていません。「ショップ」で栞と交換できます。</p>`}
  else if(cat==='頁'){const hung=new Set(R.w.filter(o=>o.k==='頁').map(o=>o.n));const pages=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!hung.has(c.n));
   body=pages.length?`<p class="muted" style="margin:0 0 8px">額に入れて壁に掛けます。</p><div class="nw-inv pages">${pages.map(c=>`<button class="nw-cell pg" data-n="${esc(c.n)}">${cardHTML(c.n,{noLv:true})}</button>`).join('')}</div>`:'<p class="muted">飾れる頁はありません。</p>'}
+ else if(cat==='背景'){const cur=bgOwned(R.bg)?R.bg:ROOM_BGS[0].k;
+  body=`<p class="muted" style="margin:0 0 8px">部屋のうしろに広がる景色です。</p><div class="nw-inv bg">${ROOM_BGS.filter(b=>bgOwned(b.k)).map(b=>`<button class="nw-cell${b.k===cur?' on':''}" data-bg="${b.k}">${bgThumb(b)}<span>${esc(b.n)}</span>${b.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`}
  else{const own=t=>SKINS.filter(f=>f.t===t&&skinOwned(f.k));
   const row=(t,cur)=>`<div class="nw-inv sk">${own(t).map(f=>`<button class="nw-cell${f.k===cur?' on':''}" data-sk="${f.k}">${skinPreview(f)}<span>${esc(f.n)}</span>${f.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`;
   body=`<h4 class="nw-h4">壁紙</h4>${row('wall',R.wall)}<h4 class="nw-h4">床</h4>${row('floor',R.floor)}`}
@@ -11706,6 +11738,7 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
   (f.t==='wall'?R.w:R.f).push(o);placed(f.t==='wall'?'w':'f',o)});
  document.querySelectorAll('.nw-cell[data-n]').forEach(b=>b.onclick=()=>{const o=findWallSpot('頁',b.dataset.n);if(!o){toast('壁に空きがありません');return}
   R.w.push(o);placed('w',o)});
+ document.querySelectorAll('.nw-cell[data-bg]').forEach(b=>b.onclick=()=>{R.bg=b.dataset.bg;save();const sc=document.querySelector('.nw-screen');if(sc)sc.style.setProperty('--nwbg',`url('${roomBgUrl()}')`);nwInventory(cat)});
  document.querySelectorAll('.nw-cell[data-sk]').forEach(b=>b.onclick=()=>{const f=SKBY[b.dataset.sk];if(f.t==='wall')R.wall=f.k;else R.floor=f.k;save();nwDraw();nwInventory(cat)})}
 
 /* ---- キャラクターの表示・非表示 ---- */
@@ -11754,7 +11787,9 @@ function nwShop(){const items=[];
   note:`${catOf(f)}・${f.t==='wall'?`幅${f.w}`:`${f.w}×${f.d}マス`}${own?`・持っている数 ${own}`:''}`,give:()=>{S.room.inv[f.k]=(S.room.inv[f.k]||0)+1},msg:'持ち物に入れました。「もようがえ」の「持ち物」から置けます'})});
  SKINS.filter(f=>f.e>=0||f.e==='all').sort((a,b)=>(b.e==='all')-(a.e==='all')).forEach(f=>{const c=f.t==='wall'?'壁紙':'床';items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:c,th:skinPreview(f),note:c,owned:skinOwned(f.k),
   give:()=>{if(!S.room.skins.includes(f.k))S.room.skins.push(f.k)},msg:'「もようがえ」の「持ち物」から貼りかえられます'})});
- shopFrame({title:'家具屋',eraKey:'tab',catKey:'scat',cats:[...FCATS,'壁紙','床'],items,redraw:nwShop})}
+ ROOM_BGS.filter(b=>b.e>=0).forEach(b=>items.push({n:b.n,e:b.e,p:b.p,x:b.x,cat:'背景',th:bgThumb(b),note:'背景',owned:bgOwned(b.k),
+  give:()=>{S.room.bgs=[...new Set([...(S.room.bgs||[]),b.k])]},msg:'「もようがえ」の「持ち物」→「背景」から切りかえられます'}));
+ shopFrame({title:'家具屋',eraKey:'tab',catKey:'scat',cats:[...FCATS,'壁紙','床','背景'],items,redraw:nwShop})}
 
 /* ---- 服屋（主人公の衣装・持ち物・小物） ---- */
 function accShop(){const items=[];
