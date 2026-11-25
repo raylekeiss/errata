@@ -9050,6 +9050,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
 ],
 "roomskins": [
   {"k":"W0","n":"生成りの漆喰","t":"wall","e":-1,"p":0,"c":"#e7d8b8","c2":"#6b4a2e","x":"図書館のもとの壁。落ちついた色で、どんな家具にも合う。"},
+  {"k":"W_clear","n":"透明な壁","t":"wall","e":-1,"p":0,"clear":1,"c":"#ffffff","c2":"#ffffff","x":"壁を消して、うしろの景色を見わたせるようにする。壁かけの家具は、宙に浮いて見える。"},
   {"k":"W1","n":"エジプシャン・ブルーの壁画","t":"wall","e":0,"p":10,"c":"#3f6a86","c2":"#c9a24a","x":"エジプトの青は、銅を使った人工の顔料。「エジプシャン・ブルー」は、世界で最初の合成顔料といわれる。"},
   {"k":"W2","n":"修道院の石壁","t":"wall","e":1,"p":10,"c":"#a39c8e","c2":"#5d564b","x":"ロマネスク様式の修道院は、厚い石の壁に小さな窓。中は昼でも薄暗かった。"},
   {"k":"W3","n":"ロココの壁紙","t":"wall","e":2,"p":10,"c":"#c8d8c0","c2":"#e8e2cf","x":"ロココは、淡い色と曲線の装飾が特徴。サンスーシ宮殿の内装が代表的である。"},
@@ -9062,6 +9063,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
   {"k":"W10","n":"ムガルの象嵌の壁","t":"wall","e":2,"p":10,"c":"#efe4cf","c2":"#a84a2a","x":"白い大理石に色石をはめこむ象嵌で、花を描いた。タージ＝マハルの壁にも同じ技法が見られる。"},
   {"k":"W11","n":"紫禁城の壁","t":"wall","e":2,"p":10,"c":"#e0a52c","c2":"#b03a24","x":"明・清の宮殿、紫禁城。赤い柱と、青や緑で彩った梁が特徴。黄色は皇帝の色とされ、屋根瓦にも使われた。"},
   {"k":"F0","n":"オークの床板","t":"floor","e":-1,"p":0,"c":"#9a7148","pat":"plank","x":"図書館のもとの床。足音がよく響くので、夜は少し怖い。","rep":16},
+  {"k":"F_clear","n":"透明な床","t":"floor","e":-1,"p":0,"clear":1,"c":"#ffffff","pat":"tile","x":"床を消して、家具が景色の中に浮かんでいるように見せる。","rep":16},
   {"k":"F1","n":"テラコッタのタイル","t":"floor","e":0,"p":10,"c":"#b5653e","pat":"tile","x":"テラコッタは素焼きの土のこと。イタリア語で「焼いた土」という意味である。","rep":16},
   {"k":"F2","n":"石畳","t":"floor","e":1,"p":10,"c":"#8b8a84","pat":"tile","x":"ローマ人が敷いた石畳の道は、中世になってもヨーロッパ各地で使われ続けた。","rep":16},
   {"k":"F3","n":"寄木細工の床","t":"floor","e":2,"p":10,"c":"#8a5a33","pat":"parquet","x":"ヴェルサイユ宮殿の床は、木片を組み合わせた寄木細工。この模様は「ヴェルサイユ」と呼ばれている。","rep":16},
@@ -11490,7 +11492,9 @@ function imgAspect(src){if(NWASP[src])return NWASP[src];NWASP[src]=1;const i=new
 function wallMats(){const {N,a,b,OX,OY,WH}=NW;
  /* (s,z)：s＝壁ぞいのマス、z＝壁の上端からの高さ。左の壁は左端から、右の壁は奥から並べる */
  return{L:`matrix(${a},${-b},0,1,${OX-N*a},${OY-WH+N*b})`,R:`matrix(${a},${b},0,1,${OX},${OY-WH})`}}
-function skinPreview(f){if(f.t==='wall'){const src=IMG['壁紙_'+f.k]||IMG['壁紙_'+f.k+'_L'];
+function skinPreview(f){if(f.clear){let c='';for(let y=0;y<90;y+=15)for(let x=0;x<120;x+=15)if((x+y)/15%2)c+=`<rect x="${x}" y="${y}" width="15" height="15" fill="#d8d2c4"/>`;
+  return `<svg viewBox="0 0 120 90" class="nw-th sk"><rect width="120" height="90" fill="#f4f0e6"/>${c}<text x="60" y="52" text-anchor="middle" font-size="14" fill="#6b5a44" font-family="serif">透明</text></svg>`}
+ if(f.t==='wall'){const src=IMG['壁紙_'+f.k]||IMG['壁紙_'+f.k+'_L'];
   return `<svg viewBox="0 0 120 90" class="nw-th sk">${src?`<image href="${src}" width="120" height="90" preserveAspectRatio="xMidYMid slice"/>`:`<rect width="120" height="90" fill="${f.c}"/><rect y="72" width="120" height="18" fill="${f.c2}"/>`}</svg>`}
  const src=IMG['床_'+f.k];return `<svg viewBox="0 0 120 90" class="nw-th sk">${src?`<image href="${src}" width="120" height="90" preserveAspectRatio="xMidYMid slice"/>`:`<rect width="120" height="90" fill="${f.c}"/>${floorPatLines(f,120,90,30)}`}</svg>`}
 function floorPatLines(f,w,h,u){let s='';const st='stroke="rgba(40,20,10,.28)" stroke-width="1"';
@@ -11513,18 +11517,20 @@ function nwRoomBase(){const {N,a,b,OX,OY,WH}=NW;const R=S.room;const wf=SKBY[R.w
   const shadeR=side==='R'?`<g transform="${M.R}"><rect width="${N}" height="${WH}" fill="rgba(0,0,0,.12)"/></g>`:'';
   if(whole){const src=side==='L'?wL:wR;const x=fit==='span'&&side==='R'?-N:0,w=fit==='span'?2*N:N;
    s+=`<g transform="${M[side]}"><g clip-path="url(#nwWC)"><image href="${src}" x="${x}" width="${w}" height="${WH}" preserveAspectRatio="none"/></g></g>${shadeR}`}
+  else if(wf.clear){}
   else if(wsrc)s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="url(#nwWP)"/></g>${shadeR}`;
   else{s+=`<g transform="${M[side]}"><rect width="${N}" height="${WH}" fill="${side==='R'?shade(wf.c,-.08):wf.c}"/><rect y="${WH-38}" width="${N}" height="38" fill="${side==='R'?shade(wf.c2,-.15):wf.c2}"/>`;
    for(let i=2;i<N;i+=2)s+=`<line x1="${i}" y1="${WH-38}" x2="${i}" y2="${WH}" stroke="rgba(0,0,0,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
    s+=`<line x1="0" y1="${WH-39}" x2="${N}" y2="${WH-39}" stroke="#3a2812" stroke-width="3" vector-effect="non-scaling-stroke"/><line x1="0" y1="10" x2="${N}" y2="10" stroke="${shade(wf.c2,.2)}" stroke-width="5" vector-effect="non-scaling-stroke"/></g>`}}
- s+=`<line x1="${OX}" y1="${OY-WH}" x2="${OX}" y2="${OY}" stroke="rgba(60,40,20,.35)" stroke-width="1.5"/>`;
+ if(!wf.clear)s+=`<line x1="${OX}" y1="${OY-WH}" x2="${OX}" y2="${OY}" stroke="rgba(60,40,20,.35)" stroke-width="1.5"/>`;
  /* 床（マス目の座標に貼る） */
  const FM=`matrix(${a},${b},${-a},${b},${OX},${OY})`;
- if(fsrc)s+=`<g transform="${FM}"><rect width="${N}" height="${N}" fill="url(#nwFP)"/></g>`;
+ if(ff.clear){}
+ else if(fsrc)s+=`<g transform="${FM}"><rect width="${N}" height="${N}" fill="url(#nwFP)"/></g>`;
  else s+=`<g transform="${FM}"><rect width="${N}" height="${N}" fill="${ff.c}"/><g transform="scale(${1/30})">${floorPatLines(ff,N*30,N*30,60).replace(/stroke-width="1"/g,'stroke-width="1" vector-effect="non-scaling-stroke"')}</g></g>`;
  let grid='';for(let i=0;i<=N;i++){const p=g2s(0,i),q=g2s(N,i),r=g2s(i,0),t=g2s(i,N);grid+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/><line x1="${r[0]}" y1="${r[1]}" x2="${t[0]}" y2="${t[1]}"/>`}
  s+=`<g class="nw-grid">${grid}</g>`;
- s+=`<polygon points="${PTS([[OX,OY],R0,F,L0])}" fill="none" stroke="#3a2812" stroke-width="2"/>`;
+ if(!ff.clear)s+=`<polygon points="${PTS([[OX,OY],R0,F,L0])}" fill="none" stroke="#3a2812" stroke-width="2"/>`;
  return s}
 
 /* ---- 重なり順 ---- */
