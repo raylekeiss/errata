@@ -198,8 +198,13 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 /* ショップ */
 .modal.shop .box{max-width:920px;max-height:92vh}
 .sh-pick{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0}
-.sh-pick button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 12px;border:1.5px solid #c9a24a;border-radius:14px;background:#f6eedb;color:#2a2320;font-family:var(--serif)}
-.sh-pick svg{width:72px;height:72px;color:#8a2a25}.sh-pick b{font-size:22px}.sh-pick small{font-family:var(--sans);color:#7a6a50;font-size:13px}
+.sh-pk{--c:#2f6f63;--bg:#e3f1ea;--bd:#a9d3c3;display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 14px 20px;border:2px solid var(--bd);border-radius:20px;background:var(--bg);color:#1c2540;font-family:var(--serif);box-shadow:inset 0 0 0 5px rgba(255,255,255,.55),0 4px 12px rgba(60,40,20,.12);transition:transform .12s}
+.sh-pk.pink{--c:#a8434e;--bg:#fbe5e3;--bd:#efbcb8}
+.sh-pk:hover{transform:translateY(-2px)}.sh-pk:active{transform:translateY(1px)}
+.sh-pk img{width:100%;max-width:340px;aspect-ratio:3/2;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(60,40,20,.18))}
+.sh-pk b{font-size:max(24px,calc(38*var(--u)));font-weight:700;letter-spacing:.08em;line-height:1.2}
+.sh-pk small{font-size:14px;color:#4a4036;letter-spacing:.08em;display:flex;gap:8px;align-items:center}.sh-pk small i{font-style:normal;color:var(--c)}
+.sh-pk .go{margin-top:6px;min-width:62%;padding:10px 24px;border-radius:999px;background:var(--c);color:#fff;font-size:18px;font-weight:700;letter-spacing:.12em;box-shadow:inset 0 0 0 2px rgba(201,162,74,.8),0 3px 0 rgba(0,0,0,.18)}
 .sh-tabs button[data-e="all"].on{background:#2a2320;border-color:#2a2320}
 .sh-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}
 .sh-grid.wear{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
@@ -9252,6 +9257,8 @@ const IMG={
 "床_F7": "img/floor_F7.webp",
 "床_F2": "img/floor_F2.webp",
 "壁紙_W1": "img/wall_W1.webp",
+"店_家具屋": "img/shop_家具屋.webp",
+"店_服屋": "img/shop_服屋.webp",
 "壁紙_W4": "img/wall_W4.webp",
 "壁紙_W5": "img/wall_W5.webp",
 "壁紙_W6": "img/wall_W6.webp",
@@ -11693,9 +11700,9 @@ function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='
   save();nwSelBar();nwDraw();nwCharaPanel()})}
 
 /* ---- ショップ：家具屋か服屋かを選ぶ ---- */
-function shopPick(){modal(`<div class="mhead"><h3>ショップ</h3><button class="btn light" data-close>閉じる</button></div>
- <div class="sh-pick"><button id="spF"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 22h32v14H8zM12 36v5M36 36v5M8 22c0-5 3-8 8-8h16c5 0 8 3 8 8M14 22v-3h20v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>家具屋</b><small>家具・置物・壁紙・床</small></button>
- <button id="spC"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 12a4 4 0 1 1 5.2 3.8c-.8.3-1.2 1-1.2 1.8V20M24 20L6 34c-1.2 1-.6 2.6 1 2.6h34c1.6 0 2.2-1.6 1-2.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg><b>服屋</b><small>衣装・持ち物・小物</small></button></div>`);
+function shopPick(){const card=(id,k,c,sub)=>`<button class="sh-pk ${c}" id="${id}"><img src="${IMG['店_'+k]||''}" alt="" draggable="false"><b>${k}</b><small><i>→</i>${sub}<i>←</i></small><span class="go">お店へ ›</span></button>`;
+ modal(`<div class="mhead"><h3>ショップ</h3><button class="btn light" data-close>閉じる</button></div>
+ <div class="sh-pick">${card('spF','家具屋','mint','家具・置物・壁紙・床')}${card('spC','服屋','pink','衣装・持ち物・小物')}</div>`);
  $('#modal').classList.add('shop');$('#spF').onclick=()=>nwShop();$('#spC').onclick=()=>accShop()}
 
 /* ショップの並び（共通）：絵を大きく、名前・分類・値段だけ。選ぶと説明と交換 */
