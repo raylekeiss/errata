@@ -9272,7 +9272,6 @@ const IMG={
 "部屋背景_星空の書庫": "img/roombg_星空の書庫.webp",
 "部屋背景_ナイル": "img/roombg_ナイル.webp",
 "部屋背景_地中海の中庭": "img/roombg_地中海の中庭.webp",
-"部屋背景_地中海の列柱": "img/roombg_地中海の列柱.webp",
 "部屋背景_修道院": "img/roombg_修道院.webp",
 "部屋背景_バグダード": "img/roombg_バグダード.webp",
 "部屋背景_雲海": "img/roombg_雲海.webp",
@@ -9280,7 +9279,6 @@ const IMG={
 "部屋背景_大図書館": "img/roombg_大図書館.webp",
 "部屋背景小_ナイル": "img/roombg_ナイル_s.webp",
 "部屋背景小_地中海の中庭": "img/roombg_地中海の中庭_s.webp",
-"部屋背景小_地中海の列柱": "img/roombg_地中海の列柱_s.webp",
 "部屋背景小_修道院": "img/roombg_修道院_s.webp",
 "部屋背景小_バグダード": "img/roombg_バグダード_s.webp",
 "部屋背景小_雲海": "img/roombg_雲海_s.webp",
@@ -11424,7 +11422,7 @@ const NWPTR=new Map();
 
 function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
  if(!Array.isArray(R.f))R.f=[];if(!Array.isArray(R.w))R.w=[];if(!R.inv||typeof R.inv!=='object')R.inv={};
- if(!Array.isArray(R.skins))R.skins=[];if(!Array.isArray(R.bgs))R.bgs=[];if(!SKBY[R.wall])R.wall='W0';if(!SKBY[R.floor])R.floor='F0';
+ if(!Array.isArray(R.skins))R.skins=[];if(!Array.isArray(R.bgs))R.bgs=[];R.bgs=[...new Set(R.bgs.map(k=>k==='地中海の列柱'?'地中海の中庭':k))];if(R.bg==='地中海の列柱')R.bg='地中海の中庭';if(!SKBY[R.wall])R.wall='W0';if(!SKBY[R.floor])R.floor='F0';
  /* 8×8マスの記録は、位置を2倍にして16×16マスへ */
  if(R.v!==2){R.f.forEach(o=>{o.x*=2;o.y*=2});R.w.forEach(o=>{o.p*=2});R.v=2}
  /* 最初から持っている家具（e:-1）。はじめて箱庭を開いたときは、空いていれば置いておく */
@@ -11609,7 +11607,6 @@ const ROOM_BGS=[
  {k:'星空の書庫',n:'星海に浮かぶ書庫',e:-1,p:0,x:'星の海にただよう、終わりのない書庫。エラータの頁は、ここから世界じゅうの時代へつながっている。'},
  {k:'ナイル',n:'ナイル河畔の夕暮れ',e:0,p:20,x:'「エジプトはナイルのたまもの」（ヘロドトス）。毎年の氾濫が肥えた土を運び、川沿いに神殿や家が建ちならんだ。'},
  {k:'地中海の中庭',n:'地中海を望む中庭',e:0,p:20,x:'オリーブとキョウチクトウの茂る、ギリシア・ローマの邸宅の中庭。海の交易が、地中海の都市をむすびつけた。'},
- {k:'地中海の列柱',n:'地中海を望む列柱廊',e:0,p:20,x:'列柱の並ぶ回廊（ストア）は、ギリシアの人々が集まり語りあう場所だった。ゼノンが教えたストア派の名も、ここからきている。'},
  {k:'修道院',n:'月夜の修道院の回廊',e:1,p:20,x:'中庭をかこむ回廊は、修道士が祈りと労働の合間に歩いた場所。「祈り、働け」はベネディクト会のことば。'},
  {k:'バグダード',n:'バグダードの河畔・夜',e:1,p:20,x:'アッバース朝の都バグダードは、ティグリス川のほとりの円城。知恵の館では、ギリシアの書物がアラビア語に訳された。'},
  {k:'雲海',n:'山水画の雲海',e:1,p:20,x:'宋の山水画は、雲や霧にかすむ山々を描いた。描かれた楼閣は、文人があこがれた俗世を離れた住まい。'},
