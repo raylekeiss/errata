@@ -180,7 +180,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .look-hd img{max-width:100%;max-height:100%;display:block;pointer-events:none}
 
 /* マイルーム：上は他の画面と同じ栞、操作は右に縦並び */
-.nw-screen{position:fixed;inset:0;font-family:var(--sans)}
+.nw-screen{position:fixed;inset:0;font-family:var(--sans);background:#0e1430 var(--nwbg) center top/cover no-repeat}
 .hd-ttl{font-family:var(--serif)}
 .pt-screen{position:fixed;inset:0}
 .pt-screen>.scroll{width:100%;max-width:1100px;margin:0 auto;padding-top:calc(env(safe-area-inset-top,0px) + max(80px,calc(108*var(--u))))}
@@ -9263,6 +9263,7 @@ const IMG={
 "床_F10": "img/floor_F10.webp",
 "床_F2": "img/floor_F2.webp",
 "壁紙_W1": "img/wall_W1.webp",
+"部屋背景_星空の書庫": "img/roombg_星空の書庫.webp",
 "店_家具屋": "img/shop_家具屋.webp",
 "店_服屋": "img/shop_服屋.webp",
 "壁紙_W4": "img/wall_W4.webp",
@@ -11576,8 +11577,11 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
  const v=nwView();const {rc,k,ox,oy}=nwScreenK();z.x=P[0]-(cx-rc.left-ox)/k;z.y=P[1]-(cy-rc.top-oy)/k;nwApplyZoom()}
 
 /* ---- 画面 ---- */
+/* マイルームの背景（部屋の下に敷く絵）。試作：いまは1種類。あとで選べるようにする */
+const ROOM_BGS=[{k:'星空の書庫',n:'星空の書庫'}];
+function roomBgUrl(){const k=(S.room&&S.room.bg)||ROOM_BGS[0].k;return IMG['部屋背景_'+k]||''}
 function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab??'all',scat:NWS.scat,ccat:NWS.ccat,ctab:NWS.ctab,z:{s:1,x:0,y:0}};NWPTR.clear();
- show(`<div class="screen nw-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">マイルーム</div><div class="gc-top">${coinsHTML()}</div>
+ show(`<div class="screen nw-screen" style="--nwbg:url('${roomBgUrl()}')"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">マイルーム</div><div class="gc-top">${coinsHTML()}</div>
  <div class="nw-body"><div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="マイルーム"></svg>
   <button class="nw-reset" id="nwReset" hidden aria-label="全体を表示">全体</button>
   <div class="nw-bub" id="nwBub" hidden></div>
