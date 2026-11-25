@@ -197,7 +197,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .sh-pick button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 12px;border:1.5px solid #c9a24a;border-radius:14px;background:#f6eedb;color:#2a2320;font-family:var(--serif)}
 .sh-pick svg{width:72px;height:72px;color:#8a2a25}.sh-pick b{font-size:22px}.sh-pick small{font-family:var(--sans);color:#7a6a50;font-size:13px}
 .sh-tabs button[data-e="all"].on{background:#2a2320;border-color:#2a2320}
-.sh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px}
+.sh-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}
+.sh-grid.wear{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.sh-grid.wear .sh-card{padding:6px}.sh-grid.wear .sh-card b{font-size:13px}
 .sh-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fffaf0;color:#2a2320;text-align:left;font-family:var(--sans)}
 .sh-card:hover{border-color:#c9a24a}
 .sh-card .sh-img,.sh-det .sh-img{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#efe5cf;border-radius:6px;overflow:hidden;margin-bottom:4px}
@@ -211,7 +213,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .sh-det{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
 .sh-det .tx p{line-height:1.8;margin:0 0 12px}
 .sh-meta{display:flex;gap:8px;align-items:center;color:#7a6a50;font-size:14px}.sh-meta .sh-pr{margin:0}
-@media (max-width:560px){.sh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sh-det{grid-template-columns:1fr}}
+@media (max-width:700px){.sh-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.sh-grid.wear{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:480px){.sh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sh-grid.wear{grid-template-columns:repeat(3,minmax(0,1fr))}.sh-det{grid-template-columns:1fr}}
 /* 外見の選択：髪／顔／服／小物 のタブ */
 .lkb-go{position:relative}
 .lkb-cost{position:absolute;right:0;bottom:-1.9cqw;font-size:1.1cqw;color:#7a5a20;font-weight:700;white-space:nowrap}
