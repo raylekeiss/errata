@@ -9050,7 +9050,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
 ],
 "roomskins": [
   {"k":"W0","n":"生成りの漆喰","t":"wall","e":-1,"p":0,"c":"#e7d8b8","c2":"#6b4a2e","x":"図書館のもとの壁。落ちついた色で、どんな家具にも合う。"},
-  {"k":"W_clear","n":"透明な壁","t":"wall","e":-1,"p":0,"clear":1,"c":"#ffffff","c2":"#ffffff","x":"壁を消して、うしろの景色を見わたせるようにする。壁かけの家具は、宙に浮いて見える。"},
+  {"k":"W_clear","n":"透明な壁","t":"wall","e":"all","p":5,"clear":1,"c":"#ffffff","c2":"#ffffff","x":"壁を消して、うしろの景色を見わたせるようにする。壁かけの家具は、宙に浮いて見える。"},
   {"k":"W1","n":"エジプシャン・ブルーの壁画","t":"wall","e":0,"p":10,"c":"#3f6a86","c2":"#c9a24a","x":"エジプトの青は、銅を使った人工の顔料。「エジプシャン・ブルー」は、世界で最初の合成顔料といわれる。"},
   {"k":"W2","n":"修道院の石壁","t":"wall","e":1,"p":10,"c":"#a39c8e","c2":"#5d564b","x":"ロマネスク様式の修道院は、厚い石の壁に小さな窓。中は昼でも薄暗かった。"},
   {"k":"W3","n":"ロココの壁紙","t":"wall","e":2,"p":10,"c":"#c8d8c0","c2":"#e8e2cf","x":"ロココは、淡い色と曲線の装飾が特徴。サンスーシ宮殿の内装が代表的である。"},
@@ -9063,7 +9063,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
   {"k":"W10","n":"ムガルの象嵌の壁","t":"wall","e":2,"p":10,"c":"#efe4cf","c2":"#a84a2a","x":"白い大理石に色石をはめこむ象嵌で、花を描いた。タージ＝マハルの壁にも同じ技法が見られる。"},
   {"k":"W11","n":"紫禁城の壁","t":"wall","e":2,"p":10,"c":"#e0a52c","c2":"#b03a24","x":"明・清の宮殿、紫禁城。赤い柱と、青や緑で彩った梁が特徴。黄色は皇帝の色とされ、屋根瓦にも使われた。"},
   {"k":"F0","n":"オークの床板","t":"floor","e":-1,"p":0,"c":"#9a7148","pat":"plank","x":"図書館のもとの床。足音がよく響くので、夜は少し怖い。","rep":16},
-  {"k":"F_clear","n":"透明な床","t":"floor","e":-1,"p":0,"clear":1,"c":"#ffffff","pat":"tile","x":"床を消して、家具が景色の中に浮かんでいるように見せる。","rep":16},
+  {"k":"F_clear","n":"透明な床","t":"floor","e":"all","p":5,"clear":1,"c":"#ffffff","pat":"tile","x":"床を消して、家具が景色の中に浮かんでいるように見せる。","rep":16},
   {"k":"F1","n":"テラコッタのタイル","t":"floor","e":0,"p":10,"c":"#b5653e","pat":"tile","x":"テラコッタは素焼きの土のこと。イタリア語で「焼いた土」という意味である。","rep":16},
   {"k":"F2","n":"石畳","t":"floor","e":1,"p":10,"c":"#8b8a84","pat":"tile","x":"ローマ人が敷いた石畳の道は、中世になってもヨーロッパ各地で使われ続けた。","rep":16},
   {"k":"F3","n":"寄木細工の床","t":"floor","e":2,"p":10,"c":"#8a5a33","pat":"parquet","x":"ヴェルサイユ宮殿の床は、木片を組み合わせた寄木細工。この模様は「ヴェルサイユ」と呼ばれている。","rep":16},
@@ -11726,31 +11726,33 @@ function shopPick(){const card=(id,k,c,sub)=>`<button class="sh-pk ${c}" id="${i
 /* ショップの並び（共通）：絵を大きく、名前・分類・値段だけ。選ぶと説明と交換 */
 function shopFrame(o){/* o={title,eraKey,catKey,cats,items,img,back} */
  const era=NWS[o.eraKey]??'all',cat=NWS[o.catKey]||'すべて';
- const L=o.items.filter(x=>(era==='all'||x.e===era)&&(cat==='すべて'||x.cat===cat));
+ const L=o.items.filter(x=>(era==='all'||x.e===era)&&(cat==='すべて'||x.cat===cat)).sort((a,b)=>(b.e==='all')-(a.e==='all'));
+ /* e:'all'＝時代を問わない品（各時代の栞をp枚ずつ）。「すべて」のいちばん上に出す */
+ const P=x=>x.e==='all'?{c:'#2a2320',t:`各時代の栞${x.p}枚ずつ`,k:'全時代',can:S.sh.every(v=>v>=x.p)}:{c:ERAS[x.e].c,t:`${ERAS[x.e].k}の栞${x.p}枚`,k:ERAS[x.e].k,can:S.sh[x.e]>=x.p};
  modal(`<div class="mhead"><h3>${o.title}</h3><div class="row" style="margin:0;gap:8px"><button class="btn light" id="shBack">戻る</button><button class="btn light" data-close>閉じる</button></div></div>
  <div class="nw-tabs sh-tabs"><button data-e="all" class="${era==='all'?'on':''}" style="--ec:#2a2320">すべて</button>${ERAS.map((E,i)=>`<button data-e="${i}" class="${i===era?'on':''}" style="--ec:${E.c}">${E.k}</button>`).join('')}</div>
  ${nwChips(['すべて',...o.cats],cat,'sc')}
  <div class="acc-have">${ERAS.map((E,i)=>`<span style="--ec:${E.c}">${E.k}の栞 <b>${S.sh[i]}</b></span>`).join('')}</div>
  <div class="sh-grid ${o.cls||''}">${L.map(x=>`<button class="sh-card${x.owned?' own':''}" data-i="${o.items.indexOf(x)}"><div class="sh-img">${x.th||''}</div><b>${esc(x.n)}</b><small>${esc(x.note)}</small>
-  <span class="sh-pr" style="--ec:${ERAS[x.e].c}">${x.owned?'交換ずみ':`${ERAS[x.e].k}の栞${x.p}枚`}</span></button>`).join('')||'<p class="muted">この時代のこの分類の品は、まだありません。</p>'}</div>`,null);
+  <span class="sh-pr" style="--ec:${P(x).c}">${x.owned?'交換ずみ':P(x).t}</span></button>`).join('')||'<p class="muted">この時代のこの分類の品は、まだありません。</p>'}</div>`,null);
  $('#modal').classList.add('shop');const box=$('#modal .box');if(NWS.shScroll){box.scrollTop=NWS.shScroll;NWS.shScroll=0}
  $('#shBack').onclick=()=>shopPick();
  document.querySelectorAll('.sh-tabs [data-e]').forEach(b=>b.onclick=()=>{NWS[o.eraKey]=b.dataset.e==='all'?'all':+b.dataset.e;o.redraw()});
  document.querySelectorAll('.nw-chips [data-sc]').forEach(b=>b.onclick=()=>{NWS[o.catKey]=b.dataset.sc;o.redraw()});
  if(o.img)o.img(L);
  document.querySelectorAll('.sh-card').forEach(b=>b.onclick=()=>{NWS.shScroll=box.scrollTop;const x=o.items[+b.dataset.i];const back=()=>o.redraw();
-  const can=S.sh[x.e]>=x.p;
+  const pr=P(x),can=pr.can;
   modal(`<div class="mhead"><h3>${esc(x.n)}</h3><button class="btn light" data-close>戻る</button></div>
-  <div class="sh-det ${o.cls||''}"><div class="sh-img">${x.th||''}</div><div class="tx"><p class="sh-meta"><span class="sh-pr" style="--ec:${ERAS[x.e].c}">${ERAS[x.e].k}</span>${esc(x.note)}</p><p>${esc(x.x||'')}</p>
-  ${x.owned?'<p class="nw-owned">交換ずみ</p>':`<button class="btn ${can?'red':'light'}" id="shBuy" ${can?'':'disabled'}>${ERAS[x.e].k}の栞${x.p}枚で交換する</button>${can?'':`<p class="muted" style="margin:6px 0 0">${ERAS[x.e].k}の栞が足りません（いま${S.sh[x.e]}枚）</p>`}`}</div></div>`,back);
+  <div class="sh-det ${o.cls||''}"><div class="sh-img">${x.th||''}</div><div class="tx"><p class="sh-meta"><span class="sh-pr" style="--ec:${pr.c}">${pr.k}</span>${esc(x.note)}</p><p>${esc(x.x||'')}</p>
+  ${x.owned?'<p class="nw-owned">交換ずみ</p>':`<button class="btn ${can?'red':'light'}" id="shBuy" ${can?'':'disabled'}>${pr.t}で交換する</button>${can?'':`<p class="muted" style="margin:6px 0 0">栞が足りません</p>`}`}</div></div>`,back);
   $('#modal').classList.add('shop');if(o.img)o.img([x]);
-  const bb=$('#shBuy');if(bb)bb.onclick=()=>{if(S.sh[x.e]<x.p){toast('栞が足りません');return}S.sh[x.e]-=x.p;x.give();saveNow();updShiori();toast(x.msg);back()}})}
+  const bb=$('#shBuy');if(bb)bb.onclick=()=>{if(!P(x).can){toast('栞が足りません');return}if(x.e==='all')S.sh=S.sh.map(v=>v-x.p);else S.sh[x.e]-=x.p;x.give();saveNow();updShiori();toast(x.msg);back()}})}
 
 /* ---- 家具屋 ---- */
 function nwShop(){const items=[];
  FURN.filter(f=>f.e>=0).forEach(f=>{const own=S.room.inv[f.k]||0;items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:catOf(f),th:thumbSVG(f),
   note:`${catOf(f)}・${f.t==='wall'?`幅${f.w}`:`${f.w}×${f.d}マス`}${own?`・持っている数 ${own}`:''}`,give:()=>{S.room.inv[f.k]=(S.room.inv[f.k]||0)+1},msg:'持ち物に入れました。「もようがえ」の「持ち物」から置けます'})});
- SKINS.filter(f=>f.e>=0).forEach(f=>{const c=f.t==='wall'?'壁紙':'床';items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:c,th:skinPreview(f),note:c,owned:skinOwned(f.k),
+ SKINS.filter(f=>f.e>=0||f.e==='all').sort((a,b)=>(b.e==='all')-(a.e==='all')).forEach(f=>{const c=f.t==='wall'?'壁紙':'床';items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:c,th:skinPreview(f),note:c,owned:skinOwned(f.k),
   give:()=>{if(!S.room.skins.includes(f.k))S.room.skins.push(f.k)},msg:'「もようがえ」の「持ち物」から貼りかえられます'})});
  shopFrame({title:'家具屋',eraKey:'tab',catKey:'scat',cats:[...FCATS,'壁紙','床'],items,redraw:nwShop})}
 
