@@ -9270,6 +9270,12 @@ const IMG={
 "床_F2": "img/floor_F2.webp",
 "壁紙_W1": "img/wall_W1.webp",
 "部屋背景_星空の書庫": "img/roombg_星空の書庫.webp",
+"部屋背景_草原": "img/roombg_草原.webp",
+"部屋背景小_草原": "img/roombg_草原_s.webp",
+"部屋背景_雪原": "img/roombg_雪原.webp",
+"部屋背景小_雪原": "img/roombg_雪原_s.webp",
+"部屋背景_砂浜": "img/roombg_砂浜.webp",
+"部屋背景小_砂浜": "img/roombg_砂浜_s.webp",
 "部屋背景_ナイル": "img/roombg_ナイル.webp",
 "部屋背景_地中海の中庭": "img/roombg_地中海の中庭.webp",
 "部屋背景_修道院": "img/roombg_修道院.webp",
@@ -11611,7 +11617,10 @@ const ROOM_BGS=[
  {k:'バグダード',n:'バグダードの河畔・夜',e:1,p:20,x:'アッバース朝の都バグダードは、ティグリス川のほとりの円城。知恵の館では、ギリシアの書物がアラビア語に訳された。'},
  {k:'雲海',n:'山水画の雲海',e:1,p:20,x:'宋の山水画は、雲や霧にかすむ山々を描いた。描かれた楼閣は、文人があこがれた俗世を離れた住まい。'},
  {k:'港町',n:'大航海時代の港町',e:2,p:20,x:'帆船が行きかい、香辛料や銀が運びこまれた港。16〜17世紀、ヨーロッパの港町は世界の海とつながった。'},
- {k:'大図書館',n:'バロックの大図書館',e:2,p:20,x:'金の装飾と大理石の柱にかこまれた、18世紀ヨーロッパの修道院図書館。天井まで本がならぶ。'}];
+ {k:'大図書館',n:'バロックの大図書館',e:2,p:20,x:'金の装飾と大理石の柱にかこまれた、18世紀ヨーロッパの修道院図書館。天井まで本がならぶ。'},
+ {k:'草原',n:'花咲く草原',e:'all',p:10,x:'白い花とクローバーが咲く、風の通る原っぱ。'},
+ {k:'雪原',n:'雪の森',e:'all',p:10,x:'雪をかぶったもみの木にかこまれた、しんと静かな雪原。'},
+ {k:'砂浜',n:'南の砂浜',e:'all',p:10,x:'波の音がきこえる白い砂浜。貝がらやサンゴがころがっている。'}];
 const BGBY=Object.fromEntries(ROOM_BGS.map(b=>[b.k,b]));
 function bgOwned(k){const b=BGBY[k];return !!b&&(b.p===0||(S.room.bgs||[]).includes(k))}
 function roomBgUrl(){let k=S.room&&S.room.bg;if(!bgOwned(k))k=ROOM_BGS[0].k;return IMG['部屋背景_'+k]||''}
@@ -11784,7 +11793,7 @@ function nwShop(){const items=[];
   note:`${catOf(f)}・${f.t==='wall'?`幅${f.w}`:`${f.w}×${f.d}マス`}${own?`・持っている数 ${own}`:''}`,give:()=>{S.room.inv[f.k]=(S.room.inv[f.k]||0)+1},msg:'持ち物に入れました。「もようがえ」の「持ち物」から置けます'})});
  SKINS.filter(f=>f.e>=0||f.e==='all').sort((a,b)=>(b.e==='all')-(a.e==='all')).forEach(f=>{const c=f.t==='wall'?'壁紙':'床';items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:c,th:skinPreview(f),note:c,owned:skinOwned(f.k),
   give:()=>{if(!S.room.skins.includes(f.k))S.room.skins.push(f.k)},msg:'「もようがえ」の「持ち物」から貼りかえられます'})});
- ROOM_BGS.filter(b=>b.e>=0).forEach(b=>items.push({n:b.n,e:b.e,p:b.p,x:b.x,cat:'背景',th:bgThumb(b),note:'背景',owned:bgOwned(b.k),
+ ROOM_BGS.filter(b=>b.e>=0||b.e==='all').forEach(b=>items.push({n:b.n,e:b.e,p:b.p,x:b.x,cat:'背景',th:bgThumb(b),note:'背景',owned:bgOwned(b.k),
   give:()=>{S.room.bgs=[...new Set([...(S.room.bgs||[]),b.k])]},msg:'「もようがえ」の「持ち物」→「背景」から切りかえられます'}));
  shopFrame({title:'家具屋',eraKey:'tab',catKey:'scat',cats:[...FCATS,'壁紙','床','背景'],items,redraw:nwShop})}
 
