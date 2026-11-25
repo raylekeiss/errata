@@ -178,6 +178,40 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .look-sw.tx:has(.look-hd){flex-wrap:nowrap;gap:6px}
 .look-hd{flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1;height:auto;padding:3px;background:#fffaf0;border:1px solid var(--line);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .look-hd img{max-width:100%;max-height:100%;display:block;pointer-events:none}
+
+/* マイルーム：上は他の画面と同じ栞、操作は右に縦並び */
+.nw-screen{position:relative}
+.nw-screen .nw-ttl{font-size:max(18px,calc(30*var(--u)))}
+.nw-body{flex:1;min-height:0;display:flex;gap:10px;padding:calc(env(safe-area-inset-top,0px) + max(70px,calc(100*var(--u)))) calc(env(safe-area-inset-right,0px) + 14px) calc(env(safe-area-inset-bottom,0px) + 12px) 8px}
+.nw-screen .nw-tools{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0}
+.nw-screen .nw-tb{flex:0 0 auto;width:max(84px,calc(104*var(--u)));min-height:max(76px,calc(92*var(--u)));max-width:none;flex-direction:column;gap:4px;font-size:max(13px,calc(15*var(--u)));
+ background:linear-gradient(#22305a,#141c38);color:#f1ead8;border:1.5px solid #c9a24a;border-radius:14px;box-shadow:0 3px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.nw-screen .nw-tb svg{width:max(26px,calc(32*var(--u)));height:max(26px,calc(32*var(--u)))}
+.nw-screen .nw-tb.main{background:linear-gradient(#a8352e,#7a2420);color:#fff7e6}
+.nw-screen .nw-tb:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.nw-hint:empty{display:none}
+@media (orientation:portrait) and (max-width:600px){.nw-body{padding-top:calc(env(safe-area-inset-top,0px) + 130px)}}
+/* ショップ */
+.modal.shop .box{max-width:920px;max-height:92vh}
+.sh-pick{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0}
+.sh-pick button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 12px;border:1.5px solid #c9a24a;border-radius:14px;background:#f6eedb;color:#2a2320;font-family:var(--serif)}
+.sh-pick svg{width:72px;height:72px;color:#8a2a25}.sh-pick b{font-size:22px}.sh-pick small{font-family:var(--sans);color:#7a6a50;font-size:13px}
+.sh-tabs button[data-e="all"].on{background:#2a2320;border-color:#2a2320}
+.sh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px}
+.sh-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fffaf0;color:#2a2320;text-align:left;font-family:var(--sans)}
+.sh-card:hover{border-color:#c9a24a}
+.sh-card .sh-img,.sh-det .sh-img{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#efe5cf;border-radius:6px;overflow:hidden;margin-bottom:4px}
+.sh-grid.wear .sh-img,.sh-det.wear .sh-img{aspect-ratio:3/4}
+.sh-img svg{width:100%;height:100%;flex:none}.sh-img .nw-th.sk{border:0}
+.sh-img img{max-width:92%;max-height:92%;object-fit:contain}
+.sh-card b{font-family:var(--serif);font-size:15px;line-height:1.35}
+.sh-card small{color:#7a6a50;font-size:12px}
+.sh-pr{align-self:flex-start;margin-top:2px;font-size:12px;font-weight:700;color:#fff;background:var(--ec);border-radius:10px;padding:2px 9px}
+.sh-card.own .sh-pr{background:#9a8f7c}
+.sh-det{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+.sh-det .tx p{line-height:1.8;margin:0 0 12px}
+.sh-meta{display:flex;gap:8px;align-items:center;color:#7a6a50;font-size:14px}.sh-meta .sh-pr{margin:0}
+@media (max-width:560px){.sh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sh-det{grid-template-columns:1fr}}
 /* 外見の選択：髪／顔／服／小物 のタブ */
 .lkb-go{position:relative}
 .lkb-cost{position:absolute;right:0;bottom:-1.9cqw;font-size:1.1cqw;color:#7a5a20;font-weight:700;white-space:nowrap}
@@ -10724,7 +10758,7 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
     <div class="lk-pane on" data-p="0">${lb('髪の色')}${sw('color',LOOK_COLORS)}${lb('髪型')}${ic('hair',LOOK_HAIRS,'髪型')}${lb('前髪')}${ic('bang',LOOK_BANGS,'前髪')}</div>
     <div class="lk-pane" data-p="1">${lb('肌')}${sw('skin',LOOK_SKINS)}${lb('目')}${ic('eye',LOOK_EYES,'目',)}${lb('眉')}${ic('brow',LOOK_BROWS,'眉')}</div>
     <div class="lk-pane${myOut.length?' has-out':''}" data-p="2">${lb('着ている服はどっち？')}${ic('wear',LOOK_WEARS,'服',' wr')}${myOut.length?lb('衣装（服屋で交換したもの）')+`<div class="look-acc look-out"><button class="look-hd${sel.outfit?'':' on'}" data-out=""><span style="margin:auto">着ない</span></button>${myOut.map(a=>`<button class="look-hd${sel.outfit===a.k?' on':''}" data-out="${esc(a.k)}"><img src="${IMG['UI_服_'+a.k]||''}" alt="" draggable="false"><span>${esc(a.n)}</span></button>`).join('')}</div>`:''}</div>
-    <div class="lk-pane" data-p="3">${myAcc.length||!myHold.length?lb('身につける小物'):''}${myAcc.length||myHold.length?`<div class="look-acc"${myAcc.length?'':' hidden'}>${myAcc.map(a=>`<button class="look-hd${sel.acc.includes(a.k)?' on':''}" data-acc="${esc(a.k)}"><img src="${IMG['UI_小物_'+a.k]||''}" alt="" draggable="false"><span>${esc(a.n)}</span></button>`).join('')}</div>${myHold.length?lb('手に持つもの（1つだけ）')+`<div class="look-acc look-hold"><button class="look-hd${sel.hold?'':' on'}" data-hold=""><span style="margin:auto">持たない</span></button>${myHold.map(a=>`<button class="look-hd${sel.hold===a.k?' on':''}" data-hold="${esc(a.k)}"><img src="${IMG['UI_持ち物_'+a.k]||''}" alt="" draggable="false"><span>${esc(a.n)}</span></button>`).join('')}</div>`:''}`:'<p class="lkb-d" style="text-align:left">まだ持っていません。マイルームの「服屋」で、栞と交換できます。</p>'}</div>`})()}
+    <div class="lk-pane" data-p="3">${myAcc.length||!myHold.length?lb('身につける小物'):''}${myAcc.length||myHold.length?`<div class="look-acc"${myAcc.length?'':' hidden'}>${myAcc.map(a=>`<button class="look-hd${sel.acc.includes(a.k)?' on':''}" data-acc="${esc(a.k)}"><img src="${IMG['UI_小物_'+a.k]||''}" alt="" draggable="false"><span>${esc(a.n)}</span></button>`).join('')}</div>${myHold.length?lb('手に持つもの（1つだけ）')+`<div class="look-acc look-hold"><button class="look-hd${sel.hold?'':' on'}" data-hold=""><span style="margin:auto">持たない</span></button>${myHold.map(a=>`<button class="look-hd${sel.hold===a.k?' on':''}" data-hold="${esc(a.k)}"><img src="${IMG['UI_持ち物_'+a.k]||''}" alt="" draggable="false"><span>${esc(a.n)}</span></button>`).join('')}</div>`:''}`:'<p class="lkb-d" style="text-align:left">まだ持っていません。マイルームの「ショップ」→「服屋」で、栞と交換できます。</p>'}</div>`})()}
    <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button><small class="lkb-cost" id="lookcost"></small></div></div></div>`,o.onCancel);
  heroBuild(sel).then(k=>{const pv=$('#lookpv');if(pv&&k)pv.src=IMG[k]});
  document.querySelectorAll('.lk-tabs button').forEach(t=>t.onclick=()=>{document.querySelectorAll('.lk-tabs button').forEach(x=>x.classList.toggle('on',x===t));document.querySelectorAll('.lk-pane').forEach(p=>p.classList.toggle('on',p.dataset.p===t.dataset.t))});
@@ -10739,7 +10773,7 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
  $('#lookok').onclick=()=>{const nm=($('#lknm')||{}).value;const v=(nm||'').trim();if(nm!=null&&!v){toast('名前を入れてください');$('#lknm').focus();return}
   const pay=o.cost&&lookBase(sel)!==base0;
   if(pay&&S.sh.some(x=>x<LOOK_COST)){toast(`栞が足りません（古代・中世・近世の栞が${LOOK_COST}枚ずつ必要です）`);return}
-  if(pay){S.sh=S.sh.map(x=>x-LOOK_COST);document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge())}
+  if(pay){S.sh=S.sh.map(x=>x-LOOK_COST);updShiori()}
   if(v)S.name=v;S.look=Object.assign({},S.look||{},sel,{acc:sel.acc.slice(),outfit:sel.outfit||'',hold:sel.hold||''});pay?saveNow():save();heroBuild(lookOf()).then(k=>{if(!k)return;HERO_LAST=k;try{localStorage.setItem(HERO_MEMO,JSON.stringify({k,url:IMG[k]}))}catch(e){}});closeModal(true);cb&&cb()}}
 function pickTutorial(){return 'ハンムラビ'}
 
@@ -11342,7 +11376,7 @@ const SD_LIST=[
  {n:'ヌル',c:'#5b5470',ok:()=>p1Clear(),say:()=>CHARA['ヌル'].lines}];
 /* rev:1 … 絵の向きがほかのキャラと逆（歩くときの左右反転を逆にする） */
 const SDBY=Object.fromEntries(SD_LIST.map(c=>[c.n,c]));
-let NWS={edit:false,sel:null,drag:null,tab:0,z:{s:1,x:0,y:0}};
+let NWS={edit:false,sel:null,drag:null,tab:'all',z:{s:1,x:0,y:0}};
 const NWPTR=new Map();
 
 function roomOf(){if(!S.room||typeof S.room!=='object')S.room={};const R=S.room;
@@ -11522,28 +11556,33 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
  const v=nwView();const {rc,k,ox,oy}=nwScreenK();z.x=P[0]-(cx-rc.left-ox)/k;z.y=P[1]-(cy-rc.top-oy)/k;nwApplyZoom()}
 
 /* ---- 画面 ---- */
-function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab||0,z:{s:1,x:0,y:0}};NWPTR.clear();
- show(`<div class="screen nw-screen">${topbar('マイルーム')}
- <div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="マイルーム"></svg>
+function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab??'all',scat:NWS.scat,ccat:NWS.ccat,ctab:NWS.ctab,z:{s:1,x:0,y:0}};NWPTR.clear();
+ show(`<div class="screen nw-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title nw-ttl">マイルーム</div><div class="gc-top">${coinsHTML()}</div>
+ <div class="nw-body"><div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="マイルーム"></svg>
   <button class="nw-reset" id="nwReset" hidden aria-label="全体を表示">全体</button>
   <div class="nw-bub" id="nwBub" hidden></div>
   <div class="nw-selbar" id="nwSel" hidden></div><p class="nw-hint" id="nwHint"></p></div>
- <div class="nw-tools" id="nwTools"></div></div>`);
+ <div class="nw-tools" id="nwTools"></div></div></div>`);
  $('#nwReset').onclick=()=>{NWS.z={s:1,x:0,y:0};nwApplyZoom()};
  nwTools();nwDraw();nwBind();nwWanderStart()}
+/* 栞の表示（上の3つの栞・小さな栞の表示）をいまの枚数に */
+function updShiori(){document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());
+ document.querySelectorAll('.coins').forEach(x=>{const o=(x.dataset.only||'').split('').map(Number);x.outerHTML=coinsHTML(o.length?o:null)})}
 function nwTools(){const t=$('#nwTools');if(!t)return;
  const ic=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${{edit:'<path d="M4 20l4-1 11-11-3-3L5 16z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
   done:'<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
   box:'<path d="M4 8l8-4 8 4v9l-8 4-8-4zM4 8l8 4 8-4M12 12v9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
   chara:'<circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4.5 21c0-5 3.3-8 7.5-8s7.5 3 7.5 8z" fill="currentColor"/>',
-  shop:'<path d="M6 3h12v18l-6-4-6 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'}[k]}</svg>`;
+  look:'<path d="M10 6.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V11M12 11l-9 7.2c-.6.5-.3 1.3.5 1.3h17c.8 0 1.1-.8.5-1.3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
+  shop:'<path d="M5 8h14l-1.2 13H6.2zM9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'}[k]}</svg>`;
  const B=(id,k,label,cls='')=>`<button class="nw-tb ${cls}" id="${id}">${ic(k)}<span>${label}</span></button>`;
- t.innerHTML=NWS.edit?B('nwPut','box','持ち物')+B('nwChara','chara','キャラ')+B('nwShop','shop','ショップ')+B('nwDone','done','完了','main')
-  :B('nwEdit','edit','もようがえ','main')+B('nwChara','chara','キャラ')+B('nwShop','shop','ショップ');
- const h=$('#nwHint');if(h)h.textContent=NWS.edit?'タップで選んでドラッグで動かす・2本指で拡大':'タップで説明・長押しでもようがえ・2本指で拡大';
- $('#nwChara').onclick=nwCharaPanel;$('#nwShop').onclick=()=>nwShop();
+ t.innerHTML=NWS.edit?B('nwPut','box','持ち物')+B('nwShop','shop','ショップ')+B('nwDone','done','完了','main')
+  :B('nwEdit','edit','もようがえ','main')+B('nwChara','chara','キャラ変更')+B('nwLook','look','見だしなみ')+B('nwShop','shop','ショップ');
+ const h=$('#nwHint');if(h)h.textContent=NWS.edit?'タップで選んで、ドラッグで動かす':'';
+ $('#nwShop').onclick=()=>shopPick();
  if(NWS.edit){$('#nwPut').onclick=()=>nwInventory();$('#nwDone').onclick=()=>{NWS.edit=false;NWS.sel=null;save();nwTools();nwSelBar();nwDraw()}}
- else $('#nwEdit').onclick=()=>{NWS.edit=true;nwHideBub();nwTools();nwDraw()}}
+ else{$('#nwEdit').onclick=()=>{NWS.edit=true;nwHideBub();nwTools();nwDraw()};$('#nwChara').onclick=nwCharaPanel;
+  $('#nwLook').onclick=()=>askLook(()=>{nwDraw()},{title:'見だしなみ',cancel:true,cost:true})}}
 function nwSelBar(){const b=$('#nwSel');if(!b)return;const sel=NWS.edit&&NWS.sel;if(!sel){b.hidden=true;return}
  const o=sel.o;b.hidden=false;
  b.innerHTML=`<span class="nm">${esc(nameOf(o))}</span><button id="nwFlip">${sel.kind==='f'?'向きを変える':'反対の壁へ'}</button><button id="nwStow">しまう</button>`;
@@ -11639,56 +11678,62 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
 
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
- modal(`<div class="mhead"><h3>キャラクター</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">マイルームにいるキャラは、空いている床をふらふら歩きます。</p><div class="row" style="margin:0 0 10px"><button class="btn light" id="nwLook">${esc(S.name||'主人公')}の姿・名前を変える</button><button class="btn light" id="nwAccShop">服屋</button></div>
+ modal(`<div class="mhead"><h3>キャラ変更</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">マイルームにいるキャラは、空いている床をふらふら歩きます。</p>
  <div class="nw-chara">${L.map(c=>{const on=shown.has(c.n);return `<button class="nw-crow${on?' on':''}" data-sd="${esc(c.n)}">${sdThumb(c.n)}<span class="nm">${esc(c.n==='主人公'?(S.name||'主人公'):c.n)}</span><span class="sw" aria-label="${on?'表示中':'非表示'}"><i></i></span><small>${on?'表示中':'非表示'}</small></button>`}).join('')}</div>`);
  document.querySelectorAll('.nw-crow').forEach(b=>b.onclick=()=>{const n=b.dataset.sd;const i=R.f.findIndex(o=>o.k==='SD'&&o.n===n);
   if(i>=0){if(NWS.sel&&NWS.sel.o===R.f[i])NWS.sel=null;R.f.splice(i,1)}
   else{const o=findFloorSpot('SD',n);if(!o){toast('床に空きがありません');return}R.f.push(o)}
-  save();nwSelBar();nwDraw();nwCharaPanel()});
- const lb=$('#nwLook');if(lb)lb.onclick=()=>askLook(()=>{nwDraw();nwCharaPanel()},{title:'姿を変える',cancel:true,cost:true,onCancel:nwCharaPanel});
- const ab=$('#nwAccShop');if(ab)ab.onclick=()=>accShop()}
+  save();nwSelBar();nwDraw();nwCharaPanel()})}
 
-/* ---- 服屋（主人公の小物を栞と交換） ---- */
-function accShop(){const L=LOOK_ACCS,O=LOOK_OUTFITS,H=LOOK_HOLDS;
- const hrow=a=>{const own=holdOwned(a.k),can=S.sh[a.e]>=a.p;return `<div class="nw-row"><div class="acc-pv"><img data-holdpv="${esc(a.k)}" alt=""></div><div class="tx"><b>${esc(a.n)}</b><p>${esc(a.x||'')}</p></div>
-  ${own?'<span class="nw-owned">交換ずみ</span>':`<button class="btn ${can?'':'light'}" data-buyhold="${esc(a.k)}" ${can?'':'disabled'}>${ERAS[a.e].k}の栞${a.p}枚</button>`}</div>`};
- const orow=a=>{const own=outfitOwned(a.k),can=S.sh[a.e]>=a.p;return `<div class="nw-row"><div class="acc-pv"><img data-outpv="${esc(a.k)}" alt=""></div><div class="tx"><b>${esc(a.n)}</b><p>${esc(a.x||'')}</p></div>
-  ${own?'<span class="nw-owned">交換ずみ</span>':`<button class="btn ${can?'':'light'}" data-buyout="${esc(a.k)}" ${can?'':'disabled'}>${ERAS[a.e].k}の栞${a.p}枚</button>`}</div>`};
- modal(`<div class="mhead"><h3>服屋</h3><button class="btn light" data-close>閉じる</button></div><p class="muted" style="margin:0 0 10px">交換した衣装は「姿を変える」の「服」、小物と持ち物は「小物」で着替えられます（着替えに栞は要りません）。</p>
+/* ---- ショップ：家具屋か服屋かを選ぶ ---- */
+function shopPick(){modal(`<div class="mhead"><h3>ショップ</h3><button class="btn light" data-close>閉じる</button></div>
+ <div class="sh-pick"><button id="spF"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 22h32v14H8zM12 36v5M36 36v5M8 22c0-5 3-8 8-8h16c5 0 8 3 8 8M14 22v-3h20v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>家具屋</b><small>家具・置物・壁紙・床</small></button>
+ <button id="spC"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 12a4 4 0 1 1 5.2 3.8c-.8.3-1.2 1-1.2 1.8V20M24 20L6 34c-1.2 1-.6 2.6 1 2.6h34c1.6 0 2.2-1.6 1-2.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg><b>服屋</b><small>衣装・持ち物・小物</small></button></div>`);
+ $('#modal').classList.add('shop');$('#spF').onclick=()=>nwShop();$('#spC').onclick=()=>accShop()}
+
+/* ショップの並び（共通）：絵を大きく、名前・分類・値段だけ。選ぶと説明と交換 */
+function shopFrame(o){/* o={title,eraKey,catKey,cats,items,img,back} */
+ const era=NWS[o.eraKey]??'all',cat=NWS[o.catKey]||'すべて';
+ const L=o.items.filter(x=>(era==='all'||x.e===era)&&(cat==='すべて'||x.cat===cat));
+ modal(`<div class="mhead"><h3>${o.title}</h3><div class="row" style="margin:0;gap:8px"><button class="btn light" id="shBack">戻る</button><button class="btn light" data-close>閉じる</button></div></div>
+ <div class="nw-tabs sh-tabs"><button data-e="all" class="${era==='all'?'on':''}" style="--ec:#2a2320">すべて</button>${ERAS.map((E,i)=>`<button data-e="${i}" class="${i===era?'on':''}" style="--ec:${E.c}">${E.k}</button>`).join('')}</div>
+ ${nwChips(['すべて',...o.cats],cat,'sc')}
  <div class="acc-have">${ERAS.map((E,i)=>`<span style="--ec:${E.c}">${E.k}の栞 <b>${S.sh[i]}</b></span>`).join('')}</div>
- ${O.length?`<h4 class="acc-h">衣装</h4><div class="nw-shop">${O.map(orow).join('')}</div>`:''}${H.length?`<h4 class="acc-h">持ち物</h4><div class="nw-shop">${H.map(hrow).join('')}</div>`:''}<h4 class="acc-h">小物</h4><div class="nw-shop">${L.length?L.map(a=>{const own=accOwned(a.k),can=S.sh[a.e]>=a.p;return `<div class="nw-row"><div class="acc-pv"><img data-accpv="${esc(a.k)}" alt=""></div><div class="tx"><b>${esc(a.n)}</b><p>${esc(a.x||'')}</p></div>
-  ${own?'<span class="nw-owned">交換ずみ</span>':`<button class="btn ${can?'':'light'}" data-buy="${esc(a.k)}" ${can?'':'disabled'}>${ERAS[a.e].k}の栞${a.p}枚</button>`}</div>`}).join(''):'<p class="muted">準備中です。品物が届くまで、もう少し待っていてね。</p>'}</div>`,()=>nwCharaPanel());
- /* 見本は、いまの主人公にその小物を付けた姿 */
- H.forEach(a=>{const lk=lookOf();lk.hold=a.k;heroBuild(lk).then(k=>{const im=document.querySelector(`[data-holdpv="${CSS.escape(a.k)}"]`);if(im&&k)im.src=IMG[k]})});
- document.querySelectorAll('[data-buyhold]').forEach(b=>b.onclick=()=>{const a=LOOK_HOLDS.find(x=>x.k===b.dataset.buyhold);
-  askYes(`${ERAS[a.e].k}の栞${a.p}枚で「${a.n}」と交換しますか？`,'交換する',()=>{if(S.sh[a.e]<a.p){toast('栞が足りません');return}
-   S.sh[a.e]-=a.p;S.holds=[...new Set([...(S.holds||[]),a.k])];saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('「姿を変える」の「小物」から持てます');accShop()},()=>accShop())});
- O.forEach(a=>{const lk=lookOf();lk.outfit=a.k;heroBuild(lk).then(k=>{const im=document.querySelector(`[data-outpv="${CSS.escape(a.k)}"]`);if(im&&k)im.src=IMG[k]})});
- document.querySelectorAll('[data-buyout]').forEach(b=>b.onclick=()=>{const a=LOOK_OUTFITS.find(x=>x.k===b.dataset.buyout);
-  askYes(`${ERAS[a.e].k}の栞${a.p}枚で「${a.n}」と交換しますか？`,'交換する',()=>{if(S.sh[a.e]<a.p){toast('栞が足りません');return}
-   S.sh[a.e]-=a.p;S.outfits=[...new Set([...(S.outfits||[]),a.k])];saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('「姿を変える」の「服」から着られます');accShop()},()=>accShop())});
- L.forEach(a=>{const lk=lookOf();lk.acc=[...new Set([...lk.acc,a.k])].sort();heroBuild(lk).then(k=>{const im=document.querySelector(`[data-accpv="${CSS.escape(a.k)}"]`);if(im&&k)im.src=IMG[k]})});
- document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const a=LOOK_ACCS.find(x=>x.k===b.dataset.buy);
-  askYes(`${ERAS[a.e].k}の栞${a.p}枚で「${a.n}」と交換しますか？`,'交換する',()=>{if(S.sh[a.e]<a.p){toast('栞が足りません');return}
-   S.sh[a.e]-=a.p;S.accs=[...new Set([...(S.accs||[]),a.k])];saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('「姿を変える」の「小物」から身につけられます');accShop()},()=>accShop())})}
+ <div class="sh-grid ${o.cls||''}">${L.map(x=>`<button class="sh-card${x.owned?' own':''}" data-i="${o.items.indexOf(x)}"><div class="sh-img">${x.th||''}</div><b>${esc(x.n)}</b><small>${esc(x.note)}</small>
+  <span class="sh-pr" style="--ec:${ERAS[x.e].c}">${x.owned?'交換ずみ':`${ERAS[x.e].k}の栞${x.p}枚`}</span></button>`).join('')||'<p class="muted">この時代のこの分類の品は、まだありません。</p>'}</div>`,null);
+ $('#modal').classList.add('shop');const box=$('#modal .box');if(NWS.shScroll){box.scrollTop=NWS.shScroll;NWS.shScroll=0}
+ $('#shBack').onclick=()=>shopPick();
+ document.querySelectorAll('.sh-tabs [data-e]').forEach(b=>b.onclick=()=>{NWS[o.eraKey]=b.dataset.e==='all'?'all':+b.dataset.e;o.redraw()});
+ document.querySelectorAll('.nw-chips [data-sc]').forEach(b=>b.onclick=()=>{NWS[o.catKey]=b.dataset.sc;o.redraw()});
+ if(o.img)o.img(L);
+ document.querySelectorAll('.sh-card').forEach(b=>b.onclick=()=>{NWS.shScroll=box.scrollTop;const x=o.items[+b.dataset.i];const back=()=>o.redraw();
+  const can=S.sh[x.e]>=x.p;
+  modal(`<div class="mhead"><h3>${esc(x.n)}</h3><button class="btn light" data-close>戻る</button></div>
+  <div class="sh-det ${o.cls||''}"><div class="sh-img">${x.th||''}</div><div class="tx"><p class="sh-meta"><span class="sh-pr" style="--ec:${ERAS[x.e].c}">${ERAS[x.e].k}</span>${esc(x.note)}</p><p>${esc(x.x||'')}</p>
+  ${x.owned?'<p class="nw-owned">交換ずみ</p>':`<button class="btn ${can?'red':'light'}" id="shBuy" ${can?'':'disabled'}>${ERAS[x.e].k}の栞${x.p}枚で交換する</button>${can?'':`<p class="muted" style="margin:6px 0 0">${ERAS[x.e].k}の栞が足りません（いま${S.sh[x.e]}枚）</p>`}`}</div></div>`,back);
+  $('#modal').classList.add('shop');if(o.img)o.img([x]);
+  const bb=$('#shBuy');if(bb)bb.onclick=()=>{if(S.sh[x.e]<x.p){toast('栞が足りません');return}S.sh[x.e]-=x.p;x.give();saveNow();updShiori();toast(x.msg);back()}})}
 
-/* ---- ショップ（栞と交換） ---- */
-function nwShop(){const e=NWS.tab;const cat=NWS.scat||'すべて';const CH=['すべて',...FCATS,'壁紙・床'];
- const L=cat==='壁紙・床'?[]:FURN.filter(f=>f.e===e&&(cat==='すべて'||catOf(f)===cat));const SK=cat==='すべて'||cat==='壁紙・床'?SKINS.filter(f=>f.e===e):[];
- const row=(th,f,owned,note)=>{const can=S.sh[e]>=f.p;return `<div class="nw-row">${th}<div class="tx"><b>${esc(f.n)}</b><small>${note}</small><p>${esc(f.x)}</p></div>
-  ${owned===true?'<span class="nw-owned">交換ずみ</span>':`<button class="btn ${can?'':'light'}" data-${SKBY[f.k]?'sk':'k'}="${f.k}" ${can?'':'disabled'}>${ERAS[e].k}の栞${f.p}枚</button>`}</div>`};
- modal(`<div class="mhead"><h3>ショップ</h3><button class="btn light" data-close>閉じる</button></div><div class="nw-tabs">${ERAS.map((E,i)=>`<button data-e="${i}" class="${i===e?'on':''}" style="--ec:${E.c}">${E.k}</button>`).join('')}</div>
- ${nwChips(CH,cat,'sc')}
- <div class="nw-have">${ribbon(e)}<span>${ERAS[e].k}の栞</span><b>${S.sh[e]}</b>枚</div>
- <div class="nw-shop">${L.map(f=>{const own=S.room.inv[f.k]||0;return row(thumbSVG(f),f,own,`${catOf(f)}・${f.t==='wall'?`幅${f.w}`:`${f.w}×${f.d}マス`}${own?`　持っている数：${own}`:''}`)}).join('')}
- ${SK.map(f=>row(skinPreview(f),f,skinOwned(f.k),f.t==='wall'?'壁紙':'床')).join('')}
- ${L.length+SK.length?'':'<p class="muted">この時代のこの分類の品はありません。</p>'}</div>`);
- document.querySelectorAll('.nw-tabs [data-e]').forEach(b=>b.onclick=()=>{NWS.tab=+b.dataset.e;nwShop()});
- document.querySelectorAll('.nw-chips [data-sc]').forEach(b=>b.onclick=()=>{NWS.scat=b.dataset.sc;nwShop()});
- const buy=(f,give)=>askYes(`${ERAS[e].k}の栞${f.p}枚で「${f.n}」と交換しますか？`,'交換する',()=>{if(S.sh[e]<f.p){toast('栞が足りません');return}
-   S.sh[e]-=f.p;give();saveNow();document.querySelectorAll('.shiori3').forEach(x=>x.outerHTML=shioriBadge());toast('持ち物に入れました。「もようがえ」の「持ち物」から置けます');nwShop()},()=>nwShop());
- document.querySelectorAll('.nw-row [data-k]').forEach(b=>b.onclick=()=>{const f=FBY[b.dataset.k];buy(f,()=>{S.room.inv[f.k]=(S.room.inv[f.k]||0)+1})});
- document.querySelectorAll('.nw-row [data-sk]').forEach(b=>b.onclick=()=>{const f=SKBY[b.dataset.sk];buy(f,()=>{if(!S.room.skins.includes(f.k))S.room.skins.push(f.k)})})}
+/* ---- 家具屋 ---- */
+function nwShop(){const items=[];
+ FURN.filter(f=>f.e>=0).forEach(f=>{const own=S.room.inv[f.k]||0;items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:catOf(f),th:thumbSVG(f),
+  note:`${catOf(f)}・${f.t==='wall'?`幅${f.w}`:`${f.w}×${f.d}マス`}${own?`・持っている数 ${own}`:''}`,give:()=>{S.room.inv[f.k]=(S.room.inv[f.k]||0)+1},msg:'持ち物に入れました。「もようがえ」の「持ち物」から置けます'})});
+ SKINS.filter(f=>f.e>=0).forEach(f=>{const c=f.t==='wall'?'壁紙':'床';items.push({n:f.n,e:f.e,p:f.p,x:f.x,cat:c,th:skinPreview(f),note:c,owned:skinOwned(f.k),
+  give:()=>{if(!S.room.skins.includes(f.k))S.room.skins.push(f.k)},msg:'「もようがえ」の「持ち物」から貼りかえられます'})});
+ shopFrame({title:'家具屋',eraKey:'tab',catKey:'scat',cats:[...FCATS,'壁紙','床'],items,redraw:nwShop})}
+
+/* ---- 服屋（主人公の衣装・持ち物・小物） ---- */
+function accShop(){const items=[];
+ const add=(L,kind,cat,owned,list,msg)=>L.forEach(a=>items.push({k:a.k,kind,n:a.n,e:a.e,p:a.p,x:a.x,cat,note:cat,owned:owned(a.k),
+  give:()=>{S[list]=[...new Set([...(S[list]||[]),a.k])]},msg}));
+ add(LOOK_OUTFITS,'outfit','衣装',outfitOwned,'outfits','「見だしなみ」の「服」から着られます');
+ add(LOOK_HOLDS,'hold','持ち物',holdOwned,'holds','「見だしなみ」の「小物」から持てます');
+ add(LOOK_ACCS,'acc','小物',accOwned,'accs','「見だしなみ」の「小物」から身につけられます');
+ /* 見本は、いまの主人公にその品を合わせた姿 */
+ items.forEach(x=>x.th=`<img data-pv="${esc(x.kind+':'+x.k)}" alt="">`);
+ const img=L=>L.forEach(x=>{const lk=lookOf();if(x.kind==='outfit')lk.outfit=x.k;else if(x.kind==='hold')lk.hold=x.k;else lk.acc=[...new Set([...lk.acc,x.k])].sort();
+  heroBuild(lk).then(k=>{document.querySelectorAll(`[data-pv="${CSS.escape(x.kind+':'+x.k)}"]`).forEach(im=>{if(k)im.src=IMG[k]})})});
+ shopFrame({title:'服屋',eraKey:'ctab',catKey:'ccat',cats:['衣装','持ち物','小物'],items,img,cls:'wear',redraw:accShop})}
 
 /* ---- キャラがふらふら歩く（空いている床だけを、1マスずつなめらかに） ---- */
 const NWW={raf:0,last:0,st:new Map()};
