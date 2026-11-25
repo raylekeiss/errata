@@ -180,8 +180,11 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .look-hd img{max-width:100%;max-height:100%;display:block;pointer-events:none}
 
 /* マイルーム：上は他の画面と同じ栞、操作は右に縦並び */
-.nw-screen{position:relative}
-.nw-screen .nw-ttl{font-family:var(--serif);left:calc(env(safe-area-inset-left,0px) + max(110px,calc(130*var(--u))));transform:none;min-width:calc(360*var(--u))}
+.nw-screen{position:fixed;inset:0;font-family:var(--sans)}
+.hd-ttl{font-family:var(--serif)}
+.pt-screen{position:fixed;inset:0}
+.pt-screen>.scroll{width:100%;max-width:1100px;margin:0 auto;padding-top:calc(env(safe-area-inset-top,0px) + max(80px,calc(108*var(--u))))}
+@media (orientation:portrait) and (max-width:900px){.pt-screen>.scroll{padding-top:calc(env(safe-area-inset-top,0px) + max(150px,calc(190*var(--u))))}.nw-body{padding-top:calc(env(safe-area-inset-top,0px) + max(150px,calc(190*var(--u))))}}
 .nw-body{flex:1;min-height:0;display:flex;gap:10px;padding:calc(env(safe-area-inset-top,0px) + max(70px,calc(100*var(--u)))) calc(env(safe-area-inset-right,0px) + 14px) calc(env(safe-area-inset-bottom,0px) + 12px) 8px}
 .nw-screen .nw-tools{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0}
 .nw-screen .nw-tb{flex:0 0 auto;width:max(84px,calc(104*var(--u)));min-height:max(76px,calc(92*var(--u)));max-width:none;flex-direction:column;gap:4px;font-size:max(13px,calc(15*var(--u)));
@@ -11338,7 +11341,7 @@ function chooseCard(title,cb,opt={}){const pool=opt.pool||gachaPool();
 
 /* ---------- party ---------- */
 function Party(){const owned=CARDS.filter(c=>lv(c.n)&&!isSP(c.n));const ch=Math.max(1,Math.min(STORY.length-1,nextChapter()||STORY.length-1));const tm=teamMult(ch,'');
- show(`<div class="screen">${topbar('編成','home',true)}<div class="scroll">
+ show(`<div class="screen pt-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">編成</div><div class="gc-top">${coinsHTML()}</div><div class="scroll">
  <div class="pane paper"><h3>連れていく頁（4枚まで）</h3><div class="slots">${[0,1,2,3].map(i=>S.party[i]?`<div data-rm="${i}">${cardHTML(S.party[i])}</div>`:`<div class="slot-empty">空き</div>`).join('')}
  <div>${cardHTML(HELPER[ch],{forceOwn:true,noLv:true})}<p class="muted" style="font-size:12px;text-align:center;margin:4px 0 0">助っ人（${CHNAME[ch]}）</p></div></div>
  <p class="bonus">同じ属性を2枚で＋10%、3枚で＋20%、4枚以上で＋35%（助っ人も数えます）。いまの編成：${tm.notes.filter(n=>n.startsWith('編成')).join('')||'ボーナスなし'}<br>頁をタップすると外せます。</p></div>
@@ -11561,7 +11564,7 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
 
 /* ---- 画面 ---- */
 function Niwa(){roomOf();NWS={edit:false,sel:null,drag:null,tab:NWS.tab??'all',scat:NWS.scat,ccat:NWS.ccat,ctab:NWS.ctab,z:{s:1,x:0,y:0}};NWPTR.clear();
- show(`<div class="screen nw-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title nw-ttl">マイルーム</div><div class="gc-top">${coinsHTML()}</div>
+ show(`<div class="screen nw-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">マイルーム</div><div class="gc-top">${coinsHTML()}</div>
  <div class="nw-body"><div class="nw-stage" id="nwStage"><svg id="nwSvg" viewBox="0 0 ${NW.W} ${NW.H}" preserveAspectRatio="xMidYMid meet" aria-label="マイルーム"></svg>
   <button class="nw-reset" id="nwReset" hidden aria-label="全体を表示">全体</button>
   <div class="nw-bub" id="nwBub" hidden></div>
