@@ -181,7 +181,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 
 /* マイルーム：上は他の画面と同じ栞、操作は右に縦並び */
 .nw-screen{position:relative}
-.nw-screen .nw-ttl{font-size:max(18px,calc(30*var(--u)))}
+.nw-screen .nw-ttl{font-family:var(--serif);left:calc(env(safe-area-inset-left,0px) + max(110px,calc(130*var(--u))));transform:none;min-width:calc(360*var(--u))}
 .nw-body{flex:1;min-height:0;display:flex;gap:10px;padding:calc(env(safe-area-inset-top,0px) + max(70px,calc(100*var(--u)))) calc(env(safe-area-inset-right,0px) + 14px) calc(env(safe-area-inset-bottom,0px) + 12px) 8px}
 .nw-screen .nw-tools{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0}
 .nw-screen .nw-tb{flex:0 0 auto;width:max(84px,calc(104*var(--u)));min-height:max(76px,calc(92*var(--u)));max-width:none;flex-direction:column;gap:4px;font-size:max(13px,calc(15*var(--u)));
@@ -191,6 +191,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .nw-screen .nw-tb:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
 .nw-hint:empty{display:none}
 @media (orientation:portrait) and (max-width:600px){.nw-body{padding-top:calc(env(safe-area-inset-top,0px) + 130px)}}
+.bar .coins{margin-left:auto}
 /* ショップ */
 .modal.shop .box{max-width:920px;max-height:92vh}
 .sh-pick{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0}
@@ -9755,7 +9756,7 @@ function blobSVG(boss,en){if(en&&IMG['誤植_'+en])return `<img src="${IMG['誤�
 /* ---------- router ---------- */
 function show(html){app.innerHTML=html;const t=app.querySelector('.gc-top');if(t&&!TOUCH&&!t.querySelector('.fs-mini')){const b=document.createElement('button');b.className='gc-back fs-mini';b.setAttribute('aria-label','全画面');b.title='全画面';b.innerHTML='<svg viewBox=\x220 0 24 24\x22 width=\x2220\x22 height=\x2220\x22 aria-hidden=\x22true\x22><path d=\x22M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\x22 fill=\x22none\x22 stroke=\x22currentColor\x22 stroke-width=\x222.2\x22 stroke-linecap=\x22round\x22 stroke-linejoin=\x22round\x22/></svg>';b.onclick=e=>{e.stopPropagation();toggleFS()};t.prepend(b)}}
 function shioriBadge(){return `<span class="shiori3">${ERAS.map((E,i)=>`${E.k}<b>${S.sh[i]}</b>`).join('')}</span>`}
-function topbar(title,backTo='home'){return `<div class="bar"><button class="back" data-go="${backTo}">戻る</button><h2>${esc(title)}</h2>${shioriBadge()}</div>`}
+function topbar(title,backTo='home',coins){return `<div class="bar"><button class="back" data-go="${backTo}">戻る</button><h2>${esc(title)}</h2>${coins?coinsHTML():shioriBadge()}</div>`}
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const k=g.dataset.go;const f=({home:Home,story:StoryMenu,quiz:QuizMenu,gacha:Gacha,party:Party,zukan:Zukan,niwa:Niwa,lib:LibMenu,title:Title})[k];if(g.classList.contains('tome'))FX._replay(g,'fx-glow',500);FX.pageTurn(f)}});
 
 /* ---------- title ---------- */
@@ -11337,7 +11338,7 @@ function chooseCard(title,cb,opt={}){const pool=opt.pool||gachaPool();
 
 /* ---------- party ---------- */
 function Party(){const owned=CARDS.filter(c=>lv(c.n)&&!isSP(c.n));const ch=Math.max(1,Math.min(STORY.length-1,nextChapter()||STORY.length-1));const tm=teamMult(ch,'');
- show(`<div class="screen">${topbar('編成')}<div class="scroll">
+ show(`<div class="screen">${topbar('編成','home',true)}<div class="scroll">
  <div class="pane paper"><h3>連れていく頁（4枚まで）</h3><div class="slots">${[0,1,2,3].map(i=>S.party[i]?`<div data-rm="${i}">${cardHTML(S.party[i])}</div>`:`<div class="slot-empty">空き</div>`).join('')}
  <div>${cardHTML(HELPER[ch],{forceOwn:true,noLv:true})}<p class="muted" style="font-size:12px;text-align:center;margin:4px 0 0">助っ人（${CHNAME[ch]}）</p></div></div>
  <p class="bonus">同じ属性を2枚で＋10%、3枚で＋20%、4枚以上で＋35%（助っ人も数えます）。いまの編成：${tm.notes.filter(n=>n.startsWith('編成')).join('')||'ボーナスなし'}<br>頁をタップすると外せます。</p></div>
