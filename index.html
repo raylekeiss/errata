@@ -223,6 +223,10 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .sh-card small{color:#7a6a50;font-size:12px}
 .sh-pr{align-self:flex-start;margin-top:2px;font-size:12px;font-weight:700;color:#fff;background:var(--ec);border-radius:10px;padding:2px 9px}
 .sh-card.own .sh-pr{background:#9a8f7c}
+/* 1回しか交換できない品（服・小物・壁紙・床・背景）は、交換ずみなら影をかぶせる */
+.sh-card.own{position:relative}
+.sh-card.own::after{content:'';position:absolute;inset:0;border-radius:inherit;background:#7a7264;mix-blend-mode:multiply;opacity:.6;pointer-events:none}
+.sh-card.own .sh-pr{position:relative;z-index:1}
 .sh-det{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
 .sh-det .tx p{line-height:1.8;margin:0 0 12px}
 .sh-meta{display:flex;gap:8px;align-items:center;color:#7a6a50;font-size:14px}.sh-meta .sh-pr{margin:0}
@@ -232,8 +236,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lkb-go{position:relative}
 .lkb-cost{position:absolute;right:0;bottom:-1.9cqw;font-size:1.1cqw;color:#7a5a20;font-weight:700;white-space:nowrap}
 .lkb-cost.ng{color:#b3262d}
-.look-acc{display:flex;flex-wrap:wrap;gap:1cqw;padding-left:.5cqw}
-.look-acc .look-hd{width:7cqw;height:8.5cqw;flex-direction:column;padding:.3cqw}
+/* 服・小物がたくさんあっても崩れないよう、1列のまま左右にスクロール */
+.look-acc{display:flex;flex-wrap:nowrap;gap:1cqw;padding:.3cqw .5cqw .9cqw;width:100%;min-width:0;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:rgba(28,37,64,.35) transparent;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 2.5cqw),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 2.5cqw),transparent)}
+.look-acc.at-end{-webkit-mask-image:none;mask-image:none}
+.look-acc::-webkit-scrollbar{height:.5cqw}
+.look-acc::-webkit-scrollbar-thumb{background:rgba(28,37,64,.35);border-radius:9px}
+.look-acc .look-hd{width:7cqw;height:8.5cqw;flex:0 0 auto;flex-direction:column;padding:.3cqw;scroll-snap-align:start}
 .look-acc .look-hd img{width:100%;flex:1;min-height:0;object-fit:contain}
 .look-acc .look-hd span{font-size:1.1cqw;font-weight:700;color:#1c2540}
 .acc-have{display:flex;gap:14px;margin:0 0 10px;font-size:13px;color:#555}.acc-have b{color:var(--ec);font-size:16px}
@@ -241,6 +249,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .lk-pane.has-out .look-sw.tx.ic.wr .look-hd{width:7.4cqw;height:9cqw}
 .look-out .look-hd{width:6.2cqw;height:7.6cqw}
 .look-out .look-hd span{text-align:center;line-height:1.2}
+.look-acc .look-hd span{text-align:center;line-height:1.25;word-break:keep-all;overflow-wrap:anywhere}
 .acc-pv{width:64px;height:84px;flex:0 0 64px;display:flex;align-items:center;justify-content:center;background:#f6efe0;border-radius:8px;overflow:hidden}
 .acc-pv img{max-width:100%;max-height:100%}
 
@@ -10843,6 +10852,7 @@ function askLook(cb,o){o=o||{};const cur=lookOf();const sel={skin:cur.skin,color
    <div class="lkb-go">${o.cancel?'<button class="lkb-no" data-close>やめる</button>':''}<button class="lkb-ok" id="lookok">決定</button><small class="lkb-cost" id="lookcost"></small></div></div></div>`,o.onCancel);
  heroBuild(sel).then(k=>{const pv=$('#lookpv');if(pv&&k)pv.src=IMG[k]});
  document.querySelectorAll('.lk-tabs button').forEach(t=>t.onclick=()=>{document.querySelectorAll('.lk-tabs button').forEach(x=>x.classList.toggle('on',x===t));document.querySelectorAll('.lk-pane').forEach(p=>p.classList.toggle('on',p.dataset.p===t.dataset.t))});
+ document.querySelectorAll('.look-acc').forEach(r=>{const f=()=>r.classList.toggle('at-end',r.scrollLeft+r.clientWidth>=r.scrollWidth-4);r.addEventListener('scroll',f,{passive:true});setTimeout(f,0);new ResizeObserver(f).observe(r)});
  const m=$('#modal');if(m){m.classList.add('lookbook');m.addEventListener('click',e=>{if(e.target===m&&o.cancel)closeModal()})}
  const costUp=()=>{const c=$('#lookcost');if(!c)return;const pay=o.cost&&lookBase(sel)!==base0;c.textContent=pay?`各時代の栞${LOOK_COST}枚ずつ`:'';c.classList.toggle('ng',pay&&S.sh.some(x=>x<LOOK_COST))};costUp();
  const redraw=()=>{costUp();const want=JSON.parse(JSON.stringify(sel));heroBuild(want).then(k=>{const pv=$('#lookpv');if(pv&&k&&heroSig(want)===heroSig(sel))pv.src=IMG[k]})};
