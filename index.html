@@ -835,6 +835,8 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .bt-enemy.img.boss{width:calc(420*var(--u));top:calc(70*var(--u))}
 @media (orientation:portrait){.bt-enemy.img{width:calc(440*var(--u));top:calc(100*var(--u))}.bt-enemy.img.boss{width:calc(500*var(--u));top:calc(80*var(--u))}}
 
+.nw-bgx{margin:0 0 10px;padding:10px 12px;border-left:3px solid #c9a24a;background:rgba(201,162,74,.12);font-size:14px;line-height:1.7}
+.nw-bgx b{display:block;font-size:15px;margin-bottom:2px}
 .dr-cfgw{position:absolute;z-index:6;left:calc(env(safe-area-inset-left,0px) + max(14px,calc(20*var(--u))) + 84px);top:calc(env(safe-area-inset-top,0px) + max(12px,calc(18*var(--u))));display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .dr-cfg{display:flex;align-items:center;gap:8px}
 @media (orientation:portrait){.dr-cfg .t{display:none}.dr-cfg{min-width:0;padding:8px 12px}}
@@ -11648,12 +11650,12 @@ function nwZoomAt(cx,cy,ns,P){/* P（部屋の座標）が画面の(cx,cy)に来
 /* マイルームの背景（部屋の下に敷く絵）。家具屋の「背景」で交換し、もようがえの「持ち物」→「背景」で切りかえる */
 const ROOM_BGS=[
  {k:'星空の書庫',n:'星海に浮かぶ書庫',e:-1,p:0,x:'星の海にただよう、終わりのない書庫。エラータの頁は、ここから世界じゅうの時代へつながっている。'},
- {k:'白無地',n:'白',e:-1,p:0,x:'あたりまえの白い壁。家具の色がいちばん引き立つ。'},
- {k:'灰無地',n:'グレー',e:-1,p:0,x:'落ち着いたグレー。石や金属の家具とよく合う。'},
- {k:'赤無地',n:'赤',e:-1,p:0,x:'くすんだ赤。木の家具や絨毯をあたたかく見せる。'},
- {k:'青無地',n:'青',e:-1,p:0,x:'やわらかな青。白い大理石の像や陶磁器が映える。'},
- {k:'緑無地',n:'緑',e:-1,p:0,x:'セージのような緑。植物や木の家具と相性がよい。'},
- {k:'水玉',n:'水玉',e:-1,p:0,x:'白地に小さな水玉。部屋が少しかわいらしくなる。'},
+ {k:'白無地',n:'白',e:-1,p:0,x:'中国や朝鮮では白は喪の色で、葬儀に白い服を着た。フランスのブルボン王家の旗は白。西洋で花嫁が白いドレスを着る習慣は、1840年のヴィクトリア女王の結婚式から広まった。'},
+ {k:'灰無地',n:'グレー',e:-1,p:0,x:'中世イングランドでは、灰色の修道服のフランシスコ会士を「グレイフライアーズ」と呼んだ。染めない粗末な布の色は清貧のしるし。アメリカの南北戦争では、南部連合軍の制服が灰色だった。'},
+ {k:'赤無地',n:'赤',e:-1,p:0,x:'中国では祝いと魔よけの色で、春節には赤い飾りがあふれる。アメリカ大陸の虫からとる赤い染料コチニールは、スペインが独占して銀に次ぐ富を生んだ。19世紀以降は、パリ＝コミューンやロシア革命の旗の色にもなった。'},
+ {k:'青無地',n:'青',e:-1,p:0,x:'アフガニスタン産のラピスラズリからとる青（ウルトラマリン）は金にならぶほど高価で、ルネサンスの画家は聖母マリアの衣に使った。元の青花はイラン産のコバルトで描かれた。インドの藍は、19世紀ベンガルの農民反乱（インディゴ反乱）の原因にもなった。'},
+ {k:'緑無地',n:'緑',e:-1,p:0,x:'イスラームでは楽園の色とされ、コーランは楽園の人々が緑の衣をまとうと語る。メキシコ国旗の緑は、独立期の三色旗では「独立」を表した。日本では緑の信号を「青」と呼ぶ。'},
+ {k:'水玉',n:'水玉',e:-1,p:0,x:'英語では「ポルカ・ドット」。19世紀半ばのヨーロッパで大流行した踊り「ポルカ」にあやかって、この名で売られた。日本でも江戸時代から、手ぬぐいの「豆絞り」として親しまれている。'},
  {k:'ナイル',n:'ナイル河畔の夕暮れ',e:0,p:20,x:'「エジプトはナイルのたまもの」（ヘロドトス）。毎年の氾濫が肥えた土を運び、川沿いに神殿や家が建ちならんだ。'},
  {k:'地中海の中庭',n:'地中海を望む中庭',e:0,p:20,x:'オリーブとキョウチクトウの茂る、ギリシア・ローマの邸宅の中庭。海の交易が、地中海の都市をむすびつけた。'},
  {k:'修道院',n:'月夜の修道院の回廊',e:1,p:20,x:'中庭をかこむ回廊は、修道士が祈りと労働の合間に歩いた場所。「祈り、働け」はベネディクト会のことば。'},
@@ -11775,7 +11777,7 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
  else if(cat==='頁'){const hung=new Set(R.w.filter(o=>o.k==='頁').map(o=>o.n));const pages=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!hung.has(c.n));
   body=pages.length?`<p class="muted" style="margin:0 0 8px">額に入れて壁に掛けます。</p><div class="nw-inv pages">${pages.map(c=>`<button class="nw-cell pg" data-n="${esc(c.n)}">${cardHTML(c.n,{noLv:true})}</button>`).join('')}</div>`:'<p class="muted">飾れる頁はありません。</p>'}
  else if(cat==='背景'){const cur=bgOwned(R.bg)?R.bg:ROOM_BGS[0].k;
-  body=`<p class="muted" style="margin:0 0 8px">部屋のうしろに広がる景色です。</p><div class="nw-inv bg">${ROOM_BGS.filter(b=>bgOwned(b.k)).map(b=>`<button class="nw-cell${b.k===cur?' on':''}" data-bg="${b.k}">${bgThumb(b)}<span>${esc(b.n)}</span>${b.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`}
+  body=`<p class="muted" style="margin:0 0 8px">部屋のうしろに広がる景色です。</p><div class="nw-bgx"><b>${esc(BGBY[cur].n)}</b>${esc(BGBY[cur].x||'')}</div><div class="nw-inv bg">${ROOM_BGS.filter(b=>bgOwned(b.k)).map(b=>`<button class="nw-cell${b.k===cur?' on':''}" data-bg="${b.k}">${bgThumb(b)}<span>${esc(b.n)}</span>${b.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`}
  else{const own=t=>SKINS.filter(f=>f.t===t&&skinOwned(f.k));
   const row=(t,cur)=>`<div class="nw-inv sk">${own(t).map(f=>`<button class="nw-cell${f.k===cur?' on':''}" data-sk="${f.k}">${skinPreview(f)}<span>${esc(f.n)}</span>${f.k===cur?'<small>使用中</small>':''}</button>`).join('')}</div>`;
   body=`<h4 class="nw-h4">壁紙</h4>${row('wall',R.wall)}<h4 class="nw-h4">床</h4>${row('floor',R.floor)}`}
