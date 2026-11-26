@@ -49,7 +49,12 @@ function getSave() {
 }
 
 /** ゲームから送られてきた記録を保存する */
-function putSave(json) {
+/**
+ * base＝送ってきた画面が知っている、学校アカウント側の記録の時刻。
+ * 保存されている記録がそれより新しい（ほかの端末で遊んだ）ときは上書きせず、新しい記録を返す。
+ * 開きっぱなしの古いタブが、ほかの端末で進めた記録を上書きしないため。
+ */
+function putSave(json, base) {
   const email = me_();
   if (typeof json !== 'string' || json.length > 49000) throw new Error('記録が大きすぎます');
   const S = JSON.parse(json);
@@ -76,7 +81,9 @@ function putSave(json) {
     if (row) {
       // 古い記録で新しい記録を上書きしないように、保存時刻を比べる
       try {
-        const old = JSON.parse(String(sh.getRange(row, COL_DATA).getValue() || '{}'));
+        const oldJson = String(sh.getRange(row, COL_DATA).getValue() || '{}');
+        const old = JSON.parse(oldJson);
+        if (typeof base === 'number' && (old.t || 0) > base && (old.t || 0) !== (S.t || 0)) return { ok: false, conflict: true, data: oldJson };
         if ((old.t || 0) > (S.t || 0)) return { ok: true, skipped: true };
       } catch (e) {}
       sh.getRange(row, 1, 1, record.length).setValues([record]);
