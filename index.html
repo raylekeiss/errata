@@ -835,6 +835,17 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .bt-enemy.img.boss{width:calc(420*var(--u));top:calc(70*var(--u))}
 @media (orientation:portrait){.bt-enemy.img{width:calc(440*var(--u));top:calc(100*var(--u))}.bt-enemy.img.boss{width:calc(500*var(--u));top:calc(80*var(--u))}}
 
+.lay-list{display:flex;flex-direction:column;gap:8px}
+.lay-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(120,90,40,.3);border-radius:8px;background:rgba(255,255,255,.45)}
+.lay-row.empty{opacity:.8;border-style:dashed}
+.lay-no{font-size:20px;width:1.4em;text-align:center;color:#7a5a20}
+.lay-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.lay-main small{font-size:12px;line-height:1.6;opacity:.85}
+.lay-d{opacity:.7}
+.lay-name{font:inherit;font-size:15px;font-weight:600;border:0;border-bottom:1px dashed rgba(120,90,40,.5);background:transparent;padding:2px 0;width:100%;max-width:14em}
+.lay-btns{display:flex;gap:6px;flex-shrink:0}
+.lay-btns .btn{padding:8px 12px;font-size:14px;min-width:0}
+@media (orientation:portrait){.lay-row:not(.empty){flex-wrap:wrap}.lay-row:not(.empty) .lay-btns{width:100%;justify-content:flex-end}}
 .nw-bgx{margin:0 0 10px;padding:10px 12px;border-left:3px solid #c9a24a;background:rgba(201,162,74,.12);font-size:14px;line-height:1.7}
 .nw-bgx b{display:block;font-size:15px;margin-bottom:2px}
 .dr-cfgw{position:absolute;z-index:6;left:calc(env(safe-area-inset-left,0px) + max(14px,calc(20*var(--u))) + 84px);top:calc(env(safe-area-inset-top,0px) + max(12px,calc(18*var(--u))));display:flex;flex-direction:column;align-items:flex-start;gap:6px}
@@ -11687,13 +11698,14 @@ function nwTools(){const t=$('#nwTools');if(!t)return;
   box:'<path d="M4 8l8-4 8 4v9l-8 4-8-4zM4 8l8 4 8-4M12 12v9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
   chara:'<circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4.5 21c0-5 3.3-8 7.5-8s7.5 3 7.5 8z" fill="currentColor"/>',
   look:'<path d="M10 6.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V11M12 11l-9 7.2c-.6.5-.3 1.3.5 1.3h17c.8 0 1.1-.8.5-1.3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
-  shop:'<path d="M5 8h14l-1.2 13H6.2zM9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'}[k]}</svg>`;
+  shop:'<path d="M5 8h14l-1.2 13H6.2zM9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+  lay:'<rect x="3.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1" fill="currentColor"/>'}[k]}</svg>`;
  const B=(id,k,label,cls='')=>`<button class="nw-tb ${cls}" id="${id}">${ic(k)}<span>${label}</span></button>`;
- t.innerHTML=NWS.edit?B('nwPut','box','持ち物')+B('nwShop','shop','ショップ')+B('nwDone','done','完了','main')
+ t.innerHTML=NWS.edit?B('nwPut','box','持ち物')+B('nwLay','lay','レイアウト')+B('nwShop','shop','ショップ')+B('nwDone','done','完了','main')
   :B('nwEdit','edit','もようがえ','main')+B('nwChara','chara','キャラ変更')+B('nwLook','look','見だしなみ')+B('nwShop','shop','ショップ');
  const h=$('#nwHint');if(h)h.textContent=NWS.edit?'タップで選んで、ドラッグで動かす':'';
  $('#nwShop').onclick=()=>shopPick();
- if(NWS.edit){$('#nwPut').onclick=()=>nwInventory();$('#nwDone').onclick=()=>{NWS.edit=false;NWS.sel=null;save();nwTools();nwSelBar();nwDraw()}}
+ if(NWS.edit){$('#nwPut').onclick=()=>nwInventory();$('#nwLay').onclick=()=>nwLayouts();$('#nwDone').onclick=()=>{NWS.edit=false;NWS.sel=null;save();nwTools();nwSelBar();nwDraw()}}
  else{$('#nwEdit').onclick=()=>{NWS.edit=true;nwHideBub();nwTools();nwDraw()};$('#nwChara').onclick=nwCharaPanel;
   $('#nwLook').onclick=()=>askLook(()=>{nwDraw()},{title:'見だしなみ',cancel:true,cost:true})}}
 function nwSelBar(){const b=$('#nwSel');if(!b)return;const sel=NWS.edit&&NWS.sel;if(!sel){b.hidden=true;return}
@@ -11791,6 +11803,44 @@ function nwInventory(cat){const R=S.room;cat=cat||NWS.itab||'本棚';NWS.itab=ca
   R.w.push(o);placed('w',o)});
  document.querySelectorAll('.nw-cell[data-bg]').forEach(b=>b.onclick=()=>{R.bg=b.dataset.bg;save();const sc=document.querySelector('.nw-screen');if(sc)sc.style.setProperty('--nwbg',`url('${roomBgUrl()}')`);nwInventory(cat)});
  document.querySelectorAll('.nw-cell[data-sk]').forEach(b=>b.onclick=()=>{const f=SKBY[b.dataset.sk];if(f.t==='wall')R.wall=f.k;else R.floor=f.k;save();nwDraw();nwInventory(cat)})}
+
+/* ---- レイアウト保存（6枠）：家具の配置（壁かけ・頁の額も）・壁紙・床・背景を丸ごと保存。キャラは含めない ----
+   S.room.lay[i]={n:名前,t:保存した時刻,f:[[キー,x,y,向き],…],w:[[キー,壁,位置,頁の人物],…],wall,floor,bg}（記録を小さくするため配列で持つ） */
+const NW_LAYS=6;
+function nwLaySlots(){const R=S.room;if(!Array.isArray(R.lay))R.lay=[];while(R.lay.length<NW_LAYS)R.lay.push(null);R.lay.length=NW_LAYS;return R.lay}
+function nwLaySum(L){const sk=k=>(SKBY[k]&&SKBY[k].n)||'—';const bg=(BGBY[L.bg]&&BGBY[L.bg].n)||'—';
+ const d=new Date(L.t||0);return `家具${L.f.length}・壁かけ${L.w.length}／壁紙：${sk(L.wall)}・床：${sk(L.floor)}・背景：${bg}<br><span class="lay-d">${d.getMonth()+1}月${d.getDate()}日 ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}に保存</span>`}
+function nwLayouts(){const Ls=nwLaySlots();NWS.sel=null;nwSelBar();
+ modal(`<div class="mhead"><h3>レイアウト</h3><button class="btn light" data-close>閉じる</button></div>
+  <p class="muted" style="margin:0 0 10px">家具の置き方と、壁紙・床・背景をまとめて${NW_LAYS}つまで保存できます。キャラは保存しません。</p>
+  <div class="lay-list">${Ls.map((L,i)=>`<div class="lay-row${L?'':' empty'}"><b class="lay-no">${i+1}</b><div class="lay-main">
+   ${L?`<input class="lay-name" data-i="${i}" maxlength="12" value="${esc(L.n||'レイアウト'+(i+1))}" aria-label="レイアウト${i+1}の名前"><small>${nwLaySum(L)}</small>`:'<span class="muted">（空き）</span>'}</div>
+   <div class="lay-btns"><button class="btn light" data-save="${i}">${L?'上書き保存':'ここに保存'}</button>${L?`<button class="btn" data-load="${i}">呼び出す</button>`:''}</div></div>`).join('')}</div>`);
+ document.querySelectorAll('.lay-name').forEach(e=>e.onchange=()=>{const L=Ls[+e.dataset.i];if(L){L.n=e.value.trim()||('レイアウト'+(+e.dataset.i+1));save()}});
+ document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{const i=+b.dataset.save;
+  const go=()=>{nwLaySave(i);toast(`レイアウト${i+1}に保存しました`);nwLayouts()};
+  Ls[i]?askYes(`「${Ls[i].n||'レイアウト'+(i+1)}」を、いまの部屋で上書きします。`,'上書きする',go,()=>nwLayouts()):go()});
+ document.querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{const i=+b.dataset.load;
+  askYes(`「${Ls[i].n||'レイアウト'+(i+1)}」を呼び出します。\nいまの家具の置き方は、保存していなければ元に戻せません（しまった家具は持ち物に戻ります）。`,'呼び出す',()=>nwLayLoad(i),()=>nwLayouts())})}
+function nwLaySave(i){const R=S.room,Ls=nwLaySlots();const old=Ls[i];
+ Ls[i]={n:(old&&old.n)||('レイアウト'+(i+1)),t:Date.now(),
+  f:R.f.filter(o=>o.k!=='SD').map(o=>[o.k,o.x,o.y,o.m?1:0]),
+  w:R.w.map(o=>o.k==='頁'?[o.k,o.s,o.p,o.n]:[o.k,o.s,o.p]),
+  wall:R.wall,floor:R.floor,bg:R.bg};save()}
+function nwLayLoad(i){const R=S.room,L=nwLaySlots()[i];if(!L)return;let miss=0;
+ const used={};const take=k=>{if(!FBY[k]||(used[k]||0)>=invOf(k))return false;used[k]=(used[k]||0)+1;return true};
+ const sds=R.f.filter(o=>o.k==='SD');
+ const F=[];(L.f||[]).forEach(([k,x,y,m])=>{if(FBY[k]&&FBY[k].t==='floor'&&take(k))F.push({k,x,y,m});else miss++});
+ const W=[],pages=new Set();(L.w||[]).forEach(([k,s,p,n])=>{
+  if(k==='頁'){if(CARD[n]&&lv(n)&&!isSP(n)&&!pages.has(n)){pages.add(n);W.push({k,s,p,n})}else miss++}
+  else if(FBY[k]&&FBY[k].t==='wall'&&take(k))W.push({k,s,p});else miss++});
+ R.f=F;R.w=W;
+ /* 表示中のキャラは残す。家具と重なったら空いている場所へ */
+ sds.forEach(o=>{if(floorFree(o))R.f.push(o);else{const q=findFloorSpot('SD',o.n);if(q)R.f.push(q)}});
+ let skin=0;if(skinOwned(L.wall))R.wall=L.wall;else skin++;if(skinOwned(L.floor))R.floor=L.floor;else skin++;if(bgOwned(L.bg))R.bg=L.bg;else skin++;
+ save();closeModal(true);NWS.sel=null;nwSelBar();nwDraw();
+ const sc=document.querySelector('.nw-screen');if(sc)sc.style.setProperty('--nwbg',`url('${roomBgUrl()}')`);
+ toast(miss||skin?`呼び出しました（持っていない家具など${miss+skin}点はそのままにしました）`:`「${L.n||'レイアウト'+(i+1)}」を呼び出しました`)}
 
 /* ---- キャラクターの表示・非表示 ---- */
 function nwCharaPanel(){const R=S.room;const shown=new Set(R.f.filter(o=>o.k==='SD').map(o=>o.n));const L=SD_LIST.filter(c=>c.ok());
