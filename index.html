@@ -742,6 +742,9 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
   display:flex;align-items:center;justify-content:center;font-style:normal;font-size:calc(14*var(--u));color:#a8873a}
 .dr-tabs .tb i.ok{background:linear-gradient(180deg,#c4302b,#8f1d1a);color:#f3d58e}
 .dr-tabs .tb i.ng{background:linear-gradient(180deg,#5a5f6e,#3b3f4a);color:#f1ead8}
+.dr-tabs.many .tb{width:min(calc(520*var(--u)),52vw);gap:2px;padding:calc(8*var(--u)) calc(10*var(--u))}
+.dr-tabs.many .tb i{flex:1 1 0;min-width:0;min-height:0;width:auto;height:10px;padding:0;font-size:0;clip-path:none;border-radius:1px}
+.dr-tabs.many .tb i.cur{box-shadow:0 0 0 1px #e6c77a;background:#e6c77a}
 .dr-tabs .tb i.cur{box-shadow:0 0 0 2px #e6c77a}
 .dr-tabs .ct{font-size:max(14px,calc(22*var(--u)));padding:calc(6*var(--u)) calc(18*var(--u));color:#2a2320;background:linear-gradient(180deg,#f3ead6,#e2d5b8);box-shadow:inset 0 0 0 1px #b8923f;font-variant-numeric:tabular-nums}
 .dr-paper{position:absolute;z-index:3;left:50%;transform:translateX(-50%);top:calc(110*var(--u));width:min(calc(900*var(--u)),94vw);min-height:calc(170*var(--u));padding:calc(30*var(--u)) calc(60*var(--u));display:flex;align-items:center;justify-content:center;
@@ -832,6 +835,12 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 .bt-enemy.img.boss{width:calc(420*var(--u));top:calc(70*var(--u))}
 @media (orientation:portrait){.bt-enemy.img{width:calc(440*var(--u));top:calc(100*var(--u))}.bt-enemy.img.boss{width:calc(500*var(--u));top:calc(80*var(--u))}}
 
+.dr-cfgw{position:absolute;z-index:6;left:calc(env(safe-area-inset-left,0px) + max(14px,calc(20*var(--u))) + 84px);top:calc(env(safe-area-inset-top,0px) + max(12px,calc(18*var(--u))));display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.dr-cfg{display:flex;align-items:center;gap:8px}
+@media (orientation:portrait){.dr-cfg .t{display:none}.dr-cfg{min-width:0;padding:8px 12px}}
+.dr-hard{padding:3px 12px;border-radius:999px;background:#7a1f1a;color:#f6e7c8;font-size:13px;letter-spacing:.1em;border:1px solid rgba(201,162,74,.7)}
+.dr-hard[hidden]{display:none}
+.drawer .dw-note{margin:10px 14px;font-size:13px;line-height:1.6;opacity:.75}
 .dr-mode{position:absolute;z-index:6;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 98*var(--u));white-space:nowrap;display:flex;gap:6px;background:rgba(7,12,31,.6);padding:4px;border-radius:999px;border:1px solid rgba(201,162,74,.5)}
 .dr-mode button{padding:6px 14px;border-radius:999px;color:#e6c77a;font-family:var(--serif);font-size:14px;letter-spacing:.08em}
 .dr-mode button.on{background:#c9a24a;color:#1a1408;font-weight:700}
@@ -11228,6 +11237,7 @@ function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk'&&DRMODE!==
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
   <div class="gc-title">問題演習</div>
   <button class="gc-back tl" data-go="home">戻る</button><div class="gc-top">${coinsHTML()}</div>
+  <div class="dr-cfgw"><button class="gc-back dr-cfg" id="drBurger" aria-label="問題演習の設定"><svg viewBox="0 0 20 16" width="20" height="16" aria-hidden="true"><path d="M1 2h18M1 8h18M1 14h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="t">設定</span></button><span class="dr-hard" id="drHardTag" ${CFG.dh?'':'hidden'}>ハード</span></div>
   <div class="dr-mode"><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button><button data-mode="jk" class="${JKM?'on':''}">受験対策</button><button data-mode="kj">記述対策</button><button data-mode="zh" class="${ZHM?'on':''}">図版・地図</button></div>
   ${JKM?`<div class="dr-sub"><button data-lv="std" class="${jc.lv==='std'?'on':''}">標準だけ</button><button data-lv="all" class="${jc.lv==='all'?'on':''}">標準＋発展</button></div>`:''}
   <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
@@ -11239,25 +11249,40 @@ function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk'&&DRMODE!==
     <span class="lbl">${vtitle(name)}</span><span class="beads">${[0,1,2,3,4].map(i=>`<i class="${i<on?'on':''}"></i>`).join('')}</span><span class="cnt">${key==='J:my'&&!jc.my.length?'単元を選ぶ':key==='T:my'&&!qc.secs.length?'範囲を選ぶ':st.done+'／'+st.n}</span></button>`}).join('')}</div></div>`);
  document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{jc.lv=b.dataset.lv;save();QuizMenu()});
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=b.dataset.mode;QuizMenu()});
+ $('#drBurger').onclick=openDrCfg;
  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;
   if(key==='J:my'){jkMyEdit();return}if(key==='T:my'){qMyEdit();return}if(!poolOf(key).length){toast('この棚には、まだ出せる問題がありません');return}FX.pageTurn(()=>startQuiz(key))})}
 function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done,fin:o.fin,quit:o.quit,timer:o.timer||0,src:o.src||o.label}}
- else{const pick=drillPick(key);QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'問題演習　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();quizQ()}
+ else{const pick=drillPick(key);const hard=!!CFG.dh;QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,hard,timer:hard?DR_HARD_SEC:0,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'問題演習　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();quizQ()}
 /* 誤植の群れの制限時間 */
 function qzStop(){if(QZ){clearTimeout(QZ.tm);clearInterval(QZ.ti);QZ.tm=QZ.ti=null}}
 function qzStart(onUp){const T=QZ.timer;let left=T;const el=$('#qzT');if(!el)return;el.querySelector('b').textContent=left;
  QZ.ti=setInterval(()=>{left--;const b=$('#qzT b');if(b)b.textContent=Math.max(0,left);if(left<=5&&el)el.classList.add('hurry')},1000);QZ.tm=setTimeout(()=>{qzStop();if($('#qo'))onUp()},T*1000)}
+/* 問題演習だけの設定（端末ごと。CFG.dn＝1回の問題数 10/20/30/50、CFG.dh＝ハードモード：1問15秒・正解で栞2倍） */
+const DR_NS=[10,20,30,50],DR_HARD_SEC=15;
+function drN(){return DR_NS.includes(+CFG.dn)?+CFG.dn:10}
+function openDrCfg(){closeDrawer();
+ const bg=document.createElement('div');bg.className='drawer-bg';bg.id='drawerBg';
+ const d=document.createElement('nav');d.className='drawer';d.id='drawer';d.setAttribute('aria-label','問題演習の設定');
+ d.innerHTML=`<h3>問題演習の設定<button id="dwClose" aria-label="閉じる">×</button></h3>
+  <div class="grp">1回に解く問題の数<div class="seg">${DR_NS.map(n=>`<button data-dn="${n}" class="${drN()===n?'on':''}">${n}問</button>`).join('')}</div></div>
+  <button class="item" id="dwHard">ハードモード<b class="sw ${CFG.dh?'on':''}" id="dwHardSw">${CFG.dh?'オン':'オフ'}</b><small>1問${DR_HARD_SEC}秒の制限時間つき。時間切れは不正解になります。正解したときの栞が2倍になります</small></button>
+  <p class="dw-note">試験範囲・受験対策・図版・地図で使えます（記述対策は対象外）。設定はこの端末に保存されます。</p>`;
+ document.body.append(bg,d);
+ bg.onclick=closeDrawer;$('#dwClose').onclick=closeDrawer;
+ d.querySelectorAll('[data-dn]').forEach(b=>b.onclick=()=>{CFG.dn=+b.dataset.dn;saveCfg();d.querySelectorAll('[data-dn]').forEach(x=>x.classList.toggle('on',x===b))});
+ $('#dwHard').onclick=()=>{CFG.dh=!CFG.dh;saveCfg();const w=$('#dwHardSw');w.textContent=CFG.dh?'オン':'オフ';w.classList.toggle('on',!!CFG.dh);toast(CFG.dh?`ハードモード：1問${DR_HARD_SEC}秒、正解で栞2倍`:'ハードモードを解除しました');const t=$('#drHardTag');if(t)t.hidden=!CFG.dh}}
 /* 問題演習の出題順：まだ解いていない問題 → 間違えた問題 → 正解済みの問題（ランダム） */
 function drillPick(key){const pool=poolOf(key);const st=qst;
  const fresh=shuffle(pool.filter(q=>st(q)===0)),wrong=shuffle(pool.filter(q=>st(q)===2)),done=shuffle(pool.filter(q=>st(q)===1));
- const list=fresh.concat(wrong,done).slice(0,10);
+ const list=fresh.concat(wrong,done).slice(0,drN());
  const mode=fresh.length?'fresh':wrong.length?'wrong':'random';
  const msg=mode==='fresh'?`まだ解いていない問題から出すよ（残り${fresh.length}問）`:mode==='wrong'?`一周したね。間違えた問題を復習しよう（残り${wrong.length}問）`:'全部正解済み！　ランダムに出すよ';
  return {list,mode,msg}}
 function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${QZ.key}章<br>${esc(CHT[QZ.key])}`:QZ.key==='T:my'?'試験範囲<br>マイ範囲':String(QZ.key).startsWith('J:')?'受験対策<br>'+jkShort(QZ.key):String(QZ.key).startsWith('Z:')?'図版・地図<br>'+(QZ.key==='Z:all'?'全範囲':jkShort('J:'+QZ.key.slice(2))):QZ.timer?esc(QZ.label).replace('　','<br>'):esc(QZ.label);
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
-  <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}</small>`:''}</div>
-  <div class="dr-tabs"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
+  <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}${QZ.hard?'・ハード':''}</small>`:''}</div>
+  <div class="dr-tabs${QZ.list.length>10?' many':''}"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.list.length>10?'':QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
   ${QZ.tut?'':'<button class="gc-back tl" id="qQuit">やめる</button>'}<div class="gc-top">${coinsHTML(qEras())}</div>
   <div class="dr-gain">この回の獲得　${gainText(QZ.gainE)}</div>
   ${QZ.timer?`<div class="qz-timer" id="qzT"><i style="animation-duration:${QZ.timer}s"></i><b>${QZ.timer}</b></div>`:''}
@@ -11269,10 +11294,10 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;if(q.z)zhReveal(q,b?b.dataset.v:null);
   if(QZ.key!=null&&!QZ.tut){msTick('dq');if(ok)msTick('dc')}
-  const qe=qEra(q);if(ok){g=qGain(q,st);qSet(q,1);if(g){if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g)}QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');qSet(q,2);QZ.wrong.push(q)}
+  const qe=qEra(q);if(ok){g=qGain(q,st)*(QZ.hard?2:1);qSet(q,1);if(g){if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g)}QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');qSet(q,2);QZ.wrong.push(q)}
   QZ.res[QZ.i]=ok;save();refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
-  const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';tabs[QZ.i].textContent=ok?'✦':'✕';
-  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}`:'正解済みの問題（栞はなし）'):`正しくは${/^「.*」$/.test(zhAns(q))?esc(zhAns(q)):'「'+esc(zhAns(q))+'」'}`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
+  const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';if(QZ.list.length<=10)tabs[QZ.i].textContent=ok?'✦':'✕';
+  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}${QZ.hard?'（ハード2倍）':''}`:'正解済みの問題（栞はなし）'):`正しくは${/^「.*」$/.test(zhAns(q))?esc(zhAns(q)):'「'+esc(zhAns(q))+'」'}`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
   setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})},60);
   $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
     saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞はホームの受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
@@ -11285,7 +11310,7 @@ function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;
   saveNow()}const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="gc-top">${coinsHTML(qEras())}</div>
-  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞はホームの受け取りボックスに届いています</p>':''}<p class="sub">${esc(QZ.label)}　正解 ${n-w.length}／${n}問</p>
+  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞はホームの受け取りボックスに届いています</p>':''}<p class="sub">${esc(QZ.label)}${QZ.hard?'（ハードモード）':''}　正解 ${n-w.length}／${n}問</p>
   ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${qHTML(q.q)}<br><b>答え：${esc(zhAns(q))}</b></p>`).join('')}<p class="sub">次に正解すると、克服ボーナスの栞がもらえます。</p></div>`:'<p>全問正解！</p>'}
   <div class="rowb"><button class="btn red" id="again">もう一度解く</button><button class="btn light" id="toShelf">ほかの棚を選ぶ</button><button class="btn light" data-go="home">ホームへ</button></div></div></div>`);
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
