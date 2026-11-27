@@ -46,7 +46,8 @@ function getSave() {
   const sh = sheet_();
   const row = findRow_(sh, email);
   // now：この保存係の時計（デイリーミッションの日付に使う。iPadの時計を進めても受け取り直せないように）
-  return { email: email, data: row ? String(sh.getRange(row, COL_DATA).getValue() || '') : null, now: Date.now() };
+  // admin：先生のアカウント（スクリプトプロパティ ADMIN_EMAILS）なら true。ゲームは学校の時間の利用制限をかけない
+  return { email: email, data: row ? String(sh.getRange(row, COL_DATA).getValue() || '') : null, now: Date.now(), admin: isAdmin_(email) };
 }
 
 /** ゲームから送られてきた記録を保存する */
