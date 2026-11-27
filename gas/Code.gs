@@ -195,10 +195,11 @@ function logSheet_() {
 function drillStart(label) {
   const email = me_();
   const tok = Utilities.getUuid().replace(/-/g, '').slice(0, 20);
-  const lock = lockUntil_(email);
+  const adm = isAdmin_(email);
+  const lock = adm ? 0 : lockUntil_(email);
   if (lock > Date.now()) return { lock: lock };
   CacheService.getScriptCache().put('dk:' + tok, JSON.stringify({ m: email, t: Date.now() }), 21600);
-  return { tok: tok };
+  return adm ? { tok: tok, adm: 1 } : { tok: tok };
 }
 
 function drillLog(p) {
@@ -230,7 +231,7 @@ function drillLog(p) {
   const dt = (Array.isArray(p.dt) ? p.dt : []).slice(0, ids.length).map(function (x) { return Number(x); });
   const env = p.env && typeof p.env === 'object' ? p.env : {};
   // 自動操作の判定：端末が止めた理由（p.b）か、保存係でも同じ基準で判定する
-  const why = String(p.b || '').slice(0, 60) || botVerdict_(dt, r, env);
+  const why = isAdmin_(email) ? '' : (String(p.b || '').slice(0, 60) || botVerdict_(dt, r, env));
   if (why) state = '自動操作の疑い';
   const tooFast = state === '確認済み' && sec < ids.length * LOG_RULE.minSecPerQ;
   const envTxt = (env.wd ? '自動操作ブラウザ／' : '') + (Number(env.tp) > 0 ? 'タッチ端末' : 'タッチなし') + '／' + String(env.ua || '').slice(0, 120);
@@ -260,6 +261,8 @@ function drillLog(p) {
  * 自動操作の判定と、問題演習の一時停止（ロック）
  * 判定の基準はゲーム側（index.html の botVerdict）と同じ。
  *  ・ブラウザの自動操作（navigator.webdriver）
+ *  ・タッチなしのLinuxの端末（生徒はiPadで遊ぶ前提。遠隔のAIが動かすブラウザはこれになる）。Windows・Macは止めない
+ *  ・管理者（ADMIN_EMAILS に登録した先生）は判定しない
  *  ・12問以上で、答えるまでの時間の中央値が0.9秒未満
  *  ・15問以上で、答える間隔のばらつき（標準偏差÷平均）が0.12未満、かつ9割以上正解
  * 止める時間：1回目は1時間。7日以内に2回目以降は24時間。
@@ -272,6 +275,8 @@ function botVerdict_(dt, r, env) {
   dt.forEach(function (x, i) { if (x >= 0) { d.push(x / 10); ok.push(r.charAt(i) === '1'); } });
   const n = d.length;
   if (env && env.wd && n >= 3) return 'ブラウザの自動操作';
+  const ua = String(env && env.ua || '');
+  if (n >= 1 && env && !Number(env.tp) && /Linux/.test(ua) && !/Android/.test(ua)) return 'iPad以外の端末（タッチなし・Linux）';
   if (!n) return '';
   const so = d.slice().sort(function (a, b) { return a - b; });
   const med = so[Math.floor(n / 2)];
@@ -282,6 +287,11 @@ function botVerdict_(dt, r, env) {
   if (n >= 12 && med < 0.9) return '答えるのが速すぎる（中央値' + med.toFixed(1) + '秒）';
   if (n >= 15 && cv < 0.12 && acc >= 0.9) return '答える間隔が一定すぎる（ばらつき' + cv.toFixed(2) + '）';
   return '';
+}
+
+function isAdmin_(email) {
+  const list = String(PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '').toLowerCase().split(/[,\s]+/).filter(Boolean);
+  return list.indexOf(String(email).toLowerCase()) >= 0;
 }
 
 function lockUntil_(email) {
