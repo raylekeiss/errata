@@ -2302,6 +2302,183 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
 @media (orientation:landscape){html.plain .shelf2{left:calc(30*var(--u))}html.plain .shelf2-board{left:0}html.plain .gc2 .gc-panel,html.plain .gc2 .gc-links{left:3.5%}}
 .drawer .item .sw{float:right;font-size:13px;font-family:var(--sans);padding:2px 10px;border-radius:999px;background:rgba(127,127,127,.25);font-weight:700}
 .drawer .item .sw.on{background:#8a2a2a;color:#fff}
+/* ===== 校正バトル ===== */
+.kb{position:fixed;inset:0;overflow:hidden;background:#05070f;font-family:var(--sans);user-select:none;-webkit-user-select:none}
+.kb-bg{position:absolute;inset:-2%;background-size:cover;background-position:center;filter:brightness(.55) saturate(.85) blur(1px)}
+.kb-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,9,26,.6),rgba(5,9,26,0) 30%,rgba(5,9,26,0) 60%,rgba(5,9,26,.82))}
+.kb-hud{position:absolute;left:0;right:0;top:0;z-index:20;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:calc(env(safe-area-inset-top,0px) + max(10px,calc(14*var(--u)))) max(12px,calc(20*var(--u))) 0}
+.kb-box{background:rgba(243,234,214,.94);border-radius:8px;padding:max(5px,calc(8*var(--u))) max(10px,calc(14*var(--u)));box-shadow:0 0 0 2px #b8923f,0 4px 14px rgba(0,0,0,.35);color:#1c2540}
+.kb-box .lb{font-size:max(11px,calc(13*var(--u)));font-weight:700;color:#6c6250;letter-spacing:.08em;white-space:nowrap}
+.kb-ink{display:flex;gap:max(4px,calc(5*var(--u)));margin-top:4px}
+.kb-ink span{width:max(14px,calc(20*var(--u)));height:max(18px,calc(26*var(--u)));background:#1c2540;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;transition:opacity .3s,transform .3s}
+.kb-ink span.off{opacity:.15;transform:scale(.7)}
+.kb-hpbox{min-width:min(38vw,calc(300*var(--u)))}
+.kb-hp{height:max(8px,calc(10*var(--u)));margin-top:5px;background:#d8ccb0;border-radius:5px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.kb-hp i{display:block;height:100%;background:linear-gradient(90deg,#8e1f24,#c4302b);transition:width .45s ease-out}
+.kb-hpn{font-family:var(--serif);font-size:max(12px,calc(14*var(--u)));text-align:right;margin-top:2px;font-variant-numeric:tabular-nums}
+.kb-ctl{display:flex;flex-direction:column;align-items:center;gap:6px}
+.kb-ttl{color:#f3ead6;font-family:var(--serif);font-size:max(14px,calc(18*var(--u)));letter-spacing:.2em;text-shadow:0 0 8px #000}
+.kb-btns{display:flex;gap:6px}
+.kb-btns button{background:rgba(28,37,64,.82);color:#fff;border:0;border-radius:999px;padding:max(5px,calc(6*var(--u))) max(10px,calc(14*var(--u)));font-size:max(12px,calc(13*var(--u)));box-shadow:0 0 0 1px rgba(255,255,255,.3);cursor:pointer}
+.kb-book{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + max(92px,calc(112*var(--u))));transform:translateX(-50%);width:min(88vw,calc(820*var(--u)));max-height:24vh;overflow:auto;z-index:5;
+  background:linear-gradient(180deg,#f3ead6,#e7dcc2);border-radius:6px;box-shadow:0 0 0 2px #b8923f,0 8px 24px rgba(0,0,0,.4);padding:max(6px,calc(10*var(--u))) max(12px,calc(18*var(--u)));min-height:calc(60*var(--u));opacity:.95}
+.kb-book .kb-bt{font-size:max(11px,calc(12*var(--u)));color:#8a6d2e;font-weight:700;letter-spacing:.15em;margin-bottom:2px}
+.kb-book .ln{font-family:var(--serif);font-size:max(14px,calc(17*var(--u)));line-height:1.55;color:#3a3020;animation:fadein .4s}
+.kb .del,.kb-fixes .del{text-decoration:line-through;text-decoration-color:#c4302b;text-decoration-thickness:2px;color:#9a8f7a}
+.kb .ins,.kb-fixes .ins{color:#c4302b;font-weight:700}
+.kb-act{position:absolute;z-index:6;bottom:calc(env(safe-area-inset-bottom,0px) + 40*var(--u));filter:drop-shadow(0 8px 10px rgba(0,0,0,.5))}
+.kb-act img{display:block;height:100%;width:auto}
+.kb-hero{left:6%;height:calc(250*var(--u))}
+.kb-shimi{left:calc(6% + 150*var(--u));height:calc(170*var(--u));bottom:calc(env(safe-area-inset-bottom,0px) + 36*var(--u));z-index:5;opacity:.95}
+.kb-foe{right:6%;width:calc(300*var(--u));height:calc(300*var(--u));display:flex;align-items:flex-end;justify-content:center;transition:opacity .5s,transform .5s}
+.kb-foe img,.kb-foe svg{max-width:100%;max-height:100%;width:auto;height:auto}
+.kb-foe.boss{width:calc(380*var(--u));height:calc(360*var(--u))}
+.kb-foe.in{animation:kbfoein .6s ease-out}
+.kb-foe.dead{opacity:0;transform:translateY(20px) scale(.9);filter:blur(4px)}
+.kb-foe.hit{animation:kbhit .45s}
+.kb-foe.cast{animation:kbcast .5s}
+.kb-fname{position:absolute;right:6%;bottom:calc(env(safe-area-inset-bottom,0px) + 16*var(--u));z-index:7;color:#fff;font-family:var(--serif);font-size:max(13px,calc(18*var(--u)));text-shadow:0 0 6px #000;width:calc(300*var(--u));text-align:center}
+@keyframes kbfoein{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes kbhit{0%,100%{transform:none}20%{transform:translateX(18px) rotate(3deg);filter:brightness(2.4)}50%{transform:translateX(-10px)}75%{transform:translateX(6px)}}
+@keyframes kbcast{50%{transform:translateY(-10px) scale(1.04)}}
+.kb-hero.slide{animation:kbslide .55s cubic-bezier(.3,.8,.3,1)}
+@keyframes kbslide{0%{transform:none}45%{transform:translateX(52vw)}100%{transform:none}}
+.kb-hero.hurt{animation:kbhurt .45s}
+@keyframes kbhurt{20%{transform:translateX(-14px);filter:brightness(1.6) sepia(1) hue-rotate(-30deg)}60%{transform:translateX(8px)}}
+.kb-lane{position:absolute;left:0;right:0;top:46%;height:calc(110*var(--u));z-index:10;pointer-events:none}
+.kb-shot{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;max-width:min(62vw,calc(640*var(--u)));background:#fbf7ec;border-radius:8px;padding:max(9px,calc(12*var(--u))) max(13px,calc(18*var(--u))) max(13px,calc(16*var(--u)));
+  box-shadow:0 0 0 2px #2b3658,0 6px 20px rgba(0,0,0,.45);font-family:var(--serif);font-size:max(15px,calc(21*var(--u)));line-height:1.5;color:#1c2540;will-change:transform}
+.kb-shot .kb-pbar{position:absolute;left:8px;right:8px;bottom:6px;height:4px;background:#dcd6c4;border-radius:2px;overflow:hidden}
+.kb-shot .kb-pbar i{display:block;height:100%;background:#2b3658;width:100%;transform-origin:left}
+.kb-shot .kb-tapb{position:absolute;right:-10px;top:-14px;background:#c4302b;color:#fff;font-family:var(--sans);font-weight:700;font-size:max(11px,calc(13*var(--u)));border-radius:999px;padding:3px 10px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.kb-shot.frozen{box-shadow:0 0 0 3px #c4302b,0 0 30px rgba(196,48,43,.6)}
+.kb-shot .w{border-bottom:3px solid #c4302b}
+.kb-shot.flash{animation:kbflash .5s}
+@keyframes kbflash{30%{background:#ffd9d6}}
+.kb-shot.pass{transition:opacity .35s;opacity:0}
+.kb-toast{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);z-index:30;font-weight:800;font-size:max(18px,calc(28*var(--u)));color:#fff;text-shadow:0 0 10px #000,0 0 3px #000;pointer-events:none;opacity:0;white-space:nowrap}
+.kb-toast.show{animation:kbtoast 1.3s ease-out}
+@keyframes kbtoast{0%{opacity:0;transform:translate(-50%,-30%) scale(.8)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-70%)}}
+.kb-dmg{position:absolute;z-index:31;font-weight:900;font-family:var(--serif);font-size:max(28px,calc(44*var(--u)));color:#fff;-webkit-text-stroke:2px #c4302b;pointer-events:none;animation:kbdmg .95s ease-out forwards;white-space:nowrap}
+.kb-dmg.sub{font-size:max(18px,calc(28*var(--u)));-webkit-text-stroke:1.5px #8a6d2e;color:#ffe6a8}
+@keyframes kbdmg{0%{opacity:0;transform:translateY(10px) scale(.6)}20%{opacity:1;transform:translateY(-10px) scale(1.15)}100%{opacity:0;transform:translateY(-60px)}}
+.kb-hand{position:absolute;left:0;right:0;bottom:0;z-index:25;display:none;flex-direction:column;align-items:center;padding:max(10px,calc(16*var(--u))) 8px calc(env(safe-area-inset-bottom,0px) + max(12px,calc(22*var(--u))));background:linear-gradient(0deg,rgba(5,9,26,.94),rgba(5,9,26,.75) 70%,rgba(5,9,26,0))}
+.kb-hand.on{display:flex;animation:fadein .2s}
+.kb-hand .q{color:#fff;font-weight:700;font-size:max(14px,calc(17*var(--u)));margin-bottom:calc(10*var(--u));text-shadow:0 0 6px #000;text-align:center}
+.kb-hand .row{display:flex;gap:max(8px,calc(14*var(--u)));justify-content:center;flex-wrap:nowrap}
+.kb-card{width:max(78px,calc(130*var(--u)));padding:0;background:var(--paper,#f3ead6);border:3px solid var(--c,#2b3658);border-radius:8px;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,.5);cursor:pointer;animation:kbcardin .3s both;font:inherit;color:#1c2540}
+.kb-card:active{transform:scale(.96)}
+.kb-card .art{position:relative;aspect-ratio:13/14;overflow:hidden;background:#cfd2c6}
+.kb-card .art img{width:100%;height:100%;object-fit:cover}
+.kb-card .art svg{width:100%;height:100%}
+.kb-card .nm{font-family:var(--serif);font-weight:700;font-size:max(11px,calc(14*var(--u)));padding:5px 2px 1px;text-align:center;letter-spacing:-.03em;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center}
+.kb-card .pw{font-size:max(10px,calc(11*var(--u)));text-align:center;color:#6c6250;padding-bottom:6px}
+.kb-card.copy .art{filter:grayscale(.85) brightness(1.05)}
+.kb-card.copy .pw{color:#8a7a5a}
+.kb-card.ng{animation:kbng .4s;opacity:.35;pointer-events:none}
+@keyframes kbng{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes kbcardin{from{opacity:0;transform:translateY(30px)}}
+.kb-hand .cancel{margin-top:calc(10*var(--u));color:#cdd;background:none;border:0;font-size:max(12px,calc(13*var(--u)));text-decoration:underline;cursor:pointer}
+.kb-cut{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(5,9,26,.55);animation:fadein .15s;transition:opacity .2s}
+.kb-cut.out{opacity:0}
+.kb-cut .band{position:absolute;left:-10%;right:-10%;top:50%;height:max(150px,calc(210*var(--u)));transform:translateY(-50%) skewY(-4deg);background:linear-gradient(180deg,#f3ead6,#e2d5b8);box-shadow:0 0 0 3px #b8923f,0 0 0 7px rgba(32,48,90,.9),0 0 50px rgba(255,214,140,.35);animation:kbband .4s cubic-bezier(.2,.9,.3,1) both}
+.kb-cut .inner{position:relative;display:flex;align-items:center;gap:max(14px,calc(26*var(--u)));max-width:92vw;animation:kbcin .45s .08s cubic-bezier(.2,.9,.3,1) both}
+.kb-cut .por{width:max(100px,calc(170*var(--u)));height:max(118px,calc(200*var(--u)));border-radius:6px;box-shadow:0 0 0 3px #2b3658;flex:none;overflow:hidden;background:#cfd2c6}
+.kb-cut .por img{width:100%;height:100%;object-fit:cover}
+.kb-cut .por.foe{background:none;box-shadow:none;display:flex;align-items:center;justify-content:center}
+.kb-cut .por.foe img,.kb-cut .por.foe svg{max-width:100%;max-height:100%}
+.kb-cut .who{font-family:var(--serif);font-weight:800;font-size:max(20px,calc(30*var(--u)));color:#1c2540}
+.kb-cut .who small{display:block;font-size:max(11px,calc(14*var(--u)));color:#c4302b;letter-spacing:.2em;font-family:var(--sans)}
+.kb-cut .say{font-family:var(--serif);font-size:max(13px,calc(18*var(--u)));color:#3a3020;line-height:1.6;max-width:min(60vw,calc(560*var(--u)));margin-top:6px}
+.kb-cut.warn .band{background:linear-gradient(180deg,#2a1216,#4a1a20);box-shadow:0 0 0 3px #c4302b,0 0 0 7px rgba(0,0,0,.8)}
+.kb-cut.warn .who{color:#fff}.kb-cut.warn .say{color:#f2d9d6}
+@keyframes kbband{from{transform:translateY(-50%) skewY(-4deg) scaleY(0)}}
+@keyframes kbcin{from{opacity:0;transform:translateX(-60px)}}
+.kb-panel{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(5,9,26,.78);animation:fadein .3s}
+.kb-sheet{border-radius:12px;box-shadow:0 0 0 3px #b8923f,0 20px 50px rgba(0,0,0,.6);padding:max(16px,calc(26*var(--u))) max(16px,calc(30*var(--u)));width:min(92vw,calc(760*var(--u)));max-height:88vh;overflow:auto;color:#1c2540}
+.kb-sheet h3{font-family:var(--serif);font-size:max(20px,calc(28*var(--u)));margin:0 0 8px;text-align:center}
+.kb-note{font-size:max(12px,calc(14*var(--u)));color:#6c6250;line-height:1.7}
+.kb-sum{font-size:max(12px,calc(14*var(--u)));color:#5a5140;text-align:center;line-height:1.7}
+.kb-gain{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;line-height:1.6}
+.kb-gain .gico{width:28px;height:28px;flex:none}
+.kb-fixes .kb-fix{font-family:var(--serif);font-size:max(14px,calc(16*var(--u)));line-height:1.7;margin:8px 0 0}
+.kb-fixes .kb-cm{font-size:max(12px,calc(13*var(--u)));color:#6c6250;margin:2px 0 6px;line-height:1.6}
+.kb-shimi-say{display:flex;gap:12px;align-items:flex-start;margin:10px 0}
+.kb-shimi-say .face{width:max(48px,calc(64*var(--u)));height:max(48px,calc(64*var(--u)));border-radius:50%;background-size:cover;background-position:center;box-shadow:0 0 0 2px #c6cabb;flex:none}
+.kb-shimi-say .kb-bub{background:#fff;border-radius:10px;padding:10px 14px;font-size:max(13px,calc(15*var(--u)));line-height:1.7;box-shadow:0 1px 0 #c6cabb}
+@media (orientation:portrait){
+ .kb-lane{top:58%}
+ .kb-hero{height:calc(300*var(--u))}
+ .kb-shimi{left:calc(6% + 170*var(--u));height:calc(200*var(--u))}
+ .kb-foe{width:calc(340*var(--u));height:calc(340*var(--u))}
+ .kb-book{max-height:28vh}
+ .kb-shot{max-width:86vw}
+ .kb-hud{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){.kb-hero.slide,.kb-foe.hit,.kb-foe.cast,.kb-foe.in{animation:none}}
+
+/* ===== G・お菓子屋・頁の育成 ===== */
+.gico{display:block}
+.coin.gcoin{padding-left:calc(40*var(--u))}
+.coin.gcoin .gico{position:absolute;left:calc(8*var(--u));top:50%;transform:translateY(-50%);width:max(20px,calc(26*var(--u)));height:auto}
+button.coin.gcoin{border:0;font:inherit;cursor:pointer;text-align:left}
+button.coin.gcoin span{color:#7a2a1e}
+.coin.gcoin b small{font-size:.6em;margin-left:2px;opacity:.8}
+.swi{display:block;width:max(30px,calc(40*var(--u)));height:auto;flex:none}
+.shp-top{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;margin:4px 0 8px}
+.shp-top .coin{min-width:150px}
+.shp-lv{flex:1;min-width:200px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.shp-lv span b{font-family:var(--serif);font-size:1.5em;margin-left:4px}
+.shp-bar,.pg-bar{height:8px;border-radius:4px;background:#d8ccb0;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.shp-bar i,.pg-bar i{display:block;height:100%;background:linear-gradient(90deg,#b58a2e,#e8c35b)}
+.shp-lv small,.pg-lv small{color:#6c6250;font-size:12px}
+.shp-note{font-size:13px;line-height:1.7;color:#4a4030;margin:4px 0 10px}
+.shp-row{border-top:1px solid rgba(150,110,50,.35);padding:10px 0}
+.shp-row.lock{opacity:.55}
+.shp-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.shp-h b{font-family:var(--serif);font-size:17px}
+.shp-h small{color:#6c6250}
+.shp-lock{font-size:12px;color:#c4302b;font-weight:600}
+.shp-its{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (max-width:640px){.shp-its{grid-template-columns:1fr}}
+.shp-it{display:flex;align-items:center;gap:8px;background:rgba(255,250,236,.7);border-radius:8px;padding:6px 8px;box-shadow:inset 0 0 0 1px rgba(150,110,50,.35)}
+.shp-nm{flex:1;font-size:13px;font-weight:600;line-height:1.3}
+.shp-nm small{display:block;font-weight:400;color:#6c6250;font-size:11px}
+.shp-buy{display:flex;flex-direction:column;gap:4px}
+.btn.bsm{padding:4px 10px;font-size:12px;min-height:0}
+.modal .box:has(.shp-list){max-width:min(860px,94vw)}
+.modal .box:has(.pg-d){max-width:min(760px,94vw)}
+.card .plv{position:absolute;right:6px;top:26px;background:rgba(28,37,64,.82);color:#ffe6a8;font-size:11px;padding:0 5px;border-radius:2px;font-family:var(--serif)}
+.pg-d{display:flex;gap:16px;align-items:flex-start}
+.pg-card{width:140px;flex:none}
+.pg-info{flex:1;min-width:0}
+.pg-info h3{margin:0 0 4px}
+.pg-f{font-size:13px;line-height:1.6;color:#4a4030;margin:0 0 8px}
+.pg-lv{display:flex;flex-direction:column;gap:4px}
+.pg-lv span b{font-family:var(--serif);font-size:1.6em;margin-left:2px}
+.pg-pow{margin:8px 0 0;font-size:14px}
+.pg-pow b{font-family:var(--serif);font-size:1.4em;margin:0 4px}
+.pg-pow small{color:#6c6250;font-size:12px}
+.pg-sw{margin-top:12px;border-top:1px solid rgba(150,110,50,.35);padding-top:10px}
+.pg-swh{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pg-seg{display:inline-flex;border-radius:999px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(150,110,50,.6)}
+.pg-seg button{border:0;background:none;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer;color:#3a2a1e}
+.pg-seg button.on{background:#2b3658;color:#fff}
+.pg-sws{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+@media (max-width:640px){.pg-sws{grid-template-columns:repeat(2,1fr)}.pg-d{flex-direction:column;align-items:center}.pg-card{width:120px}}
+.pg-it{display:flex;align-items:center;gap:6px;border:0;border-radius:8px;padding:6px;background:rgba(255,250,236,.75);box-shadow:inset 0 0 0 1px rgba(150,110,50,.35);font:inherit;color:#2a2320;cursor:pointer;text-align:left}
+.pg-it.same{box-shadow:inset 0 0 0 2px #b58a2e;background:#fff6dc}
+.pg-it.none{opacity:.4;cursor:default}
+.pg-it .swi{width:32px}
+.pg-in{flex:1;font-size:12px;font-weight:600;line-height:1.3}
+.pg-in small{display:block;font-weight:400;color:#6c6250}
+.pg-xp{font-size:12px;color:#7a5716;font-weight:700;white-space:nowrap}
+.pg-xp em{font-style:normal;color:#c4302b;margin-left:2px}
+.pg-none,.pg-maxed{font-size:13px;color:#6c6250;text-align:center}
+.pt-filter{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.pt-filter button{border:0;border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;background:rgba(255,250,236,.7);box-shadow:inset 0 0 0 1px rgba(150,110,50,.45);cursor:pointer;color:#3a2a1e}
+.pt-filter button.on{background:#2b3658;color:#fff}
+.bx-it .gico,.bx-it .swi{width:28px;height:auto;flex:none}
 </style>
 </head>
 <body>
@@ -2687,9 +2864,36 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
   "P1-20": {"en": "墨汚れ", "id":"P1-20","ch":4,"boss":false,"t":"（　　）は、魏に使いを送り「親魏倭王」の称号を与えられた","slot":"（　　）は","who":"卑弥呼","ok":"邪馬台国の女王卑弥呼は","wd":["劉備","諸葛亮","光武帝"],"ng":["奴国の女王卑弥呼は","百済の女王卑弥呼は"],"cm":"金印をもらった奴国は後漢の時代。卑弥呼の邪馬台国は三国の魏の時代だよ。"},
   "P1-21": {"en": "偽書", "id":"P1-21","ch":4,"boss":true,"t":"理想郷「桃源郷」のもとになった「桃花源記」は、（　　）の作品である","slot":"（　　）の","who":"陶淵明","ok":"東晋の詩人陶淵明の","wd":["王羲之","顧愷之","昭明太子"],"ng":["唐の詩人陶淵明の","前漢の詩人陶淵明の"],"cm":"陶淵明は東晋の詩人。「帰去来辞」で役人をやめて田舎に帰る気持ちを詠んだんだ。"},
   "P1-22": {"en": "剽窃", "id":"P1-22","ch":5,"boss":false,"t":"オリンピアの祭典では、コンラッド博士が全種目で優勝した","slot":"コンラッド博士が全種目で優勝した","who":"ソロン","ok":"ポリスの市民がゼウスに捧げる競技を行った","wd":["ハンムラビ","ヴァルダマーナ","チャンドラグプタ"],"ng":["ローマの市民が皇帝に捧げる競技を行った","奴隷が剣闘士として戦った"],"cm":"オリンピアの祭典は、ポリスの市民がゼウスに捧げる競技会だったんだ。"},
-  "P1-23": {"en": "写字生", "id":"P1-23","ch":5,"boss":false,"t":"（　　）は、独裁者の出現を防ぐため、陶片追放の制度をつくった","slot":"（　　）は、","who":"クレイステネス","ok":"前6世紀末にアテネで改革を行ったクレイステネスは、","wd":["ソロン","ペリクレス","ドラコン"],"ng":["スパルタで改革を行ったクレイステネスは、","前5世紀に民主政を完成させたクレイステネスは、"],"cm":"陶片追放をつくったのは前6世紀末のクレイステネス。民主政を完成させたペリクレスとは時代が違うよ。"},
-  "P1-24": {"en": "焼け", "id":"P1-24","ch":5,"boss":false,"t":"前490年、（　　）は、マラトンの戦いでペルシア軍を破った","slot":"（　　）は、","who":"ミルティアデス","ok":"アテネの将軍ミルティアデスは、","wd":["テミストクレス","レオニダス","ペリクレス"],"ng":["スパルタの王ミルティアデスは、","マケドニアの将軍ミルティアデスは、"],"cm":"マラトンの戦いで勝ったのは、アテネの将軍ミルティアデスの重装歩兵部隊だよ。"},
-  "P1-25": {"en": "墨汚れ", "id":"P1-25","ch":5,"boss":false,"t":"前480年、（　　）は、サラミスの海戦でペルシア艦隊を破った","slot":"（　　）は、","who":"テミストクレス","ok":"三段櫂船の艦隊を率いたテミストクレスは、","wd":["ミルティアデス","レオニダス","クレイステネス"],"ng":["重装歩兵を率いたテミストクレスは、","騎兵隊を率いたテミストクレスは、"],"cm":"サラミスの海戦では、無産市民が三段櫂船の漕ぎ手として活躍したんだ。"},
+  "P1-23": {"en": "写字生", "id":"P1-23","ch":5,"boss":false,"t":"（　　）は、独裁者の出現を防ぐため、陶片追放の制度をつくった","slot":"（　　）は、","who":"クレイステネス","ok":"前6世紀末にアテネで改革を行ったクレイステネスは、","wd":["ソロン","ペリクレス","ドラコン"],"ng":["スパルタで改革を行ったクレイステネスは、","前5世紀に民主政を完成させたクレイステネスは、"],"cm":"陶片追放をつくったのは前6世紀末のクレイステネス。民主政を完成させたペリクレスとは時代が違うよ。", "mk": {
+   "open": "アテネの民主政のはじまりを、正しく読めるかな？",
+   "lines": [
+    {"t": "前6世紀初め、ソロンは財産額に応じて市民の権利を定める財産政治を行った。", "ng": [{"bad": "ソロン", "show": "ペイシストラトス", "kind": "本人", "who": "ソロン", "hand": ["ソロン", "ペイシストラトス", "クレイステネス", "ドラコン"], "cm": "財産政治を行ったのはソロン。ペイシストラトスは、そのあと平民の支持を得て僭主になった人物。"}]},
+    {"t": "クレイステネスは、僭主の出現を防ぐため、陶片追放の制度をつくった。", "fixed": true, "ng": [{"bad": "クレイステネス", "show": "ソロン", "kind": "本人", "who": "クレイステネス", "hand": ["クレイステネス", "ソロン", "ペリクレス", "ドラコン"], "cm": "陶片追放をつくったのは前6世紀末のクレイステネス。"}]},
+    {"t": "市民は、危険だと思う人物の名を陶片に書いて投票した。"},
+    {"t": "前5世紀半ば、ペリクレスの時代にアテネの民主政は完成した。", "ng": [{"bad": "ペリクレス", "show": "クレイステネス", "kind": "本人", "who": "ペリクレス", "hand": ["ペリクレス", "クレイステネス", "ソロン", "テミストクレス"], "cm": "民主政を完成させたのは前5世紀半ばのペリクレス。クレイステネスはその基礎を築いた人物。"}]}
+   ],
+   "extra": "陶片はたくさん見つかってるんだけど、同じ筆跡の陶片がまとめて出てきたこともあるんだ。組織票だったんじゃないか、って言われてるよ。"
+  }},
+  "P1-24": {"en": "焼け", "id":"P1-24","ch":5,"boss":false,"t":"前490年、（　　）は、マラトンの戦いでペルシア軍を破った","slot":"（　　）は、","who":"ミルティアデス","ok":"アテネの将軍ミルティアデスは、","wd":["テミストクレス","レオニダス","ペリクレス"],"ng":["スパルタの王ミルティアデスは、","マケドニアの将軍ミルティアデスは、"],"cm":"マラトンの戦いで勝ったのは、アテネの将軍ミルティアデスの重装歩兵部隊だよ。", "mk": {
+   "open": "ペルシアが攻めてきた日のこと、覚えてる？",
+   "lines": [
+    {"t": "前500年、ミレトスを中心とするイオニアの諸市が、ペルシアに反乱を起こした。"},
+    {"t": "前490年、アテネの将軍ミルティアデスは、マラトンの戦いでペルシア軍を破った。", "fixed": true, "ng": [{"bad": "アテネの将軍ミルティアデス", "show": "スパルタ王レオニダス", "kind": "本人", "who": "ミルティアデス", "hand": ["ミルティアデス", "テミストクレス", "レオニダス", "ペリクレス"], "cm": "マラトンの戦いで勝ったのは、アテネの将軍ミルティアデスの重装歩兵部隊。"}]},
+    {"t": "アテネの重装歩兵は、数でまさるペルシア軍を相手に戦った。"},
+    {"t": "前480年、スパルタ王レオニダスは、テルモピレーでペルシア軍を食い止めて戦死した。", "ng": [{"bad": "スパルタ王レオニダス", "show": "アテネの将軍テミストクレス", "kind": "本人", "who": "レオニダス", "hand": ["レオニダス", "テミストクレス", "ミルティアデス", "ペイシストラトス"], "cm": "テルモピレーで戦死したのはスパルタ王レオニダス。テミストクレスは同じ年にサラミスで艦隊を率いた。"}]}
+   ],
+   "extra": "マラトンの勝利をアテネまで走って知らせた伝令の話は、マラソンの由来として有名だね。でもこの伝令の名前は、本によって違うんだ。"
+  }},
+  "P1-25": {"en": "墨汚れ", "id":"P1-25","ch":5,"boss":false,"t":"前480年、（　　）は、サラミスの海戦でペルシア艦隊を破った","slot":"（　　）は、","who":"テミストクレス","ok":"三段櫂船の艦隊を率いたテミストクレスは、","wd":["ミルティアデス","レオニダス","クレイステネス"],"ng":["重装歩兵を率いたテミストクレスは、","騎兵隊を率いたテミストクレスは、"],"cm":"サラミスの海戦では、無産市民が三段櫂船の漕ぎ手として活躍したんだ。", "mk": {
+   "open": "戦争のあとのアテネは、どうなったかな。",
+   "lines": [
+    {"t": "前480年、テミストクレスの率いる三段櫂船の艦隊が、サラミスの海戦でペルシア艦隊を破った。", "fixed": true, "ng": [{"bad": "テミストクレス", "show": "ミルティアデス", "kind": "本人", "who": "テミストクレス", "hand": ["テミストクレス", "ミルティアデス", "レオニダス", "クレイステネス"], "cm": "サラミスの海戦で艦隊を率いたのはテミストクレス。ミルティアデスはその10年前のマラトンの将軍。"}]},
+    {"t": "三段櫂船の漕ぎ手として、武器を買えない無産市民が活躍した。"},
+    {"t": "ペルシア戦争ののち、アテネを盟主にデロス同盟が結ばれた。"},
+    {"t": "ペリクレスは、デロス同盟の資金も使ってパルテノン神殿を建てさせた。", "ng": [{"bad": "ペリクレス", "show": "クレイステネス", "kind": "本人", "who": "ペリクレス", "hand": ["ペリクレス", "クレイステネス", "フェイディアス", "ソロン"], "cm": "パルテノン神殿を建てさせたのはペリクレス。神殿の彫刻を監督したのがフェイディアス。"}]}
+   ],
+   "extra": "漕ぎ手として活躍した無産市民は、このあと政治での発言力を強めていくんだ。アテネの民主政が完成していくきっかけになったんだよ。"
+  }},
   "P1-26": {"en": "誤字", "id":"P1-26","ch":5,"boss":false,"t":"デロス同盟の資金も使い、（　　）がパルテノン神殿を建てさせた","slot":"（　　）が","who":"ペリクレス","ok":"アテネの民主政を完成させたペリクレスが","wd":["クレイステネス","テミストクレス","ソロン"],"ng":["僭主政治を行ったペリクレスが","スパルタの王ペリクレスが"],"cm":"ペリクレスの時代に、アテネの民主政は完成したといわれているよ。"},
   "P1-27": {"en": "大衍字", "id":"P1-27","ch":5,"boss":true,"t":"アレクサンドリアには王立研究所（　　）が建てられ、各地から学者が集まった","slot":"（　　）","who":"エウクレイデス","ok":"ムセイオン","wd":["プラトン","アリストテレス","ゼノン"],"ng":["アカデメイア","リュケイオン"],"cm":"アカデメイアはプラトン、リュケイオンはアリストテレスの学園。ムセイオンはアレクサンドリアの研究所だよ。"},
   "P1-28": {"en": "改竄", "id":"P1-28","ch":5,"boss":true,"t":"東方遠征でアケメネス朝を滅ぼした（　　）は、征服地の各地にアレクサンドリアを建設した","slot":"（　　）は、","who":"アレクサンドロス大王","ok":"マケドニアのアレクサンドロス大王は、","wd":["フィリッポス2世","アリストテレス","ペリクレス"],"ng":["アテネのアレクサンドロス大王は、","スパルタのアレクサンドロス大王は、"],"cm":"アレクサンドロス大王はマケドニアの王。東方遠征でアケメネス朝を滅ぼしたんだ。"},
@@ -9037,7 +9241,7 @@ html.plain .drift,html.plain .oshi,html.plain .oshi-chg,html.plain .bubble,html.
   {"t": "d", "x": "ページには「世界最古の法典の一つをつくったのは、コンラッド博士である」と書かれている。"},
   {"t": "l", "s": "主人公", "x": "……コンラッド博士？"},
   {"t": "l", "s": "シミ", "x": "初めて見る名前だね。まあ、ちょうどいいや。さっきの頁に証言してもらおう。"},
-  {"t": "sys", "x": "誤植とのバトルでは、まず誤りを正せる人物の頁を選び、次に正しい内容を選びます。"},
+  {"t": "sys", "x": "誤植とのバトルでは、流れてくる文のうち間違った文だけをタップして、その誤りを正せる人物の頁を選びます。"},
   {"t": "act", "a": "tbattle"},
   {"t": "l", "s": "シミ", "x": "ハンムラビ法典は全282条。「目には目を、歯には歯を」で有名だね。ただし、罰の重さは身分によって違ったんだ。"},
   {"t": "d", "x": "ほっとしたのもつかの間、書架の上のほうで、いくつもの本が次々に光り始めた。どれも、オリエントの階のほうだ。", "fx": "flash"},
@@ -9778,7 +9982,7 @@ const DEBUG=!CLOUD&&/(^|[?&])debug(=|&|$)/.test(location.search);
 const SAVE_KEY=DEBUG?'errata_debug_v1':'errata_all_v1';
 function debugFill(){if(!DEBUG||!S)return;if(!S.name)S.name='デバッグ';S.prologue=true;S.tutorial=true;S.tour=false;
  S.sh=S.sh&&S.sh.length===3?S.sh.map(x=>Math.max(x||0,9999)):[9999,9999,9999];S.shiori=S.sh[0]+S.sh[1]+S.sh[2];
- S.cards=S.cards||{};CARDS.forEach(c=>{if(!isSP(c.n))S.cards[c.n]=5});save();
+ S.cards=S.cards||{};CARDS.forEach(c=>{if(!isSP(c.n))S.cards[c.n]=5});if((S.g||0)<99999)S.g=99999;S.sw=S.sw||{};SWEETS.forEach(w=>[0,1,2].forEach(e=>{if((S.sw[w.t+e]||0)<99)S.sw[w.t+e]=99}));save();
  if(!document.getElementById('dbgB')){const b=document.createElement('div');b.id='dbgB';b.textContent='デバッグモード';
   b.style.cssText='position:fixed;left:50%;bottom:4px;transform:translateX(-50%);z-index:9999;pointer-events:none;font:12px sans-serif;color:#fff;background:rgba(160,30,30,.85);padding:2px 10px;border-radius:10px';document.body.appendChild(b)}}
 const CL={mem:null,ready:false,busy:false,dirty:false,last:0,fail:0,pendingLocal:null,base:0,checking:false,lastCheck:0};
@@ -9804,11 +10008,11 @@ function emblem(e){const s='<svg viewBox="0 0 40 40" class="emb" aria-hidden="tr
  return s+'<g fill="currentColor">'+Array.from({length:8},(_,i)=>`<ellipse cx="20" cy="10.5" rx="4.2" ry="7.5" transform="rotate(${i*45} 20 20)" opacity=".9"/>`).join('')+'<circle cx="20" cy="20" r="5.5" fill="#f3ead6"/><circle cx="20" cy="20" r="3" /></g></svg>'}
 function ribbon(e){const c=ERAS[e].c;return `<svg class="rb" viewBox="0 0 30 44" aria-hidden="true"><path d="M3 0h24v42l-12-9-12 9z" fill="${c}"/><path d="M3 0h24v42l-12-9-12 9z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/><g transform="translate(5 6) scale(.5)" color="#fbf3df">${emblem(e).replace('<svg viewBox="0 0 40 40" class="emb" aria-hidden="true">','').replace('</svg>','')}</g></svg>`}
 function coinsHTML(only){const L=only&&only.length?only:[0,1,2];return `<div class="coins" data-only="${L.join('')}" aria-label="栞の数">${L.map(i=>`<div class="coin">${ribbon(i)}<span>${ERAS[i].k}の栞</span><b>${S.sh[i]}</b></div>`).join('')}</div>`}
-function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)))}
+function refreshCoins(){document.querySelectorAll('.coins').forEach(c=>c.outerHTML=coinsHTML((c.dataset.only||'012').split('').map(Number)));document.querySelectorAll('.gcoin').forEach(c=>c.outerHTML=gCoinHTML(c.id==='shopBtn'))}
 function qEras(){return QZ&&QZ.list?[...new Set(QZ.list.map(q=>qEra(q)))].sort():[0,1,2]}
 function gainText(g){const t=ERAS.map((E,i)=>g[i]?`${E.k}の栞${g[i]}枚`:'').filter(Boolean);return t.length?t.join('、'):'栞0枚'}
 function freshState(){return{real:null,name:'',look:null,prologue:false,pv:null,cleared:Array(NCH).fill(false),tutorial:false,
-  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},qmy:{secs:[]},ms:{},jq:{},jk:{lv:'std',my:[],mix:false},party:[],prog:null,mid:{},tour:false,drills:0,room:{f:[],w:[],inv:{}},t:0}}
+  shiori:0,sh:[0,0,0],pt:[0,0,0],hist:[],oshi:'ハンムラビ',pity:0,shiryo:0,cards:{},qs:{},qmy:{secs:[]},ms:{},jq:{},jk:{lv:'std',my:[],mix:false},party:[],prog:null,mid:{},tour:false,drills:0,room:{f:[],w:[],inv:{}},g:0,gt:0,plv:1,sw:{},pe:{},kb:{},t:0}}
 /* 記録の章数をそろえる */
 function normState(N){if(N.oshi==='シミ'&&!N.oshiSet)N.oshi='ハンムラビ';N.cleared=(N.cleared||[]).slice(0,NCH);while(N.cleared.length<NCH)N.cleared.push(false);if(!N.mid||typeof N.mid!=='object')N.mid={};delete N.quizOpen;
  /* 栞を時代別に（古い記録は、正解した問題の時代の割合で分ける） */
@@ -9817,6 +10021,7 @@ function normState(N){if(N.oshi==='シミ'&&!N.oshiSet)N.oshi='ハンムラビ';
   if(!W)N.sh=[tot,0,0];else{N.sh=w.map(x=>Math.floor(tot*x/W));N.sh[w.indexOf(Math.max(...w))]+=tot-N.sh[0]-N.sh[1]-N.sh[2]}}
  if(!Array.isArray(N.pt)||N.pt.length!==3)N.pt=[N.pity||0,0,0];
  if(!Array.isArray(N.hist))N.hist=[];
+ if(typeof N.g!=='number')N.g=0;if(typeof N.gt!=='number')N.gt=0;if(!N.plv)N.plv=1;['sw','pe','kb'].forEach(k=>{if(!N[k]||typeof N[k]!=='object')N[k]={}});
  N.shiori=N.sh[0]+N.sh[1]+N.sh[2];return N}
 let S=freshState();
 function save(){window.__played=true;S.t=Date.now();if(S.sh)S.shiori=S.sh[0]+S.sh[1]+S.sh[2];CL.dirty=true;if(CLOUD)CL.mem=JSON.stringify(S);try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
@@ -9834,7 +10039,7 @@ function cardHTML(n,opt={}){const c=CARD[n];const l=lv(n);const own=opt.forceOwn
   const art=IMG[n]?`<img src="${IMG[n]}"${fcAttr(n)} alt="" loading="lazy" decoding="async">`:silhouette();
   const sp=isSP(n);
   return `<div class="card ${ATTR_CLASS(c.a)} ${sp?'special':''} ${own?'':'unowned'}" ${opt.attrs||''}><div class="art">${art}</div>
-  ${sp?'<span class="rar sp">特別な頁</span>':`<span class="rar">${'★'.repeat(c.r)}</span>`}${own&&l>1&&!opt.noLv&&!sp?`<span class="lv">${l-1}凸</span>`:''}<div class="nm">${esc(n)}</div></div>`}
+  ${sp?'<span class="rar sp">特別な頁</span>':`<span class="rar">${'★'.repeat(c.r)}</span>`}${own&&l>1&&!opt.noLv&&!sp?`<span class="lv">${l-1}凸</span>`:''}${opt.plv&&l>0&&!sp?`<span class="plv">Lv${pgLv(n)}</span>`:''}<div class="nm">${esc(n)}</div></div>`}
 function blobSVG(boss,en){if(en&&IMG['誤植_'+en])return `<img src="${IMG['誤植_'+en]}" alt="${esc(en)}">`;if(IMG[boss?'誤植_ボス':'誤植']||IMG['誤植'])return `<img src="${IMG[boss?'誤植_ボス':'誤植']||IMG['誤植']}" alt="誤植">`;
   return `<svg viewBox="0 0 100 100" aria-label="誤植"><path d="M50 8c14 0 18 10 28 14s16 14 12 28 4 22-6 32-26 10-36 8-22 4-30-8 2-22-4-32 6-24 16-30S36 8 50 8z" fill="#0d1120"/>
   <circle cx="38" cy="46" r="8" fill="#eceee6"/><circle cx="64" cy="44" r="9" fill="#eceee6"/><circle cx="40" cy="48" r="3.5" fill="#0d1120"/><circle cx="62" cy="47" r="4" fill="#0d1120"/>
@@ -9894,7 +10099,7 @@ function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=
   <div class="home-shade"></div>
   <header class="h-logo"><div class="lg-wrap"><img class="lg-img" src="${IMG_BASE}img/logo.webp" alt="エラータ ERRATA" draggable="false"></div>
    <p class="lg-sub">― 世界史探究 ―</p></header>
-  <div class="h-coins">${msBtnHTML()}${boxBtnHTML()}${coinsHTML()}<button class="burger" id="burger" aria-label="メニュー"><span></span></button></div>
+  <div class="h-coins">${msBtnHTML()}${boxBtnHTML()}${gCoinHTML(true)}${coinsHTML()}<button class="burger" id="burger" aria-label="メニュー"><span></span></button></div>
   <div class="oshi ${(o==='シミ'||CHARA[o])?'':'cardmode'}" id="oshi" role="button" aria-label="ひとこと">${oshiHTML}</div>
   <button class="oshi-chg" id="oshiChg">人物を変更する</button>
   <div class="bubble" id="bubble" role="button" tabindex="0">${homeBubble()}</div>
@@ -9911,11 +10116,12 @@ function Home(){const nx=nextChapter();const o=oshiName();stMigrate();const cst=
  if(S.tour){S.tour=false;save();setTimeout(()=>{if($('#oshi')&&!$('#modal'))homeTour()},450)}}
 const TOUR=[['[data-go="story"]','ストーリー','部を選ぶと、史書庫の地図が開くよ。節ごとに読み進めて、ときどき出てくる「誤植の群れ」は20秒以内に答えて退治しよう。'],
  ['#msBtn','ミッション','毎日のミッションを達成すると、栞がもらえるよ。日付が変わると新しくなるんだ。'],
- ['.h-coins .boxbtn:not(.msbtn)','受け取りボックス','もらった栞は、いったんここに届くよ。タップして受け取ってね。'],
+ ['.h-coins .boxbtn:not(.msbtn):not(.shopbtn)','受け取りボックス','もらった栞やG、お菓子は、いったんここに届くよ。タップして受け取ってね。'],
+ ['#shopBtn','G・お菓子屋','Gは問題演習やストーリーでもらえるお金だよ。ここをタップすると、頁を育てるお菓子をGで買えるんだ。'],
  ['[data-go="quiz"]','問題演習','章ごとに10問ずつ出るよ。正解すると栞がもらえる。テストの前は「マイ範囲」で試験範囲の章や王朝にチェックを入れておくと、範囲の問題だけを解けるよ。'],
  ['[data-go="gacha"]','ガチャ','栞は古代・中世・近世の3種類。問題演習で正解した問題の時代の栞がもらえて、5枚で1回、50枚で10回めくれる。誰が出るかは、めくってみるまでわからないよ。'],
  ['[data-go="lib"]','カードゲーム','手に入れた頁でデッキを組んで、書架の奥の誤植と戦うんだ。頁の種類が多いほど戦い方が広がるよ。最後まで進むと栞が1枚もらえる。'],
- ['[data-go="party"]','編成','改変バトルに連れていく頁を、4枚まで選べるんだ。同じ属性をそろえるとボーナスがつくよ。'],
+ ['[data-go="party"]','編成','校正バトルに連れていく頁を、5枚まで選べるんだ。頁をタップすると、お菓子で育てられるよ。'],
  ['[data-go="niwa"]','マイルーム','君の書斎を好きに飾れるよ。家具は栞と交換できるし、手に入れた頁は額に入れて壁に掛けられるんだ。'],
  ['#burger','図鑑','手に入れた頁の人物のことを読めるよ。まだ持っていない頁も、どんな人かだけは見られるんだ。'],
  ['#oshiChg','人物を変更する','手に入れた頁の人物を、ホームに飾れるよ。'],
@@ -10232,34 +10438,47 @@ function boxAdd(src,e,n){if(!n)return;S.box=S.box||[];S.box.push({id:boxId(),src
 /* 問題演習は1回分を1件にまとめる（正解するたびに数が増える。途中で閉じても消えない） */
 function boxAddTo(key,src,e,n){if(!n)return;S.box=S.box||[];let b=S.box.find(x=>x.k===key&&x.e===e);if(!b){b={id:boxId(),k:key,src,e,n:0};S.box.push(b)}b.n+=n;save()}
 function boxHas(e){return (S.box||[]).some(b=>b.e===e)}
+/* 受け取りボックスの中身：e が 0〜2 なら栞（時代）、'g' ならG、'w:キー' ならお菓子 */
+function bxKind(b){return typeof b.e==='number'?'sh':b.e==='g'?'g':'w'}
+function bxIco(b){const k=bxKind(b);return k==='sh'?ribbon(b.e):k==='g'?GICO:swIcon(String(b.e).slice(2))}
+function bxName(b){const k=bxKind(b);return k==='sh'?`${ERAS[b.e].k}の栞 ×${b.n}`:k==='g'?`${gFmt(b.n)}G`:`${swName(String(b.e).slice(2))} ×${b.n}`}
+function bxCol(b){const k=bxKind(b);return k==='sh'?ERAS[b.e].c:k==='g'?'#c9a24a':SW_COL[+String(b.e).slice(-1)].c}
+/* 1件を受け取る。プレイヤーレベルが上がったら、上がったレベルの一覧を返す */
+function bxTake(b){const k=bxKind(b);if(k==='sh'){S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n);return []}if(k==='g')return gGet(b.n);swAdd(String(b.e).slice(2),b.n);return []}
+function bxLvUp(ups){if(!ups||!ups.length)return;const l=ups[ups.length-1];toast(`プレイヤーLv${l}になった！　お菓子が受け取りボックスに届いた`)}
 function boxBtnHTML(){const n=boxN();return `<button class="boxbtn${n?' has':''}" aria-label="受け取りボックス（${n}件）">${BOXSVG}<span>受取</span>${n?`<i>${n>99?'99+':n}</i>`:''}</button>`}
 function openBox(){const L=S.box||[];
- const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・問題演習・カードゲームでもらった栞は、ここに届きます。</p>';
+ const empty='<p class="bx-empty">受け取るものはありません。<br>ストーリー・問題演習・カードゲームでもらった栞やG、お菓子は、ここに届きます。</p>';
  modal(`<h3>受け取りボックス</h3><p class="bx-left" id="bxLeft">${L.length?`タップして受け取ろう　残り<b>${L.length}</b>件`:''}</p>
-  <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${ERAS[b.e].c}">${ribbon(b.e)}<span class="bx-t"><b>${ERAS[b.e].k}の栞 ×${b.n}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
-  <div class="row" style="justify-content:center;margin-top:14px">${L.length>1?'<button class="btn red" id="bxAll">すべて受け取る</button>':''}<button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn:not(.msbtn)');if(b)b.outerHTML=boxBtnHTML()});
+  <div class="bx-list" id="bxList">${L.length?L.map(b=>`<button class="bx-it" data-bx="${b.id}" style="--ec:${bxCol(b)}">${bxIco(b)}<span class="bx-t"><b>${bxName(b)}</b><small>${esc(b.src)}</small></span><span class="bx-get">受け取る</span></button>`).join(''):empty}</div>
+  <div class="row" style="justify-content:center;margin-top:14px">${L.length>1?'<button class="btn red" id="bxAll">すべて受け取る</button>':''}<button class="btn light" data-close>閉じる</button></div>`,()=>{refreshCoins();const b=$('.h-coins .boxbtn:not(.msbtn):not(.shopbtn)');if(b)b.outerHTML=boxBtnHTML()});
  document.querySelectorAll('#modal [data-bx]').forEach(el=>el.onclick=()=>{if(el.classList.contains('got'))return;const i=(S.box||[]).findIndex(b=>b.id===el.dataset.bx);if(i<0){el.remove();return}
-  const b=S.box[i];S.box.splice(i,1);S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n);save();
-  el.classList.add('got');const f=document.createElement('span');f.className='bx-plus';f.textContent='+'+b.n;el.appendChild(f);
+  const b=S.box[i];S.box.splice(i,1);const ups=bxTake(b);save();
+  el.classList.add('got');const f=document.createElement('span');f.className='bx-plus';f.textContent='+'+gFmt(b.n);el.appendChild(f);if(ups.length){bxLvUp(ups);setTimeout(()=>openBox(),700)}
   refreshCoins();const n=boxN();const lf=$('#bxLeft');if(lf)lf.innerHTML=n?`タップして受け取ろう　残り<b>${n}</b>件`:'ぜんぶ受け取った！';
   setTimeout(()=>{el.remove();const ls=$('#bxList');if(ls&&!ls.children.length)ls.innerHTML=empty},420);if(!n){saveNow();const ba=$('#bxAll');if(ba)ba.remove()}})
  /* すべて受け取る：時代ごとに合計して一度に受け取る */
- const ba=$('#bxAll');if(ba)ba.onclick=()=>{const L2=S.box||[];if(!L2.length)return;const sum=[0,0,0];L2.forEach(b=>{sum[b.e]+=b.n;S.sh[b.e]=Math.min(16383,S.sh[b.e]+b.n)});S.box=[];saveNow();refreshCoins();
+ const ba=$('#bxAll');if(ba)ba.onclick=()=>{const L2=S.box||[];if(!L2.length)return;const sum=[0,0,0];let gs=0,ws=0,ups=[];S.box=[];L2.forEach(b=>{const k=bxKind(b);if(k==='sh')sum[b.e]+=b.n;else if(k==='g')gs+=b.n;else ws+=b.n;ups=ups.concat(bxTake(b))});saveNow();refreshCoins();
   document.querySelectorAll('#bxList .bx-it').forEach((el,i)=>setTimeout(()=>el.classList.add('got'),i*40));
-  const lf=$('#bxLeft');if(lf)lf.innerHTML='ぜんぶ受け取った！　'+sum.map((n,e)=>n?`${ERAS[e].k}の栞 <b>＋${n}</b>`:'').filter(Boolean).join('　');ba.remove();
-  setTimeout(()=>{const ls=$('#bxList');if(ls)ls.innerHTML=empty},500)}}
+  const lf=$('#bxLeft');if(lf)lf.innerHTML='ぜんぶ受け取った！　'+sum.map((n,e)=>n?`${ERAS[e].k}の栞 <b>＋${n}</b>`:'').concat([gs?`G <b>＋${gFmt(gs)}</b>`:'',ws?`お菓子 <b>＋${ws}</b>`:'']).filter(Boolean).join('　');ba.remove();
+  setTimeout(()=>{const ls=$('#bxList');if(ls)ls.innerHTML=empty},500);if(ups.length){bxLvUp(ups);setTimeout(()=>openBox(),900)}}}
 /* ===== ミッション =====
    デイリー：その日（端末の日付）のうちに達成すると、各時代の栞がもらえる。日付が変わるとリセット
    達成：通算の記録で段階的に。報酬は受け取りボックスに届く */
-const MS_DAILY=[['dq','問題演習を10問解こう',10,1],['dc','問題演習で5問正解しよう',5,1],['st','ストーリーを1節読もう',1,1],['lx','カードゲームで1回遊ぼう',1,1]];
-const MS_ALL_BONUS=2;
+/* [キー, 内容, 必要な数, 各時代の栞の枚数, お菓子（種類, 個数）]。お菓子の色は日替わり（3日で3色ひとまわり） */
+const MS_DAILY=[['dq','問題演習を10問解こう',10,1,'c',3],['dc','問題演習で5問正解しよう',5,1,'c',3],['st','ストーリーを1節読もう',1,1,'k',1],['lx','カードゲームで1回遊ぼう',1,1,'k',1]];
+const MS_ALL_BONUS=2,MS_ALL_SW=['p',1];
+function msSwCol(){const d=msToday().split('-').map(Number);return Math.floor(Date.UTC(d[0],d[1]-1,d[2])/864e5)%3}
+function msSwText(t,n){return t&&n?`、${swName(t+msSwCol())} ×${n}`:''}
 const MS_ACH=[
  ['dr','問題演習で正解した問題',[50,200,500,1000],[2,3,5,8],()=>Object.values(S.qs||{}).filter(v=>v===1).length],
  ['jk','受験対策で正解した問題',[50,200,500,1000],[2,3,5,8],()=>Object.values(S.jq||{}).reduce((a,t)=>a+(String(t).split('1').length-1),0)],
  ['cd','集めた頁',[10,30,60],[2,4,6],()=>Object.values(S.cards||{}).filter(v=>v>0).length],
  ['sc','読み終えた節',[5,20,50],[2,4,6],()=>{try{return stages().filter(x=>x.k==='sec'&&stPassed(x)).length}catch(e){return 0}}]];
-function msToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function msState(){if(!S.ms||typeof S.ms!=='object')S.ms={};const t=msToday();if(S.ms.day!==t){S.ms.day=t;S.ms.c={};S.ms.got={}}S.ms.c=S.ms.c||{};S.ms.got=S.ms.got||{};S.ms.ach=S.ms.ach||{};return S.ms}
+/* 日付は学校アカウント（GAS）の時計で決める（iPadの時計を進めて何度も受け取れないように）。GASに届かないときは端末の時計。日本時間で判定する */
+function nowMs(){return Date.now()+(CL&&CL.toff||0)}
+function msToday(){const d=new Date(nowMs()+9*3600e3);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0')}
+function msState(){if(!S.ms||typeof S.ms!=='object')S.ms={};const t=msToday();if(S.ms.day!==t&&!(CL.toff!=null&&S.ms.day>t)){S.ms.day=t;S.ms.c={};S.ms.got={}}S.ms.c=S.ms.c||{};S.ms.got=S.ms.got||{};S.ms.ach=S.ms.ach||{};return S.ms}
 function msTick(k,n=1){const m=msState();m.c[k]=(m.c[k]||0)+n}
 function msDailyDone(){const m=msState();return MS_DAILY.every(([k,,need])=>(m.c[k]||0)>=need)}
 /* 受け取れる数（ボタンの赤丸） */
@@ -10267,27 +10486,28 @@ function msReady(){const m=msState();let n=0;for(const [k,,need] of MS_DAILY)if(
  if(msDailyDone()&&!m.got.all)n++;for(const [k,,th,,f] of MS_ACH){const t=m.ach[k]||0;if(t<th.length&&f()>=th[t])n++}return n}
 const MSSVG='<svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 6h14a2 2 0 0 1 2 2v19a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M12 4h8v4h-8z"/><path d="M11 15l2 2 4-4M11 23l2 2 4-4M19 16h3M19 24h3"/></svg>';
 function msBtnHTML(){const n=msReady();return `<button class="boxbtn msbtn${n?' has':''}" id="msBtn" aria-label="ミッション（受け取れる報酬${n}件）">${MSSVG}<span>ミッション</span>${n?`<i>${n}</i>`:''}</button>`}
-function msGive(label,n){for(let e=0;e<3;e++)boxAdd(label,e,n)}
+function msGive(label,n,sw,sn){for(let e=0;e<3;e++)boxAdd(label,e,n);if(sw&&sn)boxAdd(label,'w:'+sw+msSwCol(),sn)}
 function openMissions(tab='d'){const m=msState();
- const row=(t,cur,need,rw,state,key)=>`<div class="ms-row ${state}"><div class="ms-t"><b>${esc(t)}</b><div class="ms-bar"><i style="width:${Math.min(100,Math.round(100*cur/need))}%"></i></div><small>${Math.min(cur,need)}／${need}　報酬：各時代の栞 ×${rw}</small></div>
+ const row=(t,cur,need,rw,state,key,swt)=>`<div class="ms-row ${state}"><div class="ms-t"><b>${esc(t)}</b><div class="ms-bar"><i style="width:${Math.min(100,Math.round(100*cur/need))}%"></i></div><small>${Math.min(cur,need)}／${need}　報酬：各時代の栞 ×${rw}${swt||''}</small></div>
   ${state==='ok'?`<button class="btn red ms-get" data-ms="${key}">受け取る</button>`:state==='got'?'<span class="ms-done">受け取り済み</span>':'<span class="ms-wait">達成していません</span>'}</div>`;
  let body='';
- if(tab==='d'){body=MS_DAILY.map(([k,t,need,rw])=>{const c=m.c[k]||0;return row(t,c,need,rw,m.got[k]?'got':c>=need?'ok':'no','d:'+k)}).join('');
-  const dn=MS_DAILY.filter(([k,,need])=>(m.c[k]||0)>=need).length;body+=row('デイリーミッションをすべて達成しよう',dn,MS_DAILY.length,MS_ALL_BONUS,m.got.all?'got':dn>=MS_DAILY.length?'ok':'no','d:all');
+ if(tab==='d'){body=MS_DAILY.map(([k,t,need,rw,sw,sn])=>{const c=m.c[k]||0;return row(t,c,need,rw,m.got[k]?'got':c>=need?'ok':'no','d:'+k,msSwText(sw,sn))}).join('');
+  const dn=MS_DAILY.filter(([k,,need])=>(m.c[k]||0)>=need).length;body+=row('デイリーミッションをすべて達成しよう',dn,MS_DAILY.length,MS_ALL_BONUS,m.got.all?'got':dn>=MS_DAILY.length?'ok':'no','d:all',msSwText(...MS_ALL_SW));
   body='<p class="sub" style="margin:0 0 8px">日付が変わるとリセットされます。</p>'+body}
  else body=MS_ACH.map(([k,t,th,rw,f])=>{const tier=m.ach[k]||0;const cur=f();if(tier>=th.length)return row(`${t}（すべて達成）`,th[th.length-1],th[th.length-1],rw[rw.length-1],'got','');
   return row(`${t}を${th[tier]}にしよう`,cur,th[tier],rw[tier],cur>=th[tier]?'ok':'no','a:'+k)}).join('');
  modal(`<h3>ミッション</h3><div class="ms-tabs"><button data-mt="d" class="${tab==='d'?'on':''}">デイリー</button><button data-mt="a" class="${tab==='a'?'on':''}">達成</button></div>
   <div class="ms-list">${body}</div><p class="sub" style="margin:10px 0 0">報酬は受け取りボックスに届きます。</p>
-  <div class="row" style="justify-content:center;margin-top:12px"><button class="btn light" data-close>閉じる</button></div>`,()=>{const b=$('#msBtn');if(b)b.outerHTML=msBtnHTML();const x=$('.h-coins .boxbtn:not(.msbtn)');if(x)x.outerHTML=boxBtnHTML()});
+  <div class="row" style="justify-content:center;margin-top:12px"><button class="btn light" data-close>閉じる</button></div>`,()=>{const b=$('#msBtn');if(b)b.outerHTML=msBtnHTML();const x=$('.h-coins .boxbtn:not(.msbtn):not(.shopbtn)');if(x)x.outerHTML=boxBtnHTML()});
  document.querySelectorAll('#modal [data-mt]').forEach(b=>b.onclick=()=>openMissions(b.dataset.mt));
  document.querySelectorAll('#modal [data-ms]').forEach(b=>b.onclick=()=>{const [g,k]=b.dataset.ms.split(':');
-  if(g==='d'){if(m.got[k])return;if(k==='all'){if(!msDailyDone())return;m.got.all=1;msGive('ミッション　デイリーをすべて達成',MS_ALL_BONUS)}
-   else{const d=MS_DAILY.find(x=>x[0]===k);if(!d||(m.c[k]||0)<d[2])return;m.got[k]=1;msGive('ミッション　'+d[1],d[3])}}
+  if(g==='d'){if(m.got[k])return;if(k==='all'){if(!msDailyDone())return;m.got.all=1;msGive('ミッション　デイリーをすべて達成',MS_ALL_BONUS,...MS_ALL_SW)}
+   else{const d=MS_DAILY.find(x=>x[0]===k);if(!d||(m.c[k]||0)<d[2])return;m.got[k]=1;msGive('ミッション　'+d[1],d[3],d[4],d[5])}}
   else{const a=MS_ACH.find(x=>x[0]===k);const tier=m.ach[k]||0;if(!a||tier>=a[2].length||a[4]()<a[2][tier])return;m.ach[k]=tier+1;msGive(`ミッション　${a[1]}を${a[2][tier]}に`,a[3][tier])}
   saveNow();toast('受け取りボックスに届きました');openMissions(tab)})}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#msBtn');if(!b)return;e.stopPropagation();openMissions()},true);
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.boxbtn:not(.msbtn)');if(!b)return;e.stopPropagation();openBox()},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.boxbtn:not(.msbtn):not(.shopbtn)');if(!b)return;e.stopPropagation();openBox()},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#shopBtn');if(!b)return;e.stopPropagation();openShop()},true);
 
 /* ---------- ストーリーのステージ ----------
    章を「節」に分け、何節かごとに問題だけのステージ「誤植の群れ」をはさむ。
@@ -10452,11 +10672,13 @@ function playStage(st){if(st.k==='pro'){S.pst=null;startPrologue({turn:true});re
  const resume=S.pst&&S.pst.id===st.id&&S.prog&&S.prog.ch===st.ch&&S.prog.i>=st.a&&S.prog.i<st.b;
  S.pst={id:st.id,ch:st.ch,a:st.a,b:st.b};if(!resume)S.prog={ch:st.ch,i:st.a};save();FX.pageTurn(()=>playChapter(st.ch))}
 /* 節を読み終えたとき */
+/* 節をはじめて読み終えたときのG：第1部60・第2部100・第3部150。部の中では章ごとに5Gずつ増やす */
+function stGold(ch){const p=Math.max(0,partOf(ch));const P=PARTS[p];const chs=P?P.chs.filter(c=>c>0):[];const i=Math.max(0,chs.indexOf(ch));return [60,100,150][p]+5*i}
 function finishStage(){const P=S.pst;const ch=PL?PL.ch:P.ch;S.prog=null;S.pst=null;PL=null;if(S.mid)delete S.mid[ch];STG=null;
  const st=stages().find(s=>s.id===P.id);S.stg=S.stg||{};const r=S.stg[P.id]||(S.stg[P.id]={c:0});const first=!r.c;r.c++;msTick('st');const e=eraOfCh(ch);
- const name=st?stName(st):CHNAME[ch];if(first)boxAdd(`${name}　はじめて読了`,e,3);saveNow();
+ const name=st?stName(st):CHNAME[ch];const sg=stGold(ch);if(first){boxAdd(`${name}　はじめて読了`,e,3);boxAdd(`${name}　はじめて読了`,'g',sg)}saveNow();
  const nx=st?stages()[st.i+1]:null;if(first&&nx&&(nx.k==='pro'||partOf(nx.ch)===partOf(ch)))MAP_NEW=nx.id;
- FX.pageTurn(()=>{StoryMap(partOf(ch));modal(`<h3>${esc(name)}　修復完了</h3><p style="text-align:center;line-height:1.9">${first?`${ERAS[e].k}の栞3枚が、ホームの受け取りボックスに届いた。`:'もう一度、読み終えました。'}${first&&nx?`<br>${esc(stName(nx))}に進めるようになった。`:''}</p><div class="row" style="justify-content:center"><button class="btn" data-close>地図にもどる</button></div>`)})}
+ FX.pageTurn(()=>{StoryMap(partOf(ch));modal(`<h3>${esc(name)}　修復完了</h3><p style="text-align:center;line-height:1.9">${first?`${ERAS[e].k}の栞3枚と${sg}Gが、ホームの受け取りボックスに届いた。`:'もう一度、読み終えました。'}${first&&nx?`<br>${esc(stName(nx))}に進めるようになった。`:''}</p><div class="row" style="justify-content:center"><button class="btn" data-close>地図にもどる</button></div>`)})}
 /* 誤植の群れ（問題だけのステージ） */
 function stagePool(st){const ev=STORY[st.ch].ev;const key=id=>id.replace(/-\d+$/,'');const pf=new Set();
  for(let j=st.a;j<st.b;j++){const e=ev[j];if(e.t==='act'&&e.a==='quiz')e.v.forEach(id=>pf.add(key(id)))}
@@ -10470,7 +10692,7 @@ function stageQuizEnd(st,z){const n=z.list.length,ok=z.res.filter(x=>x===true).l
  if(sc>0){r.c=(r.c||0)+1;r.b=Math.max(r.b||0,sc)}const t1=stTier(r.c||0);
  if(first){boxAdd(`${stName(st)}　はじめてクリア`,e,3);msgs.push(`はじめてクリア！　${ERAS[e].k}の栞3枚`)}
  if(t1>t0&&!first)msgs.push(`星の色が<b class="tier t${t1}">${TIER_N[t1]}</b>になった`);
- if(t1===3&&!r.g){r.g=1;boxAdd(`${stName(st)}　金の評価`,e,10);msgs.push(`はじめての金！　${ERAS[e].k}の栞10枚`)}
+ if(t1===3&&!r.g){r.g=1;boxAdd(`${stName(st)}　金の評価`,e,10);boxAdd(`${stName(st)}　金の評価`,'g',200);msgs.push(`はじめての金！　${ERAS[e].k}の栞10枚と200G`)}
  saveNow();const nx=stages()[st.i+1];if(first&&nx&&partOf(nx.ch)===partOf(st.ch))MAP_NEW=nx.id;
  const w=z.wrong;const c=r.c||0;const nxt=c<1?'':c<3?`あと${3-c}回クリアで銀`:c<5?`あと${5-c}回クリアで金`:'';
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
@@ -10478,7 +10700,7 @@ function stageQuizEnd(st,z){const n=z.list.length,ok=z.res.filter(x=>x===true).l
   <div class="dr-res parch sq-res"><p class="sub">${esc(stName(st))}</p><h3>${sc?'誤植の群れを退治した！':'誤植に逃げられた……'}</h3>
    ${starsHTML(sc,sc?t1:0,'big pop')}<p class="sq-score">正解 <b>${ok}</b>／${n}問</p>
    ${sc?`<p class="sq-tier">評価 <b class="tier t${t1}">${TIER_N[t1]}</b>　クリア ${c}回${nxt?`　<small>${nxt}</small>`:''}</p>`:'<p class="sq-tier">5問正解でクリアです。もう一度挑戦しよう</p>'}
-   ${msgs.length?`<div class="sq-msg">${msgs.map(m=>`<p>${m}</p>`).join('')}<p class="sub">栞はホームの受け取りボックスに届いています</p></div>`:''}
+   ${msgs.length?`<div class="sq-msg">${msgs.map(m=>`<p>${m}</p>`).join('')}<p class="sub">栞とGはホームの受け取りボックスに届いています</p></div>`:''}
    ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${qHTML(q.q)}<br><b>答え：${esc(zhAns(q))}</b></p>`).join('')}</div>`:''}
    <div class="rowb"><button class="btn red" id="sqAgain">もう一度挑戦する</button><button class="btn light" id="sqMap">地図にもどる</button></div></div></div>`);
  $('#sqAgain').onclick=()=>FX.pageTurn(()=>stageQuiz(st));$('#sqMap').onclick=()=>FX.pageTurn(()=>StoryMap(partOf(st.ch)))}
@@ -10880,44 +11102,280 @@ function closeModal(silent){const m=$('#modal');if(m)m.remove();const cb=modalCb
 
 /* ---------- cards ---------- */
 function giveCard(n){const l=lv(n);if(l===0){S.cards[n]=1;return ''}if(l<5){S.cards[n]=l+1;return `（${l}凸 → ${l+1}凸）`}S.shiryo++;return '（4凸済みのため、史料片を1つ手に入れた）'}
-function autoParty(){S.party=S.party.filter(n=>lv(n)&&!isSP(n));if(S.party.length<4){const owned=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!S.party.includes(c.n)).sort((a,b)=>b.r-a.r||lv(b.n)-lv(a.n));
- for(const c of owned){if(S.party.length>=4)break;S.party.push(c.n)}}}
+function autoParty(){S.party=S.party.filter(n=>lv(n)&&!isSP(n)).slice(0,PARTY_N);if(S.party.length<PARTY_N){const owned=CARDS.filter(c=>lv(c.n)&&!isSP(c.n)&&!S.party.includes(c.n)).sort((a,b)=>b.r-a.r||lv(b.n)-lv(a.n));
+ for(const c of owned){if(S.party.length>=PARTY_N)break;S.party.push(c.n)}}}
 
-/* ---------- battle ---------- */
-let B=null;
-function teamMult(ch,whoAttr){const p=partyNames(ch);const all=[...p.own,p.helper];const cnt={};all.forEach(n=>{const a=CARD[n].a;cnt[a]=(cnt[a]||0)+1});
- const mx=Math.max(0,...Object.values(cnt));let m=1,notes=[];
- const fb=mx>=4?.35:mx===3?.2:mx===2?.1:0;if(fb){m+=fb;notes.push(`編成ボーナス＋${Math.round(fb*100)}%`)}
- if(all.some(n=>CARD[n].a===whoAttr)){m+=.1;notes.push('有利属性＋10%')}
- return {m,notes}}
-/* ---------- battle ---------- */
-const BOOK_SVG='<svg class="bt-book" viewBox="0 0 560 90" aria-hidden="true"><path d="M280 26C220 8 120 6 20 18L8 74c104-12 196-6 272 14z" fill="#e8dcbd"/><path d="M280 26c60-18 160-20 260-8l12 56c-104-12-196-6-272 14z" fill="#efe4c8"/><path d="M280 26v62" stroke="#a88c5a" stroke-width="2"/><path d="M8 74c104-12 196-6 272 14 76-20 168-26 272-14l-4 10c-100-10-190-4-268 14-78-18-168-24-268-14z" fill="#7a1c1f"/><g stroke="#c6b48a" stroke-width="1.2" fill="none" opacity=".7"><path d="M40 30c70-8 150-6 220 8M44 44c70-8 150-6 216 8M48 58c70-8 150-6 212 8M300 38c70-14 150-16 222-8M300 52c70-14 150-16 226-8M300 66c70-14 150-16 230-8"/></g><path d="M200 22c30 6 60 2 80 4 20-2 50 2 80-4" fill="#0d1120" opacity=".85"/></svg>';
-function partyNames(ch){const h=HELPER[ch]||HELPER[1];return {own:S.party.filter(n=>lv(n)&&!isSP(n)),helper:h}}
-function Battle(k,opt){const max=opt.tutorial?50:(k.boss?200:100);
- B={k,opt,hp:max,max,gauge:0,turn:0,used:new Set(),ch:k.ch,phase:'who'};renderBattle();if(k.boss&&!opt.tutorial)bossCut(askKai);else askKai()}
-function bossCut(cb){const bt=$('#battle');if(!bt){cb();return}
- const o=document.createElement('div');o.className='bosscut';o.id='bosscut';
- o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">巨大な誤植が現れた！</b><span class="bc-s">ボス戦　──　改変ゲージに気をつけよう</span></div>`;
- let done=false;const fin=()=>{if(done)return;done=true;o.classList.add('out');setTimeout(()=>{o.remove();cb()},FX.reduce()?0:280)};
- o.onclick=fin;bt.appendChild(o);if(!FX.reduce()){FX.shake('#battle','big');setTimeout(()=>FX.flash('#ff6a5a'),120)}setTimeout(fin,FX.reduce()?900:2100)}
-function renderBattle(){const k=B.k;const p=partyNames(B.ch);
- show(`<div class="bt" id="battle"><div class="bt-bg" style="background-image:url(${B.opt.tutorial?(IMG['背景_ホーム']||''):bgOf(B.ch,PL&&PL.ch===B.ch?PL.bg:null)})"></div><div class="bt-shade"></div>
-  <div class="scr-title">${B.opt.tutorial?'チュートリアル':'改変バトル'}${k.boss?'<br>ボス':''}</div>
-  <div class="bt-hud"><div class="bt-hp"><i id="hpb" style="width:${100*B.hp/B.max}%"></i></div><div class="bt-hpn" id="hpn">${k.boss?'巨大な誤植':'誤植'}　${B.hp}／${B.max}</div>
-   <div class="bt-gauge" aria-label="改変ゲージ">${[0,1,2].map(i=>`<span class="${i<B.gauge?'on':''}"></span>`).join('')}</div></div>
-  <div class="gc-top">${coinsHTML([eraOfCh(B.ch||1)])}</div>
-  ${IMG['誤植']?'':BOOK_SVG}<div class="bt-enemy ${k.boss?'boss':''} ${IMG['誤植']?'img':''}" id="enemy"><div class="blob">${blobSVG(k.boss,k.en)}</div></div>
-  <div class="bt-ms parch" id="bms"></div><div class="bt-q" id="bq"></div>
-  <div class="bt-party">${p.own.map(n=>cardHTML(n)).join('')}<span class="sep"></span><div class="helper">${cardHTML(p.helper,{forceOwn:true,noLv:true})}</div></div></div>`)}
-function updHud(){const k=B.k;$('#hpn').textContent=`${k.boss?'巨大な誤植':'誤植'}　${Math.max(0,B.hp)}／${B.max}`;$('#hpb').style.width=Math.max(0,100*B.hp/B.max)+'%';
- document.querySelectorAll('.bt-gauge span').forEach((s,i)=>s.classList.toggle('on',i<B.gauge))}
-function msText(k,state){let t=esc(k.t);const s=esc(k.slot);
- t=t.replace(s,state==='fixed'?`<span class="fixwrap"><span class="struck">${s}</span><span class="fixed">${esc(k.ok)}</span></span>`:`<span class="slot">${s}</span>`);
- return `<p class="lead">${state==='fixed'?'誤植を正した。':'本に誤植がある。下線の部分がおかしい。'}</p><p class="text">${t}</p>`}
-function slips(list,id,ownMark){return `<div class="grid2" id="${id}">${list.map(o=>{const own=ownMark&&lv(o);return `<button class="slip ${own?'owned':''}" data-v="${esc(o)}">${own?'<span class="own">頁を持っている</span>':''}${esc(o)}</button>`}).join('')}</div>`}
-function askKai(){const k=B.k;B.turn++;B.phase='who';$('#bms').innerHTML=msText(k);
- $('#bq').innerHTML=`<p class="prompt">この誤植を正せる人物は？</p>${slips(shuffle([k.who,...k.wd]),'o1',true)}`;
- document.querySelectorAll('#o1 .slip').forEach(b=>b.onclick=()=>pickWho(b))}
+/* =====================================================================
+   G（共通のお金）・プレイヤーレベル・育成アイテム（お菓子）・頁のレベル
+   仕様はプロジェクトの claude/economy-spec.md。数値はすべて初期値（試遊で調整する）
+   記録：S.g＝持っているG　S.gt＝これまでに受け取ったGの合計（＝プレイヤーの経験値）
+        S.plv＝レベルアップのお菓子を渡し終えたプレイヤーレベル
+        S.sw＝お菓子の数（キー：c0〜c2 キャンディ・k0〜k2 クッキー・p0〜p2 カップケーキ。数字は色＝時代 0黄・1青・2赤）
+        S.pe＝頁ごとの経験値の合計（頁のレベルはここから計算する）
+        S.kb＝校正バトルのクリア回数（K のIDごと）
+   ===================================================================== */
+const SWEETS=[{t:'c',n:'キャンディ',x:15,p:30,lv:1},{t:'k',n:'クッキー',x:50,p:90,lv:5},{t:'p',n:'カップケーキ',x:150,p:250,lv:10}];
+const SW_COL=[{n:'黄',c:'#e9bd3c',d:'#a8801a'},{n:'青',c:'#4f86d6',d:'#2a558f'},{n:'赤',c:'#d24b55',d:'#8e2530'}];
+const SW_SAME=3; /* 頁と同じ時代の色のお菓子なら経験値3倍 */
+const PG_MAX=50; /* 頁のレベルの上限 */
+function pgNeed(L){return 10+4*L} /* 次のレベルまでの経験値 */
+const PG_TOTAL=(()=>{let t=0;for(let L=1;L<PG_MAX;L++)t+=pgNeed(L);return t})();
+const KB_BASE={1:100,2:130,3:160},KB_COPY=60,KB_FOLLOW=.2,PARTY_N=5;
+function swOf(key){const s=SWEETS.find(x=>x.t===String(key)[0]);const e=+String(key).slice(1);return s&&e>=0&&e<3?Object.assign({},s,{e,key}):null}
+function swName(key){const s=swOf(key);return s?SW_COL[s.e].n+'の'+s.n:String(key)}
+function swN(key){return (S.sw&&S.sw[key])||0}
+function swAdd(key,n){if(!S.sw||typeof S.sw!=='object')S.sw={};S.sw[key]=Math.max(0,(S.sw[key]||0)+n);if(!S.sw[key])delete S.sw[key]}
+function swIcon(key,cls=''){const s=swOf(key);if(!s)return '';const C=SW_COL[s.e].c,D=SW_COL[s.e].d;const o=`<svg viewBox="0 0 40 40" class="swi ${cls}" aria-hidden="true">`;
+ if(s.t==='c')return o+`<path d="M3 11l11 9-11 9z M37 11l-11 9 11 9z" fill="${C}" stroke="${D}" stroke-width="1.4" stroke-linejoin="round"/><circle cx="20" cy="20" r="10" fill="${C}" stroke="${D}" stroke-width="1.6"/><path d="M13.5 16.5c4 1.5 8.5 6 10 12" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".65"/></svg>`;
+ if(s.t==='k')return o+`<circle cx="20" cy="20" r="16" fill="#d9a35c" stroke="#9c6a2c" stroke-width="1.6"/><path d="M20 9.5c6 0 10.5 4.5 10.5 10.5S26 30.5 20 30.5 9.5 26 9.5 20 14 9.5 20 9.5z" fill="${C}" stroke="${D}" stroke-width="1.2"/><g fill="#fff" opacity=".8"><circle cx="16" cy="16" r="1.6"/><circle cx="24" cy="18" r="1.4"/><circle cx="18.5" cy="24.5" r="1.5"/></g></svg>`;
+ return o+`<path d="M10 22h20l-3.2 14H13.2z" fill="#c28a52" stroke="#86562a" stroke-width="1.4" stroke-linejoin="round"/><path d="M15 22l1.2 14M20 22v14M25 22l-1.2 14" stroke="#86562a" stroke-width="1.1"/><path d="M7.5 23.5c-1.2-6 3.4-11.5 9-12 1.2-2.6 5.8-2.6 7 0 5.6.5 10.2 6 9 12z" fill="${C}" stroke="${D}" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="8.2" r="3" fill="#c4302b"/><path d="M12 18c2.5-2.6 5.5-3.6 8.5-3.2" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/></svg>`}
+const GICO='<svg viewBox="0 0 40 40" class="gico" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="#e8c35b" stroke="#946d1f" stroke-width="2"/><circle cx="20" cy="20" r="12.5" fill="#f2d57e" stroke="#b58a2e" stroke-width="1.4"/><text x="20" y="25.6" text-anchor="middle" font-size="15.5" font-weight="700" fill="#7a5716" font-family="Georgia,serif">G</text></svg>';
+function gFmt(n){return (n||0).toLocaleString()}
+/* ---- プレイヤーレベル：これまでに受け取ったGの合計が経験値（1G＝1exp）。次のレベルまで＝100×今のLv ---- */
+function plvOf(gt){let L=1,e=gt||0;while(e>=100*L){e-=100*L;L++}return {lv:L,cur:e,need:100*L}}
+function plv(){return plvOf(S.gt).lv}
+/* shop＝true ならホームのお菓子屋の入口（ボタン）にする */
+function gCoinHTML(shop){const P=plvOf(S.gt);return shop?`<button class="coin gcoin" id="shopBtn" aria-label="お菓子屋（G ${S.g||0}）">${GICO}<span>Lv${P.lv}・お菓子屋</span><b>${gFmt(S.g)}<small>G</small></b></button>`:`<div class="coin gcoin" aria-label="G">${GICO}<span>プレイヤーLv${P.lv}</span><b>${gFmt(S.g)}<small>G</small></b></div>`}
+/* 受け取ったGを財布に入れる。レベルが上がったら、お菓子を受け取りボックスに入れる */
+function gGet(n){if(!n)return [];S.g=(S.g||0)+n;S.gt=(S.gt||0)+n;return plvCheck()}
+function plvCheck(){const L=plv();if(!S.plv)S.plv=1;const ups=[],add={};const put=(k,n)=>{add[k]=(add[k]||0)+n};
+ while(S.plv<L){S.plv++;const l=S.plv;ups.push(l);
+  /* Lvの数だけキャンディ（色は3色を順番に）、5の倍数でクッキー3個（各色1個）、10の倍数でカップケーキ2個 */
+  for(let i=0;i<l;i++)put('c'+((l+i)%3),1);
+  if(l%5===0)[0,1,2].forEach(e=>put('k'+e,1));
+  if(l%10===0)[0,1].forEach(i=>put('p'+((l/10+i)%3),1))}
+ if(ups.length){const src=`プレイヤーLv${ups.length>1?ups[0]+'〜':''}${ups[ups.length-1]}のお祝い`;Object.keys(add).sort().forEach(k=>boxAdd(src,'w:'+k,add[k]))}
+ return ups}
+/* ---- 頁のレベル（Lv1〜50）と校正の力 ---- */
+function pgOf(n){let e=(S.pe&&S.pe[n])||0,L=1;while(L<PG_MAX&&e>=pgNeed(L)){e-=pgNeed(L);L++}const max=L>=PG_MAX;return {lv:L,cur:max?0:e,need:max?0:pgNeed(L),max}}
+function pgLv(n){return pgOf(n).lv}
+/* 校正の力：基礎値（★1：100／★2：130／★3：160）×（1＋0.04×（Lv−1））×（1＋0.1×凸数）。持っていない頁は0（バトルでは写本の60） */
+function pgPow(n){const c=CARD[n];if(!c||!lv(n)||isSP(n))return 0;return Math.round((KB_BASE[c.r]||100)*(1+.04*(pgLv(n)-1))*(1+.1*(lv(n)-1)))}
+function pgSwExp(n,key){const s=swOf(key);return s?s.x*(eraOfCard(n)===s.e?SW_SAME:1):0}
+/* 頁 n にお菓子を cnt 個まで使う（最大レベルに届いたら、それ以上は使わない）。使った数を返す */
+function pgFeed(n,key,cnt){const per=pgSwExp(n,key);if(!per||!lv(n)||isSP(n))return 0;if(!S.pe||typeof S.pe!=='object')S.pe={};let used=0;
+ while(used<cnt&&swN(key)>0&&(S.pe[n]||0)<PG_TOTAL){S.pe[n]=Math.min(PG_TOTAL,(S.pe[n]||0)+per);swAdd(key,-1);used++}return used}
+function partyList(){return (S.party||[]).filter(n=>lv(n)&&!isSP(n)).slice(0,PARTY_N)}
+function kbFollowPow(){return Math.round(partyList().reduce((a,n)=>a+pgPow(n)*KB_FOLLOW,0))}
+
+/* ---- お菓子屋（ホーム） ---- */
+function openShop(){const P=plvOf(S.gt);
+ modal(`<div class="mhead"><h3>お菓子屋</h3><button class="btn light" data-close>閉じる</button></div>
+  <div class="shp-top">${gCoinHTML()}<div class="shp-lv"><span>プレイヤーLv<b>${P.lv}</b></span><div class="shp-bar"><i style="width:${Math.round(100*P.cur/P.need)}%"></i></div><small>次のレベルまで あと${gFmt(P.need-P.cur)}G分　（もらったGの合計で上がります）</small></div></div>
+  <p class="shp-note">頁の育成に使うお菓子です。頁と<b>同じ時代の色</b>（黄＝古代・青＝中世・赤＝近世）なら、経験値が3倍になります。育成は「編成」で頁をタップして行います。</p>
+  <div class="shp-list">${SWEETS.map(s=>{const open=P.lv>=s.lv;return `<div class="shp-row${open?'':' lock'}"><div class="shp-h"><b>${s.n}</b><small>経験値 ${s.x}（同じ時代なら${s.x*SW_SAME}）・1個 ${s.p}G</small>${open?'':`<span class="shp-lock">プレイヤーLv${s.lv}から並びます</span>`}</div>
+   <div class="shp-its">${[0,1,2].map(e=>{const key=s.t+e;return `<div class="shp-it">${swIcon(key)}<div class="shp-nm">${SW_COL[e].n}の${s.n}<small>持っている数 ${swN(key)}</small></div>${open?`<div class="shp-buy"><button class="btn red bsm" data-buy="${key}" data-n="1">1個</button><button class="btn light bsm" data-buy="${key}" data-n="10">10個</button></div>`:''}</div>`}).join('')}</div></div>`}).join('')}</div>`,
+  ()=>{refreshCoins()});
+ document.querySelectorAll('#modal [data-buy]').forEach(b=>b.onclick=()=>{const key=b.dataset.buy,n=+b.dataset.n,s=swOf(key);if(!s||plv()<s.lv)return;const cost=s.p*n;
+  if((S.g||0)<cost){toast(`Gが足りません（${gFmt(cost)}G必要・いま${gFmt(S.g)}G）`);return}
+  S.g-=cost;swAdd(key,n);saveNow();toast(`${swName(key)}を${n}個買った（−${gFmt(cost)}G）`);openShop()})}
+
+/* ---- 頁の育成（編成画面から） ---- */
+let PG_N=1;
+function pgDetail(n,back){const c=CARD[n];if(!c||!lv(n))return;const o=pgOf(n);const inP=(S.party||[]).includes(n);const e=eraOfCard(n);
+ const keys=[];for(const s of SWEETS)for(const k of [e,...[0,1,2].filter(x=>x!==e)])keys.push(s.t+k);
+ modal(`<div class="pg-d"><div class="pg-card">${cardHTML(n,{plv:1})}</div><div class="pg-info"><h3>${esc(n)}</h3><p class="pg-f">${esc(c.f||'')}</p>
+   <div class="pg-lv"><span>Lv<b>${o.lv}</b><small>／${PG_MAX}</small></span><div class="pg-bar"><i style="width:${o.max?100:Math.round(100*o.cur/o.need)}%"></i></div><small>${o.max?'最大レベル':`次のレベルまで あと${o.need-o.cur}`}</small></div>
+   <p class="pg-pow">校正の力 <b>${pgPow(n)}</b><small>★${c.r}・${lv(n)-1}凸・${ERAS[e].k}の頁</small></p></div></div>
+  ${o.max?'<p class="pg-maxed">最大レベルです。</p>':`<div class="pg-sw"><div class="pg-swh"><b>お菓子を使う</b><span class="pg-seg">${[1,5,10].map(k=>`<button data-pgn="${k}" class="${PG_N===k?'on':''}">${k}個ずつ</button>`).join('')}</span></div>
+   <div class="pg-sws">${keys.map(k=>{const s=swOf(k),cnt=swN(k),same=s.e===e;return `<button class="pg-it${cnt?'':' none'}${same?' same':''}" data-sw="${k}"${cnt?'':' disabled'}>${swIcon(k)}<span class="pg-in">${SW_COL[s.e].n}の${s.n}<small>×${cnt}</small></span><span class="pg-xp">＋${pgSwExp(n,k)}${same?'<em>×3</em>':''}</span></button>`}).join('')}</div>
+   ${keys.some(k=>swN(k))?'':'<p class="pg-none">お菓子を持っていません。ホームの「お菓子屋」でGと交換できます。</p>'}</div>`}
+  <div class="row" style="justify-content:center;margin-top:12px"><button class="btn ${inP?'light':'red'}" id="pgParty">${inP?'編成から外す':'編成に入れる'}</button><button class="btn light" data-close>閉じる</button></div>`,back||(()=>Party()));
+ document.querySelectorAll('#modal [data-pgn]').forEach(b=>b.onclick=()=>{PG_N=+b.dataset.pgn;pgDetail(n,back)});
+ document.querySelectorAll('#modal [data-sw]').forEach(b=>b.onclick=()=>{const L0=pgLv(n);const u=pgFeed(n,b.dataset.sw,PG_N);if(!u){toast(pgOf(n).max?'最大レベルです':'そのお菓子を持っていません');return}
+  save();const L1=pgLv(n);toast(L1>L0?`${n}　Lv${L0} → Lv${L1}！`:`${swName(b.dataset.sw)}を${u}個使った`);pgDetail(n,back)});
+ $('#pgParty').onclick=()=>{S.party=S.party||[];if(inP)S.party=S.party.filter(x=>x!==n);else{if(partyList().length>=PARTY_N){toast(`編成は${PARTY_N}枚までです。先に外す頁を選んでください`);return}S.party=partyList().concat([n])}save();closeModal()}}
+
+/* =====================================================================
+   校正バトル（旧：見抜きバトル。ストーリーの誤植とのバトル）
+   誤植が本の一節を1行ずつ撃ってくる。正しい文は通し、誤った文だけをタップして、正せる頁（人物）を4枚から選ぶ。
+   ・問題：K（改変バトル）の各項目に mk があれば、それを使う（形はプロジェクトの claude/minuki-battle-rules.md）。
+     mk がない項目は K から自動で作る（台本の誤植＝t の slot、正しい文＝slot を ok に直した文）。同じ章のほかの K の文も流れてくる
+   ・台本に出てくる誤植（K の改変文）は必ず出る（ボスは2波目）。それ以外に0〜1行をランダムで誤植にする。追加の波は1〜2行
+   ・正しい頁を選ぶと、その頁の校正の力のダメージ（持っていない頁は写本で60）＋編成した頁の追撃（それぞれの力の2割）
+   ・誤植の体力（kbHP）が0になり、台本の誤植も直したら勝ち。体力が残っていれば次の波が来る（4波目からはダメージ2倍）
+   ・インク（5滴）：正しい文をタップ・違う頁を選ぶ・誤った文を見逃すと1滴減る。0になったら、その波からやり直す
+   ・K の項目（t・slot・who・ok・wd・ng・cm）はカードゲームの「改変の予告」でも使うので、消さない
+   ===================================================================== */
+const KB_INK=5;let KB=null;
+const KB_SPEEDS=[{n:'ゆっくり',v:.7},{n:'ふつう',v:1},{n:'はやい',v:1.35}];
+const KB_OPEN=['この一節、書き換えてやる……','正しい歴史なんて、誰も覚えていないさ','どこが違うか、見抜けるかな？','読み流したら、こっちのものだ','インクの染みに埋もれてしまえ','その頁、本当に読めているのか？'];
+function kbHP(ch,boss){return Math.round((150+50*(Math.max(1,ch)-1))*(boss?2.5:1))}
+function kbGold(k){return [100,160,240][Math.max(0,partOf(k.ch))]*(k.boss?2:1)}
+const KB_ORD=(()=>{const o={};Object.keys(K).filter(id=>/^P\d/.test(id)).sort().forEach((id,i)=>o[id]=i*10);return o})();
+function kbPick(a){return a[Math.floor(Math.random()*a.length)]}
+/* K の1項目 → 流れる1行（t＝正しい文、ngs＝誤植にしたときの候補、main＝台本の誤植） */
+function kbFromK(k){const blank=/（[\s　]*）/.test(k.slot);let t=k.t.replace(k.slot,k.ok);if(!/[。！？」）]$/.test(t))t+='。';
+ const base={bad:k.ok,who:k.who,hand:[k.who,...(k.wd||[])],cm:k.cm||'',kind:'本人'};const ngs=[];let main=null;
+ if(!blank){main=Object.assign({},base,{show:k.slot});ngs.push(main)}
+ if(k.ok.includes(k.who))(k.wd||[]).forEach(w=>{if(CARD[w])ngs.push(Object.assign({},base,{show:k.ok.replace(k.who,w)}))});
+ (k.ng||[]).forEach(s=>{if(s)ngs.push(Object.assign({},base,{show:s}))});
+ const ok=ngs.filter(g=>g.show&&g.show!==g.bad);if(!main||!ok.includes(main))main=ok[0]||null;
+ return {t,ngs:ok,main,ord:KB_ORD[k.id]||0}}
+/* mk の行 → 流れる1行 */
+function kbFromMk(l,ord){if(l.add)return {t:l.t,add:true,ngs:[{add:true,bad:l.t,show:l.t,who:l.who,hand:l.hand||[l.who],cm:l.cm||'',kind:l.kind||'証人'}],ord};
+ const ngs=(l.ng||[]).filter(g=>g&&g.bad&&g.show&&l.t.includes(g.bad)).map(g=>Object.assign({kind:'本人'},g,{hand:g.hand||[g.who]}));
+ return {t:l.t,fixed:!!l.fixed,ngs,main:l.fixed?kbPick(ngs):null,ord}}
+function kbMkWaves(k){const mk=k.mk;if(!mk)return null;const base=KB_ORD[k.id]||0;let j=0;
+ return (Array.isArray(mk.waves)?mk.waves:[mk]).map(w=>({open:w.open||mk.open||kbPick(KB_OPEN),lines:(w.lines||[]).map(l=>kbFromMk(l,base+(j++)/100)).filter(l=>l.t)}))}
+/* 同じ章のほかの文（足りなければ同じ部の前の章から） */
+function kbPool(k){const ks=Object.values(K).filter(x=>x&&x.id&&/^P\d/.test(x.id)&&x.id!==k.id);const L=[];
+ const add=x=>{const l=kbFromK(x);if(l.t)L.push(l);const w=kbMkWaves(x);if(w)w.forEach(v=>v.lines.forEach(m=>{if(!m.add&&!m.fixed)L.push(m)}))};
+ ks.filter(x=>x.ch===k.ch).forEach(add);
+ const own=kbMkWaves(k);if(own)own.forEach(v=>v.lines.forEach(m=>{if(!m.add&&!m.fixed)L.push(m)}));
+ for(let c=k.ch-1;c>=1&&L.length<8&&partOf(c)===partOf(k.ch);c--)ks.filter(x=>x.ch===c).forEach(add);
+ const seen=new Set();return L.filter(l=>{if(seen.has(l.t))return false;seen.add(l.t);return true})}
+/* 波の台本：mk があればそのまま。なければ、台本の誤植の行＋同じ章の文 */
+function kbScript(k,pool){const mw=kbMkWaves(k);if(mw&&mw.some(w=>w.lines.length))return mw;
+ const me=Object.assign(kbFromK(k),{fixed:true});const n=k.boss?5:4;
+ const avoid=me.main?[me.main.who]:[];
+ const others=cnt=>{const ok=pool.filter(l=>!avoid.some(w=>l.t.includes(w)));const src=ok.length>=cnt?ok:pool;return shuffle(src.slice()).slice(0,cnt)};
+ const wave=fixed=>{const L=others(fixed?n-1:n);if(fixed)L.push(me);return {open:kbPick(KB_OPEN),lines:L.sort((a,b)=>a.ord-b.ord)}};
+ return k.boss?[wave(false),wave(true)]:[wave(true)]}
+/* 1つの波の行を決める（どの行を誤植にするか） */
+function kbBuildWave(wi){const k=KB.k;const scripted=wi<KB.script.length;let open,src;
+ if(scripted){open=KB.script[wi].open;src=KB.script[wi].lines}
+ else{open=kbPick(KB_OPEN);const n=k.boss?5:4;src=shuffle(KB.pool.slice()).slice(0,n).sort((a,b)=>a.ord-b.ord)}
+ const out=src.filter(l=>!l.add).map(l=>({t:l.t,ngs:l.ngs||[],bad:!!l.fixed&&!!l.main,ng:l.fixed?l.main:null,fixed:!!l.fixed&&!!l.main}));
+ if(KB.opt.tutorial)return {open,lines:out};
+ const nFix=out.filter(r=>r.fixed).length;let extra=nFix?(Math.random()<.5?1:0):(Math.random()<.5?1:2);extra=Math.min(extra,Math.max(0,2-nFix));
+ /* 誤植にできる行（正せる頁の名前が、同じ波のほかの行に出てこないもの） */
+ const shown=()=>out.map(r=>r.bad?r.t.replace(r.ng.bad,r.ng.show):r.t);
+ const okFor=(g,self)=>!shown().some((s,i)=>out[i]!==self&&s.includes(g.who));
+ let adds=src.filter(l=>l.add);
+ for(let x=0;x<extra;x++){const cand=[];out.forEach(r=>{if(r.bad)return;r.ngs.forEach(g=>{if(okFor(g,r))cand.push({r,g})})});adds.forEach(a=>cand.push({a}));
+  if(!cand.length)break;const c=kbPick(cand);
+  if(c.a){adds=adds.filter(x=>x!==c.a);const g=c.a.ngs[0];out.splice(1+Math.floor(Math.random()*out.length),0,{t:c.a.t,ngs:[g],bad:true,ng:g,add:true})}
+  else{c.r.bad=true;c.r.ng=c.g}}
+ return {open,lines:out}}
+function kbHand(g){const ch=KB.ch;const names=[...new Set((g.hand||[]).filter(n=>CARD[n]))];if(!names.includes(g.who)&&CARD[g.who])names.unshift(g.who);
+ if(names.length<4){const e=eraOfCard(g.who);const near=shuffle(CARDS.filter(c=>!isSP(c.n)&&!names.includes(c.n)&&eraOfCard(c.n)===e&&Math.abs((c.st||1)-ch)<=1));
+  for(const c of near){if(names.length>=4)break;names.push(c.n)}}
+ return shuffle(names.slice(0,4))}
+const kbWrongText=r=>r.add?r.t:r.t.replace(r.ng.bad,r.ng.show);
+const kbFixedHTML=r=>r.add?`<span class="del">${esc(r.t)}</span><span class="ins">（あるはずのない一文を消した）</span>`:esc(r.t).replace(esc(r.ng.bad),`<span class="del">${esc(r.ng.show)}</span><span class="ins">${esc(r.ng.bad)}</span>`);
+const KB_TUT_LINES=[{t:'メソポタミア南部では、シュメール人がウルやウルクなどの都市国家をつくった。',ord:0},
+ {t:'ハンムラビ法典は、楔形文字で石碑に刻まれた。',ord:2}];
+
+/* バトルを始める（ストーリーの act:battle／チュートリアル） */
+function Battle(k,opt){opt=opt||{};const tut=!!opt.tutorial;if(KB&&KB.raf)cancelAnimationFrame(KB.raf);const pool=tut?KB_TUT_LINES:kbPool(k);
+ let script;if(tut){const me=Object.assign(kbFromK(k),{fixed:true,ord:1});script=[{open:'この法典、書き換えてやった！',lines:[KB_TUT_LINES[0],me,KB_TUT_LINES[1]]}]}else script=kbScript(k,pool);
+ const max=tut?50:kbHP(k.ch,k.boss);
+ KB={k,opt,ch:k.ch||1,max,hp:max,hp0:max,ink:KB_INK,wave:-1,script,pool,queue:[],cur:null,raf:0,paused:false,busy:false,fixedHit:0,fixedNeed:script.reduce((a,w)=>a+w.lines.filter(l=>l.fixed&&l.main).length,0),log:[],miss:0,wrong:0,t0:Date.now(),
+  sp:tut?0:(KB_SPEEDS[CFG.kbs]?+CFG.kbs:1)};
+ kbRender();
+ const go=()=>kbIntro(()=>{KB.t0=Date.now();kbNextWave()});
+ if(k.boss&&!tut)kbBossCut(go);else go()}
+function kbFoeName(){const k=KB.k;return (k.boss?'巨大な誤植・':'誤植・')+(k.en||'誤字')}
+function kbRender(){const k=KB.k,tut=KB.opt.tutorial;let hero='';try{const hk=heroKey();if(IMG[hk])hero=IMG[hk];else heroBuild(lookOf()).then(x=>{const h=$('#kbHeroImg');if(h&&x&&IMG[x])h.src=IMG[x]})}catch(e){}
+ const bg=tut?(IMG['背景_ホーム']||''):bgOf(KB.ch,PL&&PL.ch===KB.ch?PL.bg:null);
+ show(`<div class="kb" id="kb"><div class="kb-bg" style="background-image:url(${bg})"></div><div class="kb-shade"></div>
+  <div class="kb-hud"><div class="kb-box"><div class="lb">インク</div><div class="kb-ink" id="kbInk"></div></div>
+   <div class="kb-ctl"><span class="kb-ttl">${tut?'チュートリアル':'校正バトル'}${k.boss&&!tut?'　ボス':''}</span><span class="kb-btns"><button id="kbSp">速さ：${KB_SPEEDS[KB.sp].n}</button>${tut?'':'<button id="kbPause">一時停止</button>'}</span></div>
+   <div class="kb-box kb-hpbox"><div class="lb">${esc(kbFoeName())}<span id="kbWv"></span></div><div class="kb-hp"><i id="kbHpB"></i></div><div class="kb-hpn" id="kbHpN"></div></div></div>
+  <div class="kb-book" id="kbBook"><div class="kb-bt">本の頁　―　${tut?'メソポタミア':esc(CHNAME[KB.ch]||'')+(CHT&&CHT[KB.ch]?'　'+esc(CHT[KB.ch]):'')}</div><div id="kbBody"></div></div>
+  <div class="kb-hero kb-act" id="kbHero">${hero?`<img id="kbHeroImg" src="${hero}" alt="" draggable="false">`:'<img id="kbHeroImg" alt="" draggable="false">'}</div>
+  ${IMG['SD_シミ']?`<div class="kb-shimi kb-act"><img src="${IMG['SD_シミ']}" alt="" draggable="false"></div>`:''}
+  <div class="kb-foe kb-act${k.boss?' boss':''}" id="kbFoe">${blobSVG(k.boss,k.en)}</div><div class="kb-fname">${esc(kbFoeName())}</div>
+  <div class="kb-lane" id="kbLane"></div><div class="kb-toast" id="kbToast"></div>
+  <div class="kb-hand" id="kbHand"><div class="q" id="kbQ"></div><div class="row" id="kbRow"></div><button class="cancel" id="kbCancel">やっぱり正しい文だった（戻る）</button></div>
+ </div>`);
+ $('#kbSp').onclick=()=>{KB.sp=(KB.sp+1)%KB_SPEEDS.length;$('#kbSp').textContent='速さ：'+KB_SPEEDS[KB.sp].n;if(!KB.opt.tutorial){CFG.kbs=KB.sp;saveCfg()}};
+ const pb=$('#kbPause');if(pb)pb.onclick=kbPause;kbHud()}
+function kbHud(){const i=$('#kbInk');if(!i)return;i.innerHTML=Array.from({length:KB_INK},(_,j)=>`<span class="${j<KB.ink?'':'off'}"></span>`).join('');
+ $('#kbHpB').style.width=Math.max(0,100*KB.hp/KB.max)+'%';$('#kbHpN').textContent=`${Math.max(0,KB.hp)}／${KB.max}`;
+ const w=$('#kbWv');if(w)w.textContent=KB.wave>=0?`　第${KB.wave+1}波`:''}
+function kbSpeed(){return KB_SPEEDS[KB.sp].v}
+function kbSleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function kbAlive(){return KB&&$('#kb')}
+function kbToast(t,c){const e=$('#kbToast');if(!e)return;e.textContent=t;e.style.color=c||'#fff';e.classList.remove('show');void e.offsetWidth;e.classList.add('show')}
+function kbAnim(id,cls){const e=$(id);if(!e)return;e.classList.remove(cls);void e.offsetWidth;e.classList.add(cls)}
+function kbCut(o){return new Promise(res=>{const st=$('#kb');if(!st||FX.reduce()){setTimeout(res,FX.reduce()?400:0);return}
+ const c=document.createElement('div');c.className='kb-cut'+(o.warn?' warn':'');
+ const f=FOCUS[o.n];const img=o.img?`<div class="por"><img src="${o.img}" alt="" style="${f?`object-position:${f[0]}% ${f[1]}%`:'object-fit:contain'}"></div>`:o.html?`<div class="por foe">${o.html}</div>`:'';
+ c.innerHTML=`<div class="band"></div><div class="inner">${img}<div><div class="who"><small>${esc(o.small||'')}</small>${esc(o.who||'')}</div>${o.say?`<div class="say">${o.say}</div>`:''}</div></div>`;
+ st.appendChild(c);let done=false;const end=()=>{if(done)return;done=true;c.classList.add('out');setTimeout(()=>{c.remove();res()},200)};setTimeout(end,o.ms||1400);c.onclick=end})}
+function kbBossCut(cb){const st=$('#kb');if(!st){cb();return}const o=document.createElement('div');o.className='bosscut';
+ o.innerHTML=`<div class="bc-band"></div><div class="bc-in"><span class="bc-eye">WARNING</span><b class="bc-t">巨大な誤植が現れた！</b><span class="bc-s">ボス戦　──　誤植は何波にも分かれて襲ってくる</span></div>`;
+ let done=false;const fin=()=>{if(done)return;done=true;o.classList.add('out');setTimeout(()=>{o.remove();cb()},FX.reduce()?0:280)};o.onclick=fin;st.appendChild(o);
+ if(!FX.reduce()){FX.shake('#kb','big');setTimeout(()=>FX.flash('#ff6a5a'),120)}setTimeout(fin,FX.reduce()?900:2100)}
+function kbPanel(html,after){const st=$('#kb');if(!st)return;const p=document.createElement('div');p.className='kb-panel';p.id='kbPanel';p.innerHTML=`<div class="kb-sheet parch">${html}</div>`;st.appendChild(p);if(after)after(p)}
+function kbClosePanel(){const p=$('#kbPanel');if(p)p.remove()}
+function kbShimiHTML(t){return `<div class="kb-shimi-say"><span class="face" style="background-image:url(${IMG['シミ_顔']||''})"></span><div class="kb-bub">${t}</div></div>`}
+function kbIntro(go){if(!KB.opt.tutorial&&S.kbSeen){go();return}
+ kbPanel(`<h3>校正バトル</h3>${kbShimiHTML(`誤植が、本に文を書きこもうとしてるよ。<br>正しい文は、そのまま通していい。<b>間違った文が飛んできたら、その文をタップ</b>して、正せる人物の頁を出して。<br>正しい文をタップしたり、違う頁を出したり、間違った文を見逃したりすると、インクが減るからね。`)}
+  <p class="kb-note">間違った文は、1回に1つか2つ。正しい頁を出すと、編成した頁も追撃してくれます。上の「速さ」で、文の流れる速さを変えられます。</p>
+  <div class="row" style="justify-content:center"><button class="btn red" id="kbGo">はじめる</button></div>`,()=>{$('#kbGo').onclick=()=>{kbClosePanel();if(!KB.opt.tutorial){S.kbSeen=1;save()}go()}})}
+function kbPause(){if(!kbAlive()||KB.busy||$('#kbPanel'))return;KB.paused=true;
+ kbPanel(`<h3>一時停止</h3><p class="kb-note" style="text-align:center">残りインク ${KB.ink}／${KB_INK}　・　誤植の体力 ${Math.max(0,KB.hp)}／${KB.max}</p>
+  <div class="row" style="justify-content:center"><button class="btn red" id="kbRes">続ける</button><button class="btn light" id="kbRe">最初からやり直す</button></div>`,()=>{
+  $('#kbRes').onclick=()=>{kbClosePanel();KB.paused=false};$('#kbRe').onclick=()=>{cancelAnimationFrame(KB.raf);const k=KB.k,o=KB.opt;kbClosePanel();Battle(k,o)}})}
+
+async function kbNextWave(){if(!kbAlive())return;KB.wave++;const W=kbBuildWave(KB.wave);KB.queue=W.lines.slice();KB.waveLines=W.lines;KB.hp0=KB.hp;KB.inkW=KB.ink;
+ $('#kbBody').innerHTML='';kbHud();const f=$('#kbFoe');if(f){f.classList.remove('dead');kbAnim('#kbFoe','in')}
+ if(KB.wave>=3&&!KB.opt.tutorial)kbToast('誤植が弱ってきた！　訂正のダメージ2倍','#ffe6a8');
+ await kbCut({warn:true,html:blobSVG(KB.k.boss,KB.k.en),who:kbFoeName(),small:KB.wave?`第${KB.wave+1}波`:'改変の予告',say:'「'+esc(W.open)+'」',ms:1500});
+ kbNext()}
+function kbNext(){if(!kbAlive())return;if(KB.ink<=0)return kbLose();if(!KB.queue.length)return kbWaveEnd();KB.cur=KB.queue.shift();kbFire(KB.cur)}
+function kbFire(r){const lane=$('#kbLane');if(!lane)return;lane.innerHTML='';const el=document.createElement('div');el.className='kb-shot';const txt=r.bad?kbWrongText(r):r.t;
+ el.innerHTML=`<span class="txt">${esc(txt)}</span><span class="kb-tapb">訂正</span><div class="kb-pbar"><i></i></div>`;lane.appendChild(el);kbAnim('#kbFoe','cast');
+ const W=lane.clientWidth||innerWidth,ew=el.offsetWidth;const x0=Math.min(W*.70-ew/2,W-ew-12),x1=Math.max(W*.26-ew/2,12);
+ const dur=(2600+[...txt].length*95)/kbSpeed()*(KB.opt.tutorial?1.25:1);let acc=0,last=performance.now();r.el=el;r.done=false;const bar=el.querySelector('.kb-pbar i');
+ const step=now=>{if(!kbAlive())return;if(!KB.paused)acc+=now-last;last=now;const p=Math.min(1,acc/dur);el.style.transform=`translateX(${x0+(x1-x0)*p}px)`;bar.style.transform=`scaleX(${1-p})`;
+  if(p>=1){kbArrive(r);return}KB.raf=requestAnimationFrame(step)};
+ el.style.transform=`translateX(${x0}px)`;KB.raf=requestAnimationFrame(step);el.onclick=()=>{if(r.done||KB.paused||KB.busy)return;kbTap(r)}}
+function kbWrite(r,fixed){const b=$('#kbBody');if(!b)return;const d=document.createElement('div');d.className='ln'+(fixed?' fx':'');d.innerHTML=fixed?kbFixedHTML(r):esc(r.t);b.appendChild(d);
+ const bk=$('#kbBook');if(bk)bk.scrollTop=bk.scrollHeight}
+function kbHurt(msg){if(KB.opt.tutorial&&KB.ink<=1){kbToast(msg+'（練習なのでインクは減らない）','#ffd9a0');return}
+ KB.ink=Math.max(0,KB.ink-1);kbHud();kbAnim('#kbHero','hurt');FX.shake('#kb');kbToast(msg+'　インク −1','#ffb3ad')}
+async function kbArrive(r){r.done=true;cancelAnimationFrame(KB.raf);
+ if(r.bad){KB.miss++;r.el.classList.add('flash');kbHurt('書きこまれた！');await kbSleep(700);if(!kbAlive())return;r.el.classList.add('pass');await kbSleep(350);
+  if(KB.ink<=0)return kbLose();kbToast('間違った一文が、もう一度来る！','#ffd9a0');await kbSleep(900);KB.queue.push(Object.assign({},r,{el:null,done:false}))}
+ else{r.el.classList.add('pass');kbWrite(r,false);await kbSleep(380)}
+ kbNext()}
+async function kbTap(r){KB.paused=true;
+ if(!r.bad){KB.wrong++;r.el.classList.add('flash');kbHurt('それは正しい文だよ');await kbSleep(800);if(!kbAlive())return;if(KB.ink<=0){cancelAnimationFrame(KB.raf);return kbLose()}KB.paused=false;return}
+ r.el.classList.add('frozen');const t=r.el.querySelector('.txt');if(r.add)t.innerHTML=`<span class="w">${esc(r.t)}</span>`;else t.innerHTML=esc(kbWrongText(r)).replace(esc(r.ng.show),`<span class="w">${esc(r.ng.show)}</span>`);
+ kbOpenHand(r)}
+function kbCardHTML(n,i){const c=CARD[n];const own=lv(n)>0&&!isSP(n);const art=IMG[n]?`<img src="${IMG[n]}"${fcAttr(n)} alt="" draggable="false">`:silhouette();
+ return `<button class="kb-card ${ATTR_CLASS(c.a)}${own?'':' copy'}" data-n="${esc(n)}" style="animation-delay:${i*.05}s"><div class="art">${art}</div><div class="nm">${esc(n)}</div><div class="pw">${own?`Lv${pgLv(n)}　力${pgPow(n)}`:`写本　力${KB_COPY}`}</div></button>`}
+function kbOpenHand(r){const row=$('#kbRow');if(!row)return;r.hand=r.hand||kbHand(r.ng);row.innerHTML=r.hand.map(kbCardHTML).join('');
+ $('#kbQ').textContent=r.add?'この一文は、この時代にはないこと。それを知っている頁は？':r.ng.kind==='証人'?'この文が本当はいつ・どこのことか、知っている頁は？':'この一文を正せる頁は？';
+ $('#kbHand').classList.add('on');
+ row.querySelectorAll('.kb-card').forEach(b=>b.onclick=()=>kbPickCard(r,b.dataset.n,b));
+ $('#kbCancel').onclick=()=>{$('#kbHand').classList.remove('on');r.el.classList.remove('frozen');r.el.querySelector('.txt').textContent=kbWrongText(r);KB.paused=false}}
+function kbDmgNum(t,x,y,cls=''){const st=$('#kb');if(!st)return;const d=document.createElement('div');d.className='kb-dmg '+cls;d.textContent=t;d.style.left=x+'px';d.style.top=y+'px';st.appendChild(d);setTimeout(()=>d.remove(),1000)}
+async function kbPickCard(r,n,b){if(KB.busy)return;
+ if(n!==r.ng.who){KB.wrong++;b.classList.add('ng');b.disabled=true;kbHurt('その頁では直せない');if(KB.ink<=0){$('#kbHand').classList.remove('on');cancelAnimationFrame(KB.raf);return kbLose()}return}
+ KB.busy=true;$('#kbHand').classList.remove('on');cancelAnimationFrame(KB.raf);r.done=true;const c=CARD[n]||{};const own=lv(n)>0&&!isSP(n);
+ await kbCut({img:IMG[n],n,who:n,small:own?`頁をつきつけた！　Lv${pgLv(n)}`:'写本をつきつけた！',say:esc(c.f||''),ms:1300});if(!kbAlive())return;
+ r.el.classList.remove('frozen');r.el.querySelector('.txt').innerHTML=kbFixedHTML(r);kbAnim('#kbHero','slide');await kbSleep(260);if(!kbAlive())return;
+ const mul=KB.wave>=3&&!KB.opt.tutorial?2:1;const dmg=(own?pgPow(n):KB_COPY)*mul;const fol=Math.round(kbFollowPow()*mul);
+ if(r.fixed)KB.fixedHit++;
+ const fr=$('#kbFoe').getBoundingClientRect();
+ KB.hp-=dmg;if(KB.hp<=0&&!kbFixedOK())KB.hp=1;kbHud();kbAnim('#kbFoe','hit');FX.flash('#ffe6a8');kbDmgNum(dmg,fr.left+fr.width*.2,fr.top+fr.height*.2);
+ if(fol>0){await kbSleep(380);if(!kbAlive())return;KB.hp-=fol;if(KB.hp<=0&&!kbFixedOK())KB.hp=1;kbHud();kbAnim('#kbFoe','hit');kbDmgNum(`追撃 ${fol}`,fr.left+fr.width*.45,fr.top+fr.height*.42,'sub')}
+ await kbSleep(520);if(!kbAlive())return;r.el.classList.add('pass');kbWrite(r,true);KB.log.push({r,wave:KB.wave});await kbSleep(380);if(!kbAlive())return;
+ KB.busy=false;KB.paused=false;if(KB.hp<=0&&kbFixedOK())return kbWin();kbNext()}
+function kbFixedOK(){return KB.fixedHit>=KB.fixedNeed}
+async function kbWaveEnd(){const l=$('#kbLane');if(l)l.innerHTML='';if(KB.hp<=0&&kbFixedOK())return kbWin();
+ if(!KB.opt.tutorial&&!(KB.wave+1<KB.script.length))kbToast('誤植はまだ倒れない！　次の波が来る','#ffd9a0');await kbSleep(900);kbNextWave()}
+function kbWin(){cancelAnimationFrame(KB.raf);const k=KB.k,o=KB.opt,tut=!!o.tutorial;const f=$('#kbFoe');if(f)f.classList.add('dead');FX.flash('#ffe6a8');
+ let gmsg='';if(!tut&&k.id){S.kb=S.kb||{};const c=S.kb[k.id]||0;S.kb[k.id]=c+1;const g=c?Math.max(1,Math.round(kbGold(k)*.1)):kbGold(k);boxAdd(`校正バトル　${CHNAME[k.ch]||''}${c?'':'　はじめてクリア'}`,'g',g);gmsg=`${gFmt(g)}G${c?'':'（はじめてのクリア）'}が、ホームの受け取りボックスに届いた。`;saveNow()}
+ const sec=Math.round((Date.now()-KB.t0)/1000);const ex=k.mk&&k.mk.extra;
+ setTimeout(()=>{if(!kbAlive())return;kbPanel(`<h3>本の頁を直した</h3>
+  <p class="kb-sum">直した誤植 <b>${KB.log.length}</b>か所　・　残りインク <b>${KB.ink}</b>／${KB_INK}　・　見逃し ${KB.miss}回　・　まちがったタップ ${KB.wrong}回　・　${Math.floor(sec/60)}分${sec%60}秒</p>
+  ${gmsg?`<p class="kb-gain">${GICO}${gmsg}</p>`:''}
+  <div class="kb-fixes">${KB.log.map(x=>`<div class="kb-fix">${kbFixedHTML(x.r)}</div>${x.r.ng.cm?`<p class="kb-cm">${esc(x.r.ng.cm)}</p>`:''}`).join('')}</div>
+  ${ex?kbShimiHTML(esc(ex)):''}
+  <div class="row" style="justify-content:center"><button class="btn red" id="kbBack">${tut?'つづける':'ストーリーにもどる'}</button></div>`,()=>{$('#kbBack').onclick=()=>{const d=o.done;KB=null;if(d)d()}})},900)}
+function kbLose(){cancelAnimationFrame(KB.raf);const l=$('#kbLane');if(l)l.innerHTML='';const h=$('#kbHand');if(h)h.classList.remove('on');KB.log=KB.log.filter(x=>x.wave!==KB.wave);
+ kbPanel(`<h3>インクが切れた</h3>${kbShimiHTML('大丈夫、本はまだ直せるよ。人物の名前と、その人が<b>どこで・いつ</b>何をしたかを、もう一度見てみようか。')}
+  <div class="row" style="justify-content:center"><button class="btn red" id="kbAgain">この波からやり直す</button></div>`,()=>{$('#kbAgain').onclick=()=>{kbClosePanel();
+   /* その波のはじめにもどす（直した台本の誤植の数も戻す） */
+   KB.fixedHit=KB.log.filter(x=>x.r.fixed).length;KB.ink=KB_INK;KB.hp=KB.hp0;KB.paused=false;KB.busy=false;KB.wave--;kbNextWave()}})}
+
+/* ---------- 問題演習などで使う部品 ---------- */
 function lockSlips(sel,right){document.querySelectorAll(sel+' .slip').forEach(b=>{b.disabled=true;if(b.dataset.v===right)b.classList.add('right')})}
 function noteHTML(cls,head,sub,body,btn='つぎへ',face=true){if(CFG.plain&&!$('#battle'))face=false;return `<div class="note parch${face?'':' noface'}"><div class="face" style="background-image:url(${IMG['シミ_顔']||''})"></div>
  <div><p class="hd ${cls}">${head}${sub?`<small>${sub}</small>`:''}</p><p class="tx">${body}</p></div><button class="nx" id="nx">${btn}</button></div>`}
@@ -10925,36 +11383,6 @@ function noteHTML(cls,head,sub,body,btn='つぎへ',face=true){if(CFG.plain&&!$(
 /* 問題文：{{…}} を下線部、改行を<br>に */
 function qHTML(t){return esc(t).replace(/^下線部を訂正すると？/,'<span class="qbox">下線部を訂正すると？</span>').replace(/\{\{(.+?)\}\}/g,'<u class="ul">$1</u>').replace(/\n/g,'<br>')}
 function exHTML(q){return esc(q.x||'')+(q.p?`<span class="ex-p">${esc(q.p)}</span>`:'')+(q.n?`<span class="ex-n"><span class="who">シミ</span>${esc(q.n)}</span>`:'')}
-function pickWho(b){const k=B.k;const v=b.dataset.v;lockSlips('#o1',k.who);
- if(v!==k.who){b.classList.add('wrong');B.gauge++;updHud();FX.shake('#battle');
-  setTimeout(()=>{$('#bq').innerHTML=noteHTML('ng','人物がちがう……','改変ゲージ＋1',`正しくは<b>${esc(k.who)}</b>。下線の部分は「<b>${esc(k.ok)}</b>」が正しい。<br><span class="who">シミ</span>${esc(k.cm)}`);$('#nx').onclick=afterTurn},650);return}
- setTimeout(()=>{B.phase='what';$('#bq').innerHTML=`<p class="prompt">${esc(k.who)}「正しくは、こうだ」── 下線の部分を直すと？</p>${slips(shuffle([k.ok,k.slot,...k.ng]),'o2',false)}`;
-  document.querySelectorAll('#o2 .slip').forEach(x=>x.onclick=()=>pickWhat(x))},450)}
-function inkSplash(big){const e=document.createElement('div');e.className='ink';const n=big?16:9;
- e.innerHTML=Array.from({length:n},()=>{const a=Math.random()*Math.PI*2,d=(big?120:70)+Math.random()*90;return `<i style="--s:${6+Math.random()*(big?22:12)};--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.8}px"></i>`}).join('');
- $('#battle').appendChild(e);setTimeout(()=>e.remove(),900)}
-function dmgNum(n){const d=document.createElement('div');d.className='dmgnum';d.textContent=n;$('#battle').appendChild(d);setTimeout(()=>d.remove(),1150)}
-function hit(dmg,big){B.hp-=dmg;updHud();FX.shake('#enemy',big?'big':'');inkSplash(big);dmgNum(dmg)}
-function cutIn(name,cb){if(FX.reduce()){cb();return}const c=CARD[name];const o=document.createElement('div');o.className='cutin';
- o.innerHTML=`<div class="rays"></div><div class="cc">${cardHTML(name,{noLv:true})}<div class="ban"><small>${esc(name)}</small>「${esc(c.sk)}」</div></div>`;
- let done=false;const fin=()=>{if(done)return;done=true;o.remove();cb()};o.onclick=fin;$('#battle').appendChild(o);FX.flash('#ffe6a8');setTimeout(fin,1400)}
-function pickWhat(b){const k=B.k;const v=b.dataset.v;lockSlips('#o2',k.ok);
- const tm=teamMult(B.ch,(CARD[k.who]||{}).a);const l=isSP(k.who)?0:lv(k.who);let mult=tm.m,notes=tm.notes.slice();
- if(l){const om=1.5+.1*(l-1);mult*=om;notes.unshift(`頁の持ち主ボーナス×${om.toFixed(1)}`)}
- const ok=v===k.ok;if(!ok){b.classList.add('wrong');B.gauge++}
- const dmg=Math.round((ok?50:25)*mult);
- const after=()=>{hit(dmg,ok);if(ok)$('#bms').innerHTML=msText(k,'fixed');
-  setTimeout(()=>{$('#bq').innerHTML=noteHTML(ok?'ok':'ng',ok?'誤植を正した！':'内容がちがう……（人物は正解）',`${dmg}ダメージ${notes.length?'　'+notes.join('、'):''}${ok?'':'　改変ゲージ＋1'}`,`<span class="who">シミ</span>${esc(k.cm)}`);$('#nx').onclick=afterTurn},700)};
- if(ok&&l)setTimeout(()=>cutIn(k.who,after),350);else setTimeout(after,350)}
-function afterTurn(){const nb=$('#nx');if(nb){if(nb.disabled)return;nb.disabled=true}if(B.hp<=0)return win();if(B.gauge>=3)return lose();followUp()}
-function followUp(){B.turn++;const base=Q.filter(q=>q.ch===B.ch&&!q.q.includes(B.k.t));const pool=base.filter(q=>!B.used.has(q.id));const src=pool.length?pool:base;const q=src[Math.floor(Math.random()*src.length)];B.used.add(q.id);
- $('#bms').innerHTML=`<p class="lead">追撃！　正しい答えを選んで、誤植を弱らせよう。</p><p class="text">${qHTML(q.q)}</p>`;
- $('#bq').innerHTML=`<p class="prompt">答えを選ぼう</p>${slips(shuffle([q.a,...q.d]),'o3',false)}`;
- document.querySelectorAll('#o3 .slip').forEach(b=>b.onclick=()=>{lockSlips('#o3',q.a);const tm=teamMult(B.ch,CARD[B.k.who].a);const ok=b.dataset.v===q.a;let d=0;
-  if(ok){d=Math.round(20*tm.m);hit(d,false)}else{b.classList.add('wrong');B.gauge++;updHud();FX.shake('#battle')}
-  setTimeout(()=>{$('#bq').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':'不正解……',ok?`${d}ダメージ`:'改変ゲージ＋1',`${ok?'':`正しくは<b>${esc(q.a)}</b>。`}${exHTML(q)}`,'つぎへ',!!q.n);$('#nx').onclick=afterTurn},650)})}
-function win(){const cb=B.opt.done;FX.shake('#enemy','big');inkSplash(true);setTimeout(()=>modal(`<h3>誤植を修正した</h3><p style="line-height:1.8;text-align:center">本の記述が元に戻った。</p><div class="row" style="justify-content:center"><button class="btn" data-close>ストーリーにもどる</button></div>`,cb),700)}
-function lose(){const k=B.k,o=B.opt;modal(`<h3>改変ゲージがいっぱいになった</h3><p style="line-height:1.8">誤植が書き換えを広げてしまった。もう一度、最初から挑戦しよう。<br>（ペナルティはありません）</p><div class="row" style="justify-content:center"><button class="btn" data-close>もう一度挑戦する</button></div>`,()=>Battle(k,o))}
 
 /* ---------- drill ---------- */
 const CHT=DATA.chapters;
@@ -11040,6 +11468,9 @@ function qSet(q,v){if(q.z){if(!S.zq||typeof S.zq!=='object')S.zq={};const i=jqId
 function qEra(q){if(!q.u)return eraOfCh(q.ch);const g=jkGroup(q.u);if(g==='M')return 0;const n=+g;return n<=5?0:n<=9?1:2}
 /* 受験対策の栞は控えめ（はじめて正解1枚、克服2枚、正解済み0枚）。通常問題演習は3・5・1枚のまま */
 function qGain(q,st){return q.u?(st===0?1:st===2?2:0):(st===0?3:st===2?5:1)}
+/* G：はじめて正解10G・克服15G・正解済み3G。受験対策・図版・地図は半分（切り上げ）。ハードモードは2倍（呼ぶ側で） */
+function qGainG(q,st){const g=st===0?10:st===2?15:3;return q.u?Math.ceil(g/2):g}
+function qzGainText(z){const t=gainText(z.gainE);return z.gainG?(t==='栞0枚'?'':t+'、')+gFmt(z.gainG)+'G':t}
 const JK_LINES=['この棚は受験生向けだ。教科書の単元ごとに問題が並んでいる。','「マイ範囲」に単元を登録しておけば、授業の進度に合わせて解ける。','発展の問題は手ごわいぞ。まずは標準から固めたまえ。','ここで正解しても栞は少なめだ。報酬より、身につくことのほうが大事だろう？'];
 /* マイ範囲：単元にチェックを入れて保存。この端末（と学校アカウント）の記録に残る */
 function jkMyEdit(){const c=jkCfg();const sel=new Set(c.my);
@@ -11215,8 +11646,8 @@ function kjFix(){const p=KJ.p,L=kjWrongList(p);const errs=L.filter(x=>x.e);const
   <div class="kj-paper parch" id="kjP">${L.map((x,k)=>{if(x.e&&KJ.fixed[x.n]){const fx=x.ins?'':p.ms[x.i];return `<span class="seg fixed${x.ins?' cut':''}"><s>${esc(x.s)}</s>${fx?`<em>${esc(fx)}</em>`:''}</span>`}
    return `<span class="seg${all?' lock':''}" data-k="${k}">${esc(x.s)}</span>`}).join('')}</div><div id="kjPn"></div>`);
  const pn=$('#kjPn');
- if(all){const r=kjRec(p.id),first=!r[0],g=first?10:2,e=kjEra(p);kjSet(p.id,0,r[0]+1);boxAddTo(KJ.bk,'記述対策　'+p.t,e,g);save();refreshCoins();
-  pn.innerHTML=`<div class="kj-card parch"><h3>クリア</h3><p>誤植を${errs.length}か所すべて訂正した。${kjRec(p.id)[0]}回目のクリア。</p><p class="kj-gain">${ERAS[e].k}の栞＋${g}${first?'（はじめてのクリア）':''}<br><small>栞はホームの受け取りボックスに届いています</small></p>
+ if(all){const r=kjRec(p.id),first=!r[0],g=first?10:2,gg=first?25:5,e=kjEra(p);kjSet(p.id,0,r[0]+1);boxAddTo(KJ.bk,'記述対策　'+p.t,e,g);boxAddTo(KJ.bk,'記述対策　'+p.t,'g',gg);save();refreshCoins();
+  pn.innerHTML=`<div class="kj-card parch"><h3>クリア</h3><p>誤植を${errs.length}か所すべて訂正した。${kjRec(p.id)[0]}回目のクリア。</p><p class="kj-gain">${ERAS[e].k}の栞＋${g}・${gg}G${first?'（はじめてのクリア）':''}<br><small>栞とGはホームの受け取りボックスに届いています</small></p>
    <div class="row"><button class="btn red" id="kjBk">棚にもどる</button><button class="btn light" id="kjRe">最初からもう一度</button></div></div>`;
   $('#kjBk').onclick=()=>{KJ=null;FX.pageTurn(()=>{DRMODE='kj';QuizMenu()})};$('#kjRe').onclick=()=>{KJ={...KJ,step:0,ri:0,ok:0,fixed:{},bk:'kj'+boxId()};kjDraw();kjTop()};return}
  document.querySelectorAll('#kjP .seg[data-k]').forEach(el=>el.onclick=()=>{document.querySelectorAll('#kjP .seg.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');const x=L[+el.dataset.k];
@@ -11263,7 +11694,7 @@ function kjWrite(){const p=KJ.p,r=kjRec(p.id),l8=Math.ceil(p.lim*.8);
   G.querySelectorAll('.kj-rub input').forEach(c=>c.onchange=()=>{chk[c.dataset.i]=c.checked;$('#kjSc').textContent=calc()});
   $('#kjBk2').onclick=()=>{KJ=null;FX.pageTurn(()=>{DRMODE='kj';QuizMenu()})};
   $('#kjDone').onclick=()=>{const s=calc(),rr=kjRec(p.id);let msg=`${s}／${max}点で記録しました。`;
-   if(rr[2]<0&&n>=p.lim*.5&&n<=p.lim&&!miss.length){const e=kjEra(p);boxAddTo(KJ.bk,'記述対策　'+p.t,e,15);msg+=`<br>${ERAS[e].k}の栞＋15（受け取りボックスに届いています）`}
+   if(rr[2]<0&&n>=p.lim*.5&&n<=p.lim&&!miss.length){const e=kjEra(p);boxAddTo(KJ.bk,'記述対策　'+p.t,e,15);boxAddTo(KJ.bk,'記述対策　'+p.t,'g',40);msg+=`<br>${ERAS[e].k}の栞＋15・40G（受け取りボックスに届いています）`}
    if(s>rr[2])kjSet(p.id,2,s);else if(rr[2]<0)kjSet(p.id,2,s);saveNow();refreshCoins();
    modal(`<h3>自己採点を記録した</h3><p style="line-height:1.8;text-align:center">${msg}</p><div class="row" style="justify-content:center"><button class="btn red" data-close>棚にもどる</button></div>`,()=>{KJ=null;FX.pageTurn(()=>{DRMODE='kj';QuizMenu()})})};
   setTimeout(()=>G.scrollIntoView({block:'start',behavior:'smooth'}),60)}}
@@ -11320,7 +11751,7 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   <div class="scr-title">${top}${QZ.mode?`<br><small style="font-size:.75em;opacity:.8">${({fresh:'はじめての問題',wrong:'間違えた問題の復習',random:'ランダム'})[QZ.mode]}${QZ.hard?'・ハード':''}</small>`:''}</div>
   <div class="dr-tabs${QZ.list.length>10?' many':''}"><div class="tb">${QZ.list.map((_,i)=>`<i class="${QZ.res[i]===true?'ok':QZ.res[i]===false?'ng':''} ${i===QZ.i?'cur':''}">${QZ.list.length>10?'':QZ.res[i]===true?'✦':QZ.res[i]===false?'✕':''}</i>`).join('')}</div><span class="ct">${QZ.i+1} / ${QZ.list.length}</span></div>
   ${QZ.tut?'':'<button class="gc-back tl" id="qQuit">やめる</button>'}<div class="gc-top">${coinsHTML(qEras())}</div>
-  <div class="dr-gain">この回の獲得　${gainText(QZ.gainE)}</div>
+  <div class="dr-gain">この回の獲得　${qzGainText(QZ)}</div>
   ${QZ.timer?`<div class="qz-timer" id="qzT"><i style="animation-duration:${QZ.timer}s"></i><b>${QZ.timer}</b></div>`:''}
   <div class="dr-flow" id="qflow"><div class="dr-paper parch"><p>${qHTML(q.q)}</p></div>
   ${q.z?zhVis(q,QZ.opts=shuffle([q.a,...q.d])):''}
@@ -11330,13 +11761,13 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;if(q.z)zhReveal(q,b?b.dataset.v:null);
   if(QZ.key!=null&&!QZ.tut){msTick('dq');if(ok)msTick('dc')}
-  const qe=qEra(q);if(ok){g=qGain(q,st)*(QZ.hard?2:1);qSet(q,1);if(g){if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g)}QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');qSet(q,2);QZ.wrong.push(q)}
-  QZ.res[QZ.i]=ok;save();if(QZ.key!==null&&!QZ.tut){(QZ.dt||(QZ.dt=[]))[QZ.i]=b?Math.round((performance.now()-QZ.qt)/100):-1;if(botWatch(QZ))return}refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
+  const qe=qEra(q);let gg=0;if(ok){g=qGain(q,st)*(QZ.hard?2:1);if(!QZ.tut){gg=qGainG(q,st)*(QZ.hard?2:1);boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,'g',gg);QZ.gainG=(QZ.gainG||0)+gg}qSet(q,1);if(g){if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g)}QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');qSet(q,2);QZ.wrong.push(q)}
+  QZ.res[QZ.i]=ok;save();if(QZ.key!==null&&!QZ.tut){(QZ.dt||(QZ.dt=[]))[QZ.i]=b?Math.round((performance.now()-QZ.qt)/100):-1;if(botWatch(QZ))return}refreshCoins();$('.dr-gain').textContent='この回の獲得　'+qzGainText(QZ);
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';if(QZ.list.length<=10)tabs[QZ.i].textContent=ok?'✦':'✕';
-  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}${QZ.hard?'（ハード2倍）':''}`:'正解済みの問題（栞はなし）'):`正しくは${/^「.*」$/.test(zhAns(q))?esc(zhAns(q)):'「'+esc(zhAns(q))+'」'}`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
+  $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${gg?`・${gg}G`:''}${st===2?'（克服ボーナス）':''}${QZ.hard?'（ハード2倍）':''}`:`正解済みの問題（栞はなし${gg?`・${gg}G`:''}）`):`正しくは${/^「.*」$/.test(zhAns(q))?esc(zhAns(q)):'「'+esc(zhAns(q))+'」'}`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
   setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})},60);
-  $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=gainText(QZ.gainE);QZ=null;
-    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞はホームの受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
+  $('#nx').onclick=()=>{QZ.i++;if(QZ.i<QZ.list.length)quizQ();else if(QZ.fin){const f=QZ.fin,z=QZ;QZ=null;saveNow();FX.pageTurn(()=>f(z))}else if(QZ.done){const d=QZ.done,g=qzGainText(QZ);QZ=null;
+    saveNow();modal(`<h3>${g}を手に入れた</h3><p style="text-align:center;line-height:1.8">${g==='栞0枚'?'':'栞とGはホームの受け取りボックスに届いています。<br>'}おさらいはここまで。物語にもどろう。</p><div class="row" style="justify-content:center"><button class="btn" data-close>つづける</button></div>`,d)}
    else FX.pageTurn(quizEnd)}};
  document.querySelectorAll('#qo .slip').forEach(b=>b.onclick=()=>answer(b));if(q.z)document.querySelectorAll('#zv [data-i]').forEach(g=>g.addEventListener('click',()=>{const b=document.querySelectorAll('#qo .slip')[+g.dataset.i];if(b)answer(b)}));if(QZ.timer)qzStart(()=>answer(null))}
 function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;
@@ -11346,7 +11777,7 @@ function quizEnd(){if(QZ.key!==null){S.drills=(S.drills||0)+1;
   drillQueue(QZ);saveNow()}const w=QZ.wrong;const n=QZ.res.filter(x=>x!==undefined).length;
  show(`<div class="dr q" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div>
   <div class="gc-top">${coinsHTML(qEras())}</div>
-  <div class="dr-res parch"><h3>${gainText(QZ.gainE)}を手に入れた</h3>${QZ.gain?'<p class="sub" style="margin-top:-4px">栞はホームの受け取りボックスに届いています</p>':''}<p class="sub">${esc(QZ.label)}${QZ.hard?'（ハードモード）':''}　正解 ${n-w.length}／${n}問</p>
+  <div class="dr-res parch"><h3>${qzGainText(QZ)}を手に入れた</h3>${QZ.gain||QZ.gainG?'<p class="sub" style="margin-top:-4px">栞とGはホームの受け取りボックスに届いています</p>':''}<p class="sub">${esc(QZ.label)}${QZ.hard?'（ハードモード）':''}　正解 ${n-w.length}／${n}問</p>
   ${w.length?`<div class="wl"><p style="font-weight:600">間違えた問題</p>${w.map(q=>`<p>${qHTML(q.q)}<br><b>答え：${esc(zhAns(q))}</b></p>`).join('')}<p class="sub">次に正解すると、克服ボーナスの栞がもらえます。</p></div>`:'<p>全問正解！</p>'}
   <div class="rowb"><button class="btn red" id="again">もう一度解く</button><button class="btn light" id="toShelf">ほかの棚を選ぶ</button><button class="btn light" data-go="home">ホームへ</button></div></div></div>`);
  $('#again').onclick=()=>FX.pageTurn(()=>startQuiz(QZ.key));$('#toShelf').onclick=()=>FX.pageTurn(QuizMenu)}
@@ -11441,14 +11872,16 @@ function chooseCard(title,cb,opt={}){const pool=opt.pool||gachaPool();
   $('#cfY').onclick=()=>{closeModal(true);cb(n)};$('#cfN').onclick=()=>{closeModal(true);chooseCard(title,cb,opt)}})}
 
 /* ---------- party ---------- */
-function Party(){const owned=CARDS.filter(c=>lv(c.n)&&!isSP(c.n));const ch=Math.max(1,Math.min(STORY.length-1,nextChapter()||STORY.length-1));const tm=teamMult(ch,'');
- show(`<div class="screen pt-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">編成</div><div class="gc-top">${coinsHTML()}</div><div class="scroll">
- <div class="pane paper"><h3>連れていく頁（4枚まで）</h3><div class="slots">${[0,1,2,3].map(i=>S.party[i]?`<div data-rm="${i}">${cardHTML(S.party[i])}</div>`:`<div class="slot-empty">空き</div>`).join('')}
- <div>${cardHTML(HELPER[ch],{forceOwn:true,noLv:true})}<p class="muted" style="font-size:12px;text-align:center;margin:4px 0 0">助っ人（${CHNAME[ch]}）</p></div></div>
- <p class="bonus">同じ属性を2枚で＋10%、3枚で＋20%、4枚以上で＋35%（助っ人も数えます）。いまの編成：${tm.notes.filter(n=>n.startsWith('編成')).join('')||'ボーナスなし'}<br>頁をタップすると外せます。</p></div>
- <div class="pane paper"><h3>手持ちの頁</h3>${owned.length?`<div class="grid">${owned.map(c=>`<div data-add="${esc(c.n)}">${cardHTML(c.n)}</div>`).join('')}</div>`:'<p>まだ頁を持っていません。ストーリーを進めるか、頁をめくってみましょう。</p>'}</div></div></div>`);
- document.querySelectorAll('[data-rm]').forEach(d=>d.onclick=()=>{S.party.splice(+d.dataset.rm,1);save();Party()});
- document.querySelectorAll('[data-add]').forEach(d=>d.onclick=()=>{const n=d.dataset.add;if(S.party.includes(n)){toast('もう編成に入っています');return}if(S.party.length>=4){toast('編成は4枚までです。外したい頁をタップしてください');return}S.party.push(n);save();Party()})}
+/* 編成（5枚）と頁の育成。頁をタップすると育成の画面（お菓子で経験値・編成の出し入れ） */
+let PT_F=-1;
+function Party(){const all=CARDS.filter(c=>lv(c.n)&&!isSP(c.n));const owned=all.filter(c=>PT_F<0||eraOfCard(c.n)===PT_F).sort((a,b)=>pgPow(b.n)-pgPow(a.n)||b.r-a.r);const P=partyList();
+ show(`<div class="screen pt-screen"><button class="gc-back tl" data-go="home">戻る</button><div class="gc-title hd-ttl">編成</div><div class="gc-top">${gCoinHTML()}</div><div class="scroll">
+ <div class="pane paper"><h3>連れていく頁（${PARTY_N}枚まで）</h3><div class="slots">${Array.from({length:PARTY_N},(_,i)=>P[i]?`<div data-pc="${esc(P[i])}">${cardHTML(P[i],{plv:1})}</div>`:`<div class="slot-empty">空き</div>`).join('')}</div>
+ <p class="bonus">校正バトルで誤植を正すたびに、編成した頁がそれぞれの校正の力の2割で追撃します。いまの追撃の力：<b>${kbFollowPow()}</b><br>頁をタップすると、育成（お菓子で経験値）と、編成の出し入れができます。お菓子はホームの「お菓子屋」で買えます。</p></div>
+ <div class="pane paper"><h3>手持ちの頁</h3><div class="pt-filter">${[[-1,'すべて'],[0,'古代'],[1,'中世'],[2,'近世']].map(([e,t])=>`<button data-pf="${e}" class="${PT_F===e?'on':''}">${t}</button>`).join('')}</div>
+ ${owned.length?`<div class="grid">${owned.map(c=>`<div data-pc="${esc(c.n)}">${cardHTML(c.n,{plv:1})}</div>`).join('')}</div>`:all.length?'<p>この時代の頁は、まだ持っていません。</p>':'<p>まだ頁を持っていません。ストーリーを進めるか、頁をめくってみましょう。</p>'}</div></div></div>`);
+ document.querySelectorAll('[data-pf]').forEach(b=>b.onclick=()=>{PT_F=+b.dataset.pf;Party()});
+ document.querySelectorAll('[data-pc]').forEach(d=>d.onclick=()=>pgDetail(d.dataset.pc,()=>Party()))}
 
 /* ---------- zukan ---------- */
 function Zukan(){const L=zfList(CARDS);show(`<div class="screen">${topbar('図鑑')}<div class="scroll">${zfBar()}<div class="grid">${L.map(c=>`<div data-z="${esc(c.n)}">${cardHTML(c.n)}</div>`).join('')}</div>${L.length?'':'<p class="muted" style="color:#e9e1cc">この条件の頁はありません。</p>'}</div></div>`);zfBind(Zukan);
@@ -12024,7 +12457,7 @@ function openRates(){const draw=(map,src)=>{const rows=Object.keys(CHT).map(Numb
 function saveNow(){save();cloudPush(true)}
 function cloudPush(force){if(!CLOUD||!CL.ready||CL.busy||CL.checking)return;if(!CL.dirty&&!force)return;
  CL.busy=true;CL.dirty=false;const body=JSON.stringify(S),t=S.t||0;
- google.script.run.withSuccessHandler(r=>{CL.busy=false;CL.last=Date.now();CL.fail=0;
+ google.script.run.withSuccessHandler(r=>{CL.busy=false;CL.last=Date.now();CL.fail=0;clockSet(r);
    if(r&&r.conflict&&r.data){cloudAdopt(r.data);return}
    if(!(r&&r.skipped))CL.base=Math.max(CL.base,t);drillFlush()})
   .withFailureHandler(()=>{CL.busy=false;CL.dirty=true;if(++CL.fail===2)toast('学校アカウントへの保存に失敗しました。通信を確かめてください')}).putSave(body,CL.base)}
@@ -12038,14 +12471,16 @@ function cloudAdopt(json){let o=null;try{o=typeof json==='string'?JSON.parse(jso
 function cloudRecheck(){if(!CLOUD||!CL.ready||CL.checking)return;if(Date.now()-CL.lastCheck<4000)return;
  CL.checking=true;CL.lastCheck=Date.now();
  const end=()=>{CL.checking=false};const tm=setTimeout(end,15000);
- google.script.run.withSuccessHandler(r=>{clearTimeout(tm);end();
+ google.script.run.withSuccessHandler(r=>{clearTimeout(tm);end();clockSet(r);
    let cloud=null;try{cloud=r&&r.data?JSON.parse(r.data):null}catch(e){}
    if(cloud&&(cloud.t||0)>CL.base&&(cloud.t||0)!==(S.t||0))cloudAdopt(cloud)})
   .withFailureHandler(()=>{clearTimeout(tm);end()}).getSave()}
+/* GASの時計との差（デイリーミッションの日付に使う） */
+function clockSet(r){if(r&&typeof r.now==='number')CL.toff=r.now-Date.now()}
 function cloudInit(){if(!CLOUD)return;let done=false;
  const ready=()=>{if(done)return;done=true;CL.ready=true;setTimeout(drillFlush,3000);if($('#title'))Title()};
  setTimeout(()=>{if(!done){toast('学校アカウントの記録を読めませんでした。この端末の記録で続けます');ready()}},12000);
- google.script.run.withSuccessHandler(r=>{if(done)return;
+ google.script.run.withSuccessHandler(r=>{if(done)return;clockSet(r);
    let local=null;try{local=JSON.parse(localStorage.getItem(SAVE_KEY)||'null')}catch(e){}
    let cloud=null;try{cloud=r&&r.data?JSON.parse(r.data):null}catch(e){}
    CL.base=cloud?(cloud.t||0):0;CL.lastCheck=Date.now();
@@ -13408,13 +13843,13 @@ function lxRest(){const R=S.lib.run;const heal=Math.floor(R.max*.3);
   pick:it=>{R.ann.push(it.i);toast('注釈を書き込んだ');lxNextFloor()}})}
 function lxComplete(){const L=S.lib;const R=L.run;if(!R)return LibMenu();const a=R.act||0;const A=lxAct(a);
  R.fl=A.from+A.rows;R.sc=R.sc||{};R.sc.boss=(R.sc.boss||0)+50*(a+1);
- const g=[0,0,0];g[Math.floor(Math.random()*3)]++;boxAdd(`カードゲーム　${R.fl}階のボスを退治`,g.indexOf(1),1);
+ const g=[0,0,0];g[Math.floor(Math.random()*3)]++;boxAdd(`カードゲーム　${R.fl}階のボスを退治`,g.indexOf(1),1);boxAdd(`カードゲーム　${R.fl}階のボスを退治`,'g',50);
  if(a>=LX_ACTS.length-1&&!R.endless)return lxRunEnd(true);
- let topMsg='';if(a===LX_ACTS.length-1){R.sc.cl=250;L.ac=(L.ac||0)+1;const g3=[0,0,0];for(let k=0;k<3;k++)g3[Math.floor(Math.random()*3)]++;g3.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)});topMsg=`<br><b>${LX_TOP}階を登りきった！</b>　オールクリアのお礼の栞も届いた。ここから先は無限回廊。`}
+ let topMsg='';if(a===LX_ACTS.length-1){R.sc.cl=250;L.ac=(L.ac||0)+1;const g3=[0,0,0];for(let k=0;k<3;k++)g3[Math.floor(Math.random()*3)]++;g3.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)});boxAdd('カードゲーム　オールクリア','g',300);topMsg=`<br><b>${LX_TOP}階を登りきった！</b>　オールクリアのお礼の栞も届いた。ここから先は無限回廊。`}
  /* 次の幕へ：失ったHPの75%を回復し、装備を1つもらう */
  const heal=Math.floor((R.max-R.hp)*.75);R.hp+=heal;const r=lxGiveRelic(false,true);
  R.act=a+1;R.fights=0;R.map=lxGenMap(R.act);R.at=null;R.cur=null;R.path=[];R.bt=null;R.q=null;const NB=lxAct(R.act).boss;R.boss=NB[Math.floor(Math.random()*NB.length)];saveNow();
- FX.flash('#ffe6a8');modal(`<h3>${A.from+A.rows}階のボスを退治した！</h3><p style="line-height:1.8;text-align:center">お礼の<b>${gainText(g)}</b>が、ホームの受け取りボックスに届いた。<br>ひと息ついて、HPが${heal}回復した。${topMsg}${r?`<br>${lxIco(r,'big')}ボスの落とした装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:''}<br><br>次は<b>${esc(lxActName(R))}</b>（${lxAct(R.act).from}階から）。誤植はさらに強くなる。</p>${lxTipHTML(R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,()=>FX.pageTurn(lxMap))}
+ FX.flash('#ffe6a8');modal(`<h3>${A.from+A.rows}階のボスを退治した！</h3><p style="line-height:1.8;text-align:center">お礼の<b>${gainText(g)}と50G</b>が、ホームの受け取りボックスに届いた。<br>ひと息ついて、HPが${heal}回復した。${topMsg}${r?`<br>${lxIco(r,'big')}ボスの落とした装備「<b>${esc(r)}</b>」を手に入れた。<br>${esc(LX_RELIC[r])}`:''}<br><br>次は<b>${esc(lxActName(R))}</b>（${lxAct(R.act).from}階から）。誤植はさらに強くなる。</p>${lxTipHTML(R.tips)}<div class="row" style="justify-content:center"><button class="btn" data-close>先へ進む</button></div>`,()=>FX.pageTurn(lxMap))}
 /* スコア：登った階×5、倒した誤植×2、エリート10×幕、ボス50×幕、クイズ正解×1、オールクリア250 */
 function lxScore(R,clear){const s=(R&&R.sc)||{};const v={fl:((R&&R.fl)||0)*5,kill:(s.kill||0)*2,el:s.el||0,boss:s.boss||0,q:s.q||0,clear:clear?250:(s.cl||0)};v.total=v.fl+v.kill+v.el+v.boss+v.q+v.clear;return v}
 /* 探索の終わり（負け・あきらめ・オールクリア）。スコアを記録して、ハイスコアなら更新 */
@@ -13422,7 +13857,7 @@ function lxRunEnd(clear,gaveUp){const L=S.lib;const R=L.run;if(!R)return LibMenu
  const hk=EN?'hiE':'hi';const best=v.total>(L[hk]||0);if(best){L[hk]=v.total;L[hk+'Fl']=R.fl||0;L[hk+'Ch0']=ch}L[hk+'Fl']=Math.max(L[hk+'Fl']||0,R.fl||0);
  L.hiCh=L.hiCh||{};L.hiCh[ch]=Math.max(L.hiCh[ch]||0,v.total);
  L.hist=[{s:v.total,f:R.fl||0,c:ch,cl:!!clear,e:EN,t:Date.now()},...(L.hist||[])].slice(0,10);
- if(clear){L.clears=(L.clears||0)+1;L.ac=(L.ac||0)+1;const g=[0,0,0];for(let k=0;k<3;k++)g[Math.floor(Math.random()*3)]++;g.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)})}
+ if(clear){L.clears=(L.clears||0)+1;L.ac=(L.ac||0)+1;const g=[0,0,0];for(let k=0;k<3;k++)g[Math.floor(Math.random()*3)]++;g.forEach((n,i)=>{if(n)boxAdd('カードゲーム　オールクリア',i,n)});boxAdd('カードゲーム　オールクリア','g',300)}
  L.run=null;saveNow();try{cloudPush(true)}catch(e){}
  const row=(l,n)=>n?`<tr><td>${l}</td><td>${n.toLocaleString()}</td></tr>`:'';
  const head=clear?`${LX_TOP}階を登りきった！　オールクリア`:EN?`無限回廊　${R.fl||0}階まで`:gaveUp?'探索をあきらめた':'探索は失敗に終わった';

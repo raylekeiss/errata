@@ -45,7 +45,8 @@ function getSave() {
   const email = me_();
   const sh = sheet_();
   const row = findRow_(sh, email);
-  return { email: email, data: row ? String(sh.getRange(row, COL_DATA).getValue() || '') : null };
+  // now：この保存係の時計（デイリーミッションの日付に使う。iPadの時計を進めても受け取り直せないように）
+  return { email: email, data: row ? String(sh.getRange(row, COL_DATA).getValue() || '') : null, now: Date.now() };
 }
 
 /** ゲームから送られてきた記録を保存する */
@@ -83,8 +84,8 @@ function putSave(json, base) {
       try {
         const oldJson = String(sh.getRange(row, COL_DATA).getValue() || '{}');
         const old = JSON.parse(oldJson);
-        if (typeof base === 'number' && (old.t || 0) > base && (old.t || 0) !== (S.t || 0)) return { ok: false, conflict: true, data: oldJson };
-        if ((old.t || 0) > (S.t || 0)) return { ok: true, skipped: true };
+        if (typeof base === 'number' && (old.t || 0) > base && (old.t || 0) !== (S.t || 0)) return { ok: false, conflict: true, data: oldJson, now: Date.now() };
+        if ((old.t || 0) > (S.t || 0)) return { ok: true, skipped: true, now: Date.now() };
         // 一気に書き換えた記録の見張り（保存は止めない。アラームのシートに残し、管理者にメールする）
         const jump = checkJump_(old, S, sh.getRange(row, 3).getValue());
         if (jump.length) alarm_(email, S, real, jump);
@@ -97,7 +98,7 @@ function putSave(json, base) {
   } finally {
     lock.releaseLock();
   }
-  return { ok: true };
+  return { ok: true, now: Date.now() };
 }
 
 /* ===================================================================
@@ -116,6 +117,7 @@ const JUMP_RULE = {
   okQ: { label: '正解済みの問題', base: 60, perMin: 30 },
   shiori: { label: '栞', base: 800, perMin: 100 },
   cards: { label: '頁の種類', base: 15, perMin: 1 },
+  g: { label: 'もらったGの合計', base: 3000, perMin: 400 },
 };
 
 function jumpVals_(o) {
@@ -125,6 +127,7 @@ function jumpVals_(o) {
     okQ: Object.keys(qs).filter(function (k) { return qs[k] === 1; }).length,
     shiori: Array.isArray(o.sh) ? o.sh.reduce(function (a, b) { return a + (Number(b) || 0); }, 0) : Number(o.shiori || 0),
     cards: Object.keys(o.cards || {}).length,
+    g: Number(o.gt || 0),
   };
 }
 
