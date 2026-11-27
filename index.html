@@ -11976,7 +11976,7 @@ const DQ_KEY='errata_dq';
 function dqGet(){try{const a=JSON.parse(localStorage.getItem(DQ_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
 function dqSet(a){try{localStorage.setItem(DQ_KEY,JSON.stringify(a.slice(-60)))}catch(e){}}
 function drillBegin(z){if(lockLeft()>0){QZ=null;drillLocked();return true}if(!CLOUD)return false;z.t0=Date.now();
- try{google.script.run.withSuccessHandler(r=>{if(r&&r.lock&&r.lock>Date.now()){lockSet(r.lock);if(QZ===z){qzStop();QZ=null;drillLocked()}return}if(r&&r.tok)z.tok=r.tok;if(r&&r.adm)z.adm=1}).withFailureHandler(()=>{}).drillStart(String(z.label||''))}catch(e){}return false}
+ try{google.script.run.withSuccessHandler(r=>{if(r&&r.lock&&r.lock>Date.now()){lockSet(r.lock);if(QZ===z){qzStop();QZ=null;drillLocked()}return}if(r&&r.tok)z.tok=r.tok}).withFailureHandler(()=>{}).drillStart(String(z.label||''))}catch(e){}return false}
 function drillQueue(z,stop,bot){if(!CLOUD)return;
  const ids=[],r=[],dt=[];z.list.forEach((q,i)=>{if(q&&q.id&&z.res[i]!==undefined){ids.push(String(q.id));r.push(z.res[i]?1:0);dt.push(z.dt&&z.dt[i]!=null?z.dt[i]:-1)}});
  if(!ids.length)return;
@@ -11989,7 +11989,7 @@ function drillFlush(){if(!CLOUD||DQ_BUSY)return;const a=dqGet();if(!a.length)ret
    1問ごとに「問題が出てから答えるまで」の時間（0.1秒単位）を記録し、次の場合は自動操作とみなして問題演習を止める（はじき出す）。
    ・ブラウザの自動操作（navigator.webdriver）
    ・タッチなしのLinuxの端末（生徒はiPadで遊ぶので、遠隔のAIが動かすブラウザとみなす）。Windows・Macは止めない
-   ・管理者（保存係の ADMIN_EMAILS に登録した先生）は見張らない
+   ・管理者（先生）のアカウントも同じように見張る（試すため）。止まったら保存係のメニューから解除する
    ・12問以上で、答えるまでの時間の真ん中の値が0.9秒未満（人は4つの選択肢を読めない速さ）
    ・15問以上で、答える間隔がほぼ一定（ばらつき＝標準偏差÷平均が0.12未満）で、9割以上正解
    止めたときは、その回の答えを正解率に入れず、保存係が「アラーム」シートに残して管理者にメールする。
@@ -12001,7 +12001,7 @@ function botEnv(){try{return{wd:navigator.webdriver?1:0,tp:navigator.maxTouchPoi
 function botStats(z){const d=(z.dt||[]).filter(x=>x!=null&&x>=0).map(x=>x/10);const n=d.length;if(!n)return{n:0};
  const so=[...d].sort((a,b)=>a-b),med=so[Math.floor(n/2)],mean=d.reduce((a,b)=>a+b,0)/n,sd=Math.sqrt(d.reduce((a,b)=>a+(b-mean)*(b-mean),0)/n);
  const ok=z.res.filter((x,i)=>x===true&&z.dt&&z.dt[i]>=0).length;return{n,med,mean,cv:mean?sd/mean:0,acc:ok/n}}
-function botVerdict(z){if(z.adm)return'';const st=botStats(z);let env={};try{env=botEnv()}catch(e){}
+function botVerdict(z){const st=botStats(z);let env={};try{env=botEnv()}catch(e){}
  if(env.wd&&st.n>=3)return'ブラウザの自動操作';
  if(st.n>=1&&!env.tp&&/Linux/.test(env.ua||'')&&!/Android/.test(env.ua||''))return'iPad以外の端末（タッチなし・Linux）';
  if(st.n>=12&&st.med<0.9)return'答えるのが速すぎる（中央値'+st.med.toFixed(1)+'秒）';

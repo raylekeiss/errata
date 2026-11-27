@@ -195,11 +195,10 @@ function logSheet_() {
 function drillStart(label) {
   const email = me_();
   const tok = Utilities.getUuid().replace(/-/g, '').slice(0, 20);
-  const adm = isAdmin_(email);
-  const lock = adm ? 0 : lockUntil_(email);
+  const lock = lockUntil_(email);
   if (lock > Date.now()) return { lock: lock };
   CacheService.getScriptCache().put('dk:' + tok, JSON.stringify({ m: email, t: Date.now() }), 21600);
-  return adm ? { tok: tok, adm: 1 } : { tok: tok };
+  return { tok: tok };
 }
 
 function drillLog(p) {
@@ -231,7 +230,7 @@ function drillLog(p) {
   const dt = (Array.isArray(p.dt) ? p.dt : []).slice(0, ids.length).map(function (x) { return Number(x); });
   const env = p.env && typeof p.env === 'object' ? p.env : {};
   // 自動操作の判定：端末が止めた理由（p.b）か、保存係でも同じ基準で判定する
-  const why = isAdmin_(email) ? '' : (String(p.b || '').slice(0, 60) || botVerdict_(dt, r, env));
+  const why = String(p.b || '').slice(0, 60) || botVerdict_(dt, r, env);
   if (why) state = '自動操作の疑い';
   const tooFast = state === '確認済み' && sec < ids.length * LOG_RULE.minSecPerQ;
   const envTxt = (env.wd ? '自動操作ブラウザ／' : '') + (Number(env.tp) > 0 ? 'タッチ端末' : 'タッチなし') + '／' + String(env.ua || '').slice(0, 120);
@@ -262,7 +261,7 @@ function drillLog(p) {
  * 判定の基準はゲーム側（index.html の botVerdict）と同じ。
  *  ・ブラウザの自動操作（navigator.webdriver）
  *  ・タッチなしのLinuxの端末（生徒はiPadで遊ぶ前提。遠隔のAIが動かすブラウザはこれになる）。Windows・Macは止めない
- *  ・管理者（ADMIN_EMAILS に登録した先生）は判定しない
+ *  ・管理者（先生）のアカウントも判定する（試すため）。isAdmin_ は時間の制限を外すときに使う
  *  ・12問以上で、答えるまでの時間の中央値が0.9秒未満
  *  ・15問以上で、答える間隔のばらつき（標準偏差÷平均）が0.12未満、かつ9割以上正解
  * 止める時間：1回目は1時間。7日以内に2回目以降は24時間。
