@@ -11325,7 +11325,7 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   ${q.z?zhVis(q,QZ.opts=shuffle([q.a,...q.d])):''}
   <div class="dr-opts${q.z&&zhKana(q)?' zh-k':''}" id="qo">${(q.z?QZ.opts:shuffle([q.a,...q.d])).map((o,i)=>`<button class="slip" data-v="${esc(o)}">${q.z&&zhKana(q)?ZH_KANA[i]:esc(o)}</button>`).join('')}</div>
   <div class="dr-note" id="qr"></div></div></div>`);
- QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'問題演習'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',back,null,'続ける')};
+ QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'問題演習'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',()=>{if(QZ&&QZ.key!==null)drillQueue(QZ,1);back()},null,'続ける')};
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;if(q.z)zhReveal(q,b?b.dataset.v:null);
   if(QZ.key!=null&&!QZ.tut){msTick('dq');if(ok)msTick('dc')}
@@ -11969,17 +11969,17 @@ function storageOK(){try{const k='errata_test';localStorage.setItem(k,'1');const
 /* ---------- 問題演習の記録（成績用・GAS版のみ） ----------
    成績に使う「取り組み回数」は、端末の記録（S.dch）ではなく、保存係（gas/Code.gs）の「問題演習ログ」シートから数える。
    ・始めるとき：保存係から受付番号をもらう（保存係の時計で開始時刻を記録する）
-   ・終わったとき：受付番号・答えた問題・正誤をこの端末にためて、保存係に送る（送れたら消す。送れなければ次の保存のときにもう一度送る）
+   ・終わったとき（途中で中断したときも）：受付番号・答えた問題・正誤をこの端末にためて、保存係に送る（送れたら消す。送れなければ次の保存のときにもう一度送る）
    ・数えるかどうか（問題数・かかった時間・1日の上限）は、保存係が「取り組み状況を更新」のときに決める */
 const DQ_KEY='errata_dq';
 function dqGet(){try{const a=JSON.parse(localStorage.getItem(DQ_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
 function dqSet(a){try{localStorage.setItem(DQ_KEY,JSON.stringify(a.slice(-60)))}catch(e){}}
 function drillBegin(z){if(!CLOUD)return;z.t0=Date.now();
  try{google.script.run.withSuccessHandler(r=>{if(r&&r.tok)z.tok=r.tok}).withFailureHandler(()=>{}).drillStart(String(z.label||''))}catch(e){}}
-function drillQueue(z){if(!CLOUD)return;
+function drillQueue(z,stop){if(!CLOUD)return;
  const ids=[],r=[];z.list.forEach((q,i)=>{if(q&&q.id&&z.res[i]!==undefined){ids.push(String(q.id));r.push(z.res[i]?1:0)}});
  if(!ids.length)return;
- const a=dqGet();a.push({cid:Date.now().toString(36)+Math.random().toString(36).slice(2,8),tok:z.tok||'',ids,r:r.join(''),cs:z.t0?Math.round((Date.now()-z.t0)/1000):0,h:z.hard?1:0,k:String(z.label||'').slice(0,40)});dqSet(a);drillFlush()}
+ const a=dqGet();a.push({cid:Date.now().toString(36)+Math.random().toString(36).slice(2,8),tok:z.tok||'',ids,r:r.join(''),cs:z.t0?Math.round((Date.now()-z.t0)/1000):0,h:z.hard?1:0,s:stop?1:0,k:String(z.label||'').slice(0,40)});dqSet(a);drillFlush()}
 let DQ_BUSY=false;
 function drillFlush(){if(!CLOUD||DQ_BUSY)return;const a=dqGet();if(!a.length)return;DQ_BUSY=true;const it=a[0];
  try{google.script.run.withSuccessHandler(()=>{DQ_BUSY=false;dqSet(dqGet().filter(x=>x.cid!==it.cid));if(dqGet().length)setTimeout(drillFlush,500)})

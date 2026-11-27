@@ -85,6 +85,9 @@ function putSave(json, base) {
         const old = JSON.parse(oldJson);
         if (typeof base === 'number' && (old.t || 0) > base && (old.t || 0) !== (S.t || 0)) return { ok: false, conflict: true, data: oldJson };
         if ((old.t || 0) > (S.t || 0)) return { ok: true, skipped: true };
+        // 一気に書き換えた記録の見張り（保存は止めない。アラームのシートに残し、管理者にメールする）
+        const jump = checkJump_(old, S, sh.getRange(row, 3).getValue());
+        if (jump.length) alarm_(email, S, real, jump);
       } catch (e) {}
       sh.getRange(row, 1, 1, record.length).setValues([record]);
       if (real) sh.getRange(row, COL_REAL).setValue(real);
@@ -98,19 +101,83 @@ function putSave(json, base) {
 }
 
 /* ===================================================================
+ * アラーム（一気に書き換えた記録の見張り）
+ * 前回の保存から増えた量が、その間の時間でふつうに遊んで増やせる量を大きく超えたら、
+ * 「アラーム」シートに1行残し、管理者にメールする（同じ生徒へのメールは6時間に1回まで）。
+ * 保存そのものは止めない（見張るだけ）。
+ * 管理者のメールアドレスは、Apps Script の「プロジェクトの設定」→「スクリプト プロパティ」に
+ * キー ADMIN_EMAILS、値にアドレス（複数ならカンマ区切り）で登録する。コードには書かない。
+ * =================================================================== */
+const ALARM_SHEET = 'アラーム';
+const ALARM_HEAD = ['日時', 'メール', 'ゲーム内の名前', '本名', '増え方', '前回の保存からの時間（分）'];
+// 許す増え方＝ base ＋ perMin ×（前回の保存からの分）
+const JUMP_RULE = {
+  drills: { label: '問題演習の回数', base: 3, perMin: 1.5 },
+  okQ: { label: '正解済みの問題', base: 60, perMin: 30 },
+  shiori: { label: '栞', base: 800, perMin: 100 },
+  cards: { label: '頁の種類', base: 15, perMin: 1 },
+};
+
+function jumpVals_(o) {
+  const qs = o.qs || {};
+  return {
+    drills: Number(o.drills || 0),
+    okQ: Object.keys(qs).filter(function (k) { return qs[k] === 1; }).length,
+    shiori: Array.isArray(o.sh) ? o.sh.reduce(function (a, b) { return a + (Number(b) || 0); }, 0) : Number(o.shiori || 0),
+    cards: Object.keys(o.cards || {}).length,
+  };
+}
+
+function checkJump_(old, S, lastSaved) {
+  const last = lastSaved instanceof Date ? lastSaved.getTime() : 0;
+  if (!last) return [];
+  const min = Math.max(1, (Date.now() - last) / 60000);
+  const a = jumpVals_(old), b = jumpVals_(S), out = [];
+  Object.keys(JUMP_RULE).forEach(function (k) {
+    const R = JUMP_RULE[k], d = b[k] - a[k];
+    if (d > R.base + R.perMin * min) out.push(R.label + ' ' + a[k] + '→' + b[k] + '（＋' + d + '）');
+  });
+  if (out.length) out.push('_min:' + Math.round(min));
+  return out;
+}
+
+function alarm_(email, S, real, jump) {
+  const min = jump.filter(function (x) { return x.indexOf('_min:') === 0; }).map(function (x) { return Number(x.slice(5)); })[0] || '';
+  const items = jump.filter(function (x) { return x.indexOf('_min:') !== 0; });
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(ALARM_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(ALARM_SHEET);
+    sh.appendRow(ALARM_HEAD);
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, 1, ALARM_HEAD.length).setFontWeight('bold');
+  }
+  sh.appendRow([new Date(), email, String(S.name || ''), real, items.join('／'), min]);
+  try {
+    const to = String(PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '').trim();
+    const cache = CacheService.getScriptCache();
+    if (to && !cache.get('al:' + email)) {
+      cache.put('al:' + email, '1', 21600);
+      MailApp.sendEmail(to, '【エラータ】記録の急な増え方：' + (real || email),
+        (real || '') + '（' + email + '）の記録が、前回の保存から' + min + '分で次のように増えました。\n\n' + items.join('\n') +
+        '\n\nスプレッドシートの「アラーム」シートに記録しています。保存は止めていません。');
+    }
+  } catch (e) {}
+}
+
+/* ===================================================================
  * 問題演習ログ（成績用の取り組み回数）
  * 端末の記録は書き換えられるので、成績に使う回数はこのログから数える。
  * ・drillStart：問題演習を始めたときに呼ばれる。受付番号を作り、この保存係の時計で開始時刻を覚えておく（6時間）
- * ・drillLog：終わったときに呼ばれる。受付番号を確かめて、「問題演習ログ」シートに1行足す
+ * ・drillLog：終わったとき（途中で中断したときも）に呼ばれる。受付番号を確かめて、「問題演習ログ」シートに1行足す
  *   状態：確認済み（受付番号が本物）／受付切れ（6時間を過ぎた・別のアカウントの番号）／未確認（受付番号なし＝始めたときに通信できなかった）
  * 数えるかどうかは、updateProgress（取り組み状況を更新）のときに決める（下の LOG_RULE）。
  * =================================================================== */
 const LOG_SHEET = '問題演習ログ';
-const LOG_HEAD = ['日時', 'メール', '状態', '秒数（保存係の時計）', '答えた数', '正解数', '問題ID', '正誤', '秒数（端末）', 'ハード', '棚'];
+const LOG_HEAD = ['日時', 'メール', '状態', '秒数（保存係の時計）', '答えた数', '正解数', '問題ID', '正誤', '秒数（端末）', 'ハード', '中断', '棚'];
 const LOG_RULE = {
-  minQ: 10,       // 1回と数える最低の問題数
+  minQ: 5,         // 1回と数える最低の問題数（途中で中断した回も、これだけ答えていれば数える）
   minSecPerQ: 2.5, // 1問あたりの平均秒数がこれより短いと数えない
-  dayCap: 5,      // 同じ章を1日に数える上限
 };
 
 function logSheet_() {
@@ -158,7 +225,7 @@ function drillLog(p) {
     }
   }
   const okN = r.split('').filter(function (c) { return c === '1'; }).length;
-  const row = [new Date(), email, state, sec, ids.length, okN, ids.join(','), r, Number(p.cs) || '', p.h ? 'ハード' : '', String(p.k || '').slice(0, 40)];
+  const row = [new Date(), email, state, sec, ids.length, okN, ids.join(','), r, Number(p.cs) || '', p.h ? 'ハード' : '', p.s ? '中断' : '', String(p.k || '').slice(0, 40)];
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
@@ -253,14 +320,14 @@ function gameData_() {
  * 問題演習ログを数える。メールごとに
  *  n：数えた回／un：未確認の回（受付番号なし・受付切れ）／ng：数えなかった回／ch：章ごとの数えた回
  * 1回と数える条件（LOG_RULE）：確認済み・答えた数が minQ 問以上・1問あたり平均 minSecPerQ 秒以上。
- * 章ごとの回数は、その回に答えた章（通常の問題演習の問題）を1回ずつ数える。同じ章は1日 dayCap 回まで。
+ * 途中で中断した回も、この条件を満たせば数える。回数の上限はない（試験前に詰め込んでもよい）。
+ * 章ごとの回数は、その回に答えた章（通常の問題演習の問題）を1回ずつ数える。
  */
 function countLog_(G) {
   const out = {};
   const sh = SpreadsheetApp.getActive().getSheetByName(LOG_SHEET);
   if (!sh || sh.getLastRow() < 2) return out;
   const vals = sh.getRange(2, 1, sh.getLastRow() - 1, LOG_HEAD.length).getValues();
-  const perDay = {};
   vals.forEach(function (v) {
     const em = String(v[1] || ''); if (!em) return;
     const o = out[em] || (out[em] = { n: 0, un: 0, ng: 0, ch: {} });
@@ -269,14 +336,10 @@ function countLog_(G) {
     if (n < LOG_RULE.minQ || sec < n * LOG_RULE.minSecPerQ) { o.ng++; return; }
     const chs = {};
     String(v[6] || '').split(',').forEach(function (id) { const c = G.regOf[id]; if (c) chs[c] = true; });
-    const day = Utilities.formatDate(new Date(v[0]), 'Asia/Tokyo', 'yyyy-MM-dd');
-    let counted = false;
-    Object.keys(chs).forEach(function (c) {
-      const k = em + '|' + day + '|' + c;
-      perDay[k] = (perDay[k] || 0) + 1;
-      if (perDay[k] <= LOG_RULE.dayCap) { o.ch[c] = (o.ch[c] || 0) + 1; counted = true; }
-    });
-    if (counted) o.n++; else o.ng++;
+    const keys = Object.keys(chs);
+    if (!keys.length) { o.ng++; return; }
+    keys.forEach(function (c) { o.ch[c] = (o.ch[c] || 0) + 1; });
+    o.n++;
   });
   return out;
 }
@@ -289,7 +352,7 @@ function updateProgress() {
   const rows = last >= 2 ? src.getRange(2, 1, last - 1, COL_REAL).getValues() : [];
 
   const L = countLog_(G);
-  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（ログで数えた回）', '未確認の回（通信できなかった回）', '数えなかった回（速すぎ・問題数不足・1日の上限）', '端末の記録の回数（参考）', '要確認', '受験対策の正解数', '記述対策（実戦を書いた数）'];
+  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（ログで数えた回）', '未確認の回（通信できなかった回）', '数えなかった回（速すぎ・5問未満）', '端末の記録の回数（参考）', '要確認', '受験対策の正解数', '記述対策（実戦を書いた数）'];
   const FIX = head.length;
   G.names.forEach(function (nm, i) {
     head.push('第' + (i + 1) + '章 回数');
