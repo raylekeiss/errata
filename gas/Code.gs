@@ -97,6 +97,79 @@ function putSave(json, base) {
   return { ok: true };
 }
 
+/* ===================================================================
+ * 問題演習ログ（成績用の取り組み回数）
+ * 端末の記録は書き換えられるので、成績に使う回数はこのログから数える。
+ * ・drillStart：問題演習を始めたときに呼ばれる。受付番号を作り、この保存係の時計で開始時刻を覚えておく（6時間）
+ * ・drillLog：終わったときに呼ばれる。受付番号を確かめて、「問題演習ログ」シートに1行足す
+ *   状態：確認済み（受付番号が本物）／受付切れ（6時間を過ぎた・別のアカウントの番号）／未確認（受付番号なし＝始めたときに通信できなかった）
+ * 数えるかどうかは、updateProgress（取り組み状況を更新）のときに決める（下の LOG_RULE）。
+ * =================================================================== */
+const LOG_SHEET = '問題演習ログ';
+const LOG_HEAD = ['日時', 'メール', '状態', '秒数（保存係の時計）', '答えた数', '正解数', '問題ID', '正誤', '秒数（端末）', 'ハード', '棚'];
+const LOG_RULE = {
+  minQ: 10,       // 1回と数える最低の問題数
+  minSecPerQ: 2.5, // 1問あたりの平均秒数がこれより短いと数えない
+  dayCap: 5,      // 同じ章を1日に数える上限
+};
+
+function logSheet_() {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(LOG_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(LOG_SHEET);
+    sh.appendRow(LOG_HEAD);
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, 1, LOG_HEAD.length).setFontWeight('bold');
+  }
+  return sh;
+}
+
+function drillStart(label) {
+  const email = me_();
+  const tok = Utilities.getUuid().replace(/-/g, '').slice(0, 20);
+  CacheService.getScriptCache().put('dk:' + tok, JSON.stringify({ m: email, t: Date.now() }), 21600);
+  return { tok: tok };
+}
+
+function drillLog(p) {
+  const email = me_();
+  if (!p || typeof p !== 'object') throw new Error('記録の形がちがいます');
+  const ids = Array.isArray(p.ids) ? p.ids.slice(0, 60).map(function (x) { return String(x).slice(0, 40); }) : [];
+  const r = String(p.r || '').replace(/[^01]/g, '').slice(0, ids.length);
+  if (!ids.length || r.length !== ids.length) throw new Error('記録の形がちがいます');
+  const cid = String(p.cid || '').slice(0, 30);
+  const cache = CacheService.getScriptCache();
+  // 同じ記録を2回送ってきたとき（通信が切れて送り直したときなど）は、1回分だけにする
+  if (cid && cache.get('dc:' + email + ':' + cid)) return { ok: true, dup: true };
+  let state = '未確認', sec = '';
+  const tok = String(p.tok || '').slice(0, 40);
+  if (tok) {
+    if (cache.get('du:' + tok)) return { ok: true, dup: true };
+    let rec = null;
+    try { rec = JSON.parse(cache.get('dk:' + tok) || 'null'); } catch (e) { rec = null; }
+    if (rec && rec.m === email) {
+      state = '確認済み';
+      sec = Math.round((Date.now() - rec.t) / 1000);
+      cache.remove('dk:' + tok);
+      cache.put('du:' + tok, '1', 21600);
+    } else {
+      state = '受付切れ';
+    }
+  }
+  const okN = r.split('').filter(function (c) { return c === '1'; }).length;
+  const row = [new Date(), email, state, sec, ids.length, okN, ids.join(','), r, Number(p.cs) || '', p.h ? 'ハード' : '', String(p.k || '').slice(0, 40)];
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    logSheet_().appendRow(row);
+  } finally {
+    lock.releaseLock();
+  }
+  if (cid) cache.put('dc:' + email + ':' + cid, '1', 21600);
+  return { ok: true };
+}
+
 /**
  * カードゲームのランキング（ハイスコア順）を返す。50階モード（hi）と無限回廊（hiE）の2つ。
  * 全員のセーブデータからハイスコアを読み出し、5分間キャッシュする。
@@ -149,7 +222,8 @@ function getRanking() {
  * 問題の数と章は、GitHub Pages のゲーム本体（index.html）から読み込むので、問題を足してもここは直さなくてよい。
  * 1行＝生徒1人。章ごとに「回数」（その章を解いた問題演習の回数）と「正解率」（その章の問題のうち、正解済みの割合）。
  * 正解率のセルにカーソルを合わせると、正解・間違えたまま・全問の数が出る（メモ）。
- * 章ごとの回数は、この仕組みを入れた日（2026年11月25日）より前の分は数えていない。
+ * 回数は「問題演習ログ」シートから数える（端末の記録は書き換えられるため）。ログを入れる前に遊んだ分は数えていない。
+ * 「端末の記録の回数」は参考。ログより10回以上多いと「要確認」に印が出る。
  * =================================================================== */
 const PROG_SHEET = '取り組み状況';
 const GAME_URL = 'https://raylekeiss.github.io/errata/index.html';
@@ -167,11 +241,44 @@ function gameData_() {
   if (!m) throw new Error('ゲーム本体から問題を読み込めませんでした');
   const D = JSON.parse(m[1]);
   const chOf = {}, total = {};
-  (D.Q || []).forEach(function (q) { chOf[q.id] = q.ch; total[q.ch] = (total[q.ch] || 0) + 1; });
+  const regOf = {};
+  (D.Q || []).forEach(function (q) { chOf[q.id] = q.ch; total[q.ch] = (total[q.ch] || 0) + 1; if (q.ch && !q.u && !q.z) regOf[q.id] = q.ch; });
   const n = Object.keys(D.chapters || {}).length || 15;
   const names = [];
   for (let c = 1; c <= n; c++) names.push((D.chapters || {})[c] || ('第' + c + '章'));
-  return { chOf: chOf, total: total, names: names };
+  return { chOf: chOf, regOf: regOf, total: total, names: names };
+}
+
+/**
+ * 問題演習ログを数える。メールごとに
+ *  n：数えた回／un：未確認の回（受付番号なし・受付切れ）／ng：数えなかった回／ch：章ごとの数えた回
+ * 1回と数える条件（LOG_RULE）：確認済み・答えた数が minQ 問以上・1問あたり平均 minSecPerQ 秒以上。
+ * 章ごとの回数は、その回に答えた章（通常の問題演習の問題）を1回ずつ数える。同じ章は1日 dayCap 回まで。
+ */
+function countLog_(G) {
+  const out = {};
+  const sh = SpreadsheetApp.getActive().getSheetByName(LOG_SHEET);
+  if (!sh || sh.getLastRow() < 2) return out;
+  const vals = sh.getRange(2, 1, sh.getLastRow() - 1, LOG_HEAD.length).getValues();
+  const perDay = {};
+  vals.forEach(function (v) {
+    const em = String(v[1] || ''); if (!em) return;
+    const o = out[em] || (out[em] = { n: 0, un: 0, ng: 0, ch: {} });
+    const state = String(v[2]), sec = Number(v[3]) || 0, n = Number(v[4]) || 0;
+    if (state !== '確認済み') { o.un++; return; }
+    if (n < LOG_RULE.minQ || sec < n * LOG_RULE.minSecPerQ) { o.ng++; return; }
+    const chs = {};
+    String(v[6] || '').split(',').forEach(function (id) { const c = G.regOf[id]; if (c) chs[c] = true; });
+    const day = Utilities.formatDate(new Date(v[0]), 'Asia/Tokyo', 'yyyy-MM-dd');
+    let counted = false;
+    Object.keys(chs).forEach(function (c) {
+      const k = em + '|' + day + '|' + c;
+      perDay[k] = (perDay[k] || 0) + 1;
+      if (perDay[k] <= LOG_RULE.dayCap) { o.ch[c] = (o.ch[c] || 0) + 1; counted = true; }
+    });
+    if (counted) o.n++; else o.ng++;
+  });
+  return out;
 }
 
 function updateProgress() {
@@ -181,7 +288,8 @@ function updateProgress() {
   const last = src.getLastRow();
   const rows = last >= 2 ? src.getRange(2, 1, last - 1, COL_REAL).getValues() : [];
 
-  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（全体）', '受験対策の正解数', '記述対策（実戦を書いた数）'];
+  const L = countLog_(G);
+  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（ログで数えた回）', '未確認の回（通信できなかった回）', '数えなかった回（速すぎ・問題数不足・1日の上限）', '端末の記録の回数（参考）', '要確認', '受験対策の正解数', '記述対策（実戦を書いた数）'];
   const FIX = head.length;
   G.names.forEach(function (nm, i) {
     head.push('第' + (i + 1) + '章 回数');
@@ -204,12 +312,16 @@ function updateProgress() {
     Object.keys(S.jq || {}).forEach(function (u) { jk += String(S.jq[u]).split('1').length - 1; });
     let kjW = 0;
     Object.keys(S.kj || {}).forEach(function (id) { const r = S.kj[id]; if (Array.isArray(r) && Number(r[2]) >= 0) kjW++; });
-    const dch = Array.isArray(S.dch) ? S.dch : [];
-    const row = [String(v[COL_REAL - 1] || ''), String(S.name || ''), String(v[0] || ''), v[2] || '', Number(S.drills || 0), jk, kjW];
-    const note = ['', '', '', '', '', '', ''];
+    const em = String(v[0] || '');
+    const lg = L[em] || { n: 0, un: 0, ng: 0, ch: {} };
+    const dev = Number(S.drills || 0);
+    // 端末の記録がログより大きくずれている（記録を書き換えた可能性）。ログを入れる前に遊んだ分もずれになるので、導入後しばらくは目安
+    const warn = dev - lg.n - lg.un - lg.ng >= 10 ? 'ずれ ' + (dev - lg.n - lg.un - lg.ng) + '回' : '';
+    const row = [String(v[COL_REAL - 1] || ''), String(S.name || ''), em, v[2] || '', lg.n, lg.un, lg.ng, dev, warn, jk, kjW];
+    const note = ['', '', '', '', '', '', '', '', '', '', ''];
     for (let c = 1; c <= N; c++) {
       const t = G.total[c] || 0, a = ok[c] || 0, b = ng[c] || 0;
-      row.push(Number(dch[c - 1] || 0));
+      row.push(Number(lg.ch[c] || 0));
       row.push(t ? a / t : 0);
       note.push('');
       note.push('正解 ' + a + '問／間違えたまま ' + b + '問／まだ解いていない ' + Math.max(0, t - a - b) + '問（全' + t + '問）');
