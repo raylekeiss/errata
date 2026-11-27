@@ -141,7 +141,7 @@ function checkJump_(old, S, lastSaved) {
   return out;
 }
 
-function alarm_(email, S, real, jump) {
+function alarm_(email, S, real, jump, force) {
   const min = jump.filter(function (x) { return x.indexOf('_min:') === 0; }).map(function (x) { return Number(x.slice(5)); })[0] || '';
   const items = jump.filter(function (x) { return x.indexOf('_min:') !== 0; });
   const ss = SpreadsheetApp.getActive();
@@ -156,10 +156,10 @@ function alarm_(email, S, real, jump) {
   try {
     const to = String(PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '').trim();
     const cache = CacheService.getScriptCache();
-    if (to && !cache.get('al:' + email)) {
+    if (to && (force || !cache.get('al:' + email))) {
       cache.put('al:' + email, '1', 21600);
-      MailApp.sendEmail(to, '【エラータ】記録の急な増え方：' + (real || email),
-        (real || '') + '（' + email + '）の記録が、前回の保存から' + min + '分で次のように増えました。\n\n' + items.join('\n') +
+      MailApp.sendEmail(to, (force ? '【エラータ】問題演習を止めました：' : '【エラータ】記録の急な増え方：') + (real || email),
+        (force ? (real || '') + '（' + email + '）の問題演習を、自動操作の疑いで止めました。\n\n' : (real || '') + '（' + email + '）の記録が、前回の保存から' + min + '分で次のように増えました。\n\n') + items.join('\n') +
         '\n\nスプレッドシートの「アラーム」シートに記録しています。保存は止めていません。');
     }
   } catch (e) {}
@@ -174,7 +174,7 @@ function alarm_(email, S, real, jump) {
  * 数えるかどうかは、updateProgress（取り組み状況を更新）のときに決める（下の LOG_RULE）。
  * =================================================================== */
 const LOG_SHEET = '問題演習ログ';
-const LOG_HEAD = ['日時', 'メール', '状態', '秒数（保存係の時計）', '答えた数', '正解数', '問題ID', '正誤', '秒数（端末）', 'ハード', '中断', '棚'];
+const LOG_HEAD = ['日時', 'メール', '状態', '秒数（保存係の時計）', '答えた数', '正解数', '問題ID', '正誤', '秒数（端末）', 'ハード', '中断', '棚', '答えるまでの秒数', '自動操作の判定', '端末'];
 const LOG_RULE = {
   minQ: 5,         // 1回と数える最低の問題数（途中で中断した回も、これだけ答えていれば数える）
   minSecPerQ: 2.5, // 1問あたりの平均秒数がこれより短いと数えない
@@ -195,6 +195,8 @@ function logSheet_() {
 function drillStart(label) {
   const email = me_();
   const tok = Utilities.getUuid().replace(/-/g, '').slice(0, 20);
+  const lock = lockUntil_(email);
+  if (lock > Date.now()) return { lock: lock };
   CacheService.getScriptCache().put('dk:' + tok, JSON.stringify({ m: email, t: Date.now() }), 21600);
   return { tok: tok };
 }
@@ -225,16 +227,130 @@ function drillLog(p) {
     }
   }
   const okN = r.split('').filter(function (c) { return c === '1'; }).length;
-  const row = [new Date(), email, state, sec, ids.length, okN, ids.join(','), r, Number(p.cs) || '', p.h ? 'ハード' : '', p.s ? '中断' : '', String(p.k || '').slice(0, 40)];
+  const dt = (Array.isArray(p.dt) ? p.dt : []).slice(0, ids.length).map(function (x) { return Number(x); });
+  const env = p.env && typeof p.env === 'object' ? p.env : {};
+  // 自動操作の判定：端末が止めた理由（p.b）か、保存係でも同じ基準で判定する
+  const why = String(p.b || '').slice(0, 60) || botVerdict_(dt, r, env);
+  if (why) state = '自動操作の疑い';
+  const tooFast = state === '確認済み' && sec < ids.length * LOG_RULE.minSecPerQ;
+  const envTxt = (env.wd ? '自動操作ブラウザ／' : '') + (Number(env.tp) > 0 ? 'タッチ端末' : 'タッチなし') + '／' + String(env.ua || '').slice(0, 120);
+  const row = [new Date(), email, state, sec, ids.length, okN, ids.join(','), r, Number(p.cs) || '', p.h ? 'ハード' : '', p.s ? '中断' : '', String(p.k || '').slice(0, 40),
+    dt.map(function (x) { return x >= 0 ? (x / 10).toFixed(1) : '時間切れ'; }).join(','), why, envTxt];
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
+  let until = 0;
   try {
     logSheet_().appendRow(row);
+    // 正解率に使う「問題ごとの最後の答え」。自動操作の疑いの回・速すぎる回は入れない
+    if (!why && !tooFast) putResults_(email, ids, r);
+    if (why) until = setLock_(email);
   } finally {
     lock.releaseLock();
   }
+  if (why) {
+    let real = '', name = '';
+    try { const sv = sheet_(); const rw = findRow_(sv, email); if (rw) { real = String(sv.getRange(rw, COL_REAL).getValue() || ''); name = JSON.parse(String(sv.getRange(rw, COL_DATA).getValue() || '{}')).name || ''; } } catch (e) {}
+    alarm_(email, { name: name }, real, ['自動操作の疑いで問題演習を止めた：' + why + '（' + Utilities.formatDate(new Date(until), 'Asia/Tokyo', 'M/d H:mm') + 'まで）', '端末：' + envTxt], true);
+  }
   if (cid) cache.put('dc:' + email + ':' + cid, '1', 21600);
-  return { ok: true };
+  return { ok: true, lock: until || 0 };
+}
+
+/* ===================================================================
+ * 自動操作の判定と、問題演習の一時停止（ロック）
+ * 判定の基準はゲーム側（index.html の botVerdict）と同じ。
+ *  ・ブラウザの自動操作（navigator.webdriver）
+ *  ・12問以上で、答えるまでの時間の中央値が0.9秒未満
+ *  ・15問以上で、答える間隔のばらつき（標準偏差÷平均）が0.12未満、かつ9割以上正解
+ * 止める時間：1回目は1時間。7日以内に2回目以降は24時間。
+ * 解除はスプレッドシートのメニュー「エラータ」→「問題演習の停止をすべて解除」。
+ * =================================================================== */
+const BOT_LOCK = { firstMs: 3600000, againMs: 86400000, windowMs: 7 * 86400000 };
+
+function botVerdict_(dt, r, env) {
+  const d = [], ok = [];
+  dt.forEach(function (x, i) { if (x >= 0) { d.push(x / 10); ok.push(r.charAt(i) === '1'); } });
+  const n = d.length;
+  if (env && env.wd && n >= 3) return 'ブラウザの自動操作';
+  if (!n) return '';
+  const so = d.slice().sort(function (a, b) { return a - b; });
+  const med = so[Math.floor(n / 2)];
+  const mean = d.reduce(function (a, b) { return a + b; }, 0) / n;
+  const sd = Math.sqrt(d.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0) / n);
+  const cv = mean ? sd / mean : 0;
+  const acc = ok.filter(Boolean).length / n;
+  if (n >= 12 && med < 0.9) return '答えるのが速すぎる（中央値' + med.toFixed(1) + '秒）';
+  if (n >= 15 && cv < 0.12 && acc >= 0.9) return '答える間隔が一定すぎる（ばらつき' + cv.toFixed(2) + '）';
+  return '';
+}
+
+function lockUntil_(email) {
+  try { const o = JSON.parse(PropertiesService.getScriptProperties().getProperty('lock:' + email) || 'null'); return o ? Number(o.until) || 0 : 0; } catch (e) { return 0; }
+}
+
+function setLock_(email) {
+  const P = PropertiesService.getScriptProperties();
+  let o = null;
+  try { o = JSON.parse(P.getProperty('lock:' + email) || 'null'); } catch (e) { o = null; }
+  const now = Date.now();
+  const again = o && o.last && now - Number(o.last) < BOT_LOCK.windowMs;
+  const until = now + (again ? BOT_LOCK.againMs : BOT_LOCK.firstMs);
+  P.setProperty('lock:' + email, JSON.stringify({ until: until, last: now, n: (o && o.n || 0) + 1 }));
+  return until;
+}
+
+function unlockAll() {
+  const P = PropertiesService.getScriptProperties();
+  // 止めた回数の記録（7日以内の2回目は24時間にするため）は残し、止めている時間だけ消す
+  let n = 0;
+  P.getKeys().filter(function (k) { return k.indexOf('lock:') === 0; }).forEach(function (k) {
+    try { const o = JSON.parse(P.getProperty(k) || '{}'); if (Number(o.until) > Date.now()) n++; o.until = 0; P.setProperty(k, JSON.stringify(o)); } catch (e) { P.deleteProperty(k); }
+  });
+  SpreadsheetApp.getActive().toast(n + '人分の停止を解除しました', 'エラータ', 5);
+}
+
+/* ===================================================================
+ * 正誤記録（正解率の元）
+ * 生徒ごとに1行、「問題ID→最後の答え（1＝正解／0＝不正解）」をJSONで持つ。
+ * 問題演習ログを送ってきたときに更新する（自動操作の疑いの回・速すぎる回は入れない）。
+ * 取り組み状況シートの正解率と、ゲームの「自分の正解率」はここから計算する。
+ * =================================================================== */
+const RES_SHEET = '正誤記録';
+
+function resSheet_() {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(RES_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(RES_SHEET);
+    sh.appendRow(['メール', '更新', '正誤（問題ID→最後の答え）']);
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, 1, 3).setFontWeight('bold');
+  }
+  return sh;
+}
+
+function putResults_(email, ids, r) {
+  const sh = resSheet_();
+  const row = findRow_(sh, email);
+  let m = {};
+  if (row) { try { m = JSON.parse(String(sh.getRange(row, 3).getValue() || '{}')); } catch (e) { m = {}; } }
+  ids.forEach(function (id, i) { m[id] = r.charAt(i) === '1' ? 1 : 0; });
+  const json = JSON.stringify(m);
+  if (row) sh.getRange(row, 2, 1, 2).setValues([[new Date(), json]]);
+  else sh.appendRow([email, new Date(), json]);
+}
+
+function getResults_(email) {
+  const sh = SpreadsheetApp.getActive().getSheetByName(RES_SHEET);
+  if (!sh) return {};
+  const row = findRow_(sh, email);
+  if (!row) return {};
+  try { return JSON.parse(String(sh.getRange(row, 3).getValue() || '{}')); } catch (e) { return {}; }
+}
+
+/** ゲームの「自分の正解率」用。自分の正誤記録だけを返す */
+function getMyRates() {
+  return { data: JSON.stringify(getResults_(me_())) };
 }
 
 /**
@@ -287,7 +403,7 @@ function getRanking() {
  * スプレッドシートを開くと、メニューに「エラータ」→「取り組み状況を更新」が出る。
  * 押すと「取り組み状況」シートを作り直す（生徒の操作では動かない）。
  * 問題の数と章は、GitHub Pages のゲーム本体（index.html）から読み込むので、問題を足してもここは直さなくてよい。
- * 1行＝生徒1人。章ごとに「回数」（その章を解いた問題演習の回数）と「正解率」（その章の問題のうち、正解済みの割合）。
+ * 1行＝生徒1人。章ごとに「回数」（その章を解いた問題演習の回数）と「正解率」（その章の問題のうち、最後に答えたときに正解だった割合。「正誤記録」シートから計算）。
  * 正解率のセルにカーソルを合わせると、正解・間違えたまま・全問の数が出る（メモ）。
  * 回数は「問題演習ログ」シートから数える（端末の記録は書き換えられるため）。ログを入れる前に遊んだ分は数えていない。
  * 「端末の記録の回数」は参考。ログより10回以上多いと「要確認」に印が出る。
@@ -298,6 +414,7 @@ const GAME_URL = 'https://raylekeiss.github.io/errata/index.html';
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('エラータ')
     .addItem('取り組み状況を更新', 'updateProgress')
+    .addItem('問題演習の停止をすべて解除', 'unlockAll')
     .addToUi();
 }
 
@@ -309,7 +426,8 @@ function gameData_() {
   const D = JSON.parse(m[1]);
   const chOf = {}, total = {};
   const regOf = {};
-  (D.Q || []).forEach(function (q) { chOf[q.id] = q.ch; total[q.ch] = (total[q.ch] || 0) + 1; if (q.ch && !q.u && !q.z) regOf[q.id] = q.ch; });
+  // ゲームと同じく、削除した問題（del）は数えない。正解率の分母は通常の問題演習の問題（ch があり、u・z でない）
+  (D.Q || []).forEach(function (q) { if (q.del || !q.ch || q.u || q.z) return; chOf[q.id] = q.ch; regOf[q.id] = q.ch; total[q.ch] = (total[q.ch] || 0) + 1; });
   const n = Object.keys(D.chapters || {}).length || 15;
   const names = [];
   for (let c = 1; c <= n; c++) names.push((D.chapters || {})[c] || ('第' + c + '章'));
@@ -332,6 +450,7 @@ function countLog_(G) {
     const em = String(v[1] || ''); if (!em) return;
     const o = out[em] || (out[em] = { n: 0, un: 0, ng: 0, ch: {} });
     const state = String(v[2]), sec = Number(v[3]) || 0, n = Number(v[4]) || 0;
+    if (state === '自動操作の疑い') { o.ng++; return; }
     if (state !== '確認済み') { o.un++; return; }
     if (n < LOG_RULE.minQ || sec < n * LOG_RULE.minSecPerQ) { o.ng++; return; }
     const chs = {};
@@ -352,7 +471,11 @@ function updateProgress() {
   const rows = last >= 2 ? src.getRange(2, 1, last - 1, COL_REAL).getValues() : [];
 
   const L = countLog_(G);
-  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（ログで数えた回）', '未確認の回（通信できなかった回）', '数えなかった回（速すぎ・5問未満）', '端末の記録の回数（参考）', '要確認', '受験対策の正解数', '記述対策（実戦を書いた数）'];
+  // 正解率は「正誤記録」から（端末の記録は書き換えられるため）
+  const RES = {};
+  const rsh = SpreadsheetApp.getActive().getSheetByName(RES_SHEET);
+  if (rsh && rsh.getLastRow() >= 2) rsh.getRange(2, 1, rsh.getLastRow() - 1, 3).getValues().forEach(function (v) { try { RES[String(v[0])] = JSON.parse(String(v[2] || '{}')); } catch (e) {} });
+  const head = ['本名', 'ゲーム内の名前', 'メール', '最終保存', '問題演習の回数（ログで数えた回）', '未確認の回（通信できなかった回）', '数えなかった回（速すぎ・5問未満・自動操作の疑い）', '端末の記録の回数（参考）', '要確認', '受験対策の正解数', '記述対策（実戦を書いた数）'];
   const FIX = head.length;
   G.names.forEach(function (nm, i) {
     head.push('第' + (i + 1) + '章 回数');
@@ -364,12 +487,12 @@ function updateProgress() {
     let S = {};
     try { S = JSON.parse(String(v[COL_DATA - 1] || '{}')); } catch (e) { return; }
     const ok = {}, ng = {};
-    const qs = S.qs || {};
-    Object.keys(qs).forEach(function (id) {
+    const RS = RES[String(v[0] || '')] || {};
+    Object.keys(RS).forEach(function (id) {
       const c = G.chOf[id];
       if (!c) return;
-      if (qs[id] === 1) ok[c] = (ok[c] || 0) + 1;
-      else if (qs[id] === 2) ng[c] = (ng[c] || 0) + 1;
+      if (RS[id] === 1) ok[c] = (ok[c] || 0) + 1;
+      else ng[c] = (ng[c] || 0) + 1;
     });
     let jk = 0;
     Object.keys(S.jq || {}).forEach(function (u) { jk += String(S.jq[u]).split('1').length - 1; });

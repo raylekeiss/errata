@@ -862,6 +862,7 @@ textarea,input[type=text]{width:100%;font-size:18px;padding:12px;border:1px soli
 @media (orientation:portrait){.dr-cfg .t{display:none}.dr-cfg{min-width:0;padding:8px 12px}}
 .dr-hard{padding:3px 12px;border-radius:999px;background:#7a1f1a;color:#f6e7c8;font-size:13px;letter-spacing:.1em;border:1px solid rgba(201,162,74,.7)}
 .dr-hard[hidden]{display:none}
+.rt-list{max-height:60vh;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px}.rt-row{display:grid;grid-template-columns:minmax(0,1fr) 34% 64px;gap:10px;align-items:center;font-size:14px}.rt-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rt-bar{position:relative;height:12px;border-radius:6px;background:rgba(0,0,0,.12);overflow:visible}.rt-bar i{display:block;height:100%;border-radius:6px}.rt-bar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:#7a1f1a}.rt-p{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}.rt-p small{display:block;font-weight:400;font-size:11px;opacity:.7}
 .drawer .dw-note{margin:10px 14px;font-size:13px;line-height:1.6;opacity:.75}
 .dr-mode{position:absolute;z-index:6;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 98*var(--u));white-space:nowrap;display:flex;gap:6px;background:rgba(7,12,31,.6);padding:4px;border-radius:999px;border:1px solid rgba(201,162,74,.5)}
 .dr-mode button{padding:6px 14px;border-radius:999px;color:#e6c77a;font-family:var(--serif);font-size:14px;letter-spacing:.08em}
@@ -11272,7 +11273,7 @@ function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk'&&DRMODE!==
  show(`<div class="dr" id="drill"><div class="dr-bg" ${IMG['背景_ホーム']?`style="background-image:url(${IMG['背景_ホーム']})"`:''}></div><div class="gc-shade"></div>
   <div class="gc-title">問題演習</div>
   <button class="gc-back tl" data-go="home">戻る</button><div class="gc-top">${coinsHTML()}</div>
-  <div class="dr-cfgw"><button class="gc-back dr-cfg" id="drBurger" aria-label="問題演習の設定"><svg viewBox="0 0 20 16" width="20" height="16" aria-hidden="true"><path d="M1 2h18M1 8h18M1 14h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="t">設定</span></button><span class="dr-hard" id="drHardTag" ${CFG.dh?'':'hidden'}>ハード</span></div>
+  <div class="dr-cfgw"><button class="gc-back dr-cfg" id="drBurger" aria-label="問題演習の設定"><svg viewBox="0 0 20 16" width="20" height="16" aria-hidden="true"><path d="M1 2h18M1 8h18M1 14h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="t">設定</span></button><span class="dr-hard" id="drHardTag" ${CFG.dh?'':'hidden'}>ハード</span><button class="gc-back dr-cfg" id="drRate">正解率</button></div>
   <div class="dr-mode"><button data-mode="vol" class="${DRMODE==='vol'?'on':''}">試験範囲で選ぶ</button><button data-mode="jk" class="${JKM?'on':''}">受験対策</button><button data-mode="kj">記述対策</button><button data-mode="zh" class="${ZHM?'on':''}">図版・地図</button></div>
   ${JKM?`<div class="dr-sub"><button data-lv="std" class="${jc.lv==='std'?'on':''}">標準だけ</button><button data-lv="all" class="${jc.lv==='all'?'on':''}">標準＋発展</button></div>`:''}
   <div class="gc-shimi kon ${konradMet()?'':'unmet'}">${IMG['コンラッド']?`<img src="${IMG['コンラッド']}" alt="">`:''}</div>
@@ -11284,11 +11285,11 @@ function QuizMenu(){if(DRMODE==='kj')return KjMenu();if(DRMODE!=='jk'&&DRMODE!==
     <span class="lbl">${vtitle(name)}</span><span class="beads">${[0,1,2,3,4].map(i=>`<i class="${i<on?'on':''}"></i>`).join('')}</span><span class="cnt">${key==='J:my'&&!jc.my.length?'単元を選ぶ':key==='T:my'&&!qc.secs.length?'範囲を選ぶ':st.done+'／'+st.n}</span></button>`}).join('')}</div></div>`);
  document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{jc.lv=b.dataset.lv;save();QuizMenu()});
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{DRMODE=b.dataset.mode;QuizMenu()});
- $('#drBurger').onclick=openDrCfg;
+ $('#drBurger').onclick=openDrCfg;$('#drRate').onclick=openRates;
  document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{FX._replay(b,'fx-glow',500);const v=b.dataset.q;const key=/^\d+$/.test(v)?+v:v;
   if(key==='J:my'){jkMyEdit();return}if(key==='T:my'){qMyEdit();return}if(!poolOf(key).length){toast('この棚には、まだ出せる問題がありません');return}FX.pageTurn(()=>startQuiz(key))})}
 function startQuiz(key){let o;if(key&&typeof key==='object'){o=key;QZ={key:null,label:o.label,list:o.list,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],tut:!!o.tut,done:o.done,fin:o.fin,quit:o.quit,timer:o.timer||0,src:o.src||o.label}}
- else{const pick=drillPick(key);const hard=!!CFG.dh;QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,hard,timer:hard?DR_HARD_SEC:0,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'問題演習　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();if(QZ.key!==null)drillBegin(QZ);quizQ()}
+ else{const pick=drillPick(key);const hard=!!CFG.dh;QZ={key,label:labelOf(key),list:pick.list,mode:pick.mode,hard,timer:hard?DR_HARD_SEC:0,i:0,gain:0,gainE:[0,0,0],wrong:[],res:[],src:'問題演習　'+labelOf(key)};toast(pick.msg)}QZ.bk='qz'+boxId();if(QZ.key!==null&&drillBegin(QZ))return;quizQ()}
 /* 誤植の群れの制限時間 */
 function qzStop(){if(QZ){clearTimeout(QZ.tm);clearInterval(QZ.ti);QZ.tm=QZ.ti=null}}
 function qzStart(onUp){const T=QZ.timer;let left=T;const el=$('#qzT');if(!el)return;el.querySelector('b').textContent=left;
@@ -11325,12 +11326,12 @@ function quizQ(){const q=QZ.list[QZ.i];const top=typeof QZ.key==='number'?`第${
   ${q.z?zhVis(q,QZ.opts=shuffle([q.a,...q.d])):''}
   <div class="dr-opts${q.z&&zhKana(q)?' zh-k':''}" id="qo">${(q.z?QZ.opts:shuffle([q.a,...q.d])).map((o,i)=>`<button class="slip" data-v="${esc(o)}">${q.z&&zhKana(q)?ZH_KANA[i]:esc(o)}</button>`).join('')}</div>
   <div class="dr-note" id="qr"></div></div></div>`);
- QZ.answered=false;const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'問題演習'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',()=>{if(QZ&&QZ.key!==null)drillQueue(QZ,1);back()},null,'続ける')};
+ QZ.answered=false;QZ.qt=performance.now();const qq=$('#qQuit');if(qq)qq.onclick=()=>{const back=QZ.quit?()=>{qzStop();const d=QZ.quit;QZ=null;d()}:QZ.done?()=>{const d=QZ.done;QZ=null;d()}:()=>FX.pageTurn(QuizMenu);if(QZ.i===0)back();else askYes(`${QZ.timer?'挑戦':'問題演習'}を中断しますか？（ここまでの栞は受け取りボックスに届いています）`,'中断する',()=>{if(QZ&&QZ.key!==null)drillQueue(QZ,1);back()},null,'続ける')};
  const answer=b=>{if(QZ.answered)return;QZ.answered=true;qzStop();const tq=$('#qzT');if(tq)tq.classList.add('stop');document.querySelectorAll('#qo .slip').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
   const st=qst(q);const ok=!!b&&b.dataset.v===q.a;let g=0;if(q.z)zhReveal(q,b?b.dataset.v:null);
   if(QZ.key!=null&&!QZ.tut){msTick('dq');if(ok)msTick('dc')}
   const qe=qEra(q);if(ok){g=qGain(q,st)*(QZ.hard?2:1);qSet(q,1);if(g){if(QZ.tut)S.sh[qe]=Math.min(16383,S.sh[qe]+g);else boxAddTo(QZ.bk||(QZ.bk='qz'+boxId()),QZ.src||QZ.label,qe,g)}QZ.gain+=g;QZ.gainE[qe]+=g}else{if(b)b.classList.add('wrong');qSet(q,2);QZ.wrong.push(q)}
-  QZ.res[QZ.i]=ok;save();refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
+  QZ.res[QZ.i]=ok;save();if(QZ.key!==null&&!QZ.tut){(QZ.dt||(QZ.dt=[]))[QZ.i]=b?Math.round((performance.now()-QZ.qt)/100):-1;if(botWatch(QZ))return}refreshCoins();$('.dr-gain').textContent='この回の獲得　'+gainText(QZ.gainE);
   const tabs=document.querySelectorAll('.dr-tabs .tb i');tabs[QZ.i].className=ok?'ok cur':'ng cur';if(QZ.list.length<=10)tabs[QZ.i].textContent=ok?'✦':'✕';
   $('#qr').innerHTML=noteHTML(ok?'ok':'ng',ok?'正解！':b?'おしい……':'時間切れ……',ok?(g?`${ERAS[qe].k}の栞＋${g}${st===2?'（克服ボーナス）':''}${QZ.hard?'（ハード2倍）':''}`:'正解済みの問題（栞はなし）'):`正しくは${/^「.*」$/.test(zhAns(q))?esc(zhAns(q)):'「'+esc(zhAns(q))+'」'}`,exHTML(q),QZ.i+1<QZ.list.length?'つぎの問題':(QZ.done?'つづける':'結果を見る'),!!q.n);
   setTimeout(()=>{const n=$('#nx');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})},60);
@@ -11974,16 +11975,49 @@ function storageOK(){try{const k='errata_test';localStorage.setItem(k,'1');const
 const DQ_KEY='errata_dq';
 function dqGet(){try{const a=JSON.parse(localStorage.getItem(DQ_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
 function dqSet(a){try{localStorage.setItem(DQ_KEY,JSON.stringify(a.slice(-60)))}catch(e){}}
-function drillBegin(z){if(!CLOUD)return;z.t0=Date.now();
- try{google.script.run.withSuccessHandler(r=>{if(r&&r.tok)z.tok=r.tok}).withFailureHandler(()=>{}).drillStart(String(z.label||''))}catch(e){}}
-function drillQueue(z,stop){if(!CLOUD)return;
- const ids=[],r=[];z.list.forEach((q,i)=>{if(q&&q.id&&z.res[i]!==undefined){ids.push(String(q.id));r.push(z.res[i]?1:0)}});
+function drillBegin(z){if(lockLeft()>0){QZ=null;drillLocked();return true}if(!CLOUD)return false;z.t0=Date.now();
+ try{google.script.run.withSuccessHandler(r=>{if(r&&r.lock&&r.lock>Date.now()){lockSet(r.lock);if(QZ===z){qzStop();QZ=null;drillLocked()}return}if(r&&r.tok)z.tok=r.tok}).withFailureHandler(()=>{}).drillStart(String(z.label||''))}catch(e){}return false}
+function drillQueue(z,stop,bot){if(!CLOUD)return;
+ const ids=[],r=[],dt=[];z.list.forEach((q,i)=>{if(q&&q.id&&z.res[i]!==undefined){ids.push(String(q.id));r.push(z.res[i]?1:0);dt.push(z.dt&&z.dt[i]!=null?z.dt[i]:-1)}});
  if(!ids.length)return;
- const a=dqGet();a.push({cid:Date.now().toString(36)+Math.random().toString(36).slice(2,8),tok:z.tok||'',ids,r:r.join(''),cs:z.t0?Math.round((Date.now()-z.t0)/1000):0,h:z.hard?1:0,s:stop?1:0,k:String(z.label||'').slice(0,40)});dqSet(a);drillFlush()}
+ const a=dqGet();a.push({cid:Date.now().toString(36)+Math.random().toString(36).slice(2,8),tok:z.tok||'',ids,r:r.join(''),cs:z.t0?Math.round((Date.now()-z.t0)/1000):0,h:z.hard?1:0,s:stop?1:0,dt,b:bot||'',env:botEnv(),k:String(z.label||'').slice(0,40)});dqSet(a);drillFlush()}
 let DQ_BUSY=false;
 function drillFlush(){if(!CLOUD||DQ_BUSY)return;const a=dqGet();if(!a.length)return;DQ_BUSY=true;const it=a[0];
  try{google.script.run.withSuccessHandler(()=>{DQ_BUSY=false;dqSet(dqGet().filter(x=>x.cid!==it.cid));if(dqGet().length)setTimeout(drillFlush,500)})
   .withFailureHandler(()=>{DQ_BUSY=false}).drillLog(it)}catch(e){DQ_BUSY=false}}
+/* ---------- 自動操作の見張り（問題演習） ----------
+   1問ごとに「問題が出てから答えるまで」の時間（0.1秒単位）を記録し、次の場合は自動操作とみなして問題演習を止める（はじき出す）。
+   ・ブラウザの自動操作（navigator.webdriver）
+   ・12問以上で、答えるまでの時間の真ん中の値が0.9秒未満（人は4つの選択肢を読めない速さ）
+   ・15問以上で、答える間隔がほぼ一定（ばらつき＝標準偏差÷平均が0.12未満）で、9割以上正解
+   止めたときは、その回の答えを正解率に入れず、保存係が「アラーム」シートに残して管理者にメールする。
+   止める時間は保存係が決める（1回目1時間、7日以内の2回目からは24時間）。端末にも覚えておき、通信できなくても止める */
+const LOCK_KEY='errata_lock';
+function lockLeft(){try{return Math.max(0,(+localStorage.getItem(LOCK_KEY)||0)-Date.now())}catch(e){return 0}}
+function lockSet(t){try{localStorage.setItem(LOCK_KEY,String(t))}catch(e){}}
+function botEnv(){try{return{wd:navigator.webdriver?1:0,tp:navigator.maxTouchPoints||0,ua:String(navigator.userAgent||'').slice(0,160)}}catch(e){return{}}}
+function botStats(z){const d=(z.dt||[]).filter(x=>x!=null&&x>=0).map(x=>x/10);const n=d.length;if(!n)return{n:0};
+ const so=[...d].sort((a,b)=>a-b),med=so[Math.floor(n/2)],mean=d.reduce((a,b)=>a+b,0)/n,sd=Math.sqrt(d.reduce((a,b)=>a+(b-mean)*(b-mean),0)/n);
+ const ok=z.res.filter((x,i)=>x===true&&z.dt&&z.dt[i]>=0).length;return{n,med,mean,cv:mean?sd/mean:0,acc:ok/n}}
+function botVerdict(z){const st=botStats(z);let env={};try{env=botEnv()}catch(e){}
+ if(env.wd&&st.n>=3)return'ブラウザの自動操作';
+ if(st.n>=12&&st.med<0.9)return'答えるのが速すぎる（中央値'+st.med.toFixed(1)+'秒）';
+ if(st.n>=15&&st.cv<0.12&&st.acc>=0.9)return'答える間隔が一定すぎる（ばらつき'+st.cv.toFixed(2)+'）';
+ return''}
+function botWatch(z){const why=botVerdict(z);if(!why)return false;qzStop();
+ lockSet(Date.now()+3600000);drillQueue(z,1,why);QZ=null;saveNow();drillLocked();return true}
+function drillLocked(){const left=lockLeft();const t=new Date(Date.now()+left);const hm=t.getHours()+'時'+String(t.getMinutes()).padStart(2,'0')+'分';
+ FX.pageTurn(QuizMenu);setTimeout(()=>modal(`<h3>問題演習を止めています</h3><p style="line-height:1.9">自動で操作されているような答え方を見つけたので、<b>${hm}ごろまで</b>問題演習を止めています。この回の答えは正解率に入りません。<br>自分で解いていたのに止まってしまったときは、先生に伝えてください。</p><div class="row" style="justify-content:center"><button class="btn" data-close>OK</button></div>`),400)}
+/* ---------- 自分の正解率 ----------
+   学校アカウント版では、保存係の「正誤記録」（問題ごとの最後の答え）から計算する＝先生が成績に使う数字と同じ。
+   通信できないとき・学校アカウント版でないときは、この端末の記録から出した目安を出す */
+function openRates(){const draw=(map,src)=>{const rows=Object.keys(CHT).map(Number).map(c=>{const pool=poolOf(c);const n=pool.length;const ok=pool.filter(q=>map?map[q.id]===1:qst(q)===1).length;const p=n?ok/n:0;
+   return `<div class="rt-row"><div class="rt-nm">第${c}章　${esc(CHT[c])}</div><div class="rt-bar"><i style="width:${Math.round(p*100)}%;background:${p>=.8?'#3f7a4e':'#9a6b2a'}"></i><b style="left:80%"></b></div><div class="rt-p">${Math.round(p*100)}%<small>${ok}/${n}</small></div></div>`}).join('');
+  modal(`<h3>自分の正解率</h3><p class="sub" style="margin:-4px 0 10px;line-height:1.7">章ごとの、正解済みの問題の割合です（最後に答えたときの結果）。線は80%。<br>${src}</p><div class="rt-list">${rows}</div><div class="row" style="justify-content:center"><button class="btn" data-close>閉じる</button></div>`)};
+ if(!CLOUD){draw(null,'この端末の記録から出した目安です。');return}
+ toast('学校アカウントの記録を読んでいます…');
+ let done=false;const fb=()=>{if(done)return;done=true;draw(null,'学校アカウントの記録を読めなかったので、この端末の記録から出した目安です。')};const tm=setTimeout(fb,12000);
+ try{google.script.run.withSuccessHandler(r=>{if(done)return;done=true;clearTimeout(tm);let m=null;try{m=r&&r.data?JSON.parse(r.data):{}}catch(e){m=null}if(!m){draw(null,'この端末の記録から出した目安です。');return}draw(m,'学校アカウントの記録から計算しています（先生が見ている数字と同じです）。')}).withFailureHandler(()=>{clearTimeout(tm);fb()}).getMyRates()}catch(e){clearTimeout(tm);fb()}}
 function saveNow(){save();cloudPush(true)}
 function cloudPush(force){if(!CLOUD||!CL.ready||CL.busy||CL.checking)return;if(!CL.dirty&&!force)return;
  CL.busy=true;CL.dirty=false;const body=JSON.stringify(S),t=S.t||0;
